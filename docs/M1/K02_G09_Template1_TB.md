@@ -19,10 +19,10 @@ Dipersiapkan oleh:
 
 | NIM | Nama |
 |---|---|
-| *[NIM 1]* | *[Nama Anggota 1]* |
-| *[NIM 2]* | *[Nama Anggota 2]* |
-| *[NIM 3]* | *[Nama Anggota 3]* |
-| *[NIM 4]* | *[Nama Anggota 4]* |
+| 13525008 | Malik Arsyafiandra Madani |
+| 13525044 | Steven Vanako |
+| 13525071 | Muhammad Adnan Kurniawan |
+| 13525074 | Axeleon Justin Algianto |
 | *[NIM 5]* | *[Nama Anggota 5]* |
 ---
 

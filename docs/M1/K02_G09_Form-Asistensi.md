@@ -8,7 +8,7 @@
 | **Tanggal** | *\[DD/MM/YYYY\]* |
 | **Kelas** | K02 |
 | **Nomor Kelompok** | G09  |
-| **Nama Kelompok** | *\[Nama Kelompok\]*  |
+| **Nama Kelompok** | Cumlaude |
 | **Nama Perangkat Lunak** | SEHATI (Sistem Elektronik Pelayanan Kesehatan Terintegrasi)  |
 | **Dokumen** | K02_G09_Template1_TB.md (Tugas 1 - Topic Brainstorming)  |
 
@@ -16,10 +16,10 @@
 
 | NIM | Nama |
 | --- | --- |
-| *\[NIM 1\]* | *\[Nama Anggota 1\]* |
-| *\[NIM 2\]* | *\[Nama Anggota 2\]* |
-| *\[NIM 3\]* | *\[Nama Anggota 3\]* |
-| *\[NIM 4\]* | *\[Nama Anggota 4\]* |
+| 13525008 | Malik Arsyafiandra Madani |
+| 13525044 | Steven Vanako |
+| 13525071 | Muhammad Adnan Kurniawan |
+| 13525074 | Axeleon Justin Algianto |
 | *\[NIM 5\]* | *\[Nama Anggota 5\]* |
 
 ### Catatan
