@@ -6,11 +6,11 @@
 | --- | --- |
 | **Hari** | *\[Hari\]* |
 | **Tanggal** | *\[DD/MM/YYYY\]* |
-| **Kelas** | *\[Kelas\]* |
-| **Nomor Kelompok** | *\[Nomor Kelompok\]*  |
+| **Kelas** | K02 |
+| **Nomor Kelompok** | G09  |
 | **Nama Kelompok** | *\[Nama Kelompok\]*  |
-| **Nama Perangkat Lunak** | *\[Nama P/L\]*  |
-| **Dokumen** | *\[Nama Dokumen yang diasistensikan\]*  |
+| **Nama Perangkat Lunak** | SEHATI (Sistem Elektronik Pelayanan Kesehatan Terintegrasi)  |
+| **Dokumen** | K02_G09_Template1_TB.md (Tugas 1 - Topic Brainstorming)  |
 
 ### Anggota Kelompok
 
