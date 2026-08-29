@@ -1,0 +1,26 @@
+%% Sumber Activity Diagram SEHATI (Gambar 1 pada K02_G09_Template1_TB.md).
+%% Berkas ini disimpan agar diagram mudah disunting ulang bila alur berubah.
+%% Versi yang dipakai di dokumen adalah diagram-act-1.svg.
+
+flowchart TD
+    start((Mulai)) --> A1["<b>Petugas Pendaftaran</b><br>Menerima pasien dan meminta<br>NIK atau kartu berobat"]
+    A1 --> S1["<b>Sistem</b><br>Mencari data pasien pada<br>basis data puskesmas"]
+    S1 --> D1{"<b>Sistem</b><br>Pasien sudah terdaftar?"}
+    D1 -- Tidak --> A2["<b>Petugas Pendaftaran</b><br>Mendaftarkan pasien baru dan<br>membuat berkas rekam medis"]
+    A2 --> A3
+    D1 -- Ya --> A3["<b>Petugas Pendaftaran</b><br>Membuat data kunjungan dan<br>mencetak nomor antrean poli"]
+    A3 --> S2["<b>Sistem</b><br>Menyimpan data kunjungan dan<br>menampilkan daftar antrean poli"]
+    S2 --> P1["<b>Perawat</b><br>Memanggil pasien serta mencatat<br>keluhan awal dan tanda vital"]
+    P1 --> S3["<b>Sistem</b><br>Menyimpan tanda vital dan<br>mengevaluasi ambang risiko"]
+    S3 --> D2{"<b>Sistem</b><br>Nilai di luar ambang normal?"}
+    D2 -- Ya --> S4["<b>Sistem</b><br>Menandai kunjungan sebagai<br>berisiko penyakit tidak menular"]
+    S4 --> K1
+    D2 -- Tidak --> K1["<b>Dokter</b><br>Membuka rekam medis, riwayat<br>kunjungan, dan penanda risiko"]
+    K1 --> K2["<b>Dokter</b><br>Melakukan pemeriksaan serta<br>mencatat diagnosis dan tindakan"]
+    K2 --> K3["<b>Dokter</b><br>Menyusun resep elektronik"]
+    K3 --> D3{"<b>Sistem</b><br>Stok obat mencukupi?"}
+    D3 -- "Tidak (ganti obat)" --> K3
+    D3 -- Ya --> S5["<b>Sistem</b><br>Meneruskan resep ke<br>antrean pelayanan farmasi"]
+    S5 --> F1["<b>Apoteker</b><br>Menyiapkan, menyerahkan obat,<br>dan menjelaskan aturan pakai"]
+    F1 --> S6["<b>Sistem</b><br>Mengurangi stok obat, menutup kunjungan,<br>dan memperbarui rekapitulasi laporan harian"]
+    S6 --> finish((Selesai))
