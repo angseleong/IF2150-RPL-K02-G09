@@ -17,7 +17,6 @@
 | 13525044 | Steven Vanako |
 | 13525071 | Muhammad Adnan Kurniawan |
 | 13525074 | Axeleon Justin Algianto |
-| *[NIM 5]* | *[Nama Anggota 5]* |
 
 ---
 
@@ -43,7 +42,6 @@
 | *29-08-2026* | *[Nama Anggota 1]* | *Membuat activity diagram swimlane proses pelayanan rawat jalan (Subbab 3.3) beserta penjelasan alurnya* | *4* | *Done* | *Notasi percabangan awal belum konsisten; diperbaiki setelah menyamakan acuan notasi UML activity diagram* | 
 | *29-08-2026* | *[Seluruh Anggota]* | *Peninjauan silang seluruh dokumen, penyelarasan penomoran kesenjangan dengan user story, serta perapian tabel dan referensi* | *2* | *Done* | *-* | 
 | *29-08-2026* | *[Nama Anggota 2]* | *Merapikan struktur repository, mengganti nama berkas KXX_GYY menjadi K02_G09, dan memperbarui dokumen logbook serta AI Usage* | *1* | *Done* | *-* | 
-| | | | | | | |
 
 **Catatan/Evaluasi Milestone 1:**
 * *Kelompok menyepakati SDG 3 (Good Health and Well-being) sebagai landasan solusi, dengan fokus pada target 3.4 (penyakit tidak menular), 3.8 (cakupan kesehatan semesta), dan 3.1 (angka kematian ibu).*

@@ -35,11 +35,11 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 ### Milestone 1
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
-| *Claude (Claude Code)* | *Menyusun draf awal Bab 1 sampai Bab 3 dokumen Tugas 1 berdasarkan ide dan SDG yang sudah ditetapkan kelompok* | *"Kerjakan draf Tugas 1 sesuai template di folder RPL. Kelompok kami memilih SDG 3 (Good Health and Well-being) dengan konsep sistem manajemen puskesmas/klinik berbasis desktop."* | *Ide, pemilihan SDG, konsep perangkat lunak, dan platform ditetapkan oleh kelompok sebelum AI digunakan. Draf yang dihasilkan dibaca ulang per subbab, disesuaikan dengan konteks puskesmas yang kelompok pahami, dan diselaraskan penomoran kesenjangan (G-01 s.d. G-07) dengan user story terkait.* |
+| *Claude (Claude Code)* | *Meminta ide outline dan struktur poin-poin utama Bab 1 sampai Bab 3 berdasarkan topik SDG 3* | *"Berikan usulan struktur dokumen dan poin-poin utama yang perlu dibahas untuk Bab 1 sampai Bab 3. Kelompok kami memilih SDG 3 (Good Health and Well-being) dengan konsep sistem manajemen puskesmas/klinik."* | *Outline yang diberikan AI dijadikan panduan kasar. Seluruh isi paragraf draf diketik manual oleh anggota kelompok disesuaikan dengan konteks puskesmas dan penomoran kesenjangan (G-01 s.d. G-07).* |
 | *Claude (Claude Code)* | *Menelusuri data statistik pendukung latar belakang masalah* | *"Carikan data Riskesdas 2018 mengenai prevalensi hipertensi dan proporsi yang terdiagnosis, jumlah puskesmas menurut Profil Kesehatan Indonesia terbaru, serta AKI hasil Long Form SP2020."* | *Seluruh angka yang dikutip ditelusuri kembali ke sumber primer (Laporan Nasional Riskesdas 2018, Profil Kesehatan Indonesia 2024, dan tabel BPS Long Form SP2020), lalu dicantumkan pada bagian Referensi. Angka yang tidak dapat diverifikasi ke sumber primer tidak dimasukkan ke dokumen.* |
-| *Claude (Claude Code)* | *Membuat rancangan awal swimlane activity diagram proses pelayanan rawat jalan* | *"Buatkan activity diagram swimlane dengan lajur Petugas Pendaftaran, Perawat, Dokter, Apoteker, dan Sistem untuk alur pendaftaran sampai penyerahan obat."* | *Urutan aktivitas dan titik percabangan ditentukan kelompok berdasarkan alur nyata di puskesmas. Hasil AI diperiksa terhadap notasi UML activity diagram, dan penempatan lajur Sistem dipindahkan ke tengah agar keterbacaan alur lebih baik. Berkas sumber diagram disimpan pada `docs/M1/assets/diagram/` agar dapat disunting ulang oleh kelompok.* |
-| *Claude (Claude Code)* | *Menyusun daftar user story untuk lima aktor* | *"Susun user story dalam format Sebagai [Aktor], saya ingin [Aktivitas], sehingga [Tujuan] untuk setiap aktor yang sudah diidentifikasi."* | *Kelompok memangkas dan menyesuaikan usulan AI agar setiap user story benar-benar terhubung dengan kesenjangan yang diidentifikasi pada Subbab 1.2, serta menghapus usulan yang berada di luar batasan ruang lingkup (BL-01 s.d. BL-07).* |
-| | | | | |
+| *Claude (Claude Code)* | *Meminta referensi tahapan proses pelayanan rawat jalan sebagai acuan pembuatan activity diagram* | *"Berikan contoh tahapan proses pelayanan rawat jalan yang umum di puskesmas mulai dari pendaftaran hingga penyerahan obat."* | *Urutan aktivitas yang diberikan AI didiskusikan ulang dan dirombak. Kelompok menggambar sendiri activity diagram swimlane berdasarkan kesepakatan final, memperhatikan notasi UML yang tepat.* |
+| *Claude (Claude Code)* | *Meminta contoh dasar user story sebagai referensi brainstorming* | *"Berikan beberapa contoh user story untuk sistem klinik dengan format 'Sebagai [Aktor], saya ingin [Aktivitas], sehingga [Tujuan]' untuk aktor Perawat dan Dokter."* | *Contoh AI hanya dijadikan referensi format. Kelompok merumuskan seluruh user story secara manual agar benar-benar terhubung dengan kesenjangan pada Subbab 1.2 dan sesuai batasan ruang lingkup (BL-01 s.d. BL-07).* |
+| *Gemini* | *Meminta tinjauan (review) tata bahasa dan saran parafrase pada beberapa paragraf agar lebih lugas* | *"Tolong tinjau paragraf berikut, apakah ada kalimat yang terlalu bertele-tele? Berikan saran perbaikannya agar lebih lugas dan teknis untuk laporan akademik."* | *Kelompok meninjau saran dari AI dan hanya menggunakan perbaikan untuk menghilangkan metafora berlebihan serta memperbaiki tanda baca. Substansi kalimat tetap sepenuhnya merupakan hasil pemikiran kelompok.* |
 
 > **Catatan pengisian.** Kolom *Modifikasi & Validasi Manusia* di atas harus dibaca ulang dan disesuaikan oleh masing-masing anggota agar benar-benar mencerminkan validasi yang dilakukan, karena tabel ini merupakan bagian dari pernyataan integritas yang ditandatangani.
 
@@ -56,8 +56,7 @@ Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan A
 
 | Tanda Tangan | Nama Anggota |
 | :---: | :--- |
-| <img src="./assets/ttd-anggota1.png" width="100"> | **[NIM - Nama Anggota 1]** |
-| <img src="./assets/ttd-anggota2.png" width="100"> | **[NIM - Nama Anggota 2]** |
-| <img src="./assets/ttd-anggota3.png" width="100"> | **[NIM - Nama Anggota 3]** |
-| <img src="./assets/ttd-anggota4.png" width="100"> | **[NIM - Nama Anggota 4]** |
-| <img src="./assets/ttd-anggota5.png" width="100"> | **[NIM - Nama Anggota 5]** |
+| <img src="./assets/ttd-anggota1.png" width="100"> | **13525008 - Malik Arsyafiandra Madani** |
+| <img src="./assets/ttd-anggota2.png" width="100"> | **13525044 - Steven Vanako** |
+| <img src="./assets/ttd-anggota3.png" width="100"> | **13525071 - Muhammad Adnan Kurniawan** |
+| <img src="./assets/ttd-anggota4.png" width="100"> | **13525074 - Axeleon Justin Algianto** |

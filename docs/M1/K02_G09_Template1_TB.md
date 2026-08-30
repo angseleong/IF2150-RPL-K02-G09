@@ -7,7 +7,7 @@ TOPIC BRAINSTORMING
 </h1>
 <br>
 
-## SEHATI — Sistem Elektronik Pelayanan Kesehatan Terintegrasi
+## SEHATI - Sistem Elektronik Pelayanan Kesehatan Terintegrasi
 
 ### Untuk: *[Nama Asisten]*
 
@@ -39,7 +39,7 @@ Sayangnya, kapasitas administratif puskesmas belum sebanding dengan beban tugas 
 
 Dampak paling nyata dari terputusnya riwayat kesehatan pasien terlihat pada penanganan **Penyakit Tidak Menular (PTM)**. Riset Kesehatan Dasar (Riskesdas) 2018 mencatat prevalensi hipertensi pada penduduk berusia 18 tahun ke atas mencapai **34,1%** berdasarkan hasil pengukuran tekanan darah. Namun dari angka tersebut, hanya **8,8%** yang benar-benar terdiagnosis. Artinya, sebagian besar penderita hipertensi di Indonesia tidak pernah tahu bahwa dirinya sakit, sehingga tidak pernah menjalani pengobatan. Lebih jauh lagi, di antara mereka yang sudah terdiagnosis, 13,3% tidak meminum obat sama sekali dan 32,3% tidak meminum obat secara teratur. Sebagian besar penderita ini sebenarnya *pernah* datang ke puskesmas dan *pernah* diukur tekanan darahnya, tetapi karena hasil pengukuran hanya dicatat di lembar kertas kunjungan hari itu, tidak ada mekanisme apa pun yang menghubungkan angka tinggi hari ini dengan angka tinggi tiga bulan lalu.
 
-Persoalan serupa terjadi pada kesehatan ibu. Hasil Long Form Sensus Penduduk 2020 (BPS) menunjukkan Angka Kematian Ibu (AKI) Indonesia sebesar **189 per 100.000 kelahiran hidup**, masih jauh dari target SDGs 3.1 yaitu di bawah 70 per 100.000 kelahiran hidup pada 2030. Pemantauan kehamilan berisiko sangat bergantung pada kelengkapan dan kesinambungan catatan kunjungan — sesuatu yang sulit dijamin dengan berkas kertas yang mudah terselip atau hilang.
+Persoalan serupa terjadi pada kesehatan ibu. Hasil Long Form Sensus Penduduk 2020 (BPS) menunjukkan Angka Kematian Ibu (AKI) Indonesia sebesar **189 per 100.000 kelahiran hidup**, masih jauh dari target SDGs 3.1 yaitu di bawah 70 per 100.000 kelahiran hidup pada 2030. Pemantauan kehamilan berisiko sangat bergantung pada kelengkapan dan kesinambungan catatan kunjungan, sesuatu yang sulit dijamin dengan berkas kertas yang mudah terselip atau hilang.
 
 ### Keterkaitan dengan SDGs
 
@@ -53,13 +53,11 @@ Kelompok kami memilih **SDG 3: *Good Health and Well-being* (Kehidupan Sehat dan
 
 ### Urgensi
 
-Ada tiga alasan mengapa masalah ini mendesak untuk diselesaikan sekarang.
+Masalah ini sangat mendesak untuk segera diselesaikan, terutama karena adanya tuntutan regulasi. Peraturan Menteri Kesehatan Nomor 24 Tahun 2022 mewajibkan **seluruh** fasilitas pelayanan kesehatan (termasuk puskesmas, klinik, dan praktik mandiri) untuk menyelenggarakan Rekam Medis Elektronik (RME) selambat-lambatnya **31 Desember 2023**. Mengingat tenggat waktu tersebut sudah terlewat, fasilitas yang belum siap berisiko mendapat sanksi administratif hingga pencabutan akreditasi.
 
-**Pertama, ada kewajiban regulasi yang sudah jatuh tempo.** Peraturan Menteri Kesehatan Nomor 24 Tahun 2022 tentang Rekam Medis mewajibkan **seluruh** fasilitas pelayanan kesehatan — termasuk puskesmas, klinik, dan praktik mandiri — untuk menyelenggarakan Rekam Medis Elektronik (RME) paling lambat **31 Desember 2023**. Fasilitas yang melanggar dapat dikenai sanksi administratif berupa teguran tertulis hingga rekomendasi pencabutan status akreditasi. Tenggat tersebut sudah terlewat, sementara banyak fasilitas kecil belum memiliki sistem yang layak.
+Di samping masalah regulasi, penundaan digitalisasi juga memperburuk celah deteksi dini Penyakit Tidak Menular (PTM). Dengan prevalensi hipertensi sebesar 34,1% dan tingkat diagnosis yang hanya 8,8%, setiap data pasien yang tidak dicatat dengan baik berarti hilangnya kesempatan deteksi dini. Akibatnya, komplikasi penyakit seperti stroke atau gagal ginjal berisiko meningkat dan memakan biaya penanganan yang jauh lebih mahal. 
 
-**Kedua, celah deteksi dini PTM adalah masalah yang membesar setiap tahun.** Setiap kunjungan pasien yang tidak tercatat secara terstruktur adalah satu kesempatan deteksi dini yang hilang. Dengan prevalensi hipertensi 34,1% dan tingkat diagnosis hanya 8,8%, biaya sosial dari keterlambatan penanganan terus terakumulasi dalam bentuk komplikasi stroke, gagal ginjal, dan penyakit jantung yang jauh lebih mahal untuk ditangani.
-
-**Ketiga, solusi yang tersedia belum menjangkau fasilitas kecil.** Sebagian besar Sistem Informasi Manajemen Puskesmas (SIMPUS) komersial berbasis langganan dan mengasumsikan koneksi internet yang stabil — dua hal yang justru menjadi kendala utama di puskesmas daerah terpencil yang paling membutuhkannya.
+Meskipun kebutuhannya sangat mendesak, solusi yang tersedia saat ini belum sepenuhnya ramah untuk puskesmas kecil. Sebagian besar Sistem Informasi Manajemen Puskesmas (SIMPUS) komersial membebankan biaya langganan dan sangat bergantung pada internet yang stabil. Hal ini tentu menyulitkan puskesmas di daerah yang infrastrukturnya masih terbatas.
 
 ## 1.2 Analisis Kondisi Saat Ini
 
@@ -96,7 +94,7 @@ Dari alur di atas, kami mengidentifikasi tujuh kesenjangan yang akan menjadi sas
 | **Spreadsheet mandiri (Excel)** | Gratis, sudah dikuasai sebagian petugas | Tidak ada validasi data, tidak ada relasi antar-tabel, tidak ada kendali akses, rawan tertimpa; tidak menyelesaikan G-03 dan G-04 |
 | **SATUSEHAT (platform Kemenkes)** | Standar interoperabilitas nasional, memungkinkan pertukaran data antar-fasilitas | Merupakan platform pertukaran data, bukan aplikasi operasional harian; fasilitas tetap membutuhkan sistem sendiri untuk mencatat |
 
-Kesimpulannya, celah yang belum terisi adalah **sistem operasional harian yang ringan, dapat berjalan tanpa internet, dan memiliki kemampuan deteksi dini bawaan** — bukan sekadar aplikasi pencatatan administratif. Celah inilah yang akan diisi oleh perangkat lunak kami.
+Kesimpulannya, celah yang belum terisi adalah **sistem operasional harian yang ringan, dapat berjalan tanpa internet, dan memiliki kemampuan deteksi dini bawaan**, bukan sekadar aplikasi pencatatan administratif. Celah inilah yang akan diisi oleh perangkat lunak kami.
 
 ---
 
@@ -104,41 +102,37 @@ Kesimpulannya, celah yang belum terisi adalah **sistem operasional harian yang r
 
 ## 2.1 Deskripsi Perangkat Lunak
 
-**SEHATI (Sistem Elektronik Pelayanan Kesehatan Terintegrasi)** adalah aplikasi *desktop* pengelolaan pelayanan rawat jalan untuk puskesmas dan klinik pratama. SEHATI menyatukan seluruh rantai pelayanan — mulai dari pendaftaran pasien, skrining tanda vital, pemeriksaan dokter, peresepan elektronik, penyerahan obat, hingga rekapitulasi laporan — ke dalam satu aplikasi yang dipakai bersama oleh seluruh petugas di satu fasilitas kesehatan.
+**SEHATI (Sistem Elektronik Pelayanan Kesehatan Terintegrasi)** adalah aplikasi *desktop* pengelolaan pelayanan rawat jalan untuk puskesmas dan klinik pratama. SEHATI menyatukan seluruh rantai pelayanan (mulai dari pendaftaran pasien, skrining tanda vital, pemeriksaan dokter, peresepan elektronik, penyerahan obat, hingga rekapitulasi laporan) ke dalam satu aplikasi yang dipakai bersama oleh seluruh petugas di satu fasilitas kesehatan.
 
 ### Gambaran dari sudut pandang pengguna
 
-Dari sisi **petugas pendaftaran**, SEHATI menggantikan rak berkas dengan pencarian berbasis NIK atau nomor rekam medis. Data pasien muncul dalam hitungan detik, dan nomor antrean poli tercetak otomatis.
+Aplikasi ini dirancang untuk mempermudah alur kerja seluruh petugas fasilitas kesehatan. **Petugas pendaftaran** tidak perlu lagi membongkar rak berkas secara manual, karena pencarian pasien bisa dilakukan secara instan lewat NIK atau nomor rekam medis untuk mencetak nomor antrean. Selanjutnya, **perawat** tinggal menginput data skrining tanda vital ke dalam formulir digital. Sistem akan langsung membandingkan nilai tersebut dengan batas normal dan menampilkan grafik riwayat kunjungan pasien.
 
-Dari sisi **perawat**, hasil pengukuran tanda vital dimasukkan sekali ke dalam formulir digital. Sistem langsung membandingkan nilai tersebut dengan ambang klinis dan menampilkan grafik tren dari kunjungan-kunjungan sebelumnya.
+Bagi **dokter**, seluruh riwayat kesehatan (mulai dari diagnosis lampau, obat yang dikonsumsi, hingga tren tekanan darah) akan langsung tersaji dalam satu layar sebelum pemeriksaan. Jika ada indikasi risiko penyakit tertentu, sistem akan langsung memberikan peringatan otomatis. Setelah diperiksa, dokter bisa langsung menyusun resep secara digital. Resep ini kemudian otomatis terkirim ke **apoteker** dalam bentuk teks yang jelas dan stoknya juga sudah divalidasi oleh sistem.
 
-Dari sisi **dokter**, seluruh riwayat pasien — diagnosis lampau, obat yang pernah diberikan, tren tekanan darah — tersaji dalam satu layar sebelum pemeriksaan dimulai. Penanda risiko yang dihasilkan sistem muncul sebagai peringatan visual, bukan sebagai sesuatu yang harus dicari sendiri.
-
-Dari sisi **apoteker**, resep tiba dalam bentuk teks digital yang tidak mungkin salah baca, disertai informasi ketersediaan stok yang sudah divalidasi sistem sejak resep disusun.
-
-Dari sisi **kepala puskesmas**, laporan bulanan, daftar pasien berisiko, dan rekapitulasi kunjungan tersedia sebagai keluaran otomatis, bukan sebagai hasil pengetikan ulang.
+Pada akhirnya, pekerjaan **kepala puskesmas** juga menjadi jauh lebih ringan. Rekapitulasi laporan kunjungan maupun daftar pasien berisiko sudah dibuatkan secara otomatis oleh sistem tanpa perlu mengumpulkan dan mengetik ulang data dari kertas.
 
 ### Target platform dan alasan pemilihannya
 
 SEHATI dikembangkan sebagai **aplikasi desktop** yang dipasang pada komputer di lingkungan puskesmas. Pemilihan ini didasarkan pada empat pertimbangan.
 
-1. **Kemandirian terhadap koneksi internet.** Kesenjangan G-07 menunjukkan bahwa ketergantungan pada internet adalah penghalang utama adopsi di daerah. Aplikasi desktop dengan basis data lokal tetap berfungsi penuh saat jaringan terputus — kondisi yang tidak boleh menghentikan pelayanan kesehatan.
+1. **Kemandirian terhadap koneksi internet.** Kesenjangan G-07 menunjukkan bahwa ketergantungan pada internet adalah penghalang utama adopsi di daerah. Aplikasi desktop dengan basis data lokal tetap berfungsi penuh saat jaringan terputus, suatu kondisi yang tidak boleh menghentikan pelayanan kesehatan.
 2. **Kesesuaian dengan perangkat yang sudah tersedia.** Puskesmas umumnya sudah memiliki komputer atau laptop di loket pendaftaran dan ruang periksa. Aplikasi desktop yang ringan dapat memanfaatkan perangkat tersebut tanpa pengadaan baru.
 3. **Kesesuaian dengan pola kerja.** Pendaftaran, pemeriksaan, dan farmasi dilakukan di meja kerja tetap dengan intensitas pengetikan yang tinggi. Antarmuka desktop dengan papan ketik penuh dan pintasan papan ketik lebih efisien untuk pola kerja seperti ini dibandingkan antarmuka sentuh.
-4. **Kendali atas data sensitif.** Data rekam medis tersimpan di dalam lingkungan fasilitas itu sendiri, sehingga kendali dan tanggung jawab penyimpanan tetap berada di tangan fasilitas — sejalan dengan kewajiban menjaga kerahasiaan rekam medis.
+4. **Kendali atas data sensitif.** Data rekam medis tersimpan di dalam lingkungan fasilitas itu sendiri, sehingga kendali dan tanggung jawab penyimpanan tetap berada di tangan fasilitas, sejalan dengan kewajiban menjaga kerahasiaan rekam medis.
 
 ### Nilai unik dan inovasi inti
 
 Pembeda utama SEHATI dari SIMPUS pada umumnya terletak pada tiga hal berikut.
 
 **1. Modul Deteksi Dini dan Pemantauan PTM (inovasi inti).**
-SIMPUS konvensional bersifat *pasif*: ia menyimpan apa yang diketik dan menampilkannya kembali bila diminta. SEHATI bersifat *aktif*. Setiap kali tanda vital dimasukkan, sistem membandingkan nilainya terhadap ambang klinis dan terhadap riwayat pasien itu sendiri, lalu memberi penanda risiko pada kunjungan tersebut. Penanda ini terakumulasi menjadi **daftar pantau** yang dapat ditindaklanjuti: pasien dengan pola tekanan darah tinggi berulang akan muncul dalam daftar pasien yang perlu dijadwalkan kunjungan ulang. Dengan cara ini, celah antara "pernah diukur" dan "terdiagnosis" — celah 34,1% versus 8,8% pada data Riskesdas — ditangani secara sistemik, bukan diserahkan pada kejelian individu.
+Berbeda dengan SIMPUS konvensional yang umumnya hanya berfungsi sebagai tempat penyimpanan data, SEHATI dilengkapi dengan fitur pemantauan risiko. Setiap kali data tanda vital diinput, sistem akan otomatis membandingkannya dengan ambang batas klinis dan riwayat kunjungan pasien. Jika terdeteksi anomali, sistem akan memberikan penanda risiko pada data kunjungan tersebut. Pasien dengan indikasi risiko (misalnya tekanan darah tinggi berulang) akan terangkum ke dalam **daftar pantau** agar dapat ditindaklanjuti. Fitur ini diharapkan dapat meminimalkan celah antara pasien yang "pernah diukur" dan yang benar-benar "terdiagnosis" (berdasarkan celah 34,1% versus 8,8% pada data Riskesdas) secara sistematis.
 
 **2. Arsitektur *offline-first*.**
-Seluruh fungsi inti berjalan di atas basis data lokal tanpa memerlukan koneksi internet. Hal ini membalik asumsi solusi berbasis awan dan menjadikan SEHATI dapat dipakai justru di tempat yang paling membutuhkannya.
+Seluruh fungsi inti aplikasi berjalan menggunakan basis data lokal sehingga tidak bergantung pada koneksi internet. Pendekatan ini dipilih agar SEHATI tetap dapat beroperasi secara optimal di fasilitas kesehatan daerah yang sering mengalami kendala jaringan.
 
 **3. Alur kerja terpadu dari pendaftaran hingga farmasi.**
-Data mengalir dalam satu aplikasi tanpa penyalinan ulang antar-tahap. Resep yang disusun dokter langsung tervalidasi terhadap stok apotek pada saat penyusunan, sehingga penggantian obat karena stok kosong terjadi di ruang periksa — bukan setelah pasien mengantre di apotek.
+Data mengalir dalam satu aplikasi tanpa penyalinan ulang antar-tahap. Resep yang disusun dokter langsung tervalidasi terhadap stok apotek pada saat penyusunan, sehingga penggantian obat karena stok kosong terjadi di ruang periksa, bukan setelah pasien mengantre di apotek.
 
 ## 2.2 Asumsi dan Batasan
 
