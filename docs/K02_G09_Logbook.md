@@ -17,6 +17,7 @@
 | 13525044 | Steven Vanako |
 | 13525071 | Muhammad Adnan Kurniawan |
 | 13525074 | Axeleon Justin Algianto |
+| 13525110 | Fachry Azriel Fajdwani |
 
 ---
 

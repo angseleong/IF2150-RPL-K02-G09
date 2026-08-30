@@ -17,7 +17,7 @@
 | 13525044 | Steven Vanako |
 | 13525071 | Muhammad Adnan Kurniawan |
 | 13525074 | Axeleon Justin Algianto |
-| *[NIM 5]* | *[Nama Anggota 5]* |
+| 13525110 | Fachry Azriel Fajdwani |
 
 ---
 
@@ -60,3 +60,4 @@ Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan A
 | <img src="./assets/ttd-anggota2.png" width="100"> | **13525044 - Steven Vanako** |
 | <img src="./assets/ttd-anggota3.png" width="100"> | **13525071 - Muhammad Adnan Kurniawan** |
 | <img src="./assets/ttd-anggota4.png" width="100"> | **13525074 - Axeleon Justin Algianto** |
+| <img src="./assets/ttd-anggota5.png" width="100"> | **13525110 - Fachry Azriel Fajdwani** |
