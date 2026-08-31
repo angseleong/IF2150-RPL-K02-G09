@@ -37,7 +37,9 @@ Pusat Kesehatan Masyarakat (Puskesmas) merupakan ujung tombak Fasilitas Kesehata
 
 Sayangnya, kapasitas administratif puskesmas belum sebanding dengan beban tugas tersebut. Sebagian besar puskesmas, terutama di kabupaten dan daerah kepulauan, masih mengandalkan **pencatatan berbasis kertas** untuk rekam medis, pengelolaan antrean, resep, dan stok obat. Berkas rekam medis disimpan dalam rak *family folder*, ditulis tangan oleh dokter, lalu diketik ulang secara manual ketika laporan bulanan harus dikirim ke dinas kesehatan. Model kerja seperti ini menimbulkan tiga persoalan yang saling berkait: waktu tunggu pasien menjadi panjang, riwayat kesehatan pasien terputus antar-kunjungan, dan data agregat yang seharusnya bisa dipakai untuk deteksi dini justru tidak pernah terbentuk.
 
-Dampak paling nyata dari terputusnya riwayat kesehatan pasien terlihat pada penanganan **Penyakit Tidak Menular (PTM)**. Riset Kesehatan Dasar (Riskesdas) 2018 mencatat prevalensi hipertensi pada penduduk berusia 18 tahun ke atas mencapai **34,1%** berdasarkan hasil pengukuran tekanan darah. Namun dari angka tersebut, hanya **8,8%** yang benar-benar terdiagnosis. Artinya, sebagian besar penderita hipertensi di Indonesia tidak pernah tahu bahwa dirinya sakit, sehingga tidak pernah menjalani pengobatan. Lebih jauh lagi, di antara mereka yang sudah terdiagnosis, 13,3% tidak meminum obat sama sekali dan 32,3% tidak meminum obat secara teratur. Sebagian besar penderita ini sebenarnya *pernah* datang ke puskesmas dan *pernah* diukur tekanan darahnya, tetapi karena hasil pengukuran hanya dicatat di lembar kertas kunjungan hari itu, tidak ada mekanisme apa pun yang menghubungkan angka tinggi hari ini dengan angka tinggi tiga bulan lalu.
+Dampak paling nyata dari terputusnya riwayat kesehatan pasien terlihat pada penanganan **Penyakit Tidak Menular (PTM)**. Survei Kesehatan Indonesia (SKI) 2023 mencatat prevalensi hipertensi pada penduduk berusia 18 tahun ke atas sebesar **30,8%** berdasarkan hasil pengukuran tekanan darah, sementara prevalensi berdasarkan diagnosis dokter hanya **8,6%**. Selisih lebih dari 22 poin persen ini berarti sebagian besar penderita hipertensi di Indonesia tidak pernah tahu bahwa dirinya sakit, sehingga tidak pernah menjalani pengobatan. Pola yang sama terjadi pada diabetes melitus: prevalensi berdasarkan pemeriksaan gula darah pada penduduk usia 15 tahun ke atas mencapai 11,7%, sedangkan yang terdiagnosis dokter hanya 2,2%.
+
+Yang perlu digarisbawahi, celah tersebut nyaris tidak bergerak dalam lima tahun. Riset Kesehatan Dasar (Riskesdas) 2018 mencatat selisih sekitar 25 poin persen (34,1% berdasarkan pengukuran berbanding 8,8% berdasarkan diagnosis), dan pada SKI 2023 selisihnya masih sekitar 22 poin persen. Artinya penurunan prevalensi hipertensi tidak diiringi perbaikan berarti pada kemampuan sistem kesehatan mendeteksi penderitanya. Beban itu berlanjut sampai tahap pengobatan: di antara penduduk usia 15 tahun ke atas yang sudah terdiagnosis hipertensi, hanya 46,7% yang meminum obat secara teratur, sementara 36,4% meminum obat tidak teratur dan 16,9% tidak meminum obat sama sekali. Sebagian besar penderita ini sebenarnya *pernah* datang ke puskesmas dan *pernah* diukur tekanan darahnya, tetapi karena hasil pengukuran hanya dicatat di lembar kertas kunjungan hari itu, tidak ada mekanisme apa pun yang menghubungkan angka tinggi hari ini dengan angka tinggi tiga bulan lalu.
 
 Persoalan serupa terjadi pada kesehatan ibu. Hasil Long Form Sensus Penduduk 2020 (BPS) menunjukkan Angka Kematian Ibu (AKI) Indonesia sebesar **189 per 100.000 kelahiran hidup**, masih jauh dari target SDGs 3.1 yaitu di bawah 70 per 100.000 kelahiran hidup pada 2030. Pemantauan kehamilan berisiko sangat bergantung pada kelengkapan dan kesinambungan catatan kunjungan, sesuatu yang sulit dijamin dengan berkas kertas yang mudah terselip atau hilang.
 
@@ -53,9 +55,9 @@ Kelompok kami memilih **SDG 3: *Good Health and Well-being* (Kehidupan Sehat dan
 
 ### Urgensi
 
-Masalah ini sangat mendesak untuk segera diselesaikan, terutama karena adanya tuntutan regulasi. Peraturan Menteri Kesehatan Nomor 24 Tahun 2022 mewajibkan **seluruh** fasilitas pelayanan kesehatan (termasuk puskesmas, klinik, dan praktik mandiri) untuk menyelenggarakan Rekam Medis Elektronik (RME) selambat-lambatnya **31 Desember 2023**. Mengingat tenggat waktu tersebut sudah terlewat, fasilitas yang belum siap berisiko mendapat sanksi administratif hingga pencabutan akreditasi.
+Masalah ini sangat mendesak untuk segera diselesaikan, terutama karena adanya tuntutan regulasi. Peraturan Menteri Kesehatan Nomor 24 Tahun 2022, yang hingga saat ini masih berlaku, mewajibkan **seluruh** fasilitas pelayanan kesehatan (termasuk puskesmas, klinik, dan praktik mandiri) untuk menyelenggarakan Rekam Medis Elektronik (RME) selambat-lambatnya **31 Desember 2023**. Tenggat tersebut sudah terlewat lebih dari dua tahun, dan fasilitas yang belum siap berisiko mendapat sanksi administratif hingga rekomendasi pencabutan status akreditasi. Kementerian Kesehatan bahkan mempertegas kewajiban ini melalui surat edaran tertanggal 15 April 2025 yang menuntut penerapan RME secara penuh beserta pengiriman datanya ke platform SATUSEHAT.
 
-Di samping masalah regulasi, penundaan digitalisasi juga memperburuk celah deteksi dini Penyakit Tidak Menular (PTM). Dengan prevalensi hipertensi sebesar 34,1% dan tingkat diagnosis yang hanya 8,8%, setiap data pasien yang tidak dicatat dengan baik berarti hilangnya kesempatan deteksi dini. Akibatnya, komplikasi penyakit seperti stroke atau gagal ginjal berisiko meningkat dan memakan biaya penanganan yang jauh lebih mahal. 
+Di samping masalah regulasi, penundaan digitalisasi juga memperburuk celah deteksi dini Penyakit Tidak Menular (PTM). Dengan prevalensi hipertensi terukur sebesar 30,8% sementara yang terdiagnosis dokter hanya 8,6%, setiap data pasien yang tidak dicatat dengan baik berarti hilangnya kesempatan deteksi dini. Akibatnya, komplikasi penyakit seperti stroke atau gagal ginjal berisiko meningkat dan memakan biaya penanganan yang jauh lebih mahal. 
 
 Meskipun kebutuhannya sangat mendesak, solusi yang tersedia saat ini belum sepenuhnya ramah untuk puskesmas kecil. Sebagian besar Sistem Informasi Manajemen Puskesmas (SIMPUS) komersial membebankan biaya langganan dan sangat bergantung pada internet yang stabil. Hal ini tentu menyulitkan puskesmas di daerah yang infrastrukturnya masih terbatas.
 
@@ -80,7 +82,7 @@ Dari alur di atas, kami mengidentifikasi tujuh kesenjangan yang akan menjadi sas
 | **G-01** | Pencarian berkas rekam medis lambat | Berkas dicari manual di rak berdasarkan nomor atau nama; kesalahan penempatan membuat berkas sulit ditemukan | Waktu tunggu pasien bertambah, antrean menumpuk di jam sibuk |
 | **G-02** | Berkas hilang, rusak, atau tidak terbaca | Kertas rentan terhadap kelembapan dan kehilangan; tulisan tangan dokter sering sulit dibaca oleh apoteker | Risiko kesalahan pemberian obat dan riwayat pasien yang tidak dapat direkonstruksi |
 | **G-03** | Riwayat kesehatan tidak berkesinambungan | Setiap kunjungan dicatat sebagai lembar terpisah tanpa mekanisme membandingkan antar-waktu | Tren kondisi pasien (misal tekanan darah yang terus naik) tidak pernah terlihat |
-| **G-04** | Tidak ada mekanisme deteksi dini | Penandaan pasien berisiko sepenuhnya bergantung pada kejelian dan ingatan petugas | Pasien berisiko PTM lolos dari pemantauan, sejalan dengan temuan Riskesdas 2018 |
+| **G-04** | Tidak ada mekanisme deteksi dini | Penandaan pasien berisiko sepenuhnya bergantung pada kejelian dan ingatan petugas | Pasien berisiko PTM lolos dari pemantauan, sejalan dengan temuan SKI 2023 |
 | **G-05** | Stok obat tidak terpantau secara *real-time* | Pengecekan stok dilakukan secara fisik dan pencatatan dilakukan menyusul | Terjadi kekosongan obat mendadak dan obat kedaluwarsa yang tidak terdeteksi |
 | **G-06** | Rekapitulasi laporan manual dan lambat | Data harus dibaca ulang dari ratusan lembar kertas, lalu diketik ulang | Laporan terlambat, rawan salah hitung, dan menyita waktu tenaga kesehatan |
 | **G-07** | Solusi digital eksisting kurang sesuai konteks | SIMPUS komersial umumnya berbasis awan, berlangganan, dan mengasumsikan internet stabil | Puskesmas kecil dan daerah dengan internet terbatas tidak dapat mengadopsinya |
@@ -126,7 +128,7 @@ SEHATI dikembangkan sebagai **aplikasi desktop** yang dipasang pada komputer di 
 Pembeda utama SEHATI dari SIMPUS pada umumnya terletak pada tiga hal berikut.
 
 **1. Modul Deteksi Dini dan Pemantauan PTM (inovasi inti).**
-Berbeda dengan SIMPUS konvensional yang umumnya hanya berfungsi sebagai tempat penyimpanan data, SEHATI dilengkapi dengan fitur pemantauan risiko. Setiap kali data tanda vital diinput, sistem akan otomatis membandingkannya dengan ambang batas klinis dan riwayat kunjungan pasien. Jika terdeteksi anomali, sistem akan memberikan penanda risiko pada data kunjungan tersebut. Pasien dengan indikasi risiko (misalnya tekanan darah tinggi berulang) akan terangkum ke dalam **daftar pantau** agar dapat ditindaklanjuti. Fitur ini diharapkan dapat meminimalkan celah antara pasien yang "pernah diukur" dan yang benar-benar "terdiagnosis" (berdasarkan celah 34,1% versus 8,8% pada data Riskesdas) secara sistematis.
+Berbeda dengan SIMPUS konvensional yang umumnya hanya berfungsi sebagai tempat penyimpanan data, SEHATI dilengkapi dengan fitur pemantauan risiko. Setiap kali data tanda vital diinput, sistem akan otomatis membandingkannya dengan ambang batas klinis dan riwayat kunjungan pasien. Jika terdeteksi anomali, sistem akan memberikan penanda risiko pada data kunjungan tersebut. Pasien dengan indikasi risiko (misalnya tekanan darah tinggi berulang) akan terangkum ke dalam **daftar pantau** agar dapat ditindaklanjuti. Fitur ini diharapkan dapat meminimalkan celah antara pasien yang "pernah diukur" dan yang benar-benar "terdiagnosis" (celah 30,8% versus 8,6% pada data SKI 2023) secara sistematis.
 
 **2. Arsitektur *offline-first*.**
 Seluruh fungsi inti aplikasi berjalan menggunakan basis data lokal sehingga tidak bergantung pada koneksi internet. Pendekatan ini dipilih agar SEHATI tetap dapat beroperasi secara optimal di fasilitas kesehatan daerah yang sering mengalami kendala jaringan.
@@ -331,16 +333,18 @@ Nomor aktivitas dalam kurung merujuk pada tabel Deskripsi Aktivitas di Subbab 3.
 # Referensi
 
 **Regulasi**
-1. Peraturan Menteri Kesehatan Republik Indonesia Nomor 24 Tahun 2022 tentang Rekam Medis.
+1. Peraturan Menteri Kesehatan Republik Indonesia Nomor 24 Tahun 2022 tentang Rekam Medis. https://peraturan.bpk.go.id/Details/245544/permenkes-no-24-tahun-2022
 2. Undang-Undang Republik Indonesia Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi.
+3. Surat Edaran Kementerian Kesehatan Republik Indonesia tanggal 15 April 2025 mengenai penerapan Rekam Medis Elektronik dan pengiriman data ke platform SATUSEHAT.
 
 **Data dan statistik**
 
-3. Kementerian Kesehatan Republik Indonesia. (2025). *Profil Kesehatan Indonesia 2024*. Jakarta: Kementerian Kesehatan RI. https://kemkes.go.id/id/profil-kesehatan-indonesia-2024
-4. Kementerian Kesehatan Republik Indonesia. (2019). *Laporan Nasional Riskesdas 2018*. Jakarta: Lembaga Penerbit Badan Litbang Kesehatan. https://repository.badankebijakan.kemkes.go.id/id/eprint/3514/
-5. Badan Pusat Statistik. *Angka Kematian Ibu (AKI) Hasil Long Form SP2020 Menurut Provinsi*. https://www.bps.go.id/id/statistics-table/1/MjIxOSMx/angka-kematian-ibu-aki-maternal-mortality-rate-mmr-hasil-long-form-sp2020-menurut-provinsi-2020.html
-6. United Nations. *Sustainable Development Goal 3: Ensure healthy lives and promote well-being for all at all ages*. https://sdgs.un.org/goals/goal3
+4. Badan Kebijakan Pembangunan Kesehatan, Kementerian Kesehatan Republik Indonesia. (2024). *Hasil Utama Survei Kesehatan Indonesia (SKI) 2023*. https://www.badankebijakan.kemkes.go.id/daftar-frequently-asked-question-seputar-hasil-utama-ski-2023/hasil-utama-ski-2023/
+5. Kementerian Kesehatan Republik Indonesia. (2025). *Profil Kesehatan Indonesia 2024*. Jakarta: Kementerian Kesehatan RI. https://kemkes.go.id/id/profil-kesehatan-indonesia-2024
+6. Kementerian Kesehatan Republik Indonesia. (2019). *Laporan Nasional Riskesdas 2018*. Jakarta: Lembaga Penerbit Badan Litbang Kesehatan. Digunakan sebagai pembanding tren terhadap SKI 2023. https://repository.badankebijakan.kemkes.go.id/id/eprint/3514/
+7. Badan Pusat Statistik. *Angka Kematian Ibu (AKI) Hasil Long Form SP2020 Menurut Provinsi*. https://www.bps.go.id/id/statistics-table/1/MjIxOSMx/angka-kematian-ibu-aki-maternal-mortality-rate-mmr-hasil-long-form-sp2020-menurut-provinsi-2020.html
+8. United Nations. *Sustainable Development Goal 3: Ensure healthy lives and promote well-being for all at all ages*. https://sdgs.un.org/goals/goal3
 
 **Perkakas**
 
-7. Diagram UML: https://www.drawio.com/, https://staruml.io/
+9. Diagram UML: https://www.drawio.com/, https://staruml.io/

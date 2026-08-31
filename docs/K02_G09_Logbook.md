@@ -43,6 +43,7 @@
 | *29-08-2026* | *[Seluruh Anggota]* | *Peninjauan silang seluruh dokumen, penyelarasan penomoran kesenjangan dengan user story, serta perapian tabel dan referensi* | *2* | *Done* | *-* | 
 | *29-08-2026* | *Steven Vanako* | *Merapikan struktur repository, mengganti nama berkas KXX_GYY menjadi K02_G09, dan memperbarui dokumen logbook serta AI Usage* | *1* | *Done* | *-* | 
 | *31-08-2026* | *Muhammad Adnan Kurniawan* | *Menyesuaikan dokumen dengan template revisi: menambahkan Subbab 3.3 Deskripsi Aktivitas berisi 26 aktivitas (A01 s.d. A26) beserta penelusurannya ke user story, serta menggeser Model Proses Bisnis menjadi Subbab 3.4* | *2,5* | *Done* | *Template diperbarui asisten setelah draf awal selesai, sehingga penomoran subbab dan rujukan silang harus disesuaikan ulang* | 
+| *31-08-2026* | *Muhammad Adnan Kurniawan* | *Memutakhirkan data pendukung Bab 1: mengganti angka Riskesdas 2018 dengan Survei Kesehatan Indonesia (SKI) 2023, menambahkan data diabetes melitus, serta melengkapi urgensi regulasi dengan surat edaran Kemenkes 15 April 2025* | *2* | *Done* | *Riskesdas 2018 ternyata sudah digantikan SKI 2023; angka lama tetap dipertahankan sebagai pembanding tren* | 
 
 **Catatan/Evaluasi Milestone 1:**
 * *Kelompok menyepakati SDG 3 (Good Health and Well-being) sebagai landasan solusi, dengan fokus pada target 3.4 (penyakit tidak menular), 3.8 (cakupan kesehatan semesta), dan 3.1 (angka kematian ibu).*
