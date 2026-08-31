@@ -81,21 +81,25 @@ Alur berikut menggambarkan pelayanan rawat jalan pada puskesmas non rawat inap y
 
 Dari alur di atas, kami mengidentifikasi tujuh kesenjangan yang akan menjadi sasaran perangkat lunak kami.
 
-| Kode | Kesenjangan | Penjelasan | Dampak |
-| :--- | :--- | :--- | :--- |
-| **G-01** | Pencarian berkas rekam medis lambat | Berkas dicari manual di rak berdasarkan nomor atau nama; kesalahan penempatan membuat berkas sulit ditemukan | Waktu tunggu pasien bertambah, antrean menumpuk di jam sibuk |
-| **G-02** | Berkas hilang, rusak, atau tidak terbaca | Kertas rentan terhadap kelembapan dan kehilangan; tulisan tangan dokter sering sulit dibaca oleh apoteker | Risiko kesalahan pemberian obat dan riwayat pasien yang tidak dapat direkonstruksi |
-| **G-03** | Riwayat kesehatan tidak berkesinambungan | Setiap kunjungan dicatat sebagai lembar terpisah tanpa mekanisme membandingkan antar-waktu | Tren kondisi pasien (misal tekanan darah yang terus naik) tidak pernah terlihat |
-| **G-04** | Tidak ada mekanisme deteksi dini | Penandaan pasien berisiko sepenuhnya bergantung pada kejelian dan ingatan petugas | Pasien berisiko PTM lolos dari pemantauan, sejalan dengan temuan SKI 2023 |
-| **G-05** | Stok obat tidak terpantau secara *real-time* | Pengecekan stok dilakukan secara fisik dan pencatatan dilakukan menyusul | Terjadi kekosongan obat mendadak dan obat kedaluwarsa yang tidak terdeteksi |
-| **G-06** | Rekapitulasi laporan manual dan lambat | Data harus dibaca ulang dari ratusan lembar kertas, lalu diketik ulang | Laporan terlambat, rawan salah hitung, dan menyita waktu tenaga kesehatan |
-| **G-07** | Solusi digital eksisting bersifat administratif dan mengandaikan jaringan stabil | Sistem yang tersedia berfokus pada penyimpanan dan penampilan ulang data, bukan pada pemantauan antar-waktu; sebagian besar juga berbasis awan atau berlangganan | Celah deteksi dini tetap terbuka meskipun fasilitas sudah terdigitalisasi, sementara puskesmas dengan jaringan terbatas kesulitan mengadopsinya sama sekali |
+Kolom terakhir menandai kepada siapa kesenjangan tersebut berlaku, karena tidak semuanya hilang begitu sebuah puskesmas terdigitalisasi. Perbedaan inilah yang menentukan arah solusi.
+
+| Kode | Kesenjangan | Penjelasan | Dampak | Berlaku pada |
+| :--- | :--- | :--- | :--- | :--- |
+| **G-01** | Pencarian data rekam medis lambat | Berkas dicari manual di rak, atau riwayat pasien harus dirangkai dari dua media pada puskesmas hibrida | Waktu tunggu pasien bertambah, antrean menumpuk di jam sibuk | Manual dan hibrida |
+| **G-02** | Berkas hilang, rusak, atau tidak terbaca | Kertas rentan terhadap kelembapan dan kehilangan; tulisan tangan dokter sering sulit dibaca oleh apoteker | Risiko kesalahan pemberian obat dan riwayat pasien yang tidak dapat direkonstruksi | Manual dan hibrida |
+| **G-03** | Riwayat kesehatan tidak berkesinambungan | Setiap kunjungan diperlakukan sebagai catatan yang berdiri sendiri, tanpa mekanisme membandingkan hasil antar-waktu, baik pada lembar kertas maupun pada basis data | Tren kondisi pasien seperti tekanan darah yang terus naik tidak pernah terlihat | **Seluruhnya, termasuk yang sudah digital** |
+| **G-04** | Tidak ada mekanisme deteksi dini | Penandaan pasien berisiko sepenuhnya bergantung pada kejelian dan ingatan petugas, karena sistem tidak pernah memunculkannya sendiri | Pasien berisiko PTM lolos dari pemantauan, sejalan dengan celah 22 poin persen pada SKI 2023 | **Seluruhnya, termasuk yang sudah digital** |
+| **G-05** | Stok obat tidak terpantau secara *real-time* | Pengecekan stok dilakukan secara fisik dan pencatatan dilakukan menyusul | Terjadi kekosongan obat mendadak dan obat kedaluwarsa yang tidak terdeteksi | Manual dan hibrida |
+| **G-06** | Rekapitulasi laporan lambat dan rawan salah | Data harus dibaca ulang dari lembar kunjungan lalu diketik ulang ke format laporan | Laporan terlambat, rawan salah hitung, dan menyita waktu tenaga kesehatan | Manual dan hibrida |
+| **G-07** | Solusi digital eksisting bersifat administratif dan mengandaikan jaringan stabil | Sistem yang tersedia berfokus pada penyimpanan dan penampilan ulang data, bukan pada pemantauan antar-waktu; sebagian besar juga berbasis awan atau berlangganan | Celah deteksi dini tetap terbuka meskipun fasilitas sudah terdigitalisasi, sementara puskesmas berjaringan terbatas kesulitan mengadopsinya sama sekali | **Seluruhnya, termasuk yang sudah digital** |
+
+Perhatikan bahwa **G-03, G-04, dan G-07 tidak hilang meskipun sebuah puskesmas sudah sepenuhnya digital.** Ketiganya inilah inti permasalahan yang diangkat, sedangkan G-01, G-02, G-05, dan G-06 merupakan beban tambahan yang masih ditanggung puskesmas manual dan hibrida.
 
 ### Perbandingan dengan solusi yang sudah ada
 
 | Solusi | Kelebihan | Keterbatasan terhadap konteks masalah |
 | :--- | :--- | :--- |
-| **Pencatatan manual (kertas)** | Tidak butuh perangkat, tidak butuh pelatihan, tidak bergantung listrik | Seluruh kesenjangan G-01 sampai G-06 berasal dari model ini |
+| **Pencatatan manual (kertas)** | Tidak butuh perangkat, tidak butuh pelatihan, tidak bergantung listrik | Menanggung seluruh kesenjangan G-01 sampai G-06 sekaligus |
 | **SIMPUS komersial berbasis awan** | Fitur lengkap, terintegrasi dengan sistem nasional, ada dukungan teknis | Berbayar per bulan, membutuhkan internet stabil, layanan terhenti saat koneksi putus (G-07) |
 | **SIKDA Generik (sistem gratis Kemenkes untuk puskesmas)** | Gratis, resmi dari Kementerian Kesehatan, dan dirancang khusus untuk alur kerja puskesmas | Penelitian implementasi melaporkan kendala berupa keterbatasan sumber daya manusia terlatih, keterbatasan infrastruktur, pembaruan sistem yang lambat, dan tata kelola yang belum mapan. Sebagaimana SIMPUS pada umumnya, sistem ini bersifat administratif dan tidak melakukan pemantauan risiko antar-waktu (G-03, G-04) |
 | **ASRI (RME gratis Kemenkes)** | Gratis dan sudah terhubung ke SATUSEHAT sejak awal | Diperuntukkan bagi Tempat Praktik Mandiri Dokter dan Dokter Gigi, bukan untuk alur pelayanan puskesmas yang melibatkan banyak peran sekaligus |
@@ -116,17 +120,17 @@ Kesimpulannya, celah yang belum terisi adalah **sistem yang secara aktif memanta
 
 ### Gambaran dari sudut pandang pengguna
 
-Aplikasi ini dirancang untuk mempermudah alur kerja seluruh petugas fasilitas kesehatan. **Petugas pendaftaran** tidak perlu lagi membongkar rak berkas secara manual, karena pencarian pasien bisa dilakukan secara instan lewat NIK atau nomor rekam medis untuk mencetak nomor antrean. Selanjutnya, **perawat** tinggal menginput data skrining tanda vital ke dalam formulir digital. Sistem akan langsung membandingkan nilai tersebut dengan batas normal dan menampilkan grafik riwayat kunjungan pasien.
+Aplikasi ini dirancang untuk mempermudah alur kerja seluruh petugas fasilitas kesehatan. **Petugas pendaftaran** menemukan data pasien secara instan lewat NIK atau nomor rekam medis, lalu mencetak nomor antrean, tanpa perlu membongkar rak berkas maupun merangkai riwayat dari dua media pada puskesmas hibrida. Selanjutnya, **perawat** tinggal menginput data skrining tanda vital ke dalam formulir digital. Sistem akan langsung membandingkan nilai tersebut dengan batas normal dan menampilkan grafik riwayat kunjungan pasien.
 
 Bagi **dokter**, seluruh riwayat kesehatan (mulai dari diagnosis lampau, obat yang dikonsumsi, hingga tren tekanan darah) akan langsung tersaji dalam satu layar sebelum pemeriksaan. Jika ada indikasi risiko penyakit tertentu, sistem akan langsung memberikan peringatan otomatis. Setelah diperiksa, dokter bisa langsung menyusun resep secara digital. Resep ini kemudian otomatis terkirim ke **apoteker** dalam bentuk teks yang jelas dan stoknya juga sudah divalidasi oleh sistem.
 
-Pada akhirnya, pekerjaan **kepala puskesmas** juga menjadi jauh lebih ringan. Rekapitulasi laporan kunjungan maupun daftar pasien berisiko sudah dibuatkan secara otomatis oleh sistem tanpa perlu mengumpulkan dan mengetik ulang data dari kertas.
+Pada akhirnya, pekerjaan **kepala puskesmas** juga menjadi jauh lebih ringan. Rekapitulasi laporan kunjungan maupun daftar pasien berisiko disusun otomatis oleh sistem, tanpa perlu mengumpulkan dan mengetik ulang data dari lembar kunjungan.
 
 ### Target platform dan alasan pemilihannya
 
 SEHATI dikembangkan sebagai **aplikasi desktop** yang dipasang pada komputer di lingkungan puskesmas. Pemilihan ini didasarkan pada empat pertimbangan.
 
-1. **Kemandirian terhadap koneksi internet.** Kesenjangan G-07 menunjukkan bahwa ketergantungan pada internet adalah penghalang utama adopsi di daerah. Aplikasi desktop dengan basis data lokal tetap berfungsi penuh saat jaringan terputus, suatu kondisi yang tidak boleh menghentikan pelayanan kesehatan.
+1. **Kemandirian terhadap koneksi internet.** Kesenjangan G-07 menunjukkan bahwa ketergantungan pada jaringan stabil menjadi penghalang adopsi di daerah, sejalan dengan pengakuan Kementerian Kesehatan mengenai keterbatasan infrastruktur. Aplikasi desktop dengan basis data lokal tetap berfungsi penuh saat jaringan terputus, suatu kondisi yang tidak boleh menghentikan pelayanan kesehatan.
 2. **Kesesuaian dengan perangkat yang sudah tersedia.** Puskesmas umumnya sudah memiliki komputer atau laptop di loket pendaftaran dan ruang periksa. Aplikasi desktop yang ringan dapat memanfaatkan perangkat tersebut tanpa pengadaan baru.
 3. **Kesesuaian dengan pola kerja.** Pendaftaran, pemeriksaan, dan farmasi dilakukan di meja kerja tetap dengan intensitas pengetikan yang tinggi. Antarmuka desktop dengan papan ketik penuh dan pintasan papan ketik lebih efisien untuk pola kerja seperti ini dibandingkan antarmuka sentuh.
 4. **Kendali atas data sensitif.** Data rekam medis tersimpan di dalam lingkungan fasilitas itu sendiri, sehingga kendali dan tanggung jawab penyimpanan tetap berada di tangan fasilitas, sejalan dengan kewajiban menjaga kerahasiaan rekam medis.
@@ -146,7 +150,7 @@ Data mengalir dalam satu aplikasi tanpa penyalinan ulang antar-tahap. Resep yang
 
 ### Ketahanan data
 
-Memindahkan rekam medis dari kertas ke basis data lokal memunculkan risiko baru yang perlu dijawab secara jujur. Arsip kertas hilang satu per satu, sedangkan kerusakan satu media penyimpanan berpotensi melenyapkan seluruh rekam medis sekaligus. Karena itu pencadangan tidak diserahkan pada kedisiplinan petugas. SEHATI menjalankan pencadangan basis data secara otomatis menurut jadwal ke media penyimpanan terpisah, menampilkan status pencadangan terakhir pada layar utama, serta memperingatkan pengguna bila pencadangan gagal atau tertunda. Antrean sinkronisasi ke SATUSEHAT turut berperan sebagai salinan kedua yang berada di luar fasilitas.
+Menyimpan seluruh rekam medis pada satu basis data lokal memunculkan risiko yang perlu dijawab secara jujur. Arsip kertas hilang satu per satu, sedangkan kerusakan satu media penyimpanan berpotensi melenyapkan seluruh rekam medis sekaligus. Karena itu pencadangan tidak diserahkan pada kedisiplinan petugas. SEHATI menjalankan pencadangan basis data secara otomatis menurut jadwal ke media penyimpanan terpisah, menampilkan status pencadangan terakhir pada layar utama, serta memperingatkan pengguna bila pencadangan gagal atau tertunda. Antrean sinkronisasi ke SATUSEHAT turut berperan sebagai salinan kedua yang berada di luar fasilitas.
 
 ## 2.2 Asumsi dan Batasan
 
@@ -254,7 +258,7 @@ Pembagian ini memastikan bahwa apabila waktu tidak mencukupi, yang tertunda adal
 | US-17 | Apoteker | Menandai resep yang obatnya telah diserahkan kepada pasien | Status pelayanan setiap pasien terpantau hingga tuntas |
 | US-18 | Apoteker | Mencatat penerimaan obat masuk beserta nomor bets dan tanggal kedaluwarsa | Persediaan obat tertelusur dan obat kedaluwarsa dapat dicegah beredar |
 | US-19 | Apoteker | Memperoleh peringatan saat stok obat menipis atau mendekati kedaluwarsa | Pengadaan ulang dilakukan sebelum terjadi kekosongan obat |
-| US-20 | Kepala Puskesmas | Melihat rekapitulasi jumlah kunjungan dan diagnosis terbanyak per periode | Laporan bulanan tersusun tanpa perlu menghitung ulang dari berkas kertas |
+| US-20 | Kepala Puskesmas | Melihat rekapitulasi jumlah kunjungan dan diagnosis terbanyak per periode | Laporan bulanan tersusun tanpa perlu menghitung ulang dari lembar kunjungan |
 | US-21 | Kepala Puskesmas | Melihat daftar pasien yang ditandai berisiko penyakit tidak menular | Program pemantauan PTM dapat disasarkan pada pasien yang tepat |
 | US-22 | Kepala Puskesmas | Mengekspor laporan ke dalam berkas yang dapat dicetak atau diunggah | Pelaporan ke dinas kesehatan berjalan cepat dan bebas salah ketik |
 | US-23 | Kepala Puskesmas | Mengelola akun pengguna beserta hak aksesnya | Akses terhadap data pasien terbatas pada petugas yang berwenang |
@@ -351,10 +355,10 @@ Aktivitas A01 sampai A18 membentuk alur utama pelayanan rawat jalan yang divisua
 
 Diagram berikut memodelkan proses bisnis pelayanan rawat jalan di puskesmas ketika dijalankan dengan bantuan SEHATI. Diagram disusun dalam bentuk *swimlane activity diagram* dengan lima lajur: empat lajur untuk aktor manusia (Petugas Pendaftaran, Perawat, Dokter, Apoteker) dan satu lajur untuk sistem perangkat lunak.
 
-Ada tiga titik dalam alur ini yang menunjukkan peningkatan efisiensi dibandingkan proses manual pada Subbab 1.2:
+Ada tiga titik dalam alur ini yang menunjukkan peningkatan dibandingkan proses manual maupun hibrida pada Subbab 1.2:
 
 1. **Pencarian data pasien dilakukan oleh sistem**, menggantikan pencarian berkas fisik di rak (menutup kesenjangan G-01 dan G-02).
-2. **Evaluasi ambang risiko dilakukan otomatis** setelah tanda vital dimasukkan, sehingga penandaan pasien berisiko tidak lagi bergantung pada kejelian petugas (menutup kesenjangan G-03 dan G-04).
+2. **Evaluasi ambang risiko dilakukan otomatis** setelah tanda vital dimasukkan, sehingga penandaan pasien berisiko tidak lagi bergantung pada kejelian petugas (menutup kesenjangan G-03 dan G-04). Inilah titik yang membedakan SEHATI dari sistem informasi puskesmas lain, karena G-03 dan G-04 tetap terbuka bahkan pada fasilitas yang sudah terdigitalisasi.
 3. **Validasi stok obat terjadi saat resep disusun**, bukan setelah pasien mengantre di apotek, sehingga penggantian obat dilakukan tanpa pasien perlu bolak-balik (menutup kesenjangan G-05).
 
 Pada akhir alur, sistem memperbarui rekam medis dan rekapitulasi laporan secara langsung, sehingga tidak diperlukan lagi pengetikan ulang di akhir bulan (menutup kesenjangan G-06).
