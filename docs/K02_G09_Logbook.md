@@ -39,9 +39,10 @@
 | *27-08-2026* | *Muhammad Adnan Kurniawan* | *Menyusun Subbab 1.2: analisis alur proses manual saat ini, identifikasi kesenjangan G-01 s.d. G-07, dan perbandingan dengan solusi eksisting* | *3* | *Done* | *-* | 
 | *28-08-2026* | *Axeleon Justin Algianto* | *Menyusun Bab 2: deskripsi perangkat lunak, justifikasi platform desktop, nilai unik, serta daftar asumsi dan batasan* | *3,5* | *Done* | *-* | 
 | *28-08-2026* | *Fachry Azriel Fajdwani* | *Menyusun Subbab 3.1 dan 3.2: identifikasi lima aktor dan penulisan 25 user story* | *3* | *Done* | *-* | 
-| *29-08-2026* | *Malik Arsyafiandra Madani* | *Membuat activity diagram swimlane proses pelayanan rawat jalan (Subbab 3.3) beserta penjelasan alurnya* | *4* | *Done* | *Notasi percabangan awal belum konsisten; diperbaiki setelah menyamakan acuan notasi UML activity diagram* | 
+| *29-08-2026* | *Malik Arsyafiandra Madani* | *Membuat activity diagram swimlane proses pelayanan rawat jalan (Subbab 3.4) beserta penjelasan alurnya* | *4* | *Done* | *Notasi percabangan awal belum konsisten; diperbaiki setelah menyamakan acuan notasi UML activity diagram* | 
 | *29-08-2026* | *[Seluruh Anggota]* | *Peninjauan silang seluruh dokumen, penyelarasan penomoran kesenjangan dengan user story, serta perapian tabel dan referensi* | *2* | *Done* | *-* | 
 | *29-08-2026* | *Steven Vanako* | *Merapikan struktur repository, mengganti nama berkas KXX_GYY menjadi K02_G09, dan memperbarui dokumen logbook serta AI Usage* | *1* | *Done* | *-* | 
+| *31-08-2026* | *Muhammad Adnan Kurniawan* | *Menyesuaikan dokumen dengan template revisi: menambahkan Subbab 3.3 Deskripsi Aktivitas berisi 26 aktivitas (A01 s.d. A26) beserta penelusurannya ke user story, serta menggeser Model Proses Bisnis menjadi Subbab 3.4* | *2,5* | *Done* | *Template diperbarui asisten setelah draf awal selesai, sehingga penomoran subbab dan rujukan silang harus disesuaikan ulang* | 
 
 **Catatan/Evaluasi Milestone 1:**
 * *Kelompok menyepakati SDG 3 (Good Health and Well-being) sebagai landasan solusi, dengan fokus pada target 3.4 (penyakit tidak menular), 3.8 (cakupan kesehatan semesta), dan 3.1 (angka kematian ibu).*

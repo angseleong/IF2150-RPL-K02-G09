@@ -236,7 +236,64 @@ Data mengalir dalam satu aplikasi tanpa penyalinan ulang antar-tahap. Resep yang
 | US-24 | Kepala Puskesmas | Mengelola data master obat, poli, dan ambang nilai risiko | Sistem dapat disesuaikan dengan kondisi dan kebijakan fasilitas |
 | US-25 | Kepala Puskesmas | Melihat jejak audit perubahan data rekam medis | Setiap perubahan data dapat dipertanggungjawabkan sesuai ketentuan pelindungan data pribadi |
 
-## 3.3 Model Proses Bisnis
+## 3.3 Deskripsi Aktivitas
+
+Tabel berikut memuat seluruh aktivitas yang terdapat dalam SEHATI beserta penelusurannya terhadap *user story* pada Subbab 3.2. Aktivitas dikelompokkan mengikuti modul fungsional sistem.
+
+**Modul Pendaftaran dan Data Pasien**
+
+| ID | Aktivitas | Penjelasan | ID User Story |
+| :--- | :--- | :--- | :--- |
+| A01 | Mencari Data Pasien | Sistem menelusuri basis data berdasarkan NIK, nama, atau nomor rekam medis, lalu menampilkan data pasien yang cocok | US-01 |
+| A02 | Mendaftarkan Pasien Baru | Sistem menerima data diri dan data wali pasien, menerbitkan nomor rekam medis, dan membuat berkas rekam medis elektronik baru | US-02 |
+| A03 | Memperbarui Data Pasien | Sistem menyimpan perubahan data diri pasien dan mencatat perubahan tersebut pada jejak audit | US-05 |
+| A04 | Membuat Data Kunjungan | Sistem mencatat kedatangan pasien beserta poli tujuan dan menghubungkannya dengan rekam medis pasien | US-03 |
+| A05 | Menerbitkan Nomor Antrean Poli | Sistem menetapkan nomor antrean sesuai urutan pendaftaran pada poli yang dipilih dan menyiapkannya untuk dicetak | US-04 |
+
+**Modul Skrining Awal**
+
+| ID | Aktivitas | Penjelasan | ID User Story |
+| :--- | :--- | :--- | :--- |
+| A06 | Menampilkan Antrean Skrining | Sistem menampilkan daftar pasien yang telah terdaftar dan menunggu pemeriksaan tanda vital, terurut menurut nomor antrean | US-06 |
+| A07 | Mencatat Keluhan Awal dan Tanda Vital | Sistem menerima keluhan awal serta hasil pengukuran tekanan darah, berat badan, tinggi badan, suhu, dan nadi, disertai validasi rentang nilai | US-07 |
+| A08 | Menampilkan Tren Tanda Vital | Sistem menyajikan riwayat tanda vital pasien dari kunjungan-kunjungan sebelumnya dalam bentuk grafik | US-08 |
+| A09 | Mengevaluasi Ambang Risiko | Sistem membandingkan nilai tanda vital terhadap ambang klinis dan terhadap riwayat pasien, lalu memunculkan peringatan bila berada di luar ambang normal | US-09 |
+
+**Modul Pemeriksaan**
+
+| ID | Aktivitas | Penjelasan | ID User Story |
+| :--- | :--- | :--- | :--- |
+| A10 | Menampilkan Rekam Medis dan Riwayat Kunjungan | Sistem menyajikan data pasien, diagnosis lampau, dan riwayat obat dalam satu tampilan bagi dokter | US-10 |
+| A11 | Menampilkan Penanda Risiko PTM | Sistem menandai kunjungan yang hasil skriningnya berada di luar ambang normal sebagai berisiko penyakit tidak menular dan menampilkannya sebagai peringatan visual | US-11 |
+| A12 | Mencatat Hasil Pemeriksaan | Sistem menyimpan anamnesis, diagnosis, dan tindakan yang dicatat dokter pada kunjungan berjalan | US-12 |
+| A13 | Menyusun Resep Elektronik | Sistem menerima daftar obat, dosis, dan aturan pakai yang dipilih dokter dari data master obat puskesmas | US-13 |
+| A14 | Memvalidasi Ketersediaan Stok Obat | Sistem memeriksa kecukupan stok setiap obat pada saat resep disusun dan memberi tahu dokter bila stok tidak mencukupi | US-14 |
+| A15 | Menjadwalkan Kunjungan Ulang | Sistem mencatat rencana kunjungan ulang bagi pasien yang perlu dipantau dan memunculkannya pada daftar pantau | US-15 |
+
+**Modul Farmasi**
+
+| ID | Aktivitas | Penjelasan | ID User Story |
+| :--- | :--- | :--- | :--- |
+| A16 | Menampilkan Antrean Resep | Sistem meneruskan resep yang telah tervalidasi ke antrean pelayanan farmasi dan menampilkannya kepada apoteker | US-16 |
+| A17 | Menutup Pelayanan Resep | Sistem menandai resep sebagai telah diserahkan kepada pasien dan menutup kunjungan yang bersangkutan | US-17 |
+| A18 | Mengurangi Stok Obat | Sistem memotong jumlah persediaan obat sesuai jumlah yang diserahkan kepada pasien | US-17 |
+| A19 | Mencatat Penerimaan Obat Masuk | Sistem menyimpan data obat yang diterima puskesmas beserta nomor bets dan tanggal kedaluwarsa | US-18 |
+| A20 | Memantau Stok Menipis dan Kedaluwarsa | Sistem memunculkan peringatan bagi obat yang jumlahnya di bawah ambang minimum atau mendekati tanggal kedaluwarsa | US-19 |
+
+**Modul Pelaporan dan Administrasi**
+
+| ID | Aktivitas | Penjelasan | ID User Story |
+| :--- | :--- | :--- | :--- |
+| A21 | Menyusun Rekapitulasi Kunjungan | Sistem menghitung jumlah kunjungan dan diagnosis terbanyak pada periode tertentu secara otomatis dari data kunjungan | US-20 |
+| A22 | Menampilkan Daftar Pantau Pasien Berisiko | Sistem mengumpulkan pasien yang pernah ditandai berisiko PTM menjadi satu daftar yang dapat ditindaklanjuti | US-21 |
+| A23 | Mengekspor Laporan | Sistem menghasilkan berkas laporan yang dapat dicetak atau diunggah ke sistem dinas kesehatan | US-22 |
+| A24 | Mengelola Akun Pengguna | Sistem menyediakan pembuatan, penyuntingan, dan penonaktifan akun pengguna beserta pengaturan hak aksesnya | US-23 |
+| A25 | Mengelola Data Master | Sistem menyediakan pengelolaan data obat, poli, dan ambang nilai risiko agar dapat disesuaikan dengan kebijakan fasilitas | US-24 |
+| A26 | Mencatat Jejak Audit | Sistem merekam setiap perubahan data rekam medis beserta pelaku dan waktunya, lalu menampilkannya kepada pengguna yang berwenang | US-25 |
+
+Aktivitas A01 sampai A18 membentuk alur utama pelayanan rawat jalan yang divisualisasikan pada Subbab 3.4. Aktivitas A19 sampai A26 merupakan aktivitas pendukung yang dijalankan di luar alur pelayanan pasien, yaitu pada saat pengelolaan persediaan obat dan penyusunan laporan.
+
+## 3.4 Model Proses Bisnis
 
 Diagram berikut memodelkan proses bisnis pelayanan rawat jalan di puskesmas ketika dijalankan dengan bantuan SEHATI. Diagram disusun dalam bentuk *swimlane activity diagram* dengan lima lajur: empat lajur untuk aktor manusia (Petugas Pendaftaran, Perawat, Dokter, Apoteker) dan satu lajur untuk sistem perangkat lunak.
 
@@ -261,11 +318,13 @@ Pada akhir alur, sistem memperbarui rekam medis dan rekapitulasi laporan secara 
 
 ### Penjelasan alur
 
-1. **Pendaftaran.** Petugas Pendaftaran menerima pasien dan meminta NIK atau kartu berobat. Sistem mencari data pasien pada basis data. Bila pasien belum terdaftar, petugas mendaftarkan pasien baru dan sistem membuatkan berkas rekam medis elektronik. Selanjutnya petugas membuat data kunjungan, dan sistem menyimpan kunjungan tersebut serta menampilkannya pada daftar antrean poli.
-2. **Skrining.** Perawat memanggil pasien sesuai antrean, mencatat keluhan awal, dan memasukkan hasil pengukuran tanda vital. Sistem menyimpan data tersebut lalu mengevaluasinya terhadap ambang risiko. Bila terdapat nilai di luar ambang normal, sistem menandai kunjungan tersebut sebagai berisiko penyakit tidak menular.
-3. **Pemeriksaan.** Dokter membuka rekam medis pasien beserta riwayat kunjungan dan penanda risiko yang dihasilkan sistem, melakukan pemeriksaan, mencatat diagnosis dan tindakan, lalu menyusun resep elektronik. Sistem memeriksa ketersediaan stok setiap obat yang diresepkan. Bila stok tidak mencukupi, dokter mengganti obat pada saat itu juga. Bila mencukupi, sistem meneruskan resep ke antrean pelayanan farmasi.
+Nomor aktivitas dalam kurung merujuk pada tabel Deskripsi Aktivitas di Subbab 3.3.
+
+1. **Pendaftaran.** Petugas Pendaftaran menerima pasien dan meminta NIK atau kartu berobat. Sistem mencari data pasien pada basis data (A01). Bila pasien belum terdaftar, petugas mendaftarkan pasien baru dan sistem membuatkan berkas rekam medis elektronik (A02). Selanjutnya petugas membuat data kunjungan (A04), dan sistem menyimpan kunjungan tersebut serta menampilkannya pada daftar antrean poli (A05, A06).
+2. **Skrining.** Perawat memanggil pasien sesuai antrean, mencatat keluhan awal, dan memasukkan hasil pengukuran tanda vital (A07). Sistem menyimpan data tersebut lalu mengevaluasinya terhadap ambang risiko (A09). Bila terdapat nilai di luar ambang normal, sistem menandai kunjungan tersebut sebagai berisiko penyakit tidak menular (A11).
+3. **Pemeriksaan.** Dokter membuka rekam medis pasien beserta riwayat kunjungan dan penanda risiko yang dihasilkan sistem (A10, A11), melakukan pemeriksaan, mencatat diagnosis dan tindakan (A12), lalu menyusun resep elektronik (A13). Sistem memeriksa ketersediaan stok setiap obat yang diresepkan (A14). Bila stok tidak mencukupi, dokter mengganti obat pada saat itu juga. Bila mencukupi, sistem meneruskan resep ke antrean pelayanan farmasi (A16).
 4. **Farmasi.** Apoteker menyiapkan obat, menyerahkannya kepada pasien, dan menjelaskan aturan pakai.
-5. **Penutupan.** Sistem mengurangi stok obat sesuai jumlah yang diserahkan, menutup kunjungan, dan memperbarui rekapitulasi laporan harian.
+5. **Penutupan.** Sistem mengurangi stok obat sesuai jumlah yang diserahkan (A18), menutup kunjungan (A17), dan memperbarui rekapitulasi laporan harian (A21).
 
 <br>
 
