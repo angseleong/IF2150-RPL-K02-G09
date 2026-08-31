@@ -35,7 +35,7 @@ Dipersiapkan oleh:
 
 Pusat Kesehatan Masyarakat (Puskesmas) merupakan ujung tombak Fasilitas Kesehatan Tingkat Pertama (FKTP) di Indonesia. Berdasarkan Profil Kesehatan Indonesia 2024 yang diterbitkan Kementerian Kesehatan, terdapat 10.268 puskesmas yang tersebar di seluruh Indonesia, terdiri atas 6.016 puskesmas non rawat inap dan 4.252 puskesmas rawat inap. Fasilitas inilah yang menjadi titik kontak pertama masyarakat dengan layanan kesehatan, sekaligus tempat sebagian besar kegiatan promotif dan preventif dijalankan.
 
-Sayangnya, kapasitas administratif puskesmas belum sebanding dengan beban tugas tersebut. Sebagian besar puskesmas, terutama di kabupaten dan daerah kepulauan, masih mengandalkan **pencatatan berbasis kertas** untuk rekam medis, pengelolaan antrean, resep, dan stok obat. Berkas rekam medis disimpan dalam rak *family folder*, ditulis tangan oleh dokter, lalu diketik ulang secara manual ketika laporan bulanan harus dikirim ke dinas kesehatan. Model kerja seperti ini menimbulkan tiga persoalan yang saling berkait: waktu tunggu pasien menjadi panjang, riwayat kesehatan pasien terputus antar-kunjungan, dan data agregat yang seharusnya bisa dipakai untuk deteksi dini justru tidak pernah terbentuk.
+Sayangnya, kapasitas administratif puskesmas belum sebanding dengan beban tugas tersebut. Digitalisasi pencatatan juga belum merata. Meskipun rekam medis elektronik sudah diwajibkan sejak akhir 2023, Kementerian Kesehatan masih perlu menerbitkan surat edaran penegasan pada April 2025, sebuah indikasi bahwa kepatuhan di lapangan belum tuntas. Di banyak puskesmas, terutama di kabupaten dan daerah kepulauan yang infrastrukturnya terbatas, **pencatatan berbasis kertas** masih dipakai untuk rekam medis, pengelolaan antrean, resep, dan stok obat. Berkas rekam medis disimpan dalam rak *family folder*, ditulis tangan oleh dokter, lalu diketik ulang secara manual ketika laporan bulanan harus dikirim ke dinas kesehatan. Model kerja seperti ini menimbulkan tiga persoalan yang saling berkait: waktu tunggu pasien menjadi panjang, riwayat kesehatan pasien terputus antar-kunjungan, dan data agregat yang seharusnya bisa dipakai untuk deteksi dini justru tidak pernah terbentuk.
 
 Dampak paling nyata dari terputusnya riwayat kesehatan pasien terlihat pada penanganan **Penyakit Tidak Menular (PTM)**. Survei Kesehatan Indonesia (SKI) 2023 mencatat prevalensi hipertensi pada penduduk berusia 18 tahun ke atas sebesar **30,8%** berdasarkan hasil pengukuran tekanan darah, sementara prevalensi berdasarkan diagnosis dokter hanya **8,6%**. Selisih lebih dari 22 poin persen ini berarti sebagian besar penderita hipertensi di Indonesia tidak pernah tahu bahwa dirinya sakit, sehingga tidak pernah menjalani pengobatan. Pola yang sama terjadi pada diabetes melitus: prevalensi berdasarkan pemeriksaan gula darah pada penduduk usia 15 tahun ke atas mencapai 11,7%, sedangkan yang terdiagnosis dokter hanya 2,2%.
 
@@ -51,7 +51,7 @@ Kelompok kami memilih **SDG 3: *Good Health and Well-being* (Kehidupan Sehat dan
 | :--- | :--- | :--- |
 | **3.4** | Mengurangi sepertiga angka kematian dini akibat penyakit tidak menular melalui pencegahan dan pengobatan | Sistem menyimpan riwayat tanda vital lintas kunjungan dan secara otomatis menandai pasien yang hasil pengukurannya berada di luar ambang normal, sehingga deteksi dini tidak lagi bergantung pada ingatan petugas |
 | **3.8** | Mencapai cakupan kesehatan semesta (*Universal Health Coverage*), termasuk akses pelayanan kesehatan dasar yang bermutu | Sistem memangkas waktu administrasi di FKTP sehingga waktu tenaga kesehatan dapat dialihkan untuk pelayanan, dan mutu pencatatan menjadi seragam |
-| **3.1** | Mengurangi Angka Kematian Ibu hingga di bawah 70 per 100.000 kelahiran hidup | Riwayat kunjungan yang tersimpan utuh dan dapat ditelusuri memudahkan pemantauan pasien dengan kondisi berisiko, termasuk ibu hamil |
+| **3.1** | Mengurangi Angka Kematian Ibu hingga di bawah 70 per 100.000 kelahiran hidup | Sistem menandai kunjungan pemeriksaan kehamilan, mengevaluasi tanda bahaya seperti indikasi preeklampsia dari tekanan darah, serta menyusun daftar ibu hamil yang kunjungan pemeriksaannya belum lengkap agar dapat dikejar sebelum persalinan |
 
 ### Urgensi
 
@@ -65,7 +65,7 @@ Meskipun kebutuhannya sangat mendesak, solusi yang tersedia saat ini belum sepen
 
 ### Alur proses yang berjalan saat ini
 
-Berdasarkan pengamatan terhadap praktik umum di puskesmas non rawat inap, alur pelayanan rawat jalan berjalan sebagai berikut.
+Berdasarkan studi literatur dan laporan praktik pelayanan pada puskesmas non rawat inap yang masih menggunakan pencatatan manual, alur pelayanan rawat jalan berjalan sebagai berikut.
 
 1. **Pendaftaran.** Pasien datang, mengantre di loket, lalu menyebutkan nama atau menyerahkan kartu berobat. Petugas mencari berkas rekam medis pasien secara manual di rak penyimpanan. Untuk pasien baru, petugas menuliskan data diri pada formulir kertas dan membuatkan berkas baru. Nomor antrean poli diberikan secara manual.
 2. **Skrining awal.** Perawat memanggil pasien, mengukur tanda vital (tekanan darah, berat badan, tinggi badan, suhu), lalu menuliskan hasilnya pada lembar kunjungan hari itu.
@@ -93,10 +93,11 @@ Dari alur di atas, kami mengidentifikasi tujuh kesenjangan yang akan menjadi sas
 | :--- | :--- | :--- |
 | **Pencatatan manual (kertas)** | Tidak butuh perangkat, tidak butuh pelatihan, tidak bergantung listrik | Seluruh kesenjangan G-01 sampai G-06 berasal dari model ini |
 | **SIMPUS komersial berbasis awan** | Fitur lengkap, terintegrasi dengan sistem nasional, ada dukungan teknis | Berbayar per bulan, membutuhkan internet stabil, layanan terhenti saat koneksi putus (G-07) |
+| **ASRI (RME gratis Kementerian Kesehatan)** | Gratis, resmi dari Kemenkes, dan sudah terhubung ke SATUSEHAT sejak awal | Berbasis awan sehingga tetap bergantung pada internet; sasaran utamanya praktik mandiri dan klinik kecil, bukan alur pelayanan puskesmas yang melibatkan banyak peran; masa penggunaan gratisnya berakhir 31 Desember 2026 (G-07) |
 | **Spreadsheet mandiri (Excel)** | Gratis, sudah dikuasai sebagian petugas | Tidak ada validasi data, tidak ada relasi antar-tabel, tidak ada kendali akses, rawan tertimpa; tidak menyelesaikan G-03 dan G-04 |
 | **SATUSEHAT (platform Kemenkes)** | Standar interoperabilitas nasional, memungkinkan pertukaran data antar-fasilitas | Merupakan platform pertukaran data, bukan aplikasi operasional harian; fasilitas tetap membutuhkan sistem sendiri untuk mencatat |
 
-Kesimpulannya, celah yang belum terisi adalah **sistem operasional harian yang ringan, dapat berjalan tanpa internet, dan memiliki kemampuan deteksi dini bawaan**, bukan sekadar aplikasi pencatatan administratif. Celah inilah yang akan diisi oleh perangkat lunak kami.
+Perhatikan bahwa seluruh alternatif digital di atas, termasuk yang disediakan gratis oleh pemerintah, sama-sama menempatkan koneksi internet sebagai syarat beroperasi. Padahal justru fasilitas dengan jaringan paling buruklah yang paling membutuhkan pertolongan administratif. Kesimpulannya, celah yang belum terisi adalah **sistem operasional harian yang ringan, tetap berjalan penuh tanpa internet, mampu melakukan deteksi dini secara bawaan, namun tetap memenuhi kewajiban pelaporan elektronik**. Celah inilah yang akan diisi oleh perangkat lunak kami.
 
 ---
 
@@ -127,14 +128,18 @@ SEHATI dikembangkan sebagai **aplikasi desktop** yang dipasang pada komputer di 
 
 Pembeda utama SEHATI dari SIMPUS pada umumnya terletak pada tiga hal berikut.
 
-**1. Modul Deteksi Dini dan Pemantauan PTM (inovasi inti).**
-Berbeda dengan SIMPUS konvensional yang umumnya hanya berfungsi sebagai tempat penyimpanan data, SEHATI dilengkapi dengan fitur pemantauan risiko. Setiap kali data tanda vital diinput, sistem akan otomatis membandingkannya dengan ambang batas klinis dan riwayat kunjungan pasien. Jika terdeteksi anomali, sistem akan memberikan penanda risiko pada data kunjungan tersebut. Pasien dengan indikasi risiko (misalnya tekanan darah tinggi berulang) akan terangkum ke dalam **daftar pantau** agar dapat ditindaklanjuti. Fitur ini diharapkan dapat meminimalkan celah antara pasien yang "pernah diukur" dan yang benar-benar "terdiagnosis" (celah 30,8% versus 8,6% pada data SKI 2023) secara sistematis.
+**1. Pemantauan longitudinal dengan daftar pantau yang tertutup siklusnya (inovasi inti).**
+Pembeda SEHATI bukan pada pemeriksaan ambang batas semata, melainkan pada apa yang terjadi sesudah ambang itu terlampaui. Setiap hasil pengukuran disimpan sebagai bagian dari satu rangkaian riwayat pasien, bukan sebagai catatan lepas per kunjungan. Sistem membandingkan nilai terbaru terhadap ambang klinis sekaligus terhadap pola pengukuran pasien pada kunjungan-kunjungan sebelumnya, sehingga tekanan darah tinggi yang berulang dapat dibedakan dari lonjakan sesaat. Pasien yang polanya mengarah ke risiko masuk ke dalam **daftar pantau**, dan daftar itu bukan sekadar tampilan: petugas mencatat upaya tindak lanjut serta status kedatangan pasien pada kunjungan ulang, sehingga pemantauan benar-benar tertutup siklusnya. Mekanisme yang sama dipakai untuk mengenali tanda bahaya pada ibu hamil. Dengan cara inilah celah antara pasien yang "pernah diukur" dan yang benar-benar "terdiagnosis lalu tertangani" (celah 30,8% versus 8,6% pada data SKI 2023) ditangani secara sistemik.
 
-**2. Arsitektur *offline-first*.**
-Seluruh fungsi inti aplikasi berjalan menggunakan basis data lokal sehingga tidak bergantung pada koneksi internet. Pendekatan ini dipilih agar SEHATI tetap dapat beroperasi secara optimal di fasilitas kesehatan daerah yang sering mengalami kendala jaringan.
+**2. Arsitektur *offline-first* dengan sinkronisasi tunda ke SATUSEHAT.**
+Solusi yang tersedia saat ini memaksa fasilitas memilih di antara dua hal yang sama-sama buruk: sistem berbasis awan yang patuh regulasi tetapi berhenti melayani ketika jaringan putus, atau pencatatan lokal yang selalu jalan tetapi tidak pernah memenuhi kewajiban pelaporan. SEHATI menolak pilihan tersebut. Seluruh fungsi pelayanan berjalan penuh di atas basis data lokal tanpa memerlukan internet sama sekali. Setiap kunjungan yang ditutup otomatis disusun menjadi data berstandar **HL7 FHIR** lalu dimasukkan ke dalam **antrean sinkronisasi**. Ketika koneksi tersedia, kapan pun itu termasuk di luar jam pelayanan, antrean dikirim ke platform SATUSEHAT dan ditandai selesai. Bila koneksi tidak kunjung tersedia, antrean dapat diekspor sebagai berkas untuk diunggah dari lokasi lain yang berjaringan. Hasilnya, pelayanan tidak pernah berhenti karena internet, sementara kewajiban PMK 24/2022 tetap terpenuhi.
 
 **3. Alur kerja terpadu dari pendaftaran hingga farmasi.**
 Data mengalir dalam satu aplikasi tanpa penyalinan ulang antar-tahap. Resep yang disusun dokter langsung tervalidasi terhadap stok apotek pada saat penyusunan, sehingga penggantian obat karena stok kosong terjadi di ruang periksa, bukan setelah pasien mengantre di apotek.
+
+### Ketahanan data
+
+Memindahkan rekam medis dari kertas ke basis data lokal memunculkan risiko baru yang perlu dijawab secara jujur. Arsip kertas hilang satu per satu, sedangkan kerusakan satu media penyimpanan berpotensi melenyapkan seluruh rekam medis sekaligus. Karena itu pencadangan tidak diserahkan pada kedisiplinan petugas. SEHATI menjalankan pencadangan basis data secara otomatis menurut jadwal ke media penyimpanan terpisah, menampilkan status pencadangan terakhir pada layar utama, serta memperingatkan pengguna bila pencadangan gagal atau tertunda. Antrean sinkronisasi ke SATUSEHAT turut berperan sebagai salinan kedua yang berada di luar fasilitas.
 
 ## 2.2 Asumsi dan Batasan
 
@@ -146,9 +151,10 @@ Data mengalir dalam satu aplikasi tanpa penyalinan ulang antar-tahap. Resep yang
 | :--- | :--- |
 | AT-01 | Fasilitas kesehatan memiliki minimal satu komputer atau laptop dengan sistem operasi Windows/Linux 64-bit, RAM minimal 4 GB, dan ruang penyimpanan kosong minimal 2 GB |
 | AT-02 | Perangkat memperoleh pasokan listrik yang memadai selama jam pelayanan; pemadaman singkat tidak menyebabkan kerusakan basis data karena setiap transaksi disimpan secara *atomic* |
-| AT-03 | Basis data disimpan secara lokal pada perangkat, sehingga aplikasi tidak memerlukan koneksi internet untuk menjalankan seluruh fungsi intinya |
+| AT-03 | Basis data disimpan di dalam lingkungan fasilitas, sehingga seluruh fungsi operasional aplikasi dapat berjalan penuh tanpa koneksi internet |
 | AT-04 | Bila digunakan oleh beberapa petugas secara bersamaan, seluruh perangkat berada dalam satu jaringan lokal (LAN) yang sama dengan satu perangkat berperan sebagai penyimpan basis data |
-| AT-05 | Prosedur pencadangan (*backup*) basis data dijalankan secara berkala oleh pihak fasilitas sesuai panduan yang disediakan aplikasi |
+| AT-05 | Tersedia media penyimpanan terpisah (cakram eksternal atau berbagi jaringan) sebagai tujuan pencadangan otomatis yang dijadwalkan aplikasi |
+| AT-06 | Koneksi internet tersedia sesekali dan tidak harus terus-menerus, sehingga sinkronisasi ke SATUSEHAT dapat dijalankan secara berkala; untuk pengembangan dan pengujian digunakan lingkungan *sandbox* SATUSEHAT, bukan lingkungan produksi |
 
 **Asumsi pengguna**
 
@@ -168,7 +174,7 @@ Data mengalir dalam satu aplikasi tanpa penyalinan ulang antar-tahap. Resep yang
 | :--- | :--- |
 | BR-01 | Sistem harus tunduk pada Peraturan Menteri Kesehatan Nomor 24 Tahun 2022 tentang Rekam Medis, khususnya kewajiban penyelenggaraan rekam medis elektronik |
 | BR-02 | Data pasien merupakan data pribadi bersifat spesifik menurut Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi, sehingga akses harus dibatasi berdasarkan peran dan setiap perubahan data harus terekam dalam jejak audit |
-| BR-03 | Kerahasiaan rekam medis wajib dijaga; data pasien tidak dikirimkan ke pihak ketiga mana pun dan tidak keluar dari lingkungan fasilitas |
+| BR-03 | Kerahasiaan rekam medis wajib dijaga. Data pasien hanya boleh dikirimkan melalui kanal resmi yang diwajibkan regulasi, yaitu platform SATUSEHAT milik Kementerian Kesehatan, dan tidak boleh dikirimkan kepada pihak ketiga komersial mana pun maupun disimpan pada layanan awan pihak ketiga |
 | BR-04 | Sistem tidak menggantikan kewenangan klinis tenaga medis dan tidak menerbitkan diagnosis secara mandiri |
 
 **Batasan sumber daya**
@@ -185,12 +191,22 @@ Data mengalir dalam satu aplikasi tanpa penyalinan ulang antar-tahap. Resep yang
 | Kode | Batasan |
 | :--- | :--- |
 | BL-01 | Sistem hanya mencakup pelayanan **rawat jalan**; rawat inap, gawat darurat, dan tindakan bedah berada di luar lingkup |
-| BL-02 | Sistem tidak melakukan integrasi dengan sistem eksternal seperti SATUSEHAT, P-Care BPJS Kesehatan, atau sistem informasi dinas kesehatan; keluaran laporan disediakan dalam bentuk berkas yang dapat diunggah secara manual |
+| BL-02 | Integrasi data eksternal dibatasi pada kanal resmi SATUSEHAT melalui mekanisme sinkronisasi tunda; integrasi dengan P-Care BPJS Kesehatan dan sistem informasi dinas kesehatan berada di luar lingkup, dan keluaran untuk keduanya disediakan sebagai berkas laporan yang diunggah secara manual |
 | BL-03 | Sistem tidak menangani pemeriksaan laboratorium kompleks maupun radiologi; hanya hasil pemeriksaan sederhana yang dapat dicatat sebagai teks |
 | BL-04 | Sistem tidak memproses transaksi pembayaran, klaim asuransi, maupun penggajian |
 | BL-05 | Sistem digunakan untuk satu fasilitas kesehatan; sinkronisasi data antar-fasilitas berada di luar lingkup |
-| BL-06 | Penanda risiko dibatasi pada penyakit tidak menular yang parameternya dapat diukur secara rutin di puskesmas (hipertensi, obesitas, dan indikasi diabetes berdasarkan gula darah sewaktu bila tersedia) |
+| BL-06 | Penanda risiko dibatasi pada dua kelompok: (a) penyakit tidak menular yang parameternya terukur rutin di puskesmas, yaitu hipertensi, obesitas, dan indikasi diabetes berdasarkan gula darah sewaktu; serta (b) tanda bahaya kehamilan yang dapat dikenali dari tekanan darah dan hasil pengukuran rutin. Sistem tidak melakukan penilaian risiko di luar parameter tersebut |
 | BL-07 | Pasien tidak berinteraksi langsung dengan sistem; seluruh masukan data dilakukan oleh petugas fasilitas |
+
+### Prioritas pengembangan
+
+Lingkup di atas melampaui apa yang dapat diselesaikan sekaligus oleh lima orang dalam satu semester (BS-01). Karena itu pengembangan dibagi menjadi dua tahap.
+
+**Tahap inti**, yang wajib selesai, mencakup modul pendaftaran dan data pasien, skrining awal, pemeriksaan, farmasi, serta pencadangan otomatis. Rangkaian ini sudah membentuk satu siklus pelayanan rawat jalan yang utuh dan dapat diuji secara menyeluruh.
+
+**Tahap lanjutan**, yang dikerjakan setelah tahap inti stabil, mencakup pelaporan dan administrasi, pemantauan kesehatan ibu, tindak lanjut daftar pantau, serta sinkronisasi ke SATUSEHAT.
+
+Pembagian ini memastikan bahwa apabila waktu tidak mencukupi, yang tertunda adalah fitur pelengkap, bukan alur pelayanan inti.
 
 ---
 
@@ -201,7 +217,7 @@ Data mengalir dalam satu aplikasi tanpa penyalinan ulang antar-tahap. Resep yang
 | Aktor | Deskripsi |
 | :--- | :--- |
 | **Petugas Pendaftaran** | Pengguna yang bertugas di loket sebagai titik kontak pertama pasien. Bertanggung jawab mendaftarkan pasien baru, mencari data pasien lama, membuat data kunjungan, dan mengelola antrean poli. Karakteristiknya adalah bekerja di bawah tekanan antrean pada jam sibuk, sehingga mengutamakan kecepatan pencarian data dan minimnya jumlah langkah untuk menyelesaikan satu pendaftaran. |
-| **Perawat** | Tenaga kesehatan yang melakukan skrining awal sebelum pasien diperiksa dokter. Bertanggung jawab mencatat keluhan awal dan hasil pengukuran tanda vital (tekanan darah, berat badan, tinggi badan, suhu, nadi). Karakteristiknya adalah menangani banyak pasien dalam waktu singkat dan membutuhkan formulir masukan yang ringkas serta memiliki validasi nilai agar tidak terjadi salah ketik angka. |
+| **Perawat** | Tenaga kesehatan yang melakukan skrining awal sebelum pasien diperiksa dokter. Bertanggung jawab mencatat keluhan awal dan hasil pengukuran tanda vital (tekanan darah, berat badan, tinggi badan, suhu, nadi). Karakteristiknya adalah menangani banyak pasien dalam waktu singkat dan membutuhkan formulir masukan yang ringkas serta memiliki validasi nilai agar tidak terjadi salah ketik angka. Peran ini juga mencakup bidan yang melayani pemeriksaan kehamilan. |
 | **Dokter** | Tenaga medis yang melakukan pemeriksaan, menegakkan diagnosis, menentukan tindakan, dan meresepkan obat. Karakteristiknya adalah membutuhkan gambaran riwayat pasien yang utuh dalam waktu singkat, dan menuntut agar sistem tidak memperlambat proses pemeriksaan. Dokter merupakan pengguna dengan kewenangan tertinggi atas isi rekam medis pasien. |
 | **Apoteker** | Tenaga kefarmasian yang menyiapkan dan menyerahkan obat kepada pasien serta mengelola persediaan obat puskesmas. Karakteristiknya adalah membutuhkan resep yang terbaca jelas dan informasi stok yang akurat, serta bertanggung jawab atas ketertelusuran pengeluaran obat. |
 | **Kepala Puskesmas** | Pengguna yang bertanggung jawab atas kinerja fasilitas secara keseluruhan sekaligus berperan sebagai administrator sistem. Bertugas memantau laporan kunjungan, menindaklanjuti daftar pasien berisiko, serta mengelola akun pengguna dan data master (daftar obat, daftar poli, ambang risiko). Karakteristiknya adalah lebih banyak membaca ringkasan agregat dibandingkan data per pasien. |
@@ -218,7 +234,7 @@ Data mengalir dalam satu aplikasi tanpa penyalinan ulang antar-tahap. Resep yang
 | US-04 | Petugas Pendaftaran | Mencetak nomor antrean poli secara otomatis | Urutan pelayanan menjadi jelas dan tidak terjadi perselisihan antrean |
 | US-05 | Petugas Pendaftaran | Memperbarui data diri pasien yang berubah | Data kontak dan alamat pasien tetap mutakhir untuk keperluan tindak lanjut |
 | US-06 | Perawat | Melihat daftar antrean pasien yang menunggu skrining | Pemanggilan pasien berjalan tertib sesuai urutan |
-| US-07 | Perawat | Mencatat keluhan awal dan hasil pengukuran tanda vital pasien | Hasil pengukuran tersimpan permanen dan langsung tersedia bagi dokter |
+| US-07 | Perawat | Mencatat keluhan awal dan hasil pengukuran tanda vital pasien, termasuk gula darah sewaktu bila pemeriksaannya tersedia | Hasil pengukuran tersimpan permanen dan langsung tersedia bagi dokter |
 | US-08 | Perawat | Melihat grafik tren tanda vital pasien dari kunjungan sebelumnya | Perubahan kondisi pasien antar-waktu dapat dikenali sejak tahap skrining |
 | US-09 | Perawat | Memperoleh peringatan otomatis saat nilai yang dimasukkan berada di luar ambang normal | Pasien berisiko tidak terlewat meskipun antrean sedang padat |
 | US-10 | Dokter | Melihat rekam medis dan riwayat kunjungan pasien dalam satu tampilan | Keputusan klinis diambil berdasarkan gambaran kondisi pasien yang utuh |
@@ -237,6 +253,12 @@ Data mengalir dalam satu aplikasi tanpa penyalinan ulang antar-tahap. Resep yang
 | US-23 | Kepala Puskesmas | Mengelola akun pengguna beserta hak aksesnya | Akses terhadap data pasien terbatas pada petugas yang berwenang |
 | US-24 | Kepala Puskesmas | Mengelola data master obat, poli, dan ambang nilai risiko | Sistem dapat disesuaikan dengan kondisi dan kebijakan fasilitas |
 | US-25 | Kepala Puskesmas | Melihat jejak audit perubahan data rekam medis | Setiap perubahan data dapat dipertanggungjawabkan sesuai ketentuan pelindungan data pribadi |
+| US-26 | Perawat | Menandai kunjungan sebagai pemeriksaan kehamilan beserta usia kehamilannya | Riwayat pemeriksaan kehamilan tercatat berkesinambungan sejak kunjungan pertama |
+| US-27 | Dokter | Memperoleh penanda tanda bahaya kehamilan ketika hasil pengukuran ibu hamil berada di luar ambang aman | Kehamilan berisiko seperti indikasi preeklampsia dikenali dan dirujuk lebih dini |
+| US-28 | Kepala Puskesmas | Melihat daftar ibu hamil yang jumlah kunjungan pemeriksaannya belum lengkap | Ibu hamil yang putus pemantauan dapat dikejar sebelum mendekati persalinan |
+| US-29 | Perawat | Mencatat hasil upaya tindak lanjut terhadap pasien pada daftar pantau | Pemantauan pasien berisiko terdokumentasi dan tidak berhenti pada penandaan saja |
+| US-30 | Kepala Puskesmas | Menjalankan sinkronisasi data kunjungan ke SATUSEHAT ketika koneksi internet tersedia | Kewajiban pelaporan rekam medis elektronik terpenuhi tanpa membuat pelayanan bergantung pada internet |
+| US-31 | Kepala Puskesmas | Memperoleh cadangan basis data secara otomatis dan terjadwal | Rekam medis tidak hilang seluruhnya bila terjadi kerusakan perangkat penyimpanan |
 
 ## 3.3 Deskripsi Aktivitas
 
@@ -257,7 +279,7 @@ Tabel berikut memuat seluruh aktivitas yang terdapat dalam SEHATI beserta penelu
 | ID | Aktivitas | Penjelasan | ID User Story |
 | :--- | :--- | :--- | :--- |
 | A06 | Menampilkan Antrean Skrining | Sistem menampilkan daftar pasien yang telah terdaftar dan menunggu pemeriksaan tanda vital, terurut menurut nomor antrean | US-06 |
-| A07 | Mencatat Keluhan Awal dan Tanda Vital | Sistem menerima keluhan awal serta hasil pengukuran tekanan darah, berat badan, tinggi badan, suhu, dan nadi, disertai validasi rentang nilai | US-07 |
+| A07 | Mencatat Keluhan Awal dan Tanda Vital | Sistem menerima keluhan awal serta hasil pengukuran tekanan darah, berat badan, tinggi badan, suhu, nadi, dan gula darah sewaktu bila tersedia, disertai validasi rentang nilai | US-07 |
 | A08 | Menampilkan Tren Tanda Vital | Sistem menyajikan riwayat tanda vital pasien dari kunjungan-kunjungan sebelumnya dalam bentuk grafik | US-08 |
 | A09 | Mengevaluasi Ambang Risiko | Sistem membandingkan nilai tanda vital terhadap ambang klinis dan terhadap riwayat pasien, lalu memunculkan peringatan bila berada di luar ambang normal | US-09 |
 
@@ -293,7 +315,30 @@ Tabel berikut memuat seluruh aktivitas yang terdapat dalam SEHATI beserta penelu
 | A25 | Mengelola Data Master | Sistem menyediakan pengelolaan data obat, poli, dan ambang nilai risiko agar dapat disesuaikan dengan kebijakan fasilitas | US-24 |
 | A26 | Mencatat Jejak Audit | Sistem merekam setiap perubahan data rekam medis beserta pelaku dan waktunya, lalu menampilkannya kepada pengguna yang berwenang | US-25 |
 
-Aktivitas A01 sampai A18 membentuk alur utama pelayanan rawat jalan yang divisualisasikan pada Subbab 3.4. Aktivitas A19 sampai A26 merupakan aktivitas pendukung yang dijalankan di luar alur pelayanan pasien, yaitu pada saat pengelolaan persediaan obat dan penyusunan laporan.
+**Modul Pemantauan Kesehatan Ibu**
+
+| ID | Aktivitas | Penjelasan | ID User Story |
+| :--- | :--- | :--- | :--- |
+| A27 | Mencatat Kunjungan Pemeriksaan Kehamilan | Sistem menandai kunjungan sebagai pemeriksaan kehamilan, menyimpan usia kehamilan, dan menghitung urutan kunjungan pemeriksaan | US-26 |
+| A28 | Mengevaluasi Tanda Bahaya Kehamilan | Sistem membandingkan tekanan darah dan hasil pengukuran rutin ibu hamil terhadap ambang aman, lalu memunculkan penanda risiko bila ambang tersebut terlampaui | US-27 |
+| A29 | Menampilkan Daftar Pantau Ibu Hamil | Sistem mengumpulkan ibu hamil yang jumlah kunjungan pemeriksaannya belum lengkap atau yang pernah ditandai berisiko | US-28 |
+
+**Modul Tindak Lanjut**
+
+| ID | Aktivitas | Penjelasan | ID User Story |
+| :--- | :--- | :--- | :--- |
+| A30 | Mencatat Hasil Tindak Lanjut | Sistem menyimpan hasil upaya menghubungi pasien pada daftar pantau beserta status kedatangannya pada kunjungan ulang | US-29 |
+
+**Modul Kepatuhan dan Ketahanan Data**
+
+| ID | Aktivitas | Penjelasan | ID User Story |
+| :--- | :--- | :--- | :--- |
+| A31 | Mengantrekan Data Kunjungan untuk Sinkronisasi | Sistem menyusun data kunjungan yang telah ditutup menjadi bundel berstandar HL7 FHIR dan memasukkannya ke antrean sinkronisasi | US-30 |
+| A32 | Mengirimkan Data ke SATUSEHAT | Sistem mengirim isi antrean sinkronisasi ke platform SATUSEHAT ketika koneksi tersedia, lalu menandai data yang berhasil terkirim | US-30 |
+| A33 | Mengekspor Bundel Data untuk Pengiriman Manual | Sistem menyimpan antrean sinkronisasi sebagai berkas apabila koneksi tidak kunjung tersedia, agar dapat diunggah dari lokasi lain yang berjaringan | US-30 |
+| A34 | Menjalankan Pencadangan Basis Data Terjadwal | Sistem membuat salinan basis data secara otomatis menurut jadwal, menyimpannya pada media terpisah, dan memperingatkan pengguna bila pencadangan gagal | US-31 |
+
+Aktivitas A01 sampai A18 membentuk alur utama pelayanan rawat jalan yang divisualisasikan pada Gambar 1 di Subbab 3.4, sedangkan A27 dan A28 menyisip pada alur yang sama ketika kunjungan berjenis pemeriksaan kehamilan. Adapun A19 sampai A26, A29, A30, serta A31 sampai A34 dijalankan di luar alur pelayanan pasien, yaitu pada pengelolaan persediaan obat, penyusunan laporan, tindak lanjut daftar pantau, dan pemenuhan kewajiban pelaporan elektronik. Alur pelaporan dan sinkronisasi tersebut digambarkan pada Gambar 2.
 
 ## 3.4 Model Proses Bisnis
 
@@ -326,7 +371,24 @@ Nomor aktivitas dalam kurung merujuk pada tabel Deskripsi Aktivitas di Subbab 3.
 2. **Skrining.** Perawat memanggil pasien sesuai antrean, mencatat keluhan awal, dan memasukkan hasil pengukuran tanda vital (A07). Sistem menyimpan data tersebut lalu mengevaluasinya terhadap ambang risiko (A09). Bila terdapat nilai di luar ambang normal, sistem menandai kunjungan tersebut sebagai berisiko penyakit tidak menular (A11).
 3. **Pemeriksaan.** Dokter membuka rekam medis pasien beserta riwayat kunjungan dan penanda risiko yang dihasilkan sistem (A10, A11), melakukan pemeriksaan, mencatat diagnosis dan tindakan (A12), lalu menyusun resep elektronik (A13). Sistem memeriksa ketersediaan stok setiap obat yang diresepkan (A14). Bila stok tidak mencukupi, dokter mengganti obat pada saat itu juga. Bila mencukupi, sistem meneruskan resep ke antrean pelayanan farmasi (A16).
 4. **Farmasi.** Apoteker menyiapkan obat, menyerahkannya kepada pasien, dan menjelaskan aturan pakai.
-5. **Penutupan.** Sistem mengurangi stok obat sesuai jumlah yang diserahkan (A18), menutup kunjungan (A17), dan memperbarui rekapitulasi laporan harian (A21).
+5. **Penutupan.** Sistem mengurangi stok obat sesuai jumlah yang diserahkan (A18), menutup kunjungan (A17), memperbarui rekapitulasi laporan harian (A21), lalu memasukkan data kunjungan tersebut ke antrean sinkronisasi SATUSEHAT (A31).
+
+Apabila kunjungan berjenis pemeriksaan kehamilan, perawat atau bidan menandainya pada tahap skrining beserta usia kehamilan (A27), dan sistem mengevaluasi tanda bahaya kehamilan pada tahap yang sama dengan evaluasi ambang risiko PTM (A28).
+
+### Alur pelaporan dan sinkronisasi
+
+Diagram kedua memodelkan aktivitas yang berjalan di luar alur pelayanan pasien, yaitu penyusunan laporan dan pemenuhan kewajiban pelaporan elektronik. Di sinilah aktor **Kepala Puskesmas** berinteraksi dengan sistem, dan di sinilah mekanisme *store-and-forward* yang menjadi nilai unik kedua SEHATI bekerja.
+
+Titik penting pada alur ini adalah percabangan ketersediaan koneksi. Ketika internet tersedia, bundel data berstandar HL7 FHIR dikirim langsung ke SATUSEHAT. Ketika tidak tersedia, bundel yang sama disimpan sebagai berkas ekspor sehingga dapat diunggah dari lokasi lain yang berjaringan. Kedua jalur bermuara pada hasil yang sama, dan tidak satu pun di antaranya menghentikan pelayanan di puskesmas.
+
+<br>
+
+<p align="center">
+<img alt="Activity Diagram Pelaporan dan Sinkronisasi Data ke SATUSEHAT" src="./assets/diagram/diagram-act-2.svg" width="70%">
+</p>
+<p align="center">
+<i>Gambar 2. Activity Diagram pelaporan dan sinkronisasi data ke SATUSEHAT</i>
+</p>
 
 <br>
 
@@ -345,6 +407,11 @@ Nomor aktivitas dalam kurung merujuk pada tabel Deskripsi Aktivitas di Subbab 3.
 7. Badan Pusat Statistik. *Angka Kematian Ibu (AKI) Hasil Long Form SP2020 Menurut Provinsi*. https://www.bps.go.id/id/statistics-table/1/MjIxOSMx/angka-kematian-ibu-aki-maternal-mortality-rate-mmr-hasil-long-form-sp2020-menurut-provinsi-2020.html
 8. United Nations. *Sustainable Development Goal 3: Ensure healthy lives and promote well-being for all at all ages*. https://sdgs.un.org/goals/goal3
 
+**Solusi dan standar teknis pembanding**
+
+9. Kementerian Kesehatan Republik Indonesia. *SATUSEHAT Platform: Dokumentasi HL7 FHIR*. https://satusehat.kemkes.go.id/platform/docs/id/fhir/
+10. ASRI (Aplikasi Sistem RME Indonesia), aplikasi rekam medis elektronik gratis dari Kementerian Kesehatan yang terintegrasi dengan SATUSEHAT, tersedia tanpa biaya hingga 31 Desember 2026.
+
 **Perkakas**
 
-9. Diagram UML: https://www.drawio.com/, https://staruml.io/
+11. Diagram UML: https://www.drawio.com/, https://staruml.io/
