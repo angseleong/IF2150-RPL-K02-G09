@@ -5,12 +5,12 @@
 | Informasi | Keterangan |
 | --- | --- |
 | **Hari** | Senin |
-| **Tanggal** | *\[31/08/2026\]* |
+| **Tanggal** | 31/08/2026 |
 | **Kelas** | K02 |
-| **Nomor Kelompok** | G09  |
+| **Nomor Kelompok** | G09 |
 | **Nama Kelompok** | Cumlaude |
 | **Nama Perangkat Lunak** | SEHATI (Sistem Elektronik Pelayanan Kesehatan Terintegrasi)  |
-| **Dokumen** | K02_G09_Template1_TB.md (Tugas 1 - Topic Brainstorming)  |
+| **Dokumen** | K02_G09_TB.md (Tugas 1 - Topic Brainstorming)  |
 
 ### Anggota Kelompok
 
