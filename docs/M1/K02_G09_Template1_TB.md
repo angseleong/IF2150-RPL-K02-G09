@@ -125,13 +125,11 @@ Pembedanya terletak pada apa yang dilakukan sistem terhadap data yang terkumpul.
 
 ### Gambaran dari sudut pandang pengguna
 
-**Petugas Administrasi** menemukan data pasien secara instan lewat NIK atau nomor rekam medis, lalu menerbitkan nomor antrean, tanpa perlu membongkar rak berkas maupun merangkai riwayat dari dua media seperti pada puskesmas hibrida. Di luar jam pelayanan, peran yang sama menyusun rekapitulasi kunjungan, mengekspor laporan, dan menjalankan sinkronisasi data ke SATUSEHAT, semuanya tanpa mengetik ulang apa pun.
+**Petugas Administrasi** menemukan data pasien secara instan lewat NIK atau nomor rekam medis, lalu menerbitkan nomor antrean, tanpa membongkar rak berkas maupun merangkai riwayat dari dua media seperti pada puskesmas hibrida. Di luar jam pelayanan, peran yang sama menyusun rekapitulasi kunjungan, mengekspor laporan, dan menjalankan sinkronisasi ke SATUSEHAT tanpa mengetik ulang apa pun.
 
-**Perawat** memasukkan hasil skrining tanda vital ke formulir digital, dan sistem langsung membandingkannya dengan ambang klinis sekaligus dengan riwayat pengukuran pasien tersebut. Perawat juga memegang daftar pantau: melihat siapa yang perlu dihubungi, lalu mencatat hasil upaya tersebut. Inilah titik tempat pemantauan benar-benar berlanjut, bukan berhenti sebagai penanda di layar.
+**Tenaga Klinis** memasukkan hasil skrining tanda vital ke formulir digital, dan sistem langsung membandingkannya dengan ambang klinis sekaligus dengan riwayat pengukuran pasien tersebut. Riwayat kesehatan pasien, mulai dari diagnosis lampau, obat yang pernah diberikan, hingga tren tekanan darah, tersaji dalam satu layar sebelum pemeriksaan dimulai, lengkap dengan penanda risiko bila ada. Resep disusun secara elektronik dan ketersediaan stoknya tervalidasi saat itu juga. Peran ini juga memegang daftar pantau: melihat siapa yang perlu dihubungi, lalu mencatat hasil upaya tersebut. Di sinilah pemantauan berlanjut, bukan berhenti sebagai penanda di layar.
 
-Bagi **Dokter**, riwayat kesehatan pasien mulai dari diagnosis lampau, obat yang pernah diberikan, hingga tren tekanan darah tersaji dalam satu layar sebelum pemeriksaan dimulai, lengkap dengan penanda risiko bila ada. Resep disusun secara elektronik dan ketersediaan stoknya tervalidasi saat itu juga.
-
-**Apoteker** menerima resep dalam bentuk teks yang tidak mungkin salah baca beserta status stok yang sudah tervalidasi sejak di ruang periksa, serta mengelola persediaan obat masuk beserta peringatan stok menipis dan mendekati kedaluwarsa.
+**Petugas Farmasi** menerima resep dalam bentuk teks yang tidak mungkin salah baca beserta status stok yang sudah tervalidasi sejak di ruang periksa, serta mengelola persediaan obat masuk beserta peringatan stok menipis dan mendekati kedaluwarsa.
 
 ### Target platform dan alasan pemilihannya
 
@@ -250,22 +248,18 @@ Pembagian ini memastikan bahwa apabila waktu tidak mencukupi, yang tertunda adal
 
 ## 3.1 Identifikasi Aktor
 
-Aktor dibatasi pada empat peran pengguna yang **berinteraksi langsung dengan sistem** dalam pekerjaan sehari-harinya. Peran administratif seperti pengelolaan akun, data master, pelaporan, dan sinkronisasi digabungkan ke dalam Petugas Administrasi, karena pada puskesmas non rawat inap pekerjaan tersebut umumnya ditangani petugas yang sama dengan yang melayani loket pendaftaran.
+Aktor disusun mengikuti tiga titik layanan yang dilalui pasien di puskesmas: loket, ruang periksa, dan apotek. Petugas pada satu titik layanan berbagi kebutuhan dan hak akses yang sama terhadap sistem, sehingga memisahkannya lebih jauh hanya menambah kerumitan tanpa menambah informasi.
 
-| Aktor | Deskripsi |
-| :--- | :--- |
-| **Petugas Administrasi** | Pengguna yang bertugas di loket sekaligus menangani administrasi sistem. Bertanggung jawab mendaftarkan pasien, mencari data pasien, membuat kunjungan dan antrean, menyusun laporan periodik, mengelola akun pengguna beserta data master, serta menjalankan sinkronisasi data ke SATUSEHAT. Karakteristiknya adalah bekerja di bawah tekanan antrean pada jam sibuk, sehingga mengutamakan kecepatan pencarian data dan minimnya langkah untuk menyelesaikan satu pendaftaran. |
-| **Perawat** | Tenaga kesehatan yang melakukan skrining awal sebelum pasien diperiksa dokter, sekaligus menindaklanjuti pasien yang ditandai berisiko. Bertanggung jawab mencatat keluhan awal dan tanda vital, membaca tren pengukuran pasien, serta mencatat hasil upaya tindak lanjut. Karakteristiknya adalah menangani banyak pasien dalam waktu singkat, sehingga membutuhkan formulir masukan yang ringkas dengan validasi nilai agar tidak terjadi salah ketik angka. |
-| **Dokter** | Tenaga medis yang melakukan pemeriksaan, menegakkan diagnosis, menentukan tindakan, meresepkan obat, dan menjadwalkan kunjungan ulang. Karakteristiknya adalah membutuhkan gambaran riwayat pasien yang utuh dalam waktu singkat dan menuntut agar sistem tidak memperlambat proses pemeriksaan. Dokter merupakan pengguna dengan kewenangan tertinggi atas isi rekam medis pasien. |
-| **Apoteker** | Tenaga kefarmasian yang menyiapkan serta menyerahkan obat kepada pasien dan mengelola persediaan obat puskesmas. Karakteristiknya adalah membutuhkan resep yang terbaca jelas dan informasi stok yang akurat, serta bertanggung jawab atas ketertelusuran pengeluaran obat. |
+Baris terakhir tabel bukan aktor, melainkan lajur yang mewakili perangkat lunak itu sendiri. Lajur tersebut disertakan pada model proses bisnis di Subbab 3.4 agar terlihat pekerjaan mana yang beralih dari petugas kepada sistem.
 
-Selain keempat aktor pengguna di atas, model proses bisnis pada Subbab 3.4 memuat satu lajur tambahan yang mewakili perangkat lunak itu sendiri.
+| Nama | Jenis | Deskripsi |
+| :--- | :--- | :--- |
+| **Petugas Administrasi** | Aktor pengguna | Bertugas di loket sekaligus menangani administrasi sistem. Mendaftarkan pasien, mencari data pasien, membuat kunjungan dan antrean, menyusun laporan periodik, mengelola akun pengguna beserta data master, serta menjalankan sinkronisasi data ke SATUSEHAT. Bekerja di bawah tekanan antrean pada jam sibuk, sehingga mengutamakan kecepatan pencarian data dan sedikitnya langkah untuk menyelesaikan satu pendaftaran. |
+| **Tenaga Klinis** | Aktor pengguna | Mencakup perawat dan dokter yang bekerja di ruang periksa. Memanggil pasien dari antrean, mencatat keluhan awal dan tanda vital, meninjau tren pengukuran, memeriksa pasien, menegakkan diagnosis, menyusun resep, menjadwalkan kunjungan ulang, serta memegang daftar pantau dan mencatat hasil tindak lanjutnya. Menangani banyak pasien dalam waktu singkat, sehingga menuntut riwayat pasien tersaji utuh dalam satu layar. Kewenangan di dalam peran ini dibedakan melalui hak akses akun, dan hanya pengguna berstatus dokter yang dapat menegakkan diagnosis serta menyusun resep. |
+| **Petugas Farmasi** | Aktor pengguna | Meninjau antrean resep, menyiapkan serta menyerahkan obat kepada pasien, dan mengelola persediaan obat puskesmas. Membutuhkan resep yang terbaca jelas dan informasi stok yang akurat, serta bertanggung jawab atas ketertelusuran pengeluaran obat. |
+| **Sistem SEHATI** | Lajur sistem, bukan pengguna | Perangkat lunak yang sedang dirancang. Menjalankan pekerjaan yang tidak memerlukan campur tangan manusia: pencarian data, evaluasi ambang risiko, penandaan kunjungan berisiko, validasi stok, pemotongan persediaan, penyusunan bundel data, pengiriman ke SATUSEHAT, dan pencadangan terjadwal. |
 
-| Lajur sistem | Deskripsi |
-| :--- | :--- |
-| **Sistem SEHATI** | Bukan pengguna, melainkan perangkat lunak yang sedang dirancang. Lajur ini memuat aktivitas yang dijalankan sistem secara mandiri tanpa campur tangan manusia, seperti pencarian data, evaluasi ambang risiko, validasi stok, penyusunan daftar pantau, pengiriman data ke SATUSEHAT, dan pencadangan terjadwal. Lajur ini disertakan agar terlihat jelas pekerjaan mana yang beralih dari petugas kepada perangkat lunak. |
-
-> **Catatan.** Pasien merupakan pemangku kepentingan utama yang memperoleh manfaat dari sistem, namun bukan aktor karena tidak berinteraksi langsung dengan perangkat lunak (lihat batasan BL-07). Kepala Puskesmas juga tidak dijadikan aktor, karena kebutuhannya terhadap laporan dan daftar pantau dipenuhi melalui keluaran yang disiapkan Petugas Administrasi. SATUSEHAT tidak dimodelkan sebagai lajur tersendiri karena merupakan sistem eksternal di luar batas perangkat lunak ini; pengiriman data kepadanya diperlakukan sebagai aktivitas milik Sistem SEHATI.
+> **Catatan.** Pasien memperoleh manfaat dari sistem namun bukan aktor, karena tidak berinteraksi langsung dengan perangkat lunak (lihat batasan BL-07). Kepala Puskesmas juga tidak dijadikan aktor, karena kebutuhannya terhadap laporan dan daftar pantau dipenuhi melalui keluaran yang disiapkan Petugas Administrasi. SATUSEHAT tidak dimodelkan sebagai lajur karena merupakan sistem eksternal di luar batas perangkat lunak ini; pengiriman data kepadanya menjadi aktivitas milik Sistem SEHATI.
 
 ## 3.2 Kebutuhan Pengguna Awal
 
@@ -278,17 +272,17 @@ Selain keempat aktor pengguna di atas, model proses bisnis pada Subbab 3.4 memua
 | US-05 | Petugas Administrasi | Mengelola akun pengguna beserta hak aksesnya dan data master obat, poli, serta ambang nilai risiko | Akses data pasien terbatas pada petugas berwenang, dan sistem dapat disesuaikan dengan kebijakan fasilitas |
 | US-06 | Petugas Administrasi | Menjalankan sinkronisasi data kunjungan ke SATUSEHAT ketika koneksi internet tersedia | Kewajiban pelaporan rekam medis elektronik terpenuhi tanpa membuat pelayanan bergantung pada internet |
 | US-07 | Petugas Administrasi | Memperoleh cadangan basis data secara otomatis beserta peringatan bila pencadangan gagal | Rekam medis tidak hilang seluruhnya bila terjadi kerusakan perangkat penyimpanan |
-| US-08 | Perawat | Melihat daftar antrean pasien yang menunggu skrining | Pemanggilan pasien berjalan tertib sesuai urutan |
-| US-09 | Perawat | Mencatat keluhan awal dan tanda vital pasien, termasuk gula darah sewaktu bila tersedia, serta memperoleh peringatan otomatis bila nilainya di luar ambang normal | Hasil pengukuran tersimpan permanen dan pasien berisiko tidak terlewat meskipun antrean sedang padat |
-| US-10 | Perawat | Melihat tren tanda vital pasien dari kunjungan-kunjungan sebelumnya | Perubahan kondisi pasien antar-waktu dapat dikenali sejak tahap skrining |
-| US-11 | Perawat | Melihat daftar pantau pasien berisiko dan mencatat hasil upaya tindak lanjutnya | Pemantauan pasien berisiko benar-benar berlanjut dan tidak berhenti pada penandaan saja |
-| US-12 | Dokter | Melihat rekam medis, riwayat kunjungan, dan penanda risiko pasien dalam satu tampilan | Keputusan klinis diambil berdasarkan gambaran kondisi pasien yang utuh, dan pasien berisiko langsung ditindaklanjuti pada kunjungan yang sama |
-| US-13 | Dokter | Mencatat anamnesis, diagnosis, dan tindakan pada kunjungan berjalan | Hasil pemeriksaan terdokumentasi rapi dan terbaca oleh seluruh petugas |
-| US-14 | Dokter | Menyusun resep elektronik dari daftar obat puskesmas sekaligus mengetahui ketersediaan stoknya | Kesalahan penulisan obat dihindari, dan penggantian obat karena stok kosong dilakukan saat pasien masih di ruang periksa |
-| US-15 | Dokter | Menjadwalkan kunjungan ulang bagi pasien yang perlu dipantau | Pemantauan pasien berisiko berlanjut dan tidak berhenti pada satu kunjungan |
-| US-16 | Apoteker | Melihat antrean resep yang masuk dari ruang pemeriksaan | Penyiapan obat dapat dimulai sebelum pasien tiba di apotek |
-| US-17 | Apoteker | Menandai resep yang obatnya telah diserahkan kepada pasien | Status pelayanan setiap pasien terpantau hingga tuntas dan stok terpotong secara otomatis |
-| US-18 | Apoteker | Mencatat penerimaan obat masuk serta memperoleh peringatan saat stok menipis atau mendekati kedaluwarsa | Persediaan obat tertelusur dan kekosongan obat dapat dicegah sebelum terjadi |
+| US-08 | Tenaga Klinis | Melihat daftar antrean pasien yang menunggu skrining | Pemanggilan pasien berjalan tertib sesuai urutan |
+| US-09 | Tenaga Klinis | Mencatat keluhan awal dan tanda vital pasien, termasuk gula darah sewaktu bila tersedia, serta memperoleh peringatan otomatis bila nilainya di luar ambang normal | Hasil pengukuran tersimpan permanen dan pasien berisiko tidak terlewat meskipun antrean sedang padat |
+| US-10 | Tenaga Klinis | Melihat tren tanda vital pasien dari kunjungan-kunjungan sebelumnya | Perubahan kondisi pasien antar-waktu dapat dikenali sejak tahap skrining |
+| US-11 | Tenaga Klinis | Melihat daftar pantau pasien berisiko dan mencatat hasil upaya tindak lanjutnya | Pemantauan pasien berisiko benar-benar berlanjut dan tidak berhenti pada penandaan saja |
+| US-12 | Tenaga Klinis | Melihat rekam medis, riwayat kunjungan, dan penanda risiko pasien dalam satu tampilan | Keputusan klinis diambil berdasarkan gambaran kondisi pasien yang utuh, dan pasien berisiko langsung ditindaklanjuti pada kunjungan yang sama |
+| US-13 | Tenaga Klinis | Mencatat anamnesis, diagnosis, dan tindakan pada kunjungan berjalan | Hasil pemeriksaan terdokumentasi rapi dan terbaca oleh seluruh petugas |
+| US-14 | Tenaga Klinis | Menyusun resep elektronik dari daftar obat puskesmas sekaligus mengetahui ketersediaan stoknya | Kesalahan penulisan obat dihindari, dan penggantian obat karena stok kosong dilakukan saat pasien masih di ruang periksa |
+| US-15 | Tenaga Klinis | Menjadwalkan kunjungan ulang bagi pasien yang perlu dipantau | Pemantauan pasien berisiko berlanjut dan tidak berhenti pada satu kunjungan |
+| US-16 | Petugas Farmasi | Melihat antrean resep yang masuk dari ruang pemeriksaan | Penyiapan obat dapat dimulai sebelum pasien tiba di apotek |
+| US-17 | Petugas Farmasi | Menandai resep yang obatnya telah diserahkan kepada pasien | Status pelayanan setiap pasien terpantau hingga tuntas dan stok terpotong secara otomatis |
+| US-18 | Petugas Farmasi | Mencatat penerimaan obat masuk serta memperoleh peringatan saat stok menipis atau mendekati kedaluwarsa | Persediaan obat tertelusur dan kekosongan obat dapat dicegah sebelum terjadi |
 
 ## 3.3 Deskripsi Aktivitas
 
@@ -301,18 +295,18 @@ Setiap aktivitas pada tabel berikut dipetakan **satu lawan satu** dengan satu si
 | A01 | Mencari Data Pasien | Petugas Administrasi | Petugas memasukkan NIK, nama, atau nomor rekam medis, lalu sistem menampilkan data pasien yang cocok | US-01 |
 | A02 | Mendaftarkan atau Memperbarui Data Pasien | Petugas Administrasi | Petugas mengisi data diri pasien baru sehingga sistem menerbitkan nomor rekam medis, atau menyunting data pasien lama yang berubah | US-02 |
 | A03 | Membuat Kunjungan dan Nomor Antrean | Petugas Administrasi | Petugas mencatat kedatangan pasien beserta poli tujuan, lalu sistem menerbitkan nomor antrean | US-03 |
-| A04 | Menampilkan Antrean Skrining | Sistem SEHATI | Sistem menampilkan daftar pasien yang menunggu pemeriksaan tanda vital, terurut menurut nomor antrean | US-08 |
-| A05 | Mencatat Keluhan Awal dan Tanda Vital | Perawat | Perawat memasukkan keluhan awal serta hasil pengukuran tekanan darah, berat badan, tinggi badan, suhu, nadi, dan gula darah sewaktu bila tersedia | US-09 |
+| A04 | Memanggil Pasien dari Antrean Skrining | Tenaga Klinis | Perawat membuka daftar pasien yang menunggu pemeriksaan tanda vital, lalu memanggil pasien sesuai urutan antrean | US-08 |
+| A05 | Mencatat Keluhan Awal dan Tanda Vital | Tenaga Klinis | Perawat memasukkan keluhan awal serta hasil pengukuran tekanan darah, berat badan, tinggi badan, suhu, nadi, dan gula darah sewaktu bila tersedia | US-09 |
 | A06 | Mengevaluasi Ambang Risiko | Sistem SEHATI | Sistem membandingkan nilai yang baru dimasukkan terhadap ambang klinis dan terhadap riwayat pengukuran pasien pada kunjungan sebelumnya | US-09 |
 | A07 | Menandai Kunjungan Berisiko | Sistem SEHATI | Sistem memberi penanda risiko penyakit tidak menular pada kunjungan yang nilainya berada di luar ambang normal | US-09 |
-| A08 | Menampilkan Riwayat dan Tren Tanda Vital | Sistem SEHATI | Sistem menyajikan hasil pengukuran pasien dari kunjungan-kunjungan sebelumnya dalam bentuk grafik | US-10 |
-| A09 | Meninjau Rekam Medis dan Penanda Risiko | Dokter | Dokter membaca data pasien, diagnosis lampau, riwayat obat, dan penanda risiko hasil skrining sebelum memulai pemeriksaan | US-12 |
-| A10 | Melakukan Pemeriksaan dan Mencatat Diagnosis | Dokter | Dokter memeriksa pasien lalu mencatat anamnesis, diagnosis, dan tindakan pada kunjungan berjalan | US-13 |
-| A11 | Menyusun Resep Elektronik | Dokter | Dokter memilih obat, dosis, dan aturan pakai dari data master obat puskesmas | US-14 |
+| A08 | Meninjau Riwayat dan Tren Tanda Vital | Tenaga Klinis | Perawat membaca grafik hasil pengukuran pasien dari kunjungan-kunjungan sebelumnya untuk mengenali perubahan kondisi antar-waktu | US-10 |
+| A09 | Meninjau Rekam Medis dan Penanda Risiko | Tenaga Klinis | Dokter membaca data pasien, diagnosis lampau, riwayat obat, dan penanda risiko hasil skrining sebelum memulai pemeriksaan | US-12 |
+| A10 | Melakukan Pemeriksaan dan Mencatat Diagnosis | Tenaga Klinis | Dokter memeriksa pasien lalu mencatat anamnesis, diagnosis, dan tindakan pada kunjungan berjalan | US-13 |
+| A11 | Menyusun Resep Elektronik | Tenaga Klinis | Dokter memilih obat, dosis, dan aturan pakai dari data master obat puskesmas | US-14 |
 | A12 | Memvalidasi Ketersediaan Stok Obat | Sistem SEHATI | Sistem memeriksa kecukupan stok setiap obat yang diresepkan dan memberi tahu dokter bila tidak mencukupi | US-14 |
-| A13 | Menjadwalkan Kunjungan Ulang | Dokter | Dokter menetapkan rencana kunjungan ulang bagi pasien yang perlu dipantau | US-15 |
-| A14 | Menampilkan Antrean Resep | Sistem SEHATI | Sistem meneruskan resep yang telah tervalidasi ke antrean pelayanan farmasi dan menampilkannya kepada apoteker | US-16 |
-| A15 | Menyerahkan Obat dan Menjelaskan Aturan Pakai | Apoteker | Apoteker menyiapkan obat sesuai resep, menyerahkannya kepada pasien, lalu menandai resep sebagai selesai dilayani | US-17 |
+| A13 | Menjadwalkan Kunjungan Ulang | Tenaga Klinis | Dokter menetapkan rencana kunjungan ulang bagi pasien yang perlu dipantau | US-15 |
+| A14 | Meninjau Antrean Resep | Petugas Farmasi | Petugas membuka antrean resep yang telah tervalidasi dan diteruskan sistem dari ruang periksa, lalu mulai menyiapkan obat | US-16 |
+| A15 | Menyerahkan Obat dan Menjelaskan Aturan Pakai | Petugas Farmasi | Apoteker menyiapkan obat sesuai resep, menyerahkannya kepada pasien, lalu menandai resep sebagai selesai dilayani | US-17 |
 | A16 | Menutup Kunjungan dan Mengantrekan Sinkronisasi | Sistem SEHATI | Sistem memotong stok obat sesuai jumlah yang diserahkan, menutup kunjungan, lalu menyusunnya menjadi bundel HL7 FHIR pada antrean sinkronisasi | US-06, US-17 |
 
 **Alur kegiatan pendukung berkala (Gambar 2)**
@@ -320,11 +314,11 @@ Setiap aktivitas pada tabel berikut dipetakan **satu lawan satu** dengan satu si
 | ID | Aktivitas | Pelaku | Penjelasan | ID User Story |
 | :--- | :--- | :--- | :--- | :--- |
 | A17 | Mengelola Akun Pengguna dan Data Master | Petugas Administrasi | Petugas menambah atau menonaktifkan akun beserta hak aksesnya, serta memperbarui data obat, poli, dan ambang nilai risiko | US-05 |
-| A18 | Mencatat Penerimaan Obat Masuk | Apoteker | Apoteker memasukkan data obat yang diterima puskesmas beserta nomor bets dan tanggal kedaluwarsa | US-18 |
+| A18 | Mencatat Penerimaan Obat Masuk | Petugas Farmasi | Petugas memasukkan data obat yang diterima puskesmas beserta nomor bets dan tanggal kedaluwarsa | US-18 |
 | A19 | Memperbarui Stok dan Memeriksa Ambang Persediaan | Sistem SEHATI | Sistem menambahkan jumlah obat yang diterima ke persediaan lalu membandingkannya terhadap ambang minimum dan tanggal kedaluwarsa | US-18 |
 | A20 | Memunculkan Peringatan Persediaan | Sistem SEHATI | Sistem menampilkan peringatan bagi obat yang jumlahnya di bawah ambang minimum atau mendekati kedaluwarsa | US-18 |
-| A21 | Menyusun Daftar Pantau Pasien Berisiko | Sistem SEHATI | Sistem mengumpulkan pasien yang pernah ditandai berisiko maupun yang dijadwalkan kunjungan ulang menjadi satu daftar | US-11 |
-| A22 | Menindaklanjuti Pasien dan Mencatat Hasilnya | Perawat | Perawat menghubungi pasien pada daftar pantau lalu mencatat hasil upaya tersebut beserta status kedatangannya | US-11 |
+| A21 | Meninjau Daftar Pantau Pasien Berisiko | Tenaga Klinis | Perawat membuka daftar berisi pasien yang pernah ditandai berisiko maupun yang dijadwalkan kunjungan ulang, lalu menentukan siapa yang perlu dihubungi | US-11 |
+| A22 | Menindaklanjuti Pasien dan Mencatat Hasilnya | Tenaga Klinis | Perawat menghubungi pasien pada daftar pantau lalu mencatat hasil upaya tersebut beserta status kedatangannya | US-11 |
 | A23 | Menyusun dan Mengekspor Laporan Periodik | Petugas Administrasi | Petugas memilih periode, sistem menghitung rekapitulasi kunjungan dan diagnosis terbanyak, lalu menghasilkan berkas laporan yang dapat dicetak atau diunggah | US-04 |
 | A24 | Menjalankan Sinkronisasi Data | Petugas Administrasi | Petugas memerintahkan pengiriman antrean sinkronisasi yang telah terkumpul | US-06 |
 | A25 | Mengirim Bundel Data ke SATUSEHAT | Sistem SEHATI | Sistem mengirim bundel HL7 FHIR ke platform SATUSEHAT lalu menandai data yang berhasil terkirim | US-06 |
@@ -335,13 +329,13 @@ Seluruh 27 aktivitas di atas muncul sebagai simpul pada kedua diagram di Subbab 
 
 ## 3.4 Model Proses Bisnis
 
-Proses bisnis dimodelkan dalam dua *swimlane activity diagram*. Lajur pada kedua diagram hanya berisi **aktor yang didefinisikan pada Subbab 3.1** ditambah lajur **Sistem SEHATI**. Tidak ada lajur untuk pihak eksternal: SATUSEHAT berada di luar batas perangkat lunak ini, sehingga pengiriman data kepadanya digambarkan sebagai aktivitas milik Sistem SEHATI, bukan sebagai lajur tersendiri.
+Proses bisnis dimodelkan dalam dua *swimlane activity diagram*. Lajur pada kedua diagram hanya berisi **ketiga aktor yang didefinisikan pada Subbab 3.1** ditambah lajur **Sistem SEHATI**. Tidak ada lajur untuk pihak eksternal: SATUSEHAT berada di luar batas perangkat lunak ini, sehingga pengiriman data kepadanya digambarkan sebagai aktivitas milik Sistem SEHATI, bukan sebagai lajur tersendiri.
 
 Setiap kotak aktivitas pada kedua diagram diberi label ID dan berpasangan **satu lawan satu** dengan satu baris pada tabel Deskripsi Aktivitas di Subbab 3.3. Bentuk belah ketupat merupakan simpul keputusan yang tidak memiliki ID, karena hanya menentukan percabangan dan tidak mengubah keadaan sistem.
 
 ### Gambar 1: alur pelayanan rawat jalan
 
-Diagram pertama memodelkan perjalanan satu pasien sejak tiba di loket hingga menerima obat, memuat aktivitas A01 sampai A16. Seluruh aktor pengguna muncul di sini.
+Diagram pertama memodelkan perjalanan satu pasien sejak tiba di loket hingga menerima obat, memuat aktivitas A01 sampai A16. Ketiga aktor pengguna muncul di sini bersama lajur Sistem SEHATI.
 
 Ada tiga titik pada alur ini yang menunjukkan peningkatan dibandingkan proses manual maupun hibrida pada Subbab 1.2:
 
@@ -360,9 +354,9 @@ Ada tiga titik pada alur ini yang menunjukkan peningkatan dibandingkan proses ma
 
 <br>
 
-**Penjelasan alur.** Petugas Administrasi mencari data pasien berdasarkan NIK atau kartu berobat (A01). Bila pasien belum terdaftar, petugas mendaftarkannya atau memperbarui datanya (A02), lalu membuat kunjungan beserta nomor antrean (A03). Sistem menampilkan antrean skrining (A04), dan Perawat mencatat keluhan awal beserta tanda vital (A05). Sistem mengevaluasi nilai tersebut terhadap ambang klinis dan riwayat pasien (A06); bila terlampaui, kunjungan ditandai berisiko (A07). Sistem lalu menyajikan riwayat dan tren tanda vital (A08).
+**Penjelasan alur.** Petugas Administrasi mencari data pasien berdasarkan NIK atau kartu berobat (A01). Bila pasien belum terdaftar, petugas mendaftarkannya atau memperbarui datanya (A02), lalu membuat kunjungan beserta nomor antrean (A03). Tenaga Klinis memanggil pasien dari antrean skrining (A04) dan mencatat keluhan awal beserta tanda vital (A05). Sistem mengevaluasi nilai tersebut terhadap ambang klinis dan riwayat pasien (A06); bila terlampaui, kunjungan ditandai berisiko (A07). Tenaga Klinis kemudian meninjau riwayat dan tren tanda vital pasien (A08).
 
-Dokter meninjau rekam medis beserta penanda risiko (A09), melakukan pemeriksaan dan mencatat diagnosis (A10), kemudian menyusun resep elektronik (A11). Sistem memvalidasi ketersediaan stok (A12); bila tidak mencukupi, dokter kembali menyusun resep dengan obat pengganti. Dokter menjadwalkan kunjungan ulang bagi pasien yang perlu dipantau (A13), sistem menampilkan antrean resep kepada Apoteker (A14), Apoteker menyerahkan obat beserta penjelasan aturan pakai (A15), dan sistem menutup kunjungan sekaligus mengantrekannya untuk sinkronisasi (A16).
+Masih pada lajur yang sama, dokter meninjau rekam medis beserta penanda risiko (A09), melakukan pemeriksaan dan mencatat diagnosis (A10), kemudian menyusun resep elektronik (A11). Sistem memvalidasi ketersediaan stok (A12); bila tidak mencukupi, dokter kembali menyusun resep dengan obat pengganti. Setelah menjadwalkan kunjungan ulang bagi pasien yang perlu dipantau (A13), giliran Petugas Farmasi meninjau antrean resep (A14) lalu menyerahkan obat beserta penjelasan aturan pakai (A15). Sistem menutup kunjungan sekaligus mengantrekannya untuk sinkronisasi (A16).
 
 ### Gambar 2: alur kegiatan pendukung berkala
 
@@ -381,7 +375,7 @@ Titik penting pada alur ini adalah percabangan ketersediaan koneksi. Ketika inte
 
 <br>
 
-**Penjelasan alur.** Petugas Administrasi memperbarui akun pengguna dan data master (A17). Apoteker mencatat obat yang diterima puskesmas (A18), lalu sistem memperbarui stok sekaligus memeriksa ambang persediaan (A19); bila stok menipis atau mendekati kedaluwarsa, sistem memunculkan peringatan (A20). Sistem menyusun daftar pantau pasien berisiko (A21), dan Perawat menindaklanjuti pasien pada daftar tersebut serta mencatat hasilnya (A22). Petugas Administrasi menyusun dan mengekspor laporan periodik (A23), kemudian menjalankan sinkronisasi data (A24). Sistem mengirim bundel ke SATUSEHAT bila koneksi tersedia (A25) atau menyimpannya sebagai berkas ekspor bila tidak (A26), lalu menutup rangkaian dengan pencadangan basis data terjadwal (A27).
+**Penjelasan alur.** Petugas Administrasi memperbarui akun pengguna dan data master (A17). Petugas Farmasi mencatat obat yang diterima puskesmas (A18), lalu sistem memperbarui stok sekaligus memeriksa ambang persediaan (A19); bila stok menipis atau mendekati kedaluwarsa, sistem memunculkan peringatan (A20). Tenaga Klinis meninjau daftar pantau pasien berisiko (A21), menindaklanjuti pasien pada daftar tersebut, dan mencatat hasilnya (A22). Petugas Administrasi menyusun dan mengekspor laporan periodik (A23), kemudian menjalankan sinkronisasi data (A24). Sistem mengirim bundel ke SATUSEHAT bila koneksi tersedia (A25) atau menyimpannya sebagai berkas ekspor bila tidak (A26), lalu menutup rangkaian dengan pencadangan basis data terjadwal (A27).
 
 <br>
 
