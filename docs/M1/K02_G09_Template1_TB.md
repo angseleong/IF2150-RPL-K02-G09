@@ -35,7 +35,7 @@ Dipersiapkan oleh:
 
 Pusat Kesehatan Masyarakat (Puskesmas) merupakan ujung tombak Fasilitas Kesehatan Tingkat Pertama (FKTP) di Indonesia. Berdasarkan Profil Kesehatan Indonesia 2024 yang diterbitkan Kementerian Kesehatan, terdapat 10.268 puskesmas yang tersebar di seluruh Indonesia, terdiri atas 6.016 puskesmas non rawat inap dan 4.252 puskesmas rawat inap. Fasilitas inilah yang menjadi titik kontak pertama masyarakat dengan layanan kesehatan, sekaligus tempat sebagian besar kegiatan promotif dan preventif dijalankan.
 
-Digitalisasi puskesmas sendiri sudah berjalan jauh. Kementerian Kesehatan mencatat 34.463 fasilitas pelayanan kesehatan telah terintegrasi dengan platform SATUSEHAT per 27 Oktober 2025, dan mayoritas puskesmas kini sudah meninggalkan pencatatan yang sepenuhnya manual. Namun kemajuan tersebut menyisakan dua persoalan yang justru menjadi titik berangkat perangkat lunak ini.
+Digitalisasi puskesmas sendiri sudah berjalan jauh. Peraturan Menteri Kesehatan Nomor 24 Tahun 2022 mewajibkan seluruh fasilitas pelayanan kesehatan, termasuk puskesmas, menyelenggarakan Rekam Medis Elektronik yang terhubung dengan platform nasional SATUSEHAT. Kementerian Kesehatan mencatat 34.463 fasilitas pelayanan kesehatan telah terintegrasi per 27 Oktober 2025, dan pada 1 September 2026 diresmikan SATUSEHAT RME yang mengintegrasikan data klinis sekitar 280 juta penduduk antar-fasilitas. Dengan kata lain, mayoritas puskesmas hari ini sudah meninggalkan pencatatan yang sepenuhnya manual. Namun kemajuan tersebut justru menyisakan dua persoalan yang menjadi titik berangkat perangkat lunak ini.
 
 **Persoalan pertama, sebaran digitalisasi belum merata.** Kementerian Kesehatan sendiri mengakui bahwa hambatan yang tersisa adalah keterbatasan infrastruktur jaringan di daerah dan kesiapan sumber daya manusia. Puskesmas di wilayah terpencil masih menjalankan pencatatan kertas, atau menerapkan sistem hibrida dengan sebagian data di komputer dan sebagian lagi di lembar kertas. Model hibrida ini bahkan lebih menyulitkan penelusuran riwayat, karena catatan seorang pasien terbelah di dua media sehingga tidak ada satu pun yang memuat gambaran utuh.
 
@@ -56,7 +56,7 @@ Kelompok kami memilih **SDG 3: *Good Health and Well-being* (Kehidupan Sehat dan
 
 ### Urgensi
 
-**Pertama, kewajiban regulasi sudah berjalan dan pemenuhannya terbukti tidak mudah.** Peraturan Menteri Kesehatan Nomor 24 Tahun 2022 mewajibkan seluruh fasilitas pelayanan kesehatan menyelenggarakan Rekam Medis Elektronik (RME) selambat-lambatnya 31 Desember 2023. Tenggat tersebut kemudian diundur hingga akhir 2025 karena berbagai hambatan implementasi, dan Kementerian Kesehatan masih perlu menerbitkan surat edaran penegasan pada 15 April 2025. Pengunduran dua tahun itu sendiri merupakan bukti bahwa penyediaan sistem yang benar-benar dapat dipakai di lapangan bukan perkara sepele, terutama bagi fasilitas dengan infrastruktur terbatas.
+**Pertama, kewajiban regulasi sudah sepenuhnya berjalan, dan pemenuhannya terbukti tidak mudah.** PMK 24/2022 menetapkan tenggat penyelenggaraan RME selambat-lambatnya 31 Desember 2023. Tenggat tersebut kemudian diundur hingga akhir 2025 karena berbagai hambatan implementasi, dan Kementerian Kesehatan masih perlu menerbitkan surat edaran penegasan pada 15 April 2025. Kini, dengan diresmikannya SATUSEHAT RME pada 1 September 2026, tidak ada lagi ruang bagi fasilitas untuk menunda: setiap puskesmas wajib memiliki sistem pencatatan elektronik yang mampu mengirimkan data ke platform nasional. Pengunduran tenggat selama dua tahun itu sendiri merupakan bukti bahwa menyediakan sistem yang benar-benar dapat dipakai di lapangan bukan perkara sepele, terutama bagi fasilitas dengan infrastruktur terbatas.
 
 **Kedua, dan yang paling menentukan, digitalisasi terbukti tidak dengan sendirinya menutup celah deteksi dini.** Antara 2018 dan 2023 terjadi digitalisasi besar-besaran di sektor kesehatan: PMK 24/2022 terbit, SATUSEHAT diluncurkan, dan ribuan fasilitas terintegrasi. Namun celah antara prevalensi terukur dan prevalensi terdiagnosis hanya bergerak dari sekitar 25 poin persen menjadi sekitar 22 poin persen. Perlu ditegaskan bahwa SKI 2023 diukur setelah kewajiban RME berlaku, sehingga angka tersebut bukan potret puskesmas yang masih serba kertas, melainkan potret sistem kesehatan yang sudah mulai terdigitalisasi namun celahnya tetap menganga. Pemindahan catatan dari kertas ke layar saja jelas belum cukup.
 
@@ -66,19 +66,25 @@ Kelompok kami memilih **SDG 3: *Good Health and Well-being* (Kehidupan Sehat dan
 
 ### Alur proses yang berjalan saat ini
 
-Alur berikut menggambarkan pelayanan rawat jalan pada puskesmas non rawat inap yang masih menjalankan pencatatan manual atau hibrida, disusun berdasarkan studi literatur dan laporan implementasi. Pada puskesmas yang sudah terdigitalisasi, langkah 1 sampai 4 memang berjalan lebih cepat, namun sifat pencatatannya tetap sama: setiap kunjungan berdiri sendiri dan tidak dibandingkan dengan kunjungan sebelumnya.
+Peraturan Menteri Kesehatan Nomor 24 Tahun 2022 mewajibkan **seluruh** fasilitas pelayanan kesehatan, termasuk puskesmas, menyelenggarakan Rekam Medis Elektronik yang terhubung dengan platform nasional SATUSEHAT. Kewajiban tersebut kini sudah berjalan dan mencapai tonggak barunya: pada **1 September 2026** Kementerian Kesehatan meresmikan **SATUSEHAT RME**, yang mengintegrasikan data klinis sekitar 280 juta penduduk antar-fasilitas sehingga pasien tidak perlu lagi membawa berkas rekam medis fisik ketika berpindah fasilitas atau dirujuk.
 
-1. **Pendaftaran.** Pasien datang, mengantre di loket, lalu menyebutkan nama atau menyerahkan kartu berobat. Petugas mencari berkas rekam medis pasien secara manual di rak penyimpanan. Untuk pasien baru, petugas menuliskan data diri pada formulir kertas dan membuatkan berkas baru. Nomor antrean poli diberikan secara manual.
-2. **Skrining awal.** Perawat memanggil pasien, mengukur tanda vital (tekanan darah, berat badan, tinggi badan, suhu), lalu menuliskan hasilnya pada lembar kunjungan hari itu.
-3. **Pemeriksaan.** Dokter membaca berkas, melakukan pemeriksaan, lalu menuliskan anamnesis, diagnosis, dan tindakan dengan tulisan tangan. Resep ditulis pada lembar terpisah dan diserahkan kepada pasien.
-4. **Farmasi.** Pasien membawa resep ke apotek puskesmas. Apoteker membaca resep, mengecek ketersediaan obat di lemari secara fisik, menyiapkan obat, lalu mencatat pengeluaran obat di buku stok.
-5. **Pelaporan.** Pada akhir bulan, petugas merekap seluruh lembar kunjungan secara manual, lalu mengetik ulang angkanya ke dalam format laporan yang diminta dinas kesehatan.
+Karena itu, alur di bawah ini sengaja menggambarkan puskesmas yang **sudah** menjalankan rekam medis elektronik, bukan yang masih menggunakan kertas. Menggambarkan kondisi saat ini sebagai era berkas kertas akan keliru dan tidak mencerminkan lapangan.
+
+1. **Pendaftaran.** Pasien mengambil nomor antrean, lalu petugas mencari data pasien pada aplikasi rekam medis berdasarkan NIK atau nomor rekam medis. Data pasien lama langsung tampil, sedangkan pasien baru diinput saat itu juga. Kunjungan hari itu dibuat sebagai entri baru pada basis data.
+2. **Skrining awal.** Perawat memanggil pasien, mengukur tanda vital, lalu mengetikkan hasilnya ke formulir kunjungan pada aplikasi. Nilai tersebut tersimpan sebagai bagian dari entri kunjungan hari itu.
+3. **Pemeriksaan.** Dokter membuka entri kunjungan, mencatat anamnesis, diagnosis berkode, dan tindakan. Resep disusun pada modul yang sama atau dicetak untuk diserahkan kepada pasien.
+4. **Farmasi.** Apoteker menerima resep, menyiapkan obat, lalu mencatat pengeluaran obat. Pada sebagian sistem, pencatatan persediaan masih dilakukan terpisah dari modul pelayanan.
+5. **Pelaporan dan pengiriman data.** Sistem menyusun rekapitulasi kunjungan, dan data kunjungan dikirimkan ke SATUSEHAT sesuai kewajiban interoperabilitas.
+
+Seluruh langkah di atas sudah elektronik. Namun ada satu hal yang **sama sekali tidak berubah** sejak era kertas: setiap kunjungan tetap diperlakukan sebagai entri yang berdiri sendiri. Tekanan darah yang tinggi hari ini tersimpan rapi pada kunjungan hari ini, terkirim pula ke SATUSEHAT, tetapi tidak ada satu pun proses yang membandingkannya dengan hasil pengukuran tiga bulan lalu lalu menyimpulkan bahwa pasien tersebut perlu ditindaklanjuti. Riwayat memang dapat dibuka satu per satu, namun menarik kesimpulan darinya tetap menjadi pekerjaan manusia, dan manusia yang melayani puluhan pasien sehari tidak dapat diandalkan untuk itu.
+
+Di luar itu, sebagian puskesmas di wilayah dengan keterbatasan infrastruktur jaringan dan sumber daya manusia masih menjalankan pencatatan kertas atau sistem hibrida, yaitu sebagian data di aplikasi dan sebagian lagi di lembar kertas. Kementerian Kesehatan sendiri mengakui kedua hambatan tersebut sebagai kendala yang tersisa. Pada kelompok ini, beban administratif lama masih ditanggung penuh, dan model hibrida justru lebih menyulitkan penelusuran riwayat karena catatan seorang pasien terbelah di dua media.
 
 ### Kesenjangan (*gap*) yang teridentifikasi
 
 Dari alur di atas, kami mengidentifikasi tujuh kesenjangan yang akan menjadi sasaran perangkat lunak kami.
 
-Kolom terakhir menandai kepada siapa kesenjangan tersebut berlaku, karena tidak semuanya hilang begitu sebuah puskesmas terdigitalisasi. Perbedaan inilah yang menentukan arah solusi.
+Kolom terakhir menandai kepada siapa kesenjangan tersebut berlaku. Pembedaan ini penting karena sebagian kesenjangan memang ikut hilang ketika sebuah puskesmas beralih ke rekam medis elektronik, sementara sebagian lain bertahan justru pada puskesmas yang sudah sepenuhnya digital. Kelompok kedua itulah yang menjadi sasaran utama perangkat lunak ini.
 
 | Kode | Kesenjangan | Penjelasan | Dampak | Berlaku pada |
 | :--- | :--- | :--- | :--- | :--- |
@@ -96,16 +102,16 @@ Perhatikan bahwa **G-03, G-04, dan G-07 tidak hilang meskipun sebuah puskesmas s
 
 | Solusi | Kelebihan | Keterbatasan terhadap konteks masalah |
 | :--- | :--- | :--- |
-| **Pencatatan manual (kertas)** | Tidak butuh perangkat, tidak butuh pelatihan, tidak bergantung listrik | Menanggung seluruh kesenjangan G-01 sampai G-06 sekaligus |
-| **SIMPUS komersial berbasis awan** | Fitur lengkap, terintegrasi dengan sistem nasional, ada dukungan teknis | Berbayar per bulan, membutuhkan internet stabil, layanan terhenti saat koneksi putus (G-07) |
-| **SIKDA Generik (sistem gratis Kemenkes untuk puskesmas)** | Gratis, resmi dari Kementerian Kesehatan, dan dirancang khusus untuk alur kerja puskesmas | Penelitian implementasi melaporkan kendala berupa keterbatasan sumber daya manusia terlatih, keterbatasan infrastruktur, pembaruan sistem yang lambat, dan tata kelola yang belum mapan. Sebagaimana SIMPUS pada umumnya, sistem ini bersifat administratif dan tidak melakukan pemantauan risiko antar-waktu (G-03, G-04) |
-| **ASRI (RME gratis Kemenkes)** | Gratis dan sudah terhubung ke SATUSEHAT sejak awal | Diperuntukkan bagi Tempat Praktik Mandiri Dokter dan Dokter Gigi, bukan untuk alur pelayanan puskesmas yang melibatkan banyak peran sekaligus |
-| **Spreadsheet mandiri (Excel)** | Gratis, sudah dikuasai sebagian petugas | Tidak ada validasi data, tidak ada relasi antar-tabel, tidak ada kendali akses, rawan tertimpa; tidak menyelesaikan G-03 dan G-04 |
-| **SATUSEHAT (platform Kemenkes)** | Standar interoperabilitas nasional, memungkinkan pertukaran data antar-fasilitas | Merupakan platform pertukaran data, bukan aplikasi operasional harian; fasilitas tetap membutuhkan sistem sendiri untuk mencatat |
+| **SATUSEHAT RME** (diresmikan 1 September 2026) | Mengintegrasikan data klinis sekitar 280 juta penduduk antar-fasilitas, memungkinkan pasien melihat riwayatnya tanpa membawa berkas fisik, dengan pengamanan berlapis setara sistem perbankan | Merupakan lapisan integrasi nasional dan kanal akses bagi pasien, bukan aplikasi operasional yang menjalankan antrean, pemeriksaan, peresepan, dan farmasi di dalam puskesmas. Fasilitas tetap wajib memiliki sistem pencatatannya sendiri untuk dapat mengirim data ke sini, dan pengirimannya menuntut koneksi internet |
+| **SIMPUS atau RME komersial berbasis awan** | Fitur lengkap, sudah terhubung ke SATUSEHAT, tersedia dukungan teknis | Berbayar per bulan, membutuhkan internet stabil, dan pelayanan terhenti saat koneksi putus (G-07) |
+| **SIKDA Generik** (sistem gratis Kemenkes untuk puskesmas) | Gratis, resmi dari Kementerian Kesehatan, dan dirancang khusus untuk alur kerja puskesmas | Penelitian implementasi melaporkan kendala berupa keterbatasan sumber daya manusia terlatih, keterbatasan infrastruktur, pembaruan sistem yang lambat, dan tata kelola yang belum mapan. Sebagaimana SIMPUS pada umumnya, sistem ini bersifat administratif dan tidak melakukan pemantauan risiko antar-waktu (G-03, G-04) |
+| **ASRI** (RME gratis Kemenkes) | Gratis dan sudah terhubung ke SATUSEHAT sejak awal | Diperuntukkan bagi Tempat Praktik Mandiri Dokter dan Dokter Gigi, bukan untuk alur pelayanan puskesmas yang melibatkan banyak peran sekaligus |
+| **Pencatatan manual (kertas)** | Tidak butuh perangkat, tidak butuh pelatihan, tidak bergantung listrik | Menanggung seluruh kesenjangan G-01 sampai G-06 sekaligus, dan sejak PMK 24/2022 tidak lagi memenuhi kewajiban regulasi |
+| **Spreadsheet mandiri (Excel)** | Gratis dan sudah dikuasai sebagian petugas | Tidak ada validasi data, relasi antar-tabel, maupun kendali akses; tidak dapat mengirim data ke SATUSEHAT sehingga tidak memenuhi kewajiban RME; tidak menyelesaikan G-03 dan G-04 |
 
-Perhatikan satu hal yang sama pada seluruh alternatif digital di atas, termasuk yang disediakan gratis oleh pemerintah: semuanya dirancang sebagai **sistem pencatatan yang pasif**. Sistem-sistem tersebut menyimpan hasil pemeriksaan dengan rapi dan menampilkannya kembali bila diminta, tetapi tidak satu pun yang secara aktif membandingkan hasil seorang pasien antar-waktu lalu memunculkannya sebagai pasien yang perlu dipantau. Inilah sebabnya digitalisasi yang sudah berjalan luas belum menutup celah deteksi pada data SKI 2023.
+Perhatikan satu hal yang sama pada seluruh alternatif di atas, termasuk yang disediakan pemerintah: semuanya dirancang sebagai **sistem pencatatan dan pertukaran data yang pasif**. Sistem-sistem tersebut menyimpan hasil pemeriksaan dengan rapi, mengirimkannya ke tingkat nasional, dan menampilkannya kembali bila diminta. Namun tidak satu pun yang secara aktif membandingkan hasil seorang pasien antar-waktu lalu memunculkannya kepada petugas puskesmas sebagai pasien yang perlu ditindaklanjuti. Inilah sebabnya digitalisasi yang sudah berjalan luas belum menutup celah deteksi pada data SKI 2023.
 
-Kesimpulannya, celah yang belum terisi adalah **sistem yang secara aktif memantau perubahan kondisi pasien antar-waktu, tetap berjalan penuh tanpa internet sehingga dapat dipakai di fasilitas dengan jaringan terbatas, namun tetap memenuhi kewajiban pelaporan elektronik**. Celah inilah yang akan diisi oleh perangkat lunak kami.
+Kesimpulannya, celah yang belum terisi adalah **sistem yang secara aktif memantau perubahan kondisi pasien antar-waktu dan mengubahnya menjadi daftar tindak lanjut bagi petugas, tetap berjalan penuh tanpa internet sehingga dapat dipakai di fasilitas dengan jaringan terbatas, namun tetap memenuhi kewajiban pengiriman data ke SATUSEHAT**. Celah inilah yang akan diisi oleh perangkat lunak kami.
 
 ---
 
@@ -369,8 +375,9 @@ Titik penting pada alur ini adalah percabangan ketersediaan koneksi. Ketika inte
 4. Badan Kebijakan Pembangunan Kesehatan, Kementerian Kesehatan Republik Indonesia. (2024). *Hasil Utama Survei Kesehatan Indonesia (SKI) 2023*. https://www.badankebijakan.kemkes.go.id/daftar-frequently-asked-question-seputar-hasil-utama-ski-2023/hasil-utama-ski-2023/
 5. Kementerian Kesehatan Republik Indonesia. (2025). *Profil Kesehatan Indonesia 2024*. Jakarta: Kementerian Kesehatan RI. https://kemkes.go.id/id/profil-kesehatan-indonesia-2024
 6. Kementerian Kesehatan Republik Indonesia. (2019). *Laporan Nasional Riskesdas 2018*. Jakarta: Lembaga Penerbit Badan Litbang Kesehatan. Digunakan sebagai pembanding tren terhadap SKI 2023. https://repository.badankebijakan.kemkes.go.id/id/eprint/3514/
-8. United Nations. *Sustainable Development Goal 3: Ensure healthy lives and promote well-being for all at all ages*. https://sdgs.un.org/goals/goal3
+7. United Nations. *Sustainable Development Goal 3: Ensure healthy lives and promote well-being for all at all ages*. https://sdgs.un.org/goals/goal3
 
+8. Kementerian Kesehatan Republik Indonesia. *Kemenkes Resmi Luncurkan RME Terintegrasi SATUSEHAT*, peresmian SATUSEHAT RME pada 1 September 2026. https://infopublik.id/kategori/nasional-sosial-budaya/796623/kemenkes-resmi-luncurkan-rme-terintegrasi-satusehat
 9. Badan Kebijakan Pembangunan Kesehatan, Kementerian Kesehatan Republik Indonesia. *Wajib Integrasi SATUSEHAT, Kemenkes Desak Percepatan RME di Fasyankes*. Memuat data 34.463 fasyankes terintegrasi per 27 Oktober 2025 serta kendala infrastruktur dan kesiapan sumber daya manusia. https://www.badankebijakan.kemkes.go.id/wajib-integrasi-satu-sehat-kemenkes-desak-percepatan-rme-di-fasyankes/
 
 **Solusi dan standar teknis pembanding**
