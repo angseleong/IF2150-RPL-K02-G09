@@ -23,6 +23,7 @@
 
 ### Daftar Isi
 * [Milestone 1](#milestone-1)
+* [Milestone 2](#milestone-2)
 
 
 ---
@@ -54,9 +55,34 @@
 | *02-09-2026* | *[Seluruh Anggota]* | *Peninjauan akhir setelah aktor disederhanakan menjadi tiga: menyelaraskan penjelasan alur Subbab 3.4 dan gambaran pengguna Bab 2 dengan nama aktor baru, memperbaiki label diagram yang bertumpang tindih, serta memangkas kembali kalimat berlebih di Bab 1 sampai Bab 3* | *2* | *Done* | *-* | 
 
 **Catatan/Evaluasi Milestone 1:**
-* *Kelompok menyepakati SDG 3 (Good Health and Well-being) sebagai landasan solusi, dengan fokus pada target 3.4 (penyakit tidak menular), 3.8 (cakupan kesehatan semesta), dan 3.1 (angka kematian ibu).*
-* *Nilai unik yang disepakati sebagai pembeda utama adalah modul deteksi dini PTM yang bersifat aktif, bukan sekadar pencatatan administratif seperti SIMPUS pada umumnya.*
-* *Seluruh data statistik yang dikutip pada Bab 1 telah ditelusuri ke sumber primernya (Kemenkes dan BPS) dan dicantumkan pada bagian Referensi.*
-* *Hal yang perlu ditanyakan saat asistensi: (a) apakah lingkup lima aktor sudah proporsional untuk satu semester, (b) apakah 25 user story perlu diprioritaskan menjadi subset MVP, dan (c) apakah notasi activity diagram yang digunakan sudah sesuai ketentuan.*
+* *Kelompok menyepakati SDG 3 (Good Health and Well-being) sebagai landasan solusi, dengan fokus pada target 3.4 (penyakit tidak menular) dan 3.8 (cakupan kesehatan semesta). Target 3.1 sempat dimasukkan lalu dikeluarkan karena modul pendukungnya membuat lingkup bercabang.*
+* *Nilai unik yang disepakati sebagai pembeda utama adalah pemantauan longitudinal dengan daftar pantau yang ditindaklanjuti petugas, bukan sekadar pencatatan administratif seperti SIMPUS pada umumnya.*
+* *Seluruh data statistik yang dikutip pada Bab 1 telah ditelusuri ke sumber primernya dan dicantumkan pada bagian Referensi.*
+* *Hasil asistensi: lingkup dipangkas menjadi 3 aktor, 18 user story, dan 27 aktivitas; setiap aktivitas dipetakan satu lawan satu dengan simpul activity diagram; lajur aktor eksternal dihapus dari diagram.*
 
 ---
+
+### Milestone 2
+**Periode:** 06-09-2026 - 07-09-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *06-09-2026* | *[Seluruh Anggota]* | *Mempelajari template Tugas 2 Requirement Gathering dan memetakan bagian mana yang dapat diturunkan langsung dari dokumen Milestone 1* | *1,5* | *Done* | *-* |
+| *06-09-2026* | *Axeleon Justin Algianto* | *Menyusun Bab 1: deskripsi umum sistem secara naratif dan deskripsi tiga aktor pengguna* | *2* | *Done* | *-* |
+| *06-09-2026* | *Axeleon Justin Algianto* | *Menyalin dan menyelaraskan 18 user story serta 27 deskripsi aktivitas dari Milestone 1 ke Subbab 2.1 dan 2.2* | *2* | *Done* | *-* |
+| *06-09-2026* | *Axeleon Justin Algianto* | *Menyusun Subbab 2.3 Pemetaan Kebutuhan berisi 27 kebutuhan dengan kategori User, Business, System, dan Legal, lengkap dengan penanda dukungan perangkat lunak* | *3,5* | *Done* | *Menentukan batas antara Business Requirement yang ditegakkan perangkat lunak dan yang murni kebijakan sempat rancu* |
+| *06-09-2026* | *Axeleon Justin Algianto* | *Menurunkan 21 kebutuhan fungsional dan 8 kebutuhan non-fungsional dari pemetaan kebutuhan* | *3* | *Done* | *-* |
+| *06-09-2026* | *Axeleon Justin Algianto* | *Memperbarui dokumen AI Usage dengan log penggunaan AI untuk Milestone 2* | *0,5* | *Done* | *-* |
+| *07-09-2026* | *Steven Vanako* | *Merapikan struktur folder M2 dan menghapus berkas template yang sudah tidak dipakai* | *0,5* | *Done* | *-* |
+| *07-09-2026* | *[Seluruh Anggota]* | *Peninjauan silang dokumen RG: melengkapi kebutuhan arsitektur offline-first, akses bersamaan pada jaringan lokal, dan pengoperasian berbasis papan ketik yang belum tercakup; memperbaiki penanda dukungan perangkat lunak pada R03 dan R13; menyamakan sebutan pelaku pada deskripsi aktivitas; serta menyalin kedua activity diagram ke folder M2* | *3* | *Done* | *Arsitektur offline-first merupakan nilai unik utama pada Milestone 1 namun belum muncul sebagai kebutuhan mana pun di draf awal* |
+| | | | | | |
+
+**Catatan/Evaluasi Milestone 2:**
+* *Seluruh 27 aktivitas dari Milestone 1 dipakai kembali tanpa perubahan penomoran, sehingga penelusuran antar-dokumen tetap terjaga.*
+* *Kebutuhan bertambah dari 27 menjadi 30 setelah peninjauan, dengan tambahan pada arsitektur offline-first (R28), akses bersamaan dalam jaringan lokal (R29), dan pengoperasian berbasis papan ketik (R30).*
+* *Hal yang perlu ditanyakan saat asistensi: (a) apakah Business Requirement yang ditegakkan perangkat lunak sebaiknya ditandai "Ya" pada kolom P/L, (b) apakah jumlah kebutuhan non-fungsional sudah proporsional, dan (c) apakah activity diagram perlu digambar ulang khusus untuk dokumen ini atau cukup merujuk hasil Milestone 1.*
+
+---
+
+
+``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
