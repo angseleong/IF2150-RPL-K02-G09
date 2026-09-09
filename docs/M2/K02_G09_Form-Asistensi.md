@@ -26,11 +26,12 @@
 
 | Catatan |
 | --- |
-| 1. Gambar penjelasan kebutuhan tidak diperlukan; ganti dengan spesifikasi lebih rinci dalam format tabel |
-| 2. Uraikan dasar penetapan kolom P/L |
-| 3. Terapkan framework EARS pada tabel Kebutuhan Fungsional dan Kebutuhan Non-Fungsional |
-| 4. Satu KF boleh menampung beberapa kebutuhan yang telah diusulkan |
-| 5. Setiap ID Kebutuhan (R) bertanda "Ya" wajib muncul pada tabel KF/KNF |
+| 1. Lengkapi Bab 1 dengan ekspektasi pengguna, alur kerja, peran manusia dalam sistem, dan harapan dari solusi |
+| 2. Gambar penjelasan kebutuhan tidak diperlukan; ganti dengan spesifikasi lebih rinci dalam format tabel |
+| 3. Uraikan dasar penetapan kolom P/L |
+| 4. Terapkan framework EARS pada tabel Kebutuhan Fungsional dan Kebutuhan Non-Fungsional |
+| 5. Satu KF boleh menampung beberapa kebutuhan yang telah diusulkan |
+| 6. Setiap ID Kebutuhan (R) bertanda "Ya" wajib muncul pada tabel KF/KNF |
 
 ## Dokumentasi
 

@@ -63,7 +63,7 @@
 ---
 
 ### Milestone 2
-**Periode:** 06-09-2026 - 07-09-2026
+**Periode:** 06-09-2026 - 09-09-2026
 
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -74,14 +74,14 @@
 | *06-09-2026* | *Axeleon Justin Algianto* | *Menurunkan 21 kebutuhan fungsional dan 8 kebutuhan non-fungsional dari pemetaan kebutuhan* | *3* | *Done* | *-* |
 | *06-09-2026* | *Axeleon Justin Algianto* | *Memperbarui dokumen AI Usage dengan log penggunaan AI untuk Milestone 2* | *0,5* | *Done* | *-* |
 | *07-09-2026* | *Steven Vanako* | *Merapikan struktur folder M2 dan menghapus berkas template yang sudah tidak dipakai* | *0,5* | *Done* | *-* |
-| *07-09-2026* | *[Seluruh Anggota]* | *Peninjauan silang dokumen RG: melengkapi kebutuhan arsitektur offline-first, akses bersamaan pada jaringan lokal, dan pengoperasian berbasis papan ketik yang belum tercakup; memperbaiki penanda dukungan perangkat lunak pada R03 dan R13; menyamakan sebutan pelaku pada deskripsi aktivitas; serta menyalin kedua activity diagram ke folder M2* | *3* | *Done* | *Arsitektur offline-first merupakan nilai unik utama pada Milestone 1 namun belum muncul sebagai kebutuhan mana pun di draf awal* |
+| *07-09-2026* | *[Seluruh Anggota]* | *Peninjauan silang dokumen RG: melengkapi kebutuhan arsitektur offline-first, akses bersamaan pada jaringan lokal, dan pengoperasian berbasis papan ketik yang belum tercakup; memperbaiki penanda dukungan perangkat lunak pada R03 dan R13; serta menyamakan sebutan pelaku pada deskripsi aktivitas* | *3* | *Done* | *Arsitektur offline-first merupakan nilai unik utama pada Milestone 1 namun belum muncul sebagai kebutuhan mana pun di draf awal* |
 | *09-09-2026* | *Steven Vanako* | *Me-restate spesifikasi kebutuhan yang kurang jelas/tertumpuk, menambahkan kebutuhan baru yang diperlukan, dan memperbaharui dokumen Form-asistensi dan dokumentasi berupa screenshot asistensi* | *2* | *Done* | *Kebimbangan terkait cara membagi kebutuhan secara spesifik dan tepat, serta pengecekan ulang terhadap dampak perubahan* |
-| | | | | | |
 
 **Catatan/Evaluasi Milestone 2:**
 * *Seluruh 27 aktivitas dari Milestone 1 dipakai kembali tanpa perubahan penomoran, sehingga penelusuran antar-dokumen tetap terjaga.*
 * *Kebutuhan bertambah dari 27 menjadi 30 setelah peninjauan, dengan tambahan pada arsitektur offline-first (R28), akses bersamaan dalam jaringan lokal (R29), dan pengoperasian berbasis papan ketik (R30).*
-* *Hal yang perlu ditanyakan saat asistensi: (a) apakah Business Requirement yang ditegakkan perangkat lunak sebaiknya ditandai "Ya" pada kolom P/L, (b) apakah jumlah kebutuhan non-fungsional sudah proporsional, dan (c) apakah activity diagram perlu digambar ulang khusus untuk dokumen ini atau cukup merujuk hasil Milestone 1.*
+* *Kebutuhan fungsional bertambah dari 21 menjadi 24 dan non-fungsional dari 8 menjadi 13, seiring masuknya R28 s.d. R30 dan perincian hasil asistensi.*
+* *Hasil asistensi: Bab 1 dilengkapi dengan ekspektasi pengguna, alur kerja, peran manusia, dan harapan dari solusi; gambar pada Bab 2 diganti tabel beraktor; seluruh kebutuhan bertanda P/L "Ya" diturunkan menjadi KF/KNF dengan pola EARS; dan satu KF diperbolehkan mencakup beberapa ID kebutuhan.*
 
 ---
 
