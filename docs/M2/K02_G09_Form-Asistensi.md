@@ -4,8 +4,8 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Hari\]* |
-| **Tanggal** | *\[DD/MM/YYYY\]* |
+| **Hari** | Senin |
+| **Tanggal** | 07/09/2026 |
 | **Kelas** | K02 |
 | **Nomor Kelompok** | G09  |
 | **Nama Kelompok** | Cumlaude  |
@@ -26,11 +26,11 @@
 
 | Catatan |
 | --- |
-| 1. Gambar terkait penjelasan kebutuhan tidak diperlukan, melainkan spesifikasi lebih lanjut menggunakan format tabel |
-| 2. Deskripsi lebih lanjut terkait keputusan P/L  |
-| 3. Implementasi Framework EARS di tabel Kebutuhan Fungsional dan Kebutuhan Non-Fungsional |
-| 4. Setiap KF boleh mencakup beberapa kebutuhan yang telah diusulkan |
-| 5. Id Kebutuhan di tabel (R) yang ditandai sebagai "Ya" wajib disertakan dalam tabel KF/KNF |
+| 1. Gambar penjelasan kebutuhan tidak diperlukan; ganti dengan spesifikasi lebih rinci dalam format tabel |
+| 2. Uraikan dasar penetapan kolom P/L |
+| 3. Terapkan framework EARS pada tabel Kebutuhan Fungsional dan Kebutuhan Non-Fungsional |
+| 4. Satu KF boleh menampung beberapa kebutuhan yang telah diusulkan |
+| 5. Setiap ID Kebutuhan (R) bertanda "Ya" wajib muncul pada tabel KF/KNF |
 
 ## Dokumentasi
 
