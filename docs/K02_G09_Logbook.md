@@ -75,6 +75,7 @@
 | *06-09-2026* | *Axeleon Justin Algianto* | *Memperbarui dokumen AI Usage dengan log penggunaan AI untuk Milestone 2* | *0,5* | *Done* | *-* |
 | *07-09-2026* | *Steven Vanako* | *Merapikan struktur folder M2 dan menghapus berkas template yang sudah tidak dipakai* | *0,5* | *Done* | *-* |
 | *07-09-2026* | *[Seluruh Anggota]* | *Peninjauan silang dokumen RG: melengkapi kebutuhan arsitektur offline-first, akses bersamaan pada jaringan lokal, dan pengoperasian berbasis papan ketik yang belum tercakup; memperbaiki penanda dukungan perangkat lunak pada R03 dan R13; menyamakan sebutan pelaku pada deskripsi aktivitas; serta menyalin kedua activity diagram ke folder M2* | *3* | *Done* | *Arsitektur offline-first merupakan nilai unik utama pada Milestone 1 namun belum muncul sebagai kebutuhan mana pun di draf awal* |
+| *09-09-2026* | *Steven Vanako* | *Me-restate spesifikasi kebutuhan yang kurang jelas/tertumpuk, menambahkan kebutuhan baru yang diperlukan, dan memperbaharui dokumen Form-asistensi dan dokumentasi berupa screenshot asistensi* | *2* | *Done* | *Kebimbangan terkait cara membagi kebutuhan secara spesifik dan tepat, serta pengecekan ulang terhadap dampak perubahan* |
 | | | | | | |
 
 **Catatan/Evaluasi Milestone 2:**

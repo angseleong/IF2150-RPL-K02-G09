@@ -26,17 +26,14 @@
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
-
-**Notes for this section:**  
-*Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
+| 1. Gambar terkait penjelasan kebutuhan tidak diperlukan, melainkan spesifikasi lebih lanjut menggunakan format tabel |
+| 2. Deskripsi lebih lanjut terkait keputusan P/L  |
+| 3. Implementasi Framework EARS di tabel Kebutuhan Fungsional dan Kebutuhan Non-Fungsional |
+| 4. Setiap KF boleh mencakup beberapa kebutuhan yang telah diusulkan |
+| 5. Id Kebutuhan di tabel (R) yang ditandai sebagai "Ya" wajib disertakan dalam tabel KF/KNF |
 
 ## Dokumentasi
 
-<!-- ![](./assets/foto-asistensi.jpg) -->
 <p align="center">
   <img src="./assets/foto-asistensi.jpg" width="100%">
 </p>
