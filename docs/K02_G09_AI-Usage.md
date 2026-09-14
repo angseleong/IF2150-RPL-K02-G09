@@ -24,6 +24,7 @@
 ### Daftar Isi
 * [Milestone 1](#milestone-1)
 * [Milestone 2](#milestone-2)
+* [Milestone 3](#milestone-3)
 
 ---
 
@@ -50,6 +51,11 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | *Claude (Claude Code)* | *Brainstorming aspek kebutuhan non-fungsional (KNF) yang relevan untuk aplikasi kesehatan fasilitas primer* | *"Apa saja parameter kebutuhan non-fungsional yang krusial untuk sistem rekam medis puskesmas dengan arsitektur desktop dan sinkronisasi berkala?"* | *Saran aspek non-fungsional dari AI disaring dan disesuaikan dengan batasan teknis puskesmas. Nilai batas/metrik kuantitatif (kecepatan respons < 2 detik, enkripsi AES-256 untuk basis data lokal, mekanisme rollback transaksi) ditetapkan sendiri oleh kelompok.* |
 | *Gemini* | *Memeriksa konsistensi matriks keterlacakan (traceability) antara Kebutuhan Fungsional dengan User Story dan Aktivitas* | *"Tolong periksa apakah ada ID aktivitas atau user story dari daftar berikut yang belum tercakup atau terlewat pada pemetaan kebutuhan fungsional."* | *Hasil pengecekan AI ditinjau ulang secara manual baris demi baris pada draf dokumen. Penyesuaian pemetaan akhir dan penggabungan kebutuhan fungsional tetap diputuskan sendiri oleh anggota kelompok.* |
 | *Gemini* | *Review tata bahasa dan saran perbaikan formulasi kalimat kebutuhan fungsional agar tidak ambigu* | *"Tinjau formulasi kalimat kebutuhan fungsional berikut, berikan saran agar menggunakan pola pernyataan yang baku ('Sistem harus...') dan tidak bermakna ganda."* | *Saran perbaikan redaksional dari AI hanya diadopsi pada pemilihan kata kerja operasional yang lebih lugas. Makna klinis, batasan fitur, dan alur kerja puskesmas tetap sepenuhnya hasil rumusan kelompok.* |
+
+### Milestone 3
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| *Claude (Claude Code)* | *Memeriksa kelengkapan penelusuran antara Bab 2, tabel use case, skenario, dan diagram* | *"Periksa apakah ada ID KF yang belum tercakup use case mana pun, dan apakah aktor pada tabel use case sama dengan asosiasi pada diagram."* | *Hasil pemeriksaan dicocokkan ulang secara manual pada dokumen sebelum dikumpulkan, khususnya kesesuaian ID KF pada tabel Subbab 3.2 dengan rumusan KF pada Bab 2.* |
 
 ---
 ### Pernyataan Integritas dan Persetujuan

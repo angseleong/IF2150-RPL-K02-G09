@@ -24,6 +24,7 @@
 ### Daftar Isi
 * [Milestone 1](#milestone-1)
 * [Milestone 2](#milestone-2)
+* [Milestone 3](#milestone-3)
 
 
 ---
@@ -82,6 +83,28 @@
 * *Kebutuhan bertambah dari 27 menjadi 30 setelah peninjauan, dengan tambahan pada arsitektur offline-first (R28), akses bersamaan dalam jaringan lokal (R29), dan pengoperasian berbasis papan ketik (R30).*
 * *Kebutuhan fungsional bertambah dari 21 menjadi 24 dan non-fungsional dari 8 menjadi 13, seiring masuknya R28 s.d. R30 dan perincian hasil asistensi.*
 * *Hasil asistensi: Bab 1 dilengkapi dengan ekspektasi pengguna, alur kerja, peran manusia, dan harapan dari solusi; gambar pada Bab 2 diganti tabel beraktor; seluruh kebutuhan bertanda P/L "Ya" diturunkan menjadi KF/KNF dengan pola EARS; dan satu KF diperbolehkan mencakup beberapa ID kebutuhan.*
+
+---
+
+### Milestone 3
+**Periode:** 13-09-2026 - 14-09-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *13-09-2026* | *[Seluruh Anggota]* | *Mempelajari template Tugas 3 dan memetakan KF01 s.d. KF24 pada dokumen Requirement Gathering menjadi calon use case* | *1,5* | *Done* | *-* |
+| *13-09-2026* | *Axeleon Justin Algianto* | *Menyusun Bab 1 dan Bab 2 dokumen Use Case: menyalin deskripsi perangkat lunak dari Subbab 1.1 dan seluruh KF01 s.d. KF24 beserta pola EARS-nya dari Subbab 2.4 dokumen Requirement Gathering* | *1,5* | *Done* | *-* |
+| *13-09-2026* | *Muhammad Adnan Kurniawan* | *Mengidentifikasi tiga aktor dan 18 use case pada Subbab 3.1 dan 3.2 beserta penelusurannya ke ID KF* | *3* | *Done* | *Batas antara use case tersendiri dan langkah di dalam skenario sempat rancu untuk KF yang sifatnya lintas fitur (KF22 s.d. KF24)* |
+| *14-09-2026* | *Muhammad Adnan Kurniawan* | *Menetapkan enam relasi include dan extend antar use case beserta alasan pemilihannya* | *1,5* | *Done* | *-* |
+| *14-09-2026* | *Malik Arsyafiandra Madani* | *Menggambar use case diagram (Gambar 1) berisi seluruh aktor, use case, batas sistem, dan relasi include/extend* | *3* | *Done* | *Dua garis asosiasi menuju UC01 semula memotong oval use case lain; tata letaknya diperbaiki dengan merutekan kedua garis tersebut lewat sisi luar diagram* |
+| *14-09-2026* | *Fachry Azriel Fajdwani* | *Menulis skenario normal dan skenario alternatif untuk seluruh 18 use case pada Subbab 3.4* | *4* | *Done* | *-* |
+| *14-09-2026* | *[Seluruh Anggota]* | *Peninjauan silang dokumen: memastikan KF01 s.d. KF24 tercakup minimal satu use case, aktor pada tabel Subbab 3.2 sama dengan asosiasi pada diagram, dan penomoran skenario 3.4.x berurutan dengan tabel use case* | *2* | *Done* | *-* |
+| *14-09-2026* | *Steven Vanako* | *Mengganti nama berkas KXX_GYY_UC.md menjadi K02_G09_UC.md, merapikan folder assets Milestone 3, serta memperbarui dokumen Logbook dan AI Usage* | *1* | *Done* | *-* |
+
+**Catatan/Evaluasi Milestone 3:**
+* *Seluruh KF01 s.d. KF24 dari Milestone 2 dipakai kembali tanpa perubahan penomoran maupun rumusan, sehingga penelusuran antar-dokumen tetap terjaga.*
+* *KF22 (operasi luring), KF23 (perubahan data bersamaan), dan KF24 (pintasan papan ketik) bersifat lintas fitur sehingga tidak dijadikan use case tersendiri, melainkan muncul sebagai langkah atau skenario alternatif pada use case yang relevan agar diagram tidak memuat detail teknis.*
+* *Kewenangan dokter tidak dimodelkan sebagai aktor terpisah agar jumlah aktor tetap tiga sesuai hasil asistensi Milestone 1; pembatasannya ditulis pada deskripsi aktor Tenaga Klinis dan pada skenario alternatif UC09.*
+* *Dokumen belum diasistensikan saat logbook ini ditulis. Catatan hasil asistensi Milestone 3 akan ditambahkan setelah asistensi dilaksanakan.*
 
 ---
 
