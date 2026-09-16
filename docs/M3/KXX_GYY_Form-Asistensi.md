@@ -4,41 +4,38 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Hari\]* |
-| **Tanggal** | *\[DD/MM/YYYY\]* |
-| **Kelas** | *\[Kelas\]* |
-| **Nomor Kelompok** | *\[Nomor Kelompok\]*  |
-| **Nama Kelompok** | *\[Nama Kelompok\]*  |
-| **Nama Perangkat Lunak** | *\[Nama P/L\]*  |
-| **Dokumen** | *\[Nama Dokumen yang diasistensikan\]*  |
+| **Hari** | Senin |
+| **Tanggal** | 14/09/2026 |
+| **Kelas** | K02 |
+| **Nomor Kelompok** | G09  |
+| **Nama Kelompok** | Cumlaude  |
+| **Nama Perangkat Lunak** | SEHATI (Sistem Elektronik Pelayanan Kesehatan Terintegrasi)  |
+| **Dokumen** | K02_G09_RG.md (Tugas 2 - Requirement Gathering)  |
+
 
 ### Anggota Kelompok
 
 | NIM | Nama |
 | --- | --- |
-| *\[NIM 1\]* | *\[Nama Anggota 1\]* |
-| *\[NIM 2\]* | *\[Nama Anggota 2\]* |
-| *\[NIM 3\]* | *\[Nama Anggota 3\]* |
-| *\[NIM 4\]* | *\[Nama Anggota 4\]* |
-| *\[NIM 5\]* | *\[Nama Anggota 5\]* |
+| 13525008 | Malik Arsyafiandra Madani |
+| 13525044 | Steven Vanako |
+| 13525071 | Muhammad Adnan Kurniawan |
+| 13525074 | Axeleon Justin Algianto |
+| 13525110 | Fachry Azriel Fajdwani |
 
 ### Catatan
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
-
-**Notes for this section:**  
-*Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
+| 1. Penyelarasan use case dengan goal yang ingin dituju |
+| 2. Optimalisasi KF yang dikaitkan pada setiap use case dengan perampingan use case yang ditetapkan |
+| 3. Penggunaan use case (include & exclude) yang lebih optimal sesuai dengan fungsinya |
+| 4. Pemeriksaan kembali skenario use case dan use casenya serta pembuatan use case skenario yang lebih optimal dan d |
 
 ## Dokumentasi
 
-<!-- ![](./assets/foto-asistensi.jpg) -->
 <p align="center">
-  <img src="./assets/foto-asistensi.jpg" width="100%">
+  <img src="./assets/foto-asistensi.jpeg" width="100%">
 </p>
 
 <p align="center">
