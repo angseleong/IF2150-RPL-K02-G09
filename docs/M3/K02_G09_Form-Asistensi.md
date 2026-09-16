@@ -27,10 +27,10 @@
 
 | Catatan |
 | --- |
-| 1. Penyelarasan use case dengan goal yang ingin dituju |
-| 2. Optimalisasi KF yang dikaitkan pada setiap use case dengan perampingan use case yang ditetapkan |
-| 3. Penggunaan use case (include & exclude) yang lebih optimal sesuai dengan fungsinya |
-| 4. Pemeriksaan kembali skenario use case dan use casenya serta pembuatan use case skenario yang lebih optimal dan d |
+| 1. Selaraskan setiap use case dengan tujuan yang hendak dicapai |
+| 2. Rampingkan use case yang ditetapkan dan rapikan KF yang dikaitkan pada masing-masing use case |
+| 3. Pakai relasi «include» dan «extend» sesuai fungsinya |
+| 4. Periksa ulang daftar use case beserta skenarionya, lalu susun skenario yang lebih ringkas dan rinci |
 
 ## Dokumentasi
 
