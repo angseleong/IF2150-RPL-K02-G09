@@ -99,6 +99,9 @@
 | *14-09-2026* | *Fachry Azriel Fajdwani* | *Menulis skenario normal dan skenario alternatif untuk seluruh 18 use case pada Subbab 3.4* | *4* | *Done* | *-* |
 | *14-09-2026* | *[Seluruh Anggota]* | *Peninjauan silang dokumen: memastikan KF01 s.d. KF24 tercakup minimal satu use case, aktor pada tabel Subbab 3.2 sama dengan asosiasi pada diagram, dan penomoran skenario 3.4.x berurutan dengan tabel use case* | *2* | *Done* | *-* |
 | *14-09-2026* | *Steven Vanako* | *Mengganti nama berkas KXX_GYY_UC.md menjadi K02_G09_UC.md, merapikan folder assets Milestone 3, serta memperbarui dokumen Logbook dan AI Usage* | *1* | *Done* | *-* |
+| *15-09-2026* | *Axeleon Justin Algianto* | *Menyunting deskripsi aktor dan actor-use case matrix untuk menonjolkan konsistensi terminologi* | *4* | *Done* | *-* |
+| *16-09-2026* | *Steven Vanako* | *Mengubah skenario use case berdasarkan hasil asistensi (perampingan use case)* | *3* | *Done* | *-* |
+| *16-09-2026* | *Steven Vanako* | *Mengisi formulir asistensi M3 dan memperbarui dokumen Logbook dan AI Usage* | *1* | *Done* | *-* |
 
 **Catatan/Evaluasi Milestone 3:**
 * *Seluruh KF01 s.d. KF24 dari Milestone 2 dipakai kembali tanpa perubahan penomoran maupun rumusan, sehingga penelusuran antar-dokumen tetap terjaga.*

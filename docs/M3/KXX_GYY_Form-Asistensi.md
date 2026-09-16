@@ -10,7 +10,7 @@
 | **Nomor Kelompok** | G09  |
 | **Nama Kelompok** | Cumlaude  |
 | **Nama Perangkat Lunak** | SEHATI (Sistem Elektronik Pelayanan Kesehatan Terintegrasi)  |
-| **Dokumen** | K02_G09_RG.md (Tugas 2 - Requirement Gathering)  |
+| **Dokumen** | K02_G09_UC.md (Tugas 3 - Use Case & Scenario Use Case)  |
 
 
 ### Anggota Kelompok
