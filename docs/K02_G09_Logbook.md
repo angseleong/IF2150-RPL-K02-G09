@@ -108,7 +108,7 @@
 * *KF22 (operasi luring), KF23 (perubahan data bersamaan), dan KF24 (pintasan papan ketik) bersifat lintas fitur sehingga tidak dijadikan use case tersendiri, melainkan muncul sebagai langkah atau skenario alternatif pada use case yang relevan agar diagram tidak memuat detail teknis.*
 * *Kewenangan dokter tidak dimodelkan sebagai aktor terpisah agar jumlah aktor tetap tiga sesuai hasil asistensi Milestone 1; pembatasannya ditulis pada deskripsi aktor Tenaga Klinis dan pada skenario alternatif UC05.*
 * *Hasil asistensi: use case diringkas dari 18 menjadi 12 agar setiap use case sejalan dengan satu tujuan yang jelas, kaitan KF pada masing-masing use case dirapikan, relasi «include» dan «extend» dipakai sesuai fungsinya, dan skenario disusun ulang agar tiap langkah aksi aktor berpasangan dengan reaksi sistem.*
-* *Use case diagram pada Subbab 3.4 masih memuat 18 use case versi sebelum asistensi dan perlu digambar ulang mengikuti 12 use case pada Subbab 3.3 sebelum dokumen dikumpulkan.*
+* *Use case diagram pada Subbab 3.4 digambar ulang mengikuti 12 use case hasil konsolidasi, memuat tiga aktor, batas sistem SEHATI, serta relasi UC03 «include» UC02 dan UC06 «extend» UC05.*
 
 ---
 

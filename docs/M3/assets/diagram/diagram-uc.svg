@@ -1,96 +1,79 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 1560" width="1120" height="1560" font-family="Segoe UI, Helvetica, Arial, sans-serif">
-<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2933"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1f2933" stroke-width="1.4"/></marker></defs>
-<rect x="0" y="0" width="1120" height="1560" fill="#ffffff"/>
-<text x="560.0" y="38" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2933">Use Case Diagram SEHATI</text>
-<rect x="276" y="78" width="524" height="1418" rx="6" fill="#fbfcfd" stroke="#c3ccd6" stroke-width="1.4"/>
-<text x="538.0" y="104" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1f2933">SEHATI</text>
-<ellipse cx="545" cy="158" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="155" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC02</tspan> Mencari Data</text>
-<text x="545" y="171" text-anchor="middle" font-size="11.5" fill="#1f2933">Pasien</text>
-<ellipse cx="545" cy="234" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="231" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC03</tspan> Mendaftarkan dan Memutakhirkan</text>
-<text x="545" y="247" text-anchor="middle" font-size="11.5" fill="#1f2933">Data Pasien</text>
-<ellipse cx="545" cy="310" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="307" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC04</tspan> Membuka Kunjungan dan</text>
-<text x="545" y="323" text-anchor="middle" font-size="11.5" fill="#1f2933">Nomor Antrean</text>
-<ellipse cx="545" cy="386" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="383" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC15</tspan> Menyusun dan Mengekspor</text>
-<text x="545" y="399" text-anchor="middle" font-size="11.5" fill="#1f2933">Laporan Periodik</text>
-<ellipse cx="545" cy="462" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="459" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC16</tspan> Menjalankan Sinkronisasi Data</text>
-<text x="545" y="475" text-anchor="middle" font-size="11.5" fill="#1f2933">ke SATUSEHAT</text>
-<ellipse cx="545" cy="538" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="535" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC17</tspan> Mengelola Akun Pengguna</text>
-<text x="545" y="551" text-anchor="middle" font-size="11.5" fill="#1f2933">dan Data Master</text>
-<ellipse cx="545" cy="614" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="611" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC18</tspan> Meninjau Status Pencadangan</text>
-<text x="545" y="627" text-anchor="middle" font-size="11.5" fill="#1f2933">Basis Data</text>
-<ellipse cx="545" cy="690" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="694.5" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC01</tspan> Masuk ke Aplikasi</text>
-<ellipse cx="545" cy="766" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="763" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC05</tspan> Memanggil Pasien dari</text>
-<text x="545" y="779" text-anchor="middle" font-size="11.5" fill="#1f2933">Antrean Skrining</text>
-<ellipse cx="545" cy="842" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="839" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC06</tspan> Mencatat Skrining dan</text>
-<text x="545" y="855" text-anchor="middle" font-size="11.5" fill="#1f2933">Tanda Vital</text>
-<ellipse cx="545" cy="918" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="915" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC07</tspan> Meninjau Rekam Medis dan</text>
-<text x="545" y="931" text-anchor="middle" font-size="11.5" fill="#1f2933">Penanda Risiko</text>
-<ellipse cx="545" cy="994" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="998.5" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC08</tspan> Meninjau Tren Tanda Vital</text>
-<ellipse cx="545" cy="1070" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="1067" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC09</tspan> Melakukan Pemeriksaan dan</text>
-<text x="545" y="1083" text-anchor="middle" font-size="11.5" fill="#1f2933">Mencatat Diagnosis</text>
-<ellipse cx="545" cy="1146" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="1150.5" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC10</tspan> Menyusun Resep Elektronik</text>
-<ellipse cx="545" cy="1222" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="1226.5" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC11</tspan> Menjadwalkan Kunjungan Ulang</text>
-<ellipse cx="545" cy="1298" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="1295" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC14</tspan> Menindaklanjuti Pasien pada</text>
-<text x="545" y="1311" text-anchor="middle" font-size="11.5" fill="#1f2933">Daftar Pantau</text>
-<ellipse cx="545" cy="1374" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="1371" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC12</tspan> Melayani Antrean Resep dan</text>
-<text x="545" y="1387" text-anchor="middle" font-size="11.5" fill="#1f2933">Menyerahkan Obat</text>
-<ellipse cx="545" cy="1450" rx="155" ry="30" fill="#e8eef5" stroke="#6b7a8c" stroke-width="1.3"/>
-<text x="545" y="1447" text-anchor="middle" font-size="11.5" fill="#1f2933"><tspan font-weight="700">UC13</tspan> Mencatat Penerimaan</text>
-<text x="545" y="1463" text-anchor="middle" font-size="11.5" fill="#1f2933">Obat Masuk</text>
-<line x1="130.0" y1="424.0" x2="500.2" y2="186.7" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="130.0" y1="424.0" x2="484.6" y2="261.6" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="130.0" y1="424.0" x2="455.7" y2="334.5" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="130.0" y1="424.0" x2="404.9" y2="398.8" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="130.0" y1="424.0" x2="404.9" y2="449.2" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="130.0" y1="424.0" x2="455.7" y2="513.5" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="130.0" y1="424.0" x2="484.6" y2="586.4" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="130.0" y1="424.0" x2="500.2" y2="661.3" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="940.0" y1="1032.0" x2="587.8" y2="794.8" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="940.0" y1="1032.0" x2="602.9" y2="869.8" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="940.0" y1="1032.0" x2="631.3" y2="942.9" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="940.0" y1="1032.0" x2="683.8" y2="1007.4" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="940.0" y1="1032.0" x2="683.8" y2="1056.6" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="940.0" y1="1032.0" x2="631.3" y2="1121.1" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="940.0" y1="1032.0" x2="602.9" y2="1194.2" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="940.0" y1="1032.0" x2="587.8" y2="1269.2" stroke="#6b7a8c" stroke-width="1.15"/>
-<path d="M 956 1008.0 L 1030 1008.0 L 1030 690 L 700 690" fill="none" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="130.0" y1="1416.0" x2="407.6" y2="1387.9" stroke="#6b7a8c" stroke-width="1.15"/>
-<line x1="130.0" y1="1416.0" x2="402.3" y2="1438.3" stroke="#6b7a8c" stroke-width="1.15"/>
-<path d="M 130 1398 L 250 1398 L 250 706 L 402 703" fill="none" stroke="#6b7a8c" stroke-width="1.15"/>
-<g stroke="#1f2933" stroke-width="1.8" fill="none" stroke-linecap="round"><circle cx="130" cy="394.0" r="11" fill="#ffffff"/><line x1="130" y1="405.0" x2="130" y2="432.0"/><line x1="113" y1="416.0" x2="147" y2="416.0"/><line x1="130" y1="432.0" x2="116" y2="455.0"/><line x1="130" y1="432.0" x2="144" y2="455.0"/></g>
-<text x="130" y="474.0" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2933">Petugas Administrasi</text>
-<g stroke="#1f2933" stroke-width="1.8" fill="none" stroke-linecap="round"><circle cx="940" cy="1002.0" r="11" fill="#ffffff"/><line x1="940" y1="1013.0" x2="940" y2="1040.0"/><line x1="923" y1="1024.0" x2="957" y2="1024.0"/><line x1="940" y1="1040.0" x2="926" y2="1063.0"/><line x1="940" y1="1040.0" x2="954" y2="1063.0"/></g>
-<text x="940" y="1082.0" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2933">Tenaga Klinis</text>
-<g stroke="#1f2933" stroke-width="1.8" fill="none" stroke-linecap="round"><circle cx="130" cy="1386" r="11" fill="#ffffff"/><line x1="130" y1="1397" x2="130" y2="1424"/><line x1="113" y1="1408" x2="147" y2="1408"/><line x1="130" y1="1424" x2="116" y2="1447"/><line x1="130" y1="1424" x2="144" y2="1447"/></g>
-<text x="130" y="1466" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2933">Petugas Farmasi</text>
-<path d="M 700 234 C 734 234, 734 158, 700 158" fill="none" stroke="#1f2933" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#arw)"/>
-<text x="731" y="200" text-anchor="start" font-size="10.5" font-style="italic" fill="#1f2933" stroke="#ffffff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">&#171;include&#187;</text>
-<path d="M 700 310 C 768 310, 768 158, 700 158" fill="none" stroke="#1f2933" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#arw)"/>
-<text x="757" y="238" text-anchor="start" font-size="10.5" font-style="italic" fill="#1f2933" stroke="#ffffff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">&#171;include&#187;</text>
-<path d="M 390 994 C 360 994, 360 918, 390 918" fill="none" stroke="#1f2933" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#arw)"/>
-<text x="363" y="960" text-anchor="end" font-size="10.5" font-style="italic" fill="#1f2933" stroke="#ffffff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">&#171;extend&#187;</text>
-<path d="M 390 1070 C 326 1070, 326 918, 390 918" fill="none" stroke="#1f2933" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#arw)"/>
-<text x="336" y="998" text-anchor="end" font-size="10.5" font-style="italic" fill="#1f2933" stroke="#ffffff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">&#171;include&#187;</text>
-<path d="M 390 1146 C 360 1146, 360 1070, 390 1070" fill="none" stroke="#1f2933" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#arw)"/>
-<text x="363" y="1112" text-anchor="end" font-size="10.5" font-style="italic" fill="#1f2933" stroke="#ffffff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">&#171;extend&#187;</text>
-<path d="M 390 1222 C 326 1222, 326 1070, 390 1070" fill="none" stroke="#1f2933" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#arw)"/>
-<text x="336" y="1150" text-anchor="end" font-size="10.5" font-style="italic" fill="#1f2933" stroke="#ffffff" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">&#171;extend&#187;</text>
-<text x="276" y="1532" font-size="11" fill="#1f2933">Keterangan: garis lurus = asosiasi aktor&#8211;use case; panah putus-putus = relasi &#171;include&#187;/&#171;extend&#187; antar use case.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 958" width="1290" height="958" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<rect width="1290" height="958" fill="#ffffff"/>
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#333" stroke-width="1.6"/></marker></defs>
+<rect x="290" y="60" width="700" height="810" rx="8" fill="none" stroke="#333" stroke-width="2"/>
+<text x="306" y="88" font-size="16" font-weight="600" fill="#111">SEHATI</text>
+<line x1="175.0" y1="480.0" x2="396.8" y2="304.3" stroke="#333" stroke-width="1.4"/>
+<line x1="175.0" y1="480.0" x2="370.8" y2="402.4" stroke="#333" stroke-width="1.4"/>
+<line x1="175.0" y1="480.0" x2="340.0" y2="480.0" stroke="#333" stroke-width="1.4"/>
+<line x1="175.0" y1="480.0" x2="370.8" y2="557.6" stroke="#333" stroke-width="1.4"/>
+<line x1="175.0" y1="480.0" x2="396.8" y2="655.7" stroke="#333" stroke-width="1.4"/>
+<line x1="1105.0" y1="400.0" x2="911.0" y2="326.8" stroke="#333" stroke-width="1.4"/>
+<line x1="1105.0" y1="400.0" x2="940.0" y2="400.0" stroke="#333" stroke-width="1.4"/>
+<line x1="1105.0" y1="400.0" x2="911.0" y2="473.2" stroke="#333" stroke-width="1.4"/>
+<line x1="1105.0" y1="400.0" x2="885.0" y2="566.1" stroke="#333" stroke-width="1.4"/>
+<line x1="1105.0" y1="750.0" x2="929.6" y2="716.9" stroke="#333" stroke-width="1.4"/>
+<line x1="1105.0" y1="750.0" x2="929.6" y2="783.1" stroke="#333" stroke-width="1.4"/>
+<line x1="130.0" y1="428.0" x2="130.0" y2="26.0" stroke="#333" stroke-width="1.4"/>
+<line x1="130.0" y1="26.0" x2="555.0" y2="26.0" stroke="#333" stroke-width="1.4"/>
+<line x1="555.0" y1="26.0" x2="555.0" y2="130.0" stroke="#333" stroke-width="1.4"/>
+<line x1="1150.0" y1="348.0" x2="1150.0" y2="44.0" stroke="#333" stroke-width="1.4"/>
+<line x1="1150.0" y1="44.0" x2="700.0" y2="44.0" stroke="#333" stroke-width="1.4"/>
+<line x1="700.0" y1="44.0" x2="700.0" y2="120.0" stroke="#333" stroke-width="1.4"/>
+<line x1="1172.0" y1="725.0" x2="1225.0" y2="725.0" stroke="#333" stroke-width="1.4"/>
+<line x1="1225.0" y1="725.0" x2="1225.0" y2="26.0" stroke="#333" stroke-width="1.4"/>
+<line x1="1225.0" y1="26.0" x2="600.0" y2="26.0" stroke="#333" stroke-width="1.4"/>
+<line x1="600.0" y1="26.0" x2="600.0" y2="115.0" stroke="#333" stroke-width="1.4"/>
+<ellipse cx="640" cy="150" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="640" y="141" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC01</text>
+<text x="640" y="161" font-size="12" fill="#111" text-anchor="middle">Masuk ke Aplikasi</text>
+<ellipse cx="440" cy="270" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="440" y="261" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC02</text>
+<text x="440" y="281" font-size="12" fill="#111" text-anchor="middle">Mengelola Data Pasien</text>
+<ellipse cx="440" cy="375" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="440" y="366" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC03</text>
+<text x="440" y="386" font-size="12" fill="#111" text-anchor="middle">Mengelola Kunjungan Pasien</text>
+<ellipse cx="440" cy="480" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="440" y="471" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC10</text>
+<text x="440" y="491" font-size="12" fill="#111" text-anchor="middle">Menyusun Laporan Periodik</text>
+<ellipse cx="440" cy="585" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="440" y="567" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC11</text>
+<text x="440" y="586" font-size="12" fill="#111" text-anchor="middle">Melakukan Sinkronisasi</text>
+<text x="440" y="603" font-size="12" fill="#111" text-anchor="middle">SATUSEHAT</text>
+<ellipse cx="440" cy="690" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="440" y="672" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC12</text>
+<text x="440" y="691" font-size="12" fill="#111" text-anchor="middle">Mengelola Konfigurasi &amp;</text>
+<text x="440" y="708" font-size="12" fill="#111" text-anchor="middle">Basis Data Sistem</text>
+<ellipse cx="840" cy="300" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="840" y="291" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC04</text>
+<text x="840" y="311" font-size="12" fill="#111" text-anchor="middle">Melakukan Skrining Awal</text>
+<ellipse cx="840" cy="400" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="840" y="382" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC05</text>
+<text x="840" y="401" font-size="12" fill="#111" text-anchor="middle">Melakukan</text>
+<text x="840" y="418" font-size="12" fill="#111" text-anchor="middle">Pemeriksaan Medis</text>
+<ellipse cx="840" cy="500" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="840" y="491" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC06</text>
+<text x="840" y="511" font-size="12" fill="#111" text-anchor="middle">Menyusun Resep Elektronik</text>
+<ellipse cx="840" cy="600" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="840" y="582" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC09</text>
+<text x="840" y="601" font-size="12" fill="#111" text-anchor="middle">Mengelola Daftar</text>
+<text x="840" y="618" font-size="12" fill="#111" text-anchor="middle">Pantau Pasien</text>
+<ellipse cx="840" cy="700" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="840" y="691" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC07</text>
+<text x="840" y="711" font-size="12" fill="#111" text-anchor="middle">Melayani Resep Obat</text>
+<ellipse cx="840" cy="800" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="840" y="791" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC08</text>
+<text x="840" y="811" font-size="12" fill="#111" text-anchor="middle">Mengelola Persediaan Obat</text>
+<line x1="440" y1="337" x2="440" y2="311" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#ar)"/>
+<text x="452" y="329" font-size="11.5" font-style="italic" fill="#111">&#171;include&#187;</text>
+<line x1="840" y1="462" x2="840" y2="440" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#ar)"/>
+<text x="852" y="456" font-size="11.5" font-style="italic" fill="#111">&#171;extend&#187;</text>
+<g stroke="#333" stroke-width="1.8" fill="none"><circle cx="130" cy="442" r="14"/><line x1="130" y1="456" x2="130" y2="488"/><line x1="108" y1="470" x2="152" y2="470"/><line x1="130" y1="488" x2="112" y2="518"/><line x1="130" y1="488" x2="148" y2="518"/></g>
+<text x="130" y="538" font-size="13.5" font-weight="600" fill="#111" text-anchor="middle">Petugas Administrasi</text>
+<g stroke="#333" stroke-width="1.8" fill="none"><circle cx="1150" cy="362" r="14"/><line x1="1150" y1="376" x2="1150" y2="408"/><line x1="1128" y1="390" x2="1172" y2="390"/><line x1="1150" y1="408" x2="1132" y2="438"/><line x1="1150" y1="408" x2="1168" y2="438"/></g>
+<text x="1150" y="458" font-size="13.5" font-weight="600" fill="#111" text-anchor="middle">Tenaga Klinis</text>
+<g stroke="#333" stroke-width="1.8" fill="none"><circle cx="1150" cy="712" r="14"/><line x1="1150" y1="726" x2="1150" y2="758"/><line x1="1128" y1="740" x2="1172" y2="740"/><line x1="1150" y1="758" x2="1132" y2="788"/><line x1="1150" y1="758" x2="1168" y2="788"/></g>
+<text x="1150" y="808" font-size="13.5" font-weight="600" fill="#111" text-anchor="middle">Petugas Farmasi</text>
+<text x="290" y="906" font-size="12" fill="#444">Keterangan: garis lurus = asosiasi aktor&#8211;use case; panah putus-putus = relasi &#171;include&#187;/&#171;extend&#187; antar use case.</text>
+<text x="290" y="926" font-size="12" fill="#444">Asosiasi ketiga aktor ke UC01 dirutekan lewat sisi luar diagram agar tidak memotong use case lain.</text>
 </svg>
