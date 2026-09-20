@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 958" width="1290" height="958" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<rect width="1290" height="958" fill="#ffffff"/>
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#333" stroke-width="1.6"/></marker></defs>
+<rect x="290" y="60" width="700" height="810" rx="8" fill="none" stroke="#333" stroke-width="2"/>
+<text x="306" y="88" font-size="16" font-weight="600" fill="#111">SEHATI</text>
+<line x1="175.0" y1="480.0" x2="396.8" y2="304.3" stroke="#333" stroke-width="1.4"/>
+<line x1="175.0" y1="480.0" x2="370.8" y2="402.4" stroke="#333" stroke-width="1.4"/>
+<line x1="175.0" y1="480.0" x2="340.0" y2="480.0" stroke="#333" stroke-width="1.4"/>
+<line x1="175.0" y1="480.0" x2="370.8" y2="557.6" stroke="#333" stroke-width="1.4"/>
+<line x1="175.0" y1="480.0" x2="396.8" y2="655.7" stroke="#333" stroke-width="1.4"/>
+<line x1="1105.0" y1="400.0" x2="911.0" y2="326.8" stroke="#333" stroke-width="1.4"/>
+<line x1="1105.0" y1="400.0" x2="940.0" y2="400.0" stroke="#333" stroke-width="1.4"/>
+<line x1="1105.0" y1="400.0" x2="911.0" y2="473.2" stroke="#333" stroke-width="1.4"/>
+<line x1="1105.0" y1="400.0" x2="885.0" y2="566.1" stroke="#333" stroke-width="1.4"/>
+<line x1="1105.0" y1="750.0" x2="929.6" y2="716.9" stroke="#333" stroke-width="1.4"/>
+<line x1="1105.0" y1="750.0" x2="929.6" y2="783.1" stroke="#333" stroke-width="1.4"/>
+<line x1="130.0" y1="428.0" x2="130.0" y2="26.0" stroke="#333" stroke-width="1.4"/>
+<line x1="130.0" y1="26.0" x2="555.0" y2="26.0" stroke="#333" stroke-width="1.4"/>
+<line x1="555.0" y1="26.0" x2="555.0" y2="130.0" stroke="#333" stroke-width="1.4"/>
+<line x1="1150.0" y1="348.0" x2="1150.0" y2="44.0" stroke="#333" stroke-width="1.4"/>
+<line x1="1150.0" y1="44.0" x2="700.0" y2="44.0" stroke="#333" stroke-width="1.4"/>
+<line x1="700.0" y1="44.0" x2="700.0" y2="120.0" stroke="#333" stroke-width="1.4"/>
+<line x1="1172.0" y1="725.0" x2="1225.0" y2="725.0" stroke="#333" stroke-width="1.4"/>
+<line x1="1225.0" y1="725.0" x2="1225.0" y2="26.0" stroke="#333" stroke-width="1.4"/>
+<line x1="1225.0" y1="26.0" x2="600.0" y2="26.0" stroke="#333" stroke-width="1.4"/>
+<line x1="600.0" y1="26.0" x2="600.0" y2="115.0" stroke="#333" stroke-width="1.4"/>
+<ellipse cx="640" cy="150" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="640" y="141" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC01</text>
+<text x="640" y="161" font-size="12" fill="#111" text-anchor="middle">Masuk ke Aplikasi</text>
+<ellipse cx="440" cy="270" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="440" y="261" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC02</text>
+<text x="440" y="281" font-size="12" fill="#111" text-anchor="middle">Mengelola Data Pasien</text>
+<ellipse cx="440" cy="375" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="440" y="366" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC03</text>
+<text x="440" y="386" font-size="12" fill="#111" text-anchor="middle">Mengelola Kunjungan Pasien</text>
+<ellipse cx="440" cy="480" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="440" y="471" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC10</text>
+<text x="440" y="491" font-size="12" fill="#111" text-anchor="middle">Menyusun Laporan Periodik</text>
+<ellipse cx="440" cy="585" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="440" y="567" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC11</text>
+<text x="440" y="586" font-size="12" fill="#111" text-anchor="middle">Melakukan Sinkronisasi</text>
+<text x="440" y="603" font-size="12" fill="#111" text-anchor="middle">SATUSEHAT</text>
+<ellipse cx="440" cy="690" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="440" y="672" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC12</text>
+<text x="440" y="691" font-size="12" fill="#111" text-anchor="middle">Mengelola Konfigurasi &amp;</text>
+<text x="440" y="708" font-size="12" fill="#111" text-anchor="middle">Basis Data Sistem</text>
+<ellipse cx="840" cy="300" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="840" y="291" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC04</text>
+<text x="840" y="311" font-size="12" fill="#111" text-anchor="middle">Melakukan Skrining Awal</text>
+<ellipse cx="840" cy="400" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="840" y="382" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC05</text>
+<text x="840" y="401" font-size="12" fill="#111" text-anchor="middle">Melakukan</text>
+<text x="840" y="418" font-size="12" fill="#111" text-anchor="middle">Pemeriksaan Medis</text>
+<ellipse cx="840" cy="500" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="840" y="491" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC06</text>
+<text x="840" y="511" font-size="12" fill="#111" text-anchor="middle">Menyusun Resep Elektronik</text>
+<ellipse cx="840" cy="600" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="840" y="582" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC09</text>
+<text x="840" y="601" font-size="12" fill="#111" text-anchor="middle">Mengelola Daftar</text>
+<text x="840" y="618" font-size="12" fill="#111" text-anchor="middle">Pantau Pasien</text>
+<ellipse cx="840" cy="700" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="840" y="691" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC07</text>
+<text x="840" y="711" font-size="12" fill="#111" text-anchor="middle">Melayani Resep Obat</text>
+<ellipse cx="840" cy="800" rx="100" ry="38" fill="#ffffff" stroke="#333" stroke-width="1.6"/>
+<text x="840" y="791" font-size="11.5" font-weight="700" fill="#555" text-anchor="middle">UC08</text>
+<text x="840" y="811" font-size="12" fill="#111" text-anchor="middle">Mengelola Persediaan Obat</text>
+<line x1="440" y1="337" x2="440" y2="311" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#ar)"/>
+<text x="452" y="329" font-size="11.5" font-style="italic" fill="#111">&#171;include&#187;</text>
+<line x1="840" y1="462" x2="840" y2="440" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#ar)"/>
+<text x="852" y="456" font-size="11.5" font-style="italic" fill="#111">&#171;extend&#187;</text>
+<g stroke="#333" stroke-width="1.8" fill="none"><circle cx="130" cy="442" r="14"/><line x1="130" y1="456" x2="130" y2="488"/><line x1="108" y1="470" x2="152" y2="470"/><line x1="130" y1="488" x2="112" y2="518"/><line x1="130" y1="488" x2="148" y2="518"/></g>
+<text x="130" y="538" font-size="13.5" font-weight="600" fill="#111" text-anchor="middle">Petugas Administrasi</text>
+<g stroke="#333" stroke-width="1.8" fill="none"><circle cx="1150" cy="362" r="14"/><line x1="1150" y1="376" x2="1150" y2="408"/><line x1="1128" y1="390" x2="1172" y2="390"/><line x1="1150" y1="408" x2="1132" y2="438"/><line x1="1150" y1="408" x2="1168" y2="438"/></g>
+<text x="1150" y="458" font-size="13.5" font-weight="600" fill="#111" text-anchor="middle">Tenaga Klinis</text>
+<g stroke="#333" stroke-width="1.8" fill="none"><circle cx="1150" cy="712" r="14"/><line x1="1150" y1="726" x2="1150" y2="758"/><line x1="1128" y1="740" x2="1172" y2="740"/><line x1="1150" y1="758" x2="1132" y2="788"/><line x1="1150" y1="758" x2="1168" y2="788"/></g>
+<text x="1150" y="808" font-size="13.5" font-weight="600" fill="#111" text-anchor="middle">Petugas Farmasi</text>
+<text x="290" y="906" font-size="12" fill="#444">Keterangan: garis lurus = asosiasi aktor&#8211;use case; panah putus-putus = relasi &#171;include&#187;/&#171;extend&#187; antar use case.</text>
+<text x="290" y="926" font-size="12" fill="#444">Asosiasi ketiga aktor ke UC01 dirutekan lewat sisi luar diagram agar tidak memotong use case lain.</text>
+</svg>

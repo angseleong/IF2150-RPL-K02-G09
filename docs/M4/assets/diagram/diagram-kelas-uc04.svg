@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 838 432" width="838" height="432" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<rect width="838" height="432" fill="#ffffff"/>
+<defs><marker id="op" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#333" stroke-width="1.5"/></marker></defs>
+<text x="419" y="26" font-size="15" font-weight="600" fill="#111" text-anchor="middle">Diagram Kelas UC04: Melakukan Skrining Awal</text>
+<polygon points="169.0,115.0 163.0,122.5 169.0,130.0 175.0,122.5" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
+<line x1="169.0" y1="130.0" x2="169.0" y2="199.0" stroke="#333" stroke-width="1.5"/>
+<text x="169" y="146" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
+<text x="169" y="171" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
+<line x1="419.0" y1="115.0" x2="419.0" y2="199.0" stroke="#333" stroke-width="1.5" marker-end="url(#op)"/>
+<text x="419" y="157" font-size="11" fill="#444" text-anchor="middle"><tspan dy="0" style="paint-order:stroke;stroke:#fff;stroke-width:5px">mencatat</tspan></text>
+<polygon points="230.0,222.0 237.5,228.0 245.0,222.0 237.5,216.0" fill="#333" stroke="#333" stroke-width="1.5"/>
+<line x1="245.0" y1="222.0" x2="358.0" y2="222.0" stroke="#333" stroke-width="1.5"/>
+<text x="267" y="216" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
+<text x="336" y="216" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..1</text>
+<polygon points="480.0,222.0 487.5,228.0 495.0,222.0 487.5,216.0" fill="#333" stroke="#333" stroke-width="1.5"/>
+<line x1="495.0" y1="222.0" x2="608.0" y2="222.0" stroke="#333" stroke-width="1.5"/>
+<text x="517" y="216" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
+<text x="586" y="216" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
+<line x1="669.0" y1="199.0" x2="669.0" y2="115.0" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#op)"/>
+<text x="669" y="157" font-size="11" fill="#444" text-anchor="middle"><tspan dy="0" style="paint-order:stroke;stroke:#fff;stroke-width:5px">dibandingkan</tspan></text>
+<line x1="419.0" y1="245.0" x2="419.0" y2="329.0" stroke="#333" stroke-width="1.5"/>
+<text x="419" y="261" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
+<text x="419" y="301" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
+<line x1="480.0" y1="352.0" x2="593.5" y2="352.0" stroke="#333" stroke-width="1.5"/>
+<text x="502" y="346" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
+<text x="572" y="346" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..1</text>
+<rect x="109.0" y="70.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="169.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Antrean</text>
+<rect x="359.0" y="70.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="419.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">TenagaKlinis</text>
+<rect x="609.0" y="70.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="669.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">AmbangRisiko</text>
+<rect x="109.0" y="200.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="169.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Kunjungan</text>
+<rect x="359.0" y="200.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="419.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Skrining</text>
+<rect x="609.0" y="200.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="669.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">TandaVital</text>
+<rect x="359.0" y="330.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="419.0" y="357.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PenandaRisiko</text>
+<rect x="594.5" y="330.0" width="149.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="669.0" y="357.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">EntriDaftarPantau</text>
+</svg>

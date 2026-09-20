@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 838 432" width="838" height="432" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<rect width="838" height="432" fill="#ffffff"/>
+<defs><marker id="op" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#333" stroke-width="1.5"/></marker></defs>
+<text x="419" y="26" font-size="15" font-weight="600" fill="#111" text-anchor="middle">Diagram Kelas UC06: Menyusun Resep Elektronik</text>
+<line x1="213.2" y1="115.0" x2="374.8" y2="199.0" stroke="#333" stroke-width="1.5" marker-end="url(#op)"/>
+<text x="294" y="150" font-size="11" fill="#444" text-anchor="middle"><tspan dy="0" style="paint-order:stroke;stroke:#fff;stroke-width:5px">menyusun</tspan></text>
+<line x1="419.0" y1="115.0" x2="419.0" y2="199.0" stroke="#333" stroke-width="1.5"/>
+<text x="419" y="131" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
+<text x="419" y="171" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..1</text>
+<line x1="463.2" y1="199.0" x2="624.8" y2="115.0" stroke="#333" stroke-width="1.5"/>
+<text x="544" y="150" font-size="11" fill="#444" text-anchor="middle"><tspan dy="0" style="paint-order:stroke;stroke:#fff;stroke-width:5px">antrean apotek</tspan></text>
+<polygon points="419.0,245.0 413.0,252.5 419.0,260.0 425.0,252.5" fill="#333" stroke="#333" stroke-width="1.5"/>
+<line x1="419.0" y1="260.0" x2="419.0" y2="329.0" stroke="#333" stroke-width="1.5"/>
+<text x="419" y="276" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
+<text x="419" y="301" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1..*</text>
+<line x1="480.0" y1="352.0" x2="608.0" y2="352.0" stroke="#333" stroke-width="1.5"/>
+<text x="502" y="346" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
+<text x="586" y="346" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
+<rect x="109.0" y="70.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="169.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">TenagaKlinis</text>
+<rect x="359.0" y="70.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="419.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Pemeriksaan</text>
+<rect x="609.0" y="70.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="669.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Antrean</text>
+<rect x="359.0" y="200.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="419.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Resep</text>
+<rect x="359.0" y="330.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="419.0" y="357.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">ItemResep</text>
+<rect x="609.0" y="330.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
+<text x="669.0" y="357.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Obat</text>
+</svg>
