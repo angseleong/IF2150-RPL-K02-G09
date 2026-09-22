@@ -9,6 +9,7 @@
 <line x1="497.1" y1="469.0" x2="634.9" y2="399.0" stroke="#333" stroke-width="1.5"/>
 <line x1="518.8" y1="500.0" x2="617.3" y2="500.0" stroke="#333" stroke-width="1.5"/>
 <line x1="497.1" y1="531.0" x2="634.9" y2="601.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,530.0 L 436.0,573.0 L 566.0,573.0 L 566.0,691.0 L 696.0,691.0 L 696.0,734.0" fill="none" stroke="#333" stroke-width="1.5"/>
 <path d="M 436.0,530.0 L 436.0,573.0 L 566.0,573.0 L 566.0,823.0 L 696.0,823.0 L 696.0,866.0" fill="none" stroke="#333" stroke-width="1.5"/>
 <path d="M 436.0,530.0 L 436.0,573.0 L 566.0,573.0 L 566.0,955.0 L 696.0,955.0 L 696.0,998.0" fill="none" stroke="#333" stroke-width="1.5"/>
 <polygon points="696.0,135.0 689.5,143.0 696.0,151.0 702.5,143.0" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
