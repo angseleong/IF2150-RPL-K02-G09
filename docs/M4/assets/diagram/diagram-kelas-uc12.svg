@@ -1,29 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 838 432" width="838" height="432" font-family="Segoe UI, Helvetica, Arial, sans-serif">
-<rect width="838" height="432" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 872 840" width="872" height="840" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<rect width="872" height="840" fill="#ffffff"/>
 <defs><marker id="op" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#333" stroke-width="1.5"/></marker></defs>
-<text x="419" y="26" font-size="15" font-weight="600" fill="#111" text-anchor="middle">Diagram Kelas UC12: Mengelola Konfigurasi & Basis Data Sistem</text>
-<line x1="377.0" y1="115.0" x2="223.7" y2="199.0" stroke="#333" stroke-width="1.5" marker-end="url(#op)"/>
-<text x="300" y="150" font-size="11" fill="#444" text-anchor="middle"><tspan dy="0" style="paint-order:stroke;stroke:#fff;stroke-width:5px">mengelola</tspan></text>
-<line x1="335.5" y1="92.0" x2="230.0" y2="92.0" stroke="#333" stroke-width="1.5" marker-end="url(#op)"/>
-<line x1="502.5" y1="92.0" x2="608.0" y2="92.0" stroke="#333" stroke-width="1.5" marker-end="url(#op)"/>
-<line x1="463.2" y1="115.0" x2="624.8" y2="199.0" stroke="#333" stroke-width="1.5" marker-end="url(#op)"/>
-<line x1="419.0" y1="115.0" x2="419.0" y2="199.0" stroke="#333" stroke-width="1.5" marker-end="url(#op)"/>
-<text x="419" y="157" font-size="11" fill="#444" text-anchor="middle"><tspan dy="0" style="paint-order:stroke;stroke:#fff;stroke-width:5px">memantau</tspan></text>
-<line x1="230.0" y1="259.0" x2="372.3" y2="329.0" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#op)"/>
-<line x1="419.0" y1="245.0" x2="419.0" y2="329.0" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#op)"/>
-<rect x="109.0" y="70.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="169.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Obat</text>
-<rect x="336.5" y="70.0" width="165.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="419.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PetugasAdministrasi</text>
-<rect x="609.0" y="70.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="669.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Poli</text>
-<rect x="109.0" y="200.0" width="120.0" height="58.0" rx="3" fill="#f6eefb" stroke="#333" stroke-width="1.6"/>
-<text x="169.0" y="220.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;abstract&#187;</text>
-<text x="169.0" y="240.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Pengguna</text>
-<rect x="359.0" y="200.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="419.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Pencadangan</text>
-<rect x="609.0" y="200.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="669.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">AmbangRisiko</text>
-<rect x="359.0" y="330.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="419.0" y="357.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">JejakAudit</text>
+<text x="436" y="27" font-size="15.5" font-weight="600" fill="#111" text-anchor="middle">Diagram Kelas UC12: Mengelola Konfigurasi & Basis Data Sistem</text>
+<line x1="246.5" y1="368.0" x2="353.2" y2="368.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,338.0 L 436.0,295.0 L 566.0,295.0 L 566.0,177.0 L 696.0,177.0 L 696.0,134.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<line x1="497.1" y1="337.0" x2="634.9" y2="267.0" stroke="#333" stroke-width="1.5"/>
+<line x1="518.8" y1="368.0" x2="630.0" y2="368.0" stroke="#333" stroke-width="1.5"/>
+<line x1="497.1" y1="399.0" x2="634.9" y2="469.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,398.0 L 436.0,441.0 L 566.0,441.0 L 566.0,559.0 L 696.0,559.0 L 696.0,602.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,398.0 L 436.0,441.0 L 566.0,441.0 L 566.0,691.0 L 696.0,691.0 L 696.0,734.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<rect x="106.5" y="338.0" width="139.0" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="176.0" y="358.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="176.0" y="380.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">KonfigurasiForm</text>
+<rect x="354.2" y="338.0" width="163.6" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="436.0" y="358.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="436.0" y="380.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">KonfigurasiManager</text>
+<rect x="630.6" y="74.0" width="130.8" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="94.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="116.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PenggunaEntity</text>
+<rect x="631.0" y="206.0" width="130.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="226.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="248.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PoliEntity</text>
+<rect x="631.0" y="338.0" width="130.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="358.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="380.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">ObatEntity</text>
+<rect x="614.2" y="470.0" width="163.6" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="490.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="512.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">AmbangRisikoEntity</text>
+<rect x="618.3" y="602.0" width="155.4" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="622.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="644.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PencadanganEntity</text>
+<rect x="631.0" y="734.0" width="130.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="754.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="776.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">AuditEntity</text>
 </svg>

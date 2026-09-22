@@ -1,165 +1,282 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1588 822" width="1588" height="822" font-family="Segoe UI, Helvetica, Arial, sans-serif">
-<rect width="1588" height="822" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2432 1080" width="2432" height="1080" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<rect width="2432" height="1080" fill="#ffffff"/>
 <defs><marker id="op" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#333" stroke-width="1.5"/></marker></defs>
-<text x="794" y="26" font-size="15" font-weight="600" fill="#111" text-anchor="middle">Diagram Kelas Keseluruhan SEHATI</text>
-<polygon points="358.0,129.0 348.1,142.8 341.0,128.4" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
-<line x1="215.7" y1="199.0" x2="344.6" y2="135.6" stroke="#333" stroke-width="1.5"/>
-<polygon points="419.0,129.0 427.0,144.0 411.0,144.0" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
-<line x1="419.0" y1="199.0" x2="419.0" y2="144.0" stroke="#333" stroke-width="1.5"/>
-<polygon points="480.0,129.0 497.0,128.4 489.9,142.8" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
-<line x1="622.3" y1="199.0" x2="493.4" y2="135.6" stroke="#333" stroke-width="1.5"/>
-<polygon points="358.0,97.3 350.7,91.1 343.0,96.9 350.3,103.1" fill="#333" stroke="#333" stroke-width="1.5"/>
-<line x1="343.0" y1="96.9" x2="230.0" y2="93.7" stroke="#333" stroke-width="1.5"/>
-<text x="321" y="90" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="252" y="88" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
-<line x1="480.0" y1="97.3" x2="608.0" y2="93.7" stroke="#333" stroke-width="1.5"/>
-<text x="502" y="91" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="586" y="88" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
-<line x1="169.0" y1="245.0" x2="169.0" y2="329.0" stroke="#333" stroke-width="1.5" marker-end="url(#op)"/>
-<polygon points="230.0,352.0 237.5,358.0 245.0,352.0 237.5,346.0" fill="#333" stroke="#333" stroke-width="1.5"/>
-<line x1="245.0" y1="352.0" x2="358.0" y2="352.0" stroke="#333" stroke-width="1.5"/>
-<text x="267" y="346" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="336" y="346" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<polygon points="480.0,352.0 487.5,358.0 495.0,352.0 487.5,346.0" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
-<line x1="495.0" y1="352.0" x2="608.0" y2="352.0" stroke="#333" stroke-width="1.5"/>
-<text x="517" y="346" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="586" y="346" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
-<line x1="463.2" y1="459.0" x2="624.8" y2="375.0" stroke="#333" stroke-width="1.5"/>
-<text x="483" y="443" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="605" y="379" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
-<polygon points="874.8,245.0 865.3,243.1 861.5,251.9 870.9,253.8" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
-<line x1="861.5" y1="251.9" x2="713.2" y2="329.0" stroke="#333" stroke-width="1.5"/>
-<text x="842" y="256" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="733" y="313" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
-<polygon points="730.0,352.0 737.5,358.0 745.0,352.0 737.5,346.0" fill="#333" stroke="#333" stroke-width="1.5"/>
-<line x1="745.0" y1="352.0" x2="858.0" y2="352.0" stroke="#333" stroke-width="1.5"/>
-<text x="767" y="346" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="836" y="346" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..1</text>
-<polygon points="980.0,352.0 987.5,358.0 995.0,352.0 987.5,346.0" fill="#333" stroke="#333" stroke-width="1.5"/>
-<line x1="995.0" y1="352.0" x2="1108.0" y2="352.0" stroke="#333" stroke-width="1.5"/>
-<text x="1017" y="346" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="1086" y="346" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<line x1="1169.0" y1="329.0" x2="1169.0" y2="245.0" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#op)"/>
-<line x1="1358.0" y1="352.0" x2="1230.0" y2="352.0" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#op)"/>
-<line x1="669.0" y1="375.0" x2="669.0" y2="459.0" stroke="#333" stroke-width="1.5"/>
-<text x="669" y="391" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="669" y="431" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
-<path d="M 669.0,504.0 L 669.0,547.0 L 294.0,547.0 L 294.0,547.0 L 169.0,547.0 L 169.0,504.0" fill="none" stroke="#333" stroke-width="1.5"/>
-<text x="294" y="541" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="294" y="541" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..1</text>
-<polygon points="169.0,505.0 163.0,512.5 169.0,520.0 175.0,512.5" fill="#333" stroke="#333" stroke-width="1.5"/>
-<line x1="169.0" y1="520.0" x2="169.0" y2="589.0" stroke="#333" stroke-width="1.5"/>
-<text x="169" y="536" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="169" y="561" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
-<line x1="213.2" y1="505.0" x2="374.8" y2="589.0" stroke="#333" stroke-width="1.5"/>
-<text x="233" y="509" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="355" y="573" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..1</text>
-<polygon points="713.2,375.0 717.1,383.8 726.5,381.9 722.7,373.1" fill="#333" stroke="#333" stroke-width="1.5"/>
-<line x1="726.5" y1="381.9" x2="874.8" y2="459.0" stroke="#333" stroke-width="1.5"/>
-<text x="746" y="386" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="855" y="443" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..1</text>
-<polygon points="980.0,482.0 987.5,488.0 995.0,482.0 987.5,476.0" fill="#333" stroke="#333" stroke-width="1.5"/>
-<line x1="995.0" y1="482.0" x2="1108.0" y2="482.0" stroke="#333" stroke-width="1.5"/>
-<text x="1017" y="476" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="1086" y="476" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1..*</text>
-<line x1="1230.0" y1="482.0" x2="1358.0" y2="482.0" stroke="#333" stroke-width="1.5"/>
-<text x="1252" y="476" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
-<text x="1336" y="476" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<path d="M 919.0,504.0 L 919.0,547.0 L 544.0,547.0 L 544.0,547.0 L 419.0,547.0 L 419.0,590.0" fill="none" stroke="#333" stroke-width="1.5"/>
-<line x1="919.0" y1="505.0" x2="919.0" y2="589.0" stroke="#333" stroke-width="1.5"/>
-<text x="919" y="521" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="919" y="561" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..1</text>
-<line x1="732.5" y1="222.0" x2="858.0" y2="222.0" stroke="#333" stroke-width="1.5" marker-end="url(#op)"/>
-<polygon points="919.0,635.0 913.0,642.5 919.0,650.0 925.0,642.5" fill="#333" stroke="#333" stroke-width="1.5"/>
-<line x1="919.0" y1="650.0" x2="919.0" y2="719.0" stroke="#333" stroke-width="1.5"/>
-<text x="919" y="666" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="919" y="691" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1..*</text>
-<line x1="963.2" y1="719.0" x2="1124.8" y2="635.0" stroke="#333" stroke-width="1.5"/>
-<text x="983" y="703" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
-<text x="1105" y="639" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<polygon points="1169.0,635.0 1163.0,642.5 1169.0,650.0 1175.0,642.5" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
-<line x1="1169.0" y1="650.0" x2="1169.0" y2="719.0" stroke="#333" stroke-width="1.5"/>
-<text x="1169" y="666" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="1169" y="691" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
-<polygon points="1355.5,742.0 1348.0,736.0 1340.5,742.0 1348.0,748.0" fill="#333" stroke="#333" stroke-width="1.5"/>
-<line x1="1340.5" y1="742.0" x2="1230.0" y2="742.0" stroke="#333" stroke-width="1.5"/>
-<text x="1318" y="736" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="1252" y="736" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1..*</text>
-<line x1="1230.0" y1="612.0" x2="1331.5" y2="612.0" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#op)"/>
-<path d="M 669.0,374.0 L 669.0,417.0 L 794.0,417.0 L 794.0,547.0 L 669.0,547.0 L 669.0,590.0" fill="none" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#op)"/>
-<polygon points="669.0,719.0 675.0,711.5 669.0,704.0 663.0,711.5" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
-<line x1="669.0" y1="704.0" x2="669.0" y2="635.0" stroke="#333" stroke-width="1.5"/>
-<text x="669" y="676" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="669" y="651" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
-<line x1="585.5" y1="742.0" x2="482.5" y2="742.0" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#op)"/>
-<path d="M 1169.0,114.0 L 1169.0,157.0 L 794.0,157.0 L 794.0,287.0 L 669.0,287.0 L 669.0,330.0" fill="none" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#op)"/>
-<path d="M 1169.0,114.0 L 1169.0,157.0 L 1294.0,157.0 L 1294.0,417.0 L 1169.0,417.0 L 1169.0,460.0" fill="none" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#op)"/>
-<path d="M 169.0,200.0 L 169.0,157.0 L 294.0,157.0 L 294.0,157.0 L 1419.0,157.0 L 1419.0,114.0" fill="none" stroke="#333" stroke-width="1.5" marker-end="url(#op)"/>
-<rect x="109.0" y="70.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="169.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">SesiPengguna</text>
-<rect x="359.0" y="70.0" width="120.0" height="58.0" rx="3" fill="#f6eefb" stroke="#333" stroke-width="1.6"/>
-<text x="419.0" y="90.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;abstract&#187;</text>
-<text x="419.0" y="110.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Pengguna</text>
-<rect x="609.0" y="70.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="669.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">JejakAudit</text>
-<rect x="1102.5" y="70.0" width="133.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="1169.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">LaporanPeriodik</text>
-<rect x="1359.0" y="70.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="1419.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Pencadangan</text>
-<rect x="86.5" y="200.0" width="165.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="169.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PetugasAdministrasi</text>
-<rect x="359.0" y="200.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="419.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">TenagaKlinis</text>
-<rect x="606.5" y="200.0" width="125.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="669.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PetugasFarmasi</text>
-<rect x="859.0" y="200.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="919.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Antrean</text>
-<rect x="1109.0" y="200.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="1169.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">AmbangRisiko</text>
-<rect x="109.0" y="330.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="169.0" y="357.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Pasien</text>
-<rect x="359.0" y="330.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="419.0" y="357.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">RekamMedis</text>
-<rect x="609.0" y="330.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="669.0" y="357.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Kunjungan</text>
-<rect x="859.0" y="330.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="919.0" y="357.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Skrining</text>
-<rect x="1109.0" y="330.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="1169.0" y="357.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">TandaVital</text>
-<rect x="1359.0" y="330.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="1419.0" y="357.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">GrafikTren</text>
-<rect x="94.5" y="460.0" width="149.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="169.0" y="487.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">EntriDaftarPantau</text>
-<rect x="359.0" y="460.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="419.0" y="487.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Poli</text>
-<rect x="609.0" y="460.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="669.0" y="487.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PenandaRisiko</text>
-<rect x="859.0" y="460.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="919.0" y="487.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Pemeriksaan</text>
-<rect x="1109.0" y="460.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="1169.0" y="487.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Diagnosis</text>
-<rect x="1359.0" y="460.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="1419.0" y="487.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">KodeICD10</text>
-<rect x="109.0" y="590.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="169.0" y="617.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">TindakLanjut</text>
-<rect x="359.0" y="590.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="419.0" y="617.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">JadwalKontrol</text>
-<rect x="609.0" y="590.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="669.0" y="617.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">BundelFHIR</text>
-<rect x="859.0" y="590.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="919.0" y="617.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Resep</text>
-<rect x="1109.0" y="590.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="1169.0" y="617.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Obat</text>
-<rect x="1332.5" y="590.0" width="173.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="1419.0" y="617.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PeringatanPersediaan</text>
-<rect x="356.5" y="720.0" width="125.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="419.0" y="747.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">KlienSATUSEHAT</text>
-<rect x="586.5" y="720.0" width="165.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="669.0" y="747.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">AntreanSinkronisasi</text>
-<rect x="859.0" y="720.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="919.0" y="747.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">ItemResep</text>
-<rect x="1109.0" y="720.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="1169.0" y="747.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">BetsObat</text>
-<rect x="1356.5" y="720.0" width="125.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="1419.0" y="747.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PenerimaanObat</text>
+<text x="1216" y="27" font-size="15.5" font-weight="600" fill="#111" text-anchor="middle">Diagram Kelas Keseluruhan SEHATI</text>
+<path d="M 176.0,134.0 L 176.0,186.0 L 306.0,186.0 L 306.0,322.0 L 176.0,322.0 L 176.0,374.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 176.0,434.0 L 176.0,486.0 L 306.0,486.0 L 306.0,622.0 L 176.0,622.0 L 176.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 176.0,434.0 L 176.0,486.0 L 306.0,486.0 L 306.0,622.0 L 436.0,622.0 L 436.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 176.0,434.0 L 176.0,486.0 L 306.0,486.0 L 306.0,622.0 L 696.0,622.0 L 696.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<polygon points="242.4,704.0 250.4,710.5 258.4,704.0 250.4,697.5" fill="#333" stroke="#333" stroke-width="1.5"/>
+<line x1="258.4" y1="704.0" x2="370.0" y2="704.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,134.0 L 436.0,186.0 L 566.0,186.0 L 566.0,322.0 L 436.0,322.0 L 436.0,374.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,434.0 L 436.0,486.0 L 566.0,486.0 L 566.0,622.0 L 956.0,622.0 L 956.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,434.0 L 436.0,486.0 L 566.0,486.0 L 566.0,622.0 L 1216.0,622.0 L 1216.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,434.0 L 436.0,486.0 L 566.0,486.0 L 566.0,622.0 L 696.0,622.0 L 696.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<polygon points="1022.0,704.0 1030.0,710.5 1038.0,704.0 1030.0,697.5" fill="#333" stroke="#333" stroke-width="1.5"/>
+<line x1="1038.0" y1="704.0" x2="1141.4" y2="704.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 696.0,134.0 L 696.0,186.0 L 826.0,186.0 L 826.0,322.0 L 696.0,322.0 L 696.0,374.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 696.0,434.0 L 696.0,486.0 L 826.0,486.0 L 826.0,622.0 L 1996.0,622.0 L 1996.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 696.0,434.0 L 696.0,486.0 L 826.0,486.0 L 826.0,622.0 L 1476.0,622.0 L 1476.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 696.0,434.0 L 696.0,486.0 L 826.0,486.0 L 826.0,622.0 L 1736.0,622.0 L 1736.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 696.0,434.0 L 696.0,486.0 L 826.0,486.0 L 826.0,622.0 L 956.0,622.0 L 956.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 696.0,434.0 L 696.0,486.0 L 826.0,486.0 L 826.0,622.0 L 696.0,622.0 L 696.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<polygon points="1996.0,734.0 1989.5,742.0 1996.0,750.0 2002.5,742.0" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
+<path d="M 1996.0,750.0 L 1996.0,786.0 L 1606.0,786.0 L 1606.0,786.0 L 1476.0,786.0 L 1476.0,734.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<line x1="1670.0" y1="704.0" x2="1546.5" y2="704.0" stroke="#333" stroke-width="1.5"/>
+<polygon points="956.0,734.0 949.5,742.0 956.0,750.0 962.5,742.0" fill="#333" stroke="#333" stroke-width="1.5"/>
+<path d="M 956.0,750.0 L 956.0,786.0 L 1086.0,786.0 L 1086.0,786.0 L 1476.0,786.0 L 1476.0,734.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 956.0,134.0 L 956.0,186.0 L 1086.0,186.0 L 1086.0,322.0 L 956.0,322.0 L 956.0,374.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1216.0,134.0 L 1216.0,186.0 L 1086.0,186.0 L 1086.0,322.0 L 956.0,322.0 L 956.0,374.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1216.0,134.0 L 1216.0,186.0 L 1346.0,186.0 L 1346.0,322.0 L 1216.0,322.0 L 1216.0,374.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<line x1="1026.5" y1="404.0" x2="1150.0" y2="404.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 956.0,434.0 L 956.0,486.0 L 1086.0,486.0 L 1086.0,622.0 L 1996.0,622.0 L 1996.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 956.0,434.0 L 956.0,486.0 L 1086.0,486.0 L 1086.0,622.0 L 1476.0,622.0 L 1476.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 956.0,434.0 L 956.0,486.0 L 1086.0,486.0 L 1086.0,622.0 L 2256.0,622.0 L 2256.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 956.0,434.0 L 956.0,486.0 L 306.0,486.0 L 306.0,772.0 L 176.0,772.0 L 176.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1216.0,434.0 L 1216.0,486.0 L 306.0,486.0 L 306.0,772.0 L 176.0,772.0 L 176.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1216.0,434.0 L 1216.0,486.0 L 566.0,486.0 L 566.0,772.0 L 436.0,772.0 L 436.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1216.0,434.0 L 1216.0,486.0 L 826.0,486.0 L 826.0,772.0 L 696.0,772.0 L 696.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1216.0,434.0 L 1216.0,486.0 L 1086.0,486.0 L 1086.0,922.0 L 956.0,922.0 L 956.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<polygon points="1476.0,734.0 1469.5,742.0 1476.0,750.0 1482.5,742.0" fill="#333" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,750.0 L 1476.0,786.0 L 1606.0,786.0 L 1606.0,786.0 L 2256.0,786.0 L 2256.0,734.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<polygon points="2256.0,734.0 2249.5,742.0 2256.0,750.0 2262.5,742.0" fill="#333" stroke="#333" stroke-width="1.5"/>
+<path d="M 2256.0,750.0 L 2256.0,786.0 L 306.0,786.0 L 306.0,772.0 L 176.0,772.0 L 176.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<line x1="749.7" y1="885.0" x2="902.3" y2="973.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,134.0 L 1476.0,186.0 L 1606.0,186.0 L 1606.0,322.0 L 1476.0,322.0 L 1476.0,374.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1736.0,134.0 L 1736.0,186.0 L 1606.0,186.0 L 1606.0,322.0 L 1476.0,322.0 L 1476.0,374.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,434.0 L 1476.0,486.0 L 1346.0,486.0 L 1346.0,622.0 L 1216.0,622.0 L 1216.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,434.0 L 1476.0,486.0 L 1606.0,486.0 L 1606.0,622.0 L 1476.0,622.0 L 1476.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,434.0 L 1476.0,486.0 L 306.0,486.0 L 306.0,772.0 L 176.0,772.0 L 176.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,434.0 L 1476.0,486.0 L 1086.0,486.0 L 1086.0,772.0 L 956.0,772.0 L 956.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,434.0 L 1476.0,486.0 L 1346.0,486.0 L 1346.0,772.0 L 1216.0,772.0 L 1216.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,434.0 L 1476.0,486.0 L 1606.0,486.0 L 1606.0,772.0 L 1736.0,772.0 L 1736.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,434.0 L 1476.0,486.0 L 826.0,486.0 L 826.0,622.0 L 696.0,622.0 L 696.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<polygon points="1290.6,704.0 1298.6,710.5 1306.6,704.0 1298.6,697.5" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
+<line x1="1306.6" y1="704.0" x2="1405.5" y2="704.0" stroke="#333" stroke-width="1.5"/>
+<polygon points="1476.0,734.0 1469.5,742.0 1476.0,750.0 1482.5,742.0" fill="#333" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,750.0 L 1476.0,786.0 L 1086.0,786.0 L 1086.0,772.0 L 956.0,772.0 L 956.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<polygon points="1034.7,854.0 1042.7,860.5 1050.7,854.0 1042.7,847.5" fill="#333" stroke="#333" stroke-width="1.5"/>
+<line x1="1050.7" y1="854.0" x2="1145.5" y2="854.0" stroke="#333" stroke-width="1.5"/>
+<line x1="1286.5" y1="854.0" x2="1405.5" y2="854.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 1996.0,134.0 L 1996.0,186.0 L 1866.0,186.0 L 1866.0,322.0 L 1736.0,322.0 L 1736.0,374.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1736.0,434.0 L 1736.0,486.0 L 1086.0,486.0 L 1086.0,772.0 L 956.0,772.0 L 956.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1736.0,434.0 L 1736.0,486.0 L 1866.0,486.0 L 1866.0,772.0 L 1996.0,772.0 L 1996.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1736.0,434.0 L 1736.0,486.0 L 1866.0,486.0 L 1866.0,772.0 L 2256.0,772.0 L 2256.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1736.0,434.0 L 1736.0,486.0 L 306.0,486.0 L 306.0,922.0 L 176.0,922.0 L 176.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1736.0,434.0 L 1736.0,486.0 L 1866.0,486.0 L 1866.0,622.0 L 1996.0,622.0 L 1996.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<polygon points="2062.0,854.0 2070.0,860.5 2078.0,854.0 2070.0,847.5" fill="#333" stroke="#333" stroke-width="1.5"/>
+<line x1="2078.0" y1="854.0" x2="2185.5" y2="854.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 2256.0,884.0 L 2256.0,936.0 L 306.0,936.0 L 306.0,922.0 L 176.0,922.0 L 176.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 176.0,284.0 L 176.0,336.0 L 306.0,336.0 L 306.0,472.0 L 176.0,472.0 L 176.0,524.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,284.0 L 436.0,336.0 L 306.0,336.0 L 306.0,472.0 L 176.0,472.0 L 176.0,524.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 176.0,584.0 L 176.0,636.0 L 306.0,636.0 L 306.0,622.0 L 1996.0,622.0 L 1996.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 176.0,584.0 L 176.0,636.0 L 306.0,636.0 L 306.0,772.0 L 1996.0,772.0 L 1996.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 176.0,584.0 L 176.0,636.0 L 306.0,636.0 L 306.0,922.0 L 176.0,922.0 L 176.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 176.0,584.0 L 176.0,636.0 L 306.0,636.0 L 306.0,922.0 L 436.0,922.0 L 436.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 176.0,584.0 L 176.0,636.0 L 306.0,636.0 L 306.0,622.0 L 1476.0,622.0 L 1476.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 176.0,584.0 L 176.0,636.0 L 306.0,636.0 L 306.0,922.0 L 1736.0,922.0 L 1736.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<polygon points="1996.0,735.0 1989.5,743.0 1996.0,751.0 2002.5,743.0" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
+<line x1="1996.0" y1="751.0" x2="1996.0" y2="823.0" stroke="#333" stroke-width="1.5"/>
+<polygon points="242.0,1004.0 250.0,1010.5 258.0,1004.0 250.0,997.5" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
+<line x1="258.0" y1="1004.0" x2="369.6" y2="1004.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,734.0 L 1476.0,786.0 L 1606.0,786.0 L 1606.0,922.0 L 1736.0,922.0 L 1736.0,974.0" fill="none" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#op)"/>
+<path d="M 696.0,284.0 L 696.0,336.0 L 566.0,336.0 L 566.0,472.0 L 436.0,472.0 L 436.0,524.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,584.0 L 436.0,636.0 L 566.0,636.0 L 566.0,922.0 L 696.0,922.0 L 696.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,584.0 L 436.0,636.0 L 566.0,636.0 L 566.0,922.0 L 436.0,922.0 L 436.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,584.0 L 436.0,636.0 L 306.0,636.0 L 306.0,922.0 L 176.0,922.0 L 176.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<line x1="489.7" y1="585.0" x2="642.3" y2="673.0" stroke="#333" stroke-width="1.5"/>
+<polygon points="605.0,1004.0 597.0,997.5 589.0,1004.0 597.0,1010.5" fill="#333" stroke="#333" stroke-width="1.5"/>
+<line x1="589.0" y1="1004.0" x2="502.4" y2="1004.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 956.0,284.0 L 956.0,336.0 L 826.0,336.0 L 826.0,472.0 L 696.0,472.0 L 696.0,524.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<line x1="1009.7" y1="285.0" x2="1162.3" y2="373.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 696.0,524.0 L 696.0,472.0 L 826.0,472.0 L 826.0,486.0 L 1216.0,486.0 L 1216.0,434.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 696.0,584.0 L 696.0,636.0 L 826.0,636.0 L 826.0,922.0 L 956.0,922.0 L 956.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 696.0,584.0 L 696.0,636.0 L 826.0,636.0 L 826.0,922.0 L 1216.0,922.0 L 1216.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<line x1="749.7" y1="585.0" x2="902.3" y2="673.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 696.0,584.0 L 696.0,636.0 L 826.0,636.0 L 826.0,622.0 L 1216.0,622.0 L 1216.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1216.0,434.0 L 1216.0,486.0 L 1346.0,486.0 L 1346.0,772.0 L 1736.0,772.0 L 1736.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<polygon points="1038.8,1004.0 1046.8,1010.5 1054.8,1004.0 1046.8,997.5" fill="#333" stroke="#333" stroke-width="1.5"/>
+<line x1="1054.8" y1="1004.0" x2="1133.2" y2="1004.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 1736.0,884.0 L 1736.0,936.0 L 1086.0,936.0 L 1086.0,922.0 L 956.0,922.0 L 956.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1216.0,284.0 L 1216.0,336.0 L 1086.0,336.0 L 1086.0,472.0 L 956.0,472.0 L 956.0,524.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 956.0,584.0 L 956.0,636.0 L 1086.0,636.0 L 1086.0,622.0 L 1476.0,622.0 L 1476.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 956.0,584.0 L 956.0,636.0 L 1086.0,636.0 L 1086.0,772.0 L 1216.0,772.0 L 1216.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 956.0,584.0 L 956.0,636.0 L 1086.0,636.0 L 1086.0,622.0 L 1736.0,622.0 L 1736.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 956.0,584.0 L 956.0,636.0 L 1086.0,636.0 L 1086.0,922.0 L 1476.0,922.0 L 1476.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,284.0 L 1476.0,336.0 L 1346.0,336.0 L 1346.0,472.0 L 1216.0,472.0 L 1216.0,524.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1216.0,524.0 L 1216.0,472.0 L 1346.0,472.0 L 1346.0,336.0 L 1736.0,336.0 L 1736.0,284.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<line x1="1269.7" y1="585.0" x2="1422.3" y2="673.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 1216.0,584.0 L 1216.0,636.0 L 1346.0,636.0 L 1346.0,922.0 L 1736.0,922.0 L 1736.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1996.0,284.0 L 1996.0,336.0 L 1606.0,336.0 L 1606.0,472.0 L 1476.0,472.0 L 1476.0,524.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,584.0 L 1476.0,636.0 L 306.0,636.0 L 306.0,622.0 L 176.0,622.0 L 176.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<line x1="1529.7" y1="585.0" x2="1682.3" y2="673.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,584.0 L 1476.0,636.0 L 306.0,636.0 L 306.0,922.0 L 176.0,922.0 L 176.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,584.0 L 1476.0,636.0 L 566.0,636.0 L 566.0,772.0 L 436.0,772.0 L 436.0,824.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,584.0 L 1476.0,636.0 L 1606.0,636.0 L 1606.0,922.0 L 1996.0,922.0 L 1996.0,974.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 1476.0,584.0 L 1476.0,636.0 L 826.0,636.0 L 826.0,622.0 L 696.0,622.0 L 696.0,674.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<rect x="111.0" y="74.0" width="130.0" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="176.0" y="94.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="176.0" y="116.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">LoginForm</text>
+<rect x="371.0" y="74.0" width="130.0" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="436.0" y="94.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="436.0" y="116.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PasienForm</text>
+<rect x="631.0" y="74.0" width="130.0" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="696.0" y="94.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="696.0" y="116.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">KunjunganForm</text>
+<rect x="870.1" y="74.0" width="171.8" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="956.0" y="94.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="956.0" y="116.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">AntreanSkriningForm</text>
+<rect x="1151.0" y="74.0" width="130.0" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="1216.0" y="94.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="1216.0" y="116.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">SkriningForm</text>
+<rect x="1410.6" y="74.0" width="130.8" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="1476.0" y="94.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="1476.0" y="116.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">RekamMedisForm</text>
+<rect x="1666.5" y="74.0" width="139.0" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="1736.0" y="94.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="1736.0" y="116.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PemeriksaanForm</text>
+<rect x="1931.0" y="74.0" width="130.0" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="1996.0" y="94.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="1996.0" y="116.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">ResepForm</text>
+<rect x="102.4" y="224.0" width="147.2" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="176.0" y="244.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="176.0" y="266.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">AntreanResepForm</text>
+<rect x="354.2" y="224.0" width="163.6" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="436.0" y="244.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="436.0" y="266.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PenyerahanObatForm</text>
+<rect x="630.6" y="224.0" width="130.8" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="696.0" y="244.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="696.0" y="266.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PersediaanForm</text>
+<rect x="882.4" y="224.0" width="147.2" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="956.0" y="244.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="956.0" y="266.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">DaftarPantauForm</text>
+<rect x="1151.0" y="224.0" width="130.0" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="1216.0" y="244.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="1216.0" y="266.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">LaporanForm</text>
+<rect x="1402.4" y="224.0" width="147.2" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="1476.0" y="244.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="1476.0" y="266.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">SinkronisasiForm</text>
+<rect x="1662.4" y="224.0" width="147.2" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="1736.0" y="244.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="1736.0" y="266.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">SATUSEHATGateway</text>
+<rect x="1926.5" y="224.0" width="139.0" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="1996.0" y="244.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="1996.0" y="266.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">KonfigurasiForm</text>
+<rect x="94.2" y="374.0" width="163.6" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="176.0" y="394.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="176.0" y="416.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">AutentikasiManager</text>
+<rect x="371.0" y="374.0" width="130.0" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="436.0" y="394.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="436.0" y="416.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PasienManager</text>
+<rect x="622.4" y="374.0" width="147.2" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="696.0" y="394.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="696.0" y="416.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">KunjunganManager</text>
+<rect x="886.5" y="374.0" width="139.0" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="956.0" y="394.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="956.0" y="416.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">SkriningManager</text>
+<rect x="1151.0" y="374.0" width="130.0" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="1216.0" y="394.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="1216.0" y="416.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">RisikoManager</text>
+<rect x="1394.2" y="374.0" width="163.6" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="1476.0" y="394.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="1476.0" y="416.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PemeriksaanManager</text>
+<rect x="1671.0" y="374.0" width="130.0" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="1736.0" y="394.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="1736.0" y="416.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">ResepManager</text>
+<rect x="111.0" y="524.0" width="130.0" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="176.0" y="544.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="176.0" y="566.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">ApotekManager</text>
+<rect x="358.3" y="524.0" width="155.4" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="436.0" y="544.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="436.0" y="566.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PersediaanManager</text>
+<rect x="631.0" y="524.0" width="130.0" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="696.0" y="544.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="696.0" y="566.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PantauManager</text>
+<rect x="890.6" y="524.0" width="130.8" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="956.0" y="544.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="956.0" y="566.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">LaporanManager</text>
+<rect x="1130.1" y="524.0" width="171.8" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="1216.0" y="544.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="1216.0" y="566.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">SinkronisasiManager</text>
+<rect x="1394.2" y="524.0" width="163.6" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="1476.0" y="544.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="1476.0" y="566.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">KonfigurasiManager</text>
+<rect x="110.6" y="674.0" width="130.8" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="176.0" y="694.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="176.0" y="716.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PenggunaEntity</text>
+<rect x="371.0" y="674.0" width="130.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="436.0" y="694.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="436.0" y="716.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">SesiEntity</text>
+<rect x="631.0" y="674.0" width="130.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="694.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="716.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">AuditEntity</text>
+<rect x="891.0" y="674.0" width="130.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="956.0" y="694.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="956.0" y="716.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PasienEntity</text>
+<rect x="1142.4" y="674.0" width="147.2" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="1216.0" y="694.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="1216.0" y="716.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">RekamMedisEntity</text>
+<rect x="1406.5" y="674.0" width="139.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="1476.0" y="694.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="1476.0" y="716.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">KunjunganEntity</text>
+<rect x="1671.0" y="674.0" width="130.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="1736.0" y="694.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="1736.0" y="716.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PoliEntity</text>
+<rect x="1931.0" y="674.0" width="130.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="1996.0" y="694.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="1996.0" y="716.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">AntreanEntity</text>
+<rect x="2190.6" y="674.0" width="130.8" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="2256.0" y="694.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="2256.0" y="716.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">SkriningEntity</text>
+<rect x="102.4" y="824.0" width="147.2" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="176.0" y="844.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="176.0" y="866.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">TandaVitalEntity</text>
+<rect x="354.2" y="824.0" width="163.6" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="436.0" y="844.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="436.0" y="866.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">AmbangRisikoEntity</text>
+<rect x="610.1" y="824.0" width="171.8" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="844.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="866.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PenandaRisikoEntity</text>
+<rect x="878.3" y="824.0" width="155.4" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="956.0" y="844.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="956.0" y="866.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PemeriksaanEntity</text>
+<rect x="1146.5" y="824.0" width="139.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="1216.0" y="844.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="1216.0" y="866.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">DiagnosisEntity</text>
+<rect x="1406.5" y="824.0" width="139.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="1476.0" y="844.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="1476.0" y="866.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">KodeICD10Entity</text>
+<rect x="1650.1" y="824.0" width="171.8" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="1736.0" y="844.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="1736.0" y="866.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">JadwalKontrolEntity</text>
+<rect x="1931.0" y="824.0" width="130.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="1996.0" y="844.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="1996.0" y="866.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">ResepEntity</text>
+<rect x="2186.5" y="824.0" width="139.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="2256.0" y="844.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="2256.0" y="866.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">ItemResepEntity</text>
+<rect x="111.0" y="974.0" width="130.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="176.0" y="994.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="176.0" y="1016.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">ObatEntity</text>
+<rect x="370.6" y="974.0" width="130.8" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="436.0" y="994.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="436.0" y="1016.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">BetsObatEntity</text>
+<rect x="606.0" y="974.0" width="180.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="994.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="1016.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PenerimaanObatEntity</text>
+<rect x="874.2" y="974.0" width="163.6" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="956.0" y="994.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="956.0" y="1016.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">DaftarPantauEntity</text>
+<rect x="1134.2" y="974.0" width="163.6" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="1216.0" y="994.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="1216.0" y="1016.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">TindakLanjutEntity</text>
+<rect x="1411.0" y="974.0" width="130.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="1476.0" y="994.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="1476.0" y="1016.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">LaporanEntity</text>
+<rect x="1662.4" y="974.0" width="147.2" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="1736.0" y="994.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="1736.0" y="1016.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">BundelFHIREntity</text>
+<rect x="1918.3" y="974.0" width="155.4" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="1996.0" y="994.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="1996.0" y="1016.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PencadanganEntity</text>
 </svg>

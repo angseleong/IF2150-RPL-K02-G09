@@ -4,8 +4,8 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Hari\]* |
-| **Tanggal** | *\[DD/MM/YYYY\]* |
+| **Hari** | Selasa |
+| **Tanggal** | 22/09/2026 |
 | **Kelas** | K02 |
 | **Nomor Kelompok** | G09  |
 | **Nama Kelompok** | Cumlaude  |
@@ -27,15 +27,17 @@
 
 | Catatan |
 | --- |
-| 1. *\[Catatan hasil asistensi\]* |
-| 2. ... |
-| 3. ... |
-| 4. ... |
+| 1. Pakai kerangka Entity-Control-Boundary (ECB) saat menyusun diagram kelas tiap use case |
+| 2. Boundary mewakili sisi front end yang disentuh pengguna (client side) |
+| 3. Control mewakili manager yang memegang alur kerja use case |
+| 4. Entity mewakili data yang tersimpan |
+| 5. Tiap diagram kelas per use case sekurang-kurangnya memuat satu boundary, satu control, dan satu entity, dan boleh lebih dari satu sesuai kebutuhan use case tersebut |
+| 6. Penentuan atribut cukup seadanya, tidak perlu terlalu lengkap |
 
 ## Dokumentasi
 
 <p align="center">
-  <img src="./assets/foto-asistensi.jpeg" width="100%">
+  <img src="./assets/foto-asistensi.png" width="100%">
 </p>
 
 <p align="center">

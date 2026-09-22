@@ -1,42 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 838 432" width="838" height="432" font-family="Segoe UI, Helvetica, Arial, sans-serif">
-<rect width="838" height="432" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 872 840" width="872" height="840" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<rect width="872" height="840" fill="#ffffff"/>
 <defs><marker id="op" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#333" stroke-width="1.5"/></marker></defs>
-<text x="419" y="26" font-size="15" font-weight="600" fill="#111" text-anchor="middle">Diagram Kelas UC09: Mengelola Daftar Pantau Pasien</text>
-<line x1="230.0" y1="92.0" x2="343.5" y2="92.0" stroke="#333" stroke-width="1.5" marker-end="url(#op)"/>
-<text x="287" y="85" font-size="11" fill="#444" text-anchor="middle"><tspan dy="0" style="paint-order:stroke;stroke:#fff;stroke-width:5px">menindaklanjuti</tspan></text>
-<line x1="608.0" y1="92.0" x2="494.5" y2="92.0" stroke="#333" stroke-width="1.5"/>
-<text x="586" y="86" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="516" y="86" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..1</text>
-<polygon points="419.0,115.0 413.0,122.5 419.0,130.0 425.0,122.5" fill="#333" stroke="#333" stroke-width="1.5"/>
-<line x1="419.0" y1="130.0" x2="419.0" y2="199.0" stroke="#333" stroke-width="1.5"/>
-<text x="419" y="146" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="419" y="171" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
-<line x1="463.2" y1="115.0" x2="624.8" y2="199.0" stroke="#333" stroke-width="1.5"/>
-<text x="483" y="119" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="605" y="183" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..1</text>
-<line x1="213.2" y1="199.0" x2="374.8" y2="115.0" stroke="#333" stroke-width="1.5"/>
-<text x="233" y="183" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="355" y="119" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
-<polygon points="169.0,245.0 163.0,252.5 169.0,260.0 175.0,252.5" fill="#333" stroke="#333" stroke-width="1.5"/>
-<line x1="169.0" y1="260.0" x2="169.0" y2="329.0" stroke="#333" stroke-width="1.5"/>
-<text x="169" y="276" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<text x="169" y="301" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
-<line x1="374.8" y1="245.0" x2="213.2" y2="329.0" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#op)"/>
-<line x1="419.0" y1="245.0" x2="419.0" y2="329.0" stroke="#333" stroke-width="1.5" stroke-dasharray="7,5" marker-end="url(#op)"/>
-<rect x="109.0" y="70.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="169.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">TenagaKlinis</text>
-<rect x="344.5" y="70.0" width="149.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="419.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">EntriDaftarPantau</text>
-<rect x="609.0" y="70.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="669.0" y="97.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PenandaRisiko</text>
-<rect x="109.0" y="200.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="169.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">Pasien</text>
-<rect x="359.0" y="200.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="419.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">TindakLanjut</text>
-<rect x="609.0" y="200.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="669.0" y="227.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">JadwalKontrol</text>
-<rect x="109.0" y="330.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="169.0" y="357.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">RekamMedis</text>
-<rect x="359.0" y="330.0" width="120.0" height="44.0" rx="3" fill="#eef4fb" stroke="#333" stroke-width="1.6"/>
-<text x="419.0" y="357.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">JejakAudit</text>
+<text x="436" y="27" font-size="15.5" font-weight="600" fill="#111" text-anchor="middle">Diagram Kelas UC09: Mengelola Daftar Pantau Pasien</text>
+<line x1="237.1" y1="337.0" x2="374.9" y2="267.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 176.0,398.0 L 176.0,441.0 L 306.0,441.0 L 306.0,559.0 L 436.0,559.0 L 436.0,602.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<line x1="436.0" y1="267.0" x2="436.0" y2="601.0" stroke="#333" stroke-width="1.5"/>
+<line x1="497.1" y1="205.0" x2="634.9" y2="135.0" stroke="#333" stroke-width="1.5"/>
+<line x1="502.0" y1="236.0" x2="613.2" y2="236.0" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,266.0 L 436.0,309.0 L 566.0,309.0 L 566.0,559.0 L 696.0,559.0 L 696.0,602.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,266.0 L 436.0,309.0 L 566.0,309.0 L 566.0,691.0 L 696.0,691.0 L 696.0,734.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<path d="M 436.0,602.0 L 436.0,559.0 L 566.0,559.0 L 566.0,441.0 L 696.0,441.0 L 696.0,398.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<line x1="497.1" y1="601.0" x2="634.9" y2="531.0" stroke="#333" stroke-width="1.5"/>
+<polygon points="696.0,135.0 689.5,143.0 696.0,151.0 702.5,143.0" fill="#333" stroke="#333" stroke-width="1.5"/>
+<line x1="696.0" y1="151.0" x2="696.0" y2="205.0" stroke="#333" stroke-width="1.5"/>
+<text x="696" y="167" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
+<text x="696" y="177" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..*</text>
+<path d="M 696.0,338.0 L 696.0,295.0 L 826.0,295.0 L 826.0,177.0 L 696.0,177.0 L 696.0,134.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<text x="696" y="310" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
+<text x="696" y="150" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..1</text>
+<path d="M 696.0,470.0 L 696.0,427.0 L 826.0,427.0 L 826.0,177.0 L 696.0,177.0 L 696.0,134.0" fill="none" stroke="#333" stroke-width="1.5"/>
+<text x="696" y="442" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..1</text>
+<text x="696" y="150" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">0..1</text>
+<polygon points="696.0,663.0 689.5,671.0 696.0,679.0 702.5,671.0" fill="#333" stroke="#333" stroke-width="1.5"/>
+<line x1="696.0" y1="679.0" x2="696.0" y2="733.0" stroke="#333" stroke-width="1.5"/>
+<text x="696" y="695" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
+<text x="696" y="705" font-size="11" fill="#444" text-anchor="middle" style="paint-order:stroke;stroke:#fff;stroke-width:5px">1</text>
+<rect x="102.4" y="338.0" width="147.2" height="60.0" rx="3" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.6"/>
+<text x="176.0" y="358.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;boundary&#187;</text>
+<text x="176.0" y="380.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">DaftarPantauForm</text>
+<rect x="371.0" y="206.0" width="130.0" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="436.0" y="226.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="436.0" y="248.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PantauManager</text>
+<rect x="371.0" y="602.0" width="130.0" height="60.0" rx="3" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.6"/>
+<text x="436.0" y="622.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;control&#187;</text>
+<text x="436.0" y="644.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">RisikoManager</text>
+<rect x="614.2" y="74.0" width="163.6" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="94.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="116.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">DaftarPantauEntity</text>
+<rect x="614.2" y="206.0" width="163.6" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="226.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="248.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">TindakLanjutEntity</text>
+<rect x="610.1" y="338.0" width="171.8" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="358.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="380.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PenandaRisikoEntity</text>
+<rect x="610.1" y="470.0" width="171.8" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="490.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="512.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">JadwalKontrolEntity</text>
+<rect x="631.0" y="602.0" width="130.0" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="622.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="644.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">PasienEntity</text>
+<rect x="622.4" y="734.0" width="147.2" height="60.0" rx="3" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.6"/>
+<text x="696.0" y="754.0" font-size="11" fill="#555" text-anchor="middle" font-style="italic">&#171;entity&#187;</text>
+<text x="696.0" y="776.0" font-size="13.5" fill="#111" text-anchor="middle" font-weight="600">RekamMedisEntity</text>
 </svg>
