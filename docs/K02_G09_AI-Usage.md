@@ -25,6 +25,7 @@
 * [Milestone 1](#milestone-1)
 * [Milestone 2](#milestone-2)
 * [Milestone 3](#milestone-3)
+* [Milestone 4](#milestone-4)
 
 ---
 
@@ -56,6 +57,13 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
 | *Claude (Claude Code)* | *Memeriksa kelengkapan penelusuran antara Bab 2, tabel use case, skenario, dan diagram* | *"Periksa apakah ada ID KF yang belum tercakup use case mana pun, dan apakah aktor pada tabel use case sama dengan asosiasi pada diagram."* | *Hasil pemeriksaan dicocokkan ulang secara manual pada dokumen sebelum dikumpulkan, khususnya kesesuaian ID KF pada tabel Subbab 3.2 dengan rumusan KF pada Bab 2.* |
+
+### Milestone 4
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| *Claude (Claude Code)* | *Menyusun draf identifikasi kelas beserta atribut, metode, dan relasinya dari skenario use case Milestone 3* | *"Turunkan kandidat kelas dari skenario use case pada dokumen UC, lengkap dengan atribut, metode, dan jenis relasi antarkelasnya."* | *Draf AI dipakai sebagai titik awal. Kelompok memeriksa tiap kelas terhadap skenario Subbab 3.4, membuang kelas yang tidak berpangkal pada KF mana pun, dan menetapkan sendiri jenis relasi yang dipakai.* |
+| *Claude (Claude Code)* | *Menggambar ulang 13 diagram kelas setelah model disusun ulang mengikuti kerangka ECB hasil asistensi* | *"Gambar ulang diagram kelas tiap use case memakai stereotip boundary, control, dan entity, dengan boundary hanya berhubungan lewat control."* | *Pembagian kelas ke dalam stereotip ECB dan pola penamaannya ditetapkan kelompok berdasarkan catatan asistensi. Tata letak dan hasil gambar diperiksa satu per satu, dan diagram yang garisnya menembus kotak kelas digambar ulang.* |
+| *Claude (Claude Code)* | *Memeriksa kelengkapan penelusuran KF, aturan ECB, dan konsistensi antara diagram dengan tabel* | *"Periksa apakah ada KF yang belum tercakup kelas mana pun, apakah ada garis dari boundary langsung ke entity, dan apakah nomor gambar berurutan."* | *Hasil pemeriksaan dicocokkan ulang pada dokumen. Satu temuan ditindaklanjuti, yaitu KodeICD10Entity yang belum tersambung ke control; relasinya ke PemeriksaanManager ditambahkan setelah kelompok memastikan pencarian kode ICD-10 memang dijalankan manager tersebut.* |
 
 ---
 ### Pernyataan Integritas dan Persetujuan

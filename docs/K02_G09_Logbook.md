@@ -25,6 +25,7 @@
 * [Milestone 1](#milestone-1)
 * [Milestone 2](#milestone-2)
 * [Milestone 3](#milestone-3)
+* [Milestone 4](#milestone-4)
 
 
 ---
@@ -109,6 +110,31 @@
 * *Kewenangan dokter tidak dimodelkan sebagai aktor terpisah agar jumlah aktor tetap tiga sesuai hasil asistensi Milestone 1; pembatasannya ditulis pada deskripsi aktor Tenaga Klinis dan pada skenario alternatif UC05.*
 * *Hasil asistensi: use case diringkas dari 18 menjadi 12 agar setiap use case sejalan dengan satu tujuan yang jelas, kaitan KF pada masing-masing use case dirapikan, relasi «include» dan «extend» dipakai sesuai fungsinya, dan skenario disusun ulang agar tiap langkah aksi aktor berpasangan dengan reaksi sistem.*
 * *Use case diagram pada Subbab 3.4 digambar ulang mengikuti 12 use case hasil konsolidasi, memuat tiga aktor, batas sistem SEHATI, serta relasi UC03 «include» UC02 dan UC06 «extend» UC05.*
+
+---
+
+### Milestone 4
+**Periode:** 20-09-2026 - 22-09-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *20-09-2026* | *[Seluruh Anggota]* | *Menyinkronkan repository dengan rilis Milestone 4 dan mempelajari template Tugas 4 Class Diagram* | *1* | *Done* | *-* |
+| *20-09-2026* | *Axeleon Justin Algianto* | *Menyusun Bab 1 sampai Bab 3 dokumen Class Diagram: menyalin deskripsi perangkat lunak, KF01 s.d. KF24, 12 use case, dan seluruh skenarionya dari dokumen Use Case* | *2* | *Done* | *-* |
+| *20-09-2026* | *Muhammad Adnan Kurniawan* | *Mengidentifikasi 33 kelas dari skenario use case beserta atribut, metode, dan relasinya pada Subbab 4.1, serta menyusun tabel traceability Bab 5* | *4* | *Done* | *Batas antara kelas penyimpan data dan kelas yang hanya menampilkan hasil sempat rancu* |
+| *20-09-2026* | *Malik Arsyafiandra Madani* | *Menggambar 12 diagram kelas per use case dan satu diagram kelas keseluruhan* | *4* | *Done* | *-* |
+| *20-09-2026* | *Steven Vanako* | *Mengganti nama berkas KXX_GYY_CD.md menjadi K02_G09_CD.md dan merapikan folder M4* | *0,5* | *Done* | *-* |
+| *22-09-2026* | *[Seluruh Anggota]* | *Asistensi Milestone 4 bersama asisten* | *1* | *Done* | *-* |
+| *22-09-2026* | *Muhammad Adnan Kurniawan* | *Menyusun ulang model kelas mengikuti kerangka Entity-Control-Boundary hasil asistensi: 33 kelas dipecah menjadi 55 kelas yang terdiri atas 16 boundary, 13 control, dan 26 entity* | *4* | *Done* | *Beberapa kelas draf pertama ternyata bukan data, misalnya GrafikTren dan PeringatanPersediaan, sehingga tugasnya dipindahkan ke boundary dan control* |
+| *22-09-2026* | *Malik Arsyafiandra Madani* | *Menggambar ulang seluruh 13 diagram kelas mengikuti stereotip ECB dan memastikan tiap use case memuat sedikitnya satu boundary, satu control, dan satu entity* | *3,5* | *Done* | *-* |
+| *22-09-2026* | *Fachry Azriel Fajdwani* | *Meringkas atribut tiap kelas sesuai catatan asistensi dan menyesuaikan tabel traceability Bab 5 dengan 55 kelas baru* | *2* | *Done* | *-* |
+| *22-09-2026* | *[Seluruh Anggota]* | *Peninjauan silang akhir: memastikan tidak ada garis dari boundary langsung ke entity, seluruh KF01 s.d. KF24 tercakup, dan penomoran gambar berurutan* | *1,5* | *Done* | *Ditemukan KodeICD10Entity yang belum tersambung ke control mana pun; relasinya ke PemeriksaanManager ditambahkan* |
+| *22-09-2026* | *Steven Vanako* | *Mengisi formulir asistensi M4 beserta dokumentasinya dan memperbarui dokumen Logbook serta AI Usage* | *1* | *Done* | *-* |
+
+**Catatan/Evaluasi Milestone 4:**
+* *Bab 1 sampai Bab 3 disalin dari Milestone 3 tanpa mengubah penomoran KF maupun use case, sehingga penelusuran antar-dokumen tetap terjaga.*
+* *Draf pertama memodelkan 33 kelas domain tanpa pemisahan lapisan. Setelah asistensi, model disusun ulang menjadi 55 kelas ber-stereotip ECB dengan pola penamaan `<Nama>Form`, `<Nama>Manager`, dan `<Nama>Entity`.*
+* *Lima use case memakai lebih dari satu boundary atau control: UC04 dan UC07 karena aktor berpindah layar, UC05 karena layar rekam medis terpisah dari formulir pemeriksaan, UC09 karena berbagi RisikoManager dengan UC04, dan UC11 karena SATUSEHATGateway berkedudukan sebagai boundary ke sistem luar.*
+* *Hasil asistensi: diagram kelas per use case wajib memakai kerangka ECB, dengan boundary sebagai antarmuka sisi klien, control sebagai manager, dan entity sebagai data; tiap diagram memuat sedikitnya satu kelas dari masing-masing stereotip dan boleh lebih dari satu sesuai kebutuhan use case; penentuan atribut cukup seadanya.*
 
 ---
 
