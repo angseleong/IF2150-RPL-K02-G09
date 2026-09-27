@@ -37,10 +37,10 @@ Dipersiapkan oleh:
 # BAB 1: Pendahuluan
 
 ## 1.1 Tujuan Penulisan Dokumen
-Dokumen Spesifikasi Kebutuhan Perangkat Lunak (SKPL) ini disusun sebagai acuan utama dalam pengembangan aplikasi SEHATI (Sistem Elektronik Pelayanan Kesehatan Terintegrasi). Tujuan dokumen ini adalah mendefinisikan dengan jelas dan spesifik seluruh kebutuhan perangkat lunak, baik fungsional maupun non-fungsional, serta batasan-batasan sistem. Dokumen ini akan digunakan oleh pengembang (*developer*) sebagai panduan implementasi, penguji (*tester*) sebagai basis pengujian kualitas, serta pemangku kepentingan (*stakeholder*) seperti pihak puskesmas untuk validasi fungsionalitas sistem akhir.
+Dokumen ini memuat Spesifikasi Kebutuhan Perangkat Lunak (SKPL) untuk SEHATI (Sistem Elektronik Pelayanan Kesehatan Terintegrasi). Kami menghimpun kebutuhan fungsional, kebutuhan non-fungsional, batasan, model *use case*, dan model kelas dari dokumen Milestone 1 sampai 4 ke dalam satu acuan. Pengembang memakai dokumen ini sebagai dasar implementasi, dan penguji menurunkan kasus uji dari tiap KF dan KNF di dalamnya. Pihak puskesmas dapat memakainya untuk mencocokkan fitur SEHATI dengan kebutuhan mereka sebelum aplikasi dipasang.
 
 ## 1.2 Lingkup Masalah
-SEHATI merupakan aplikasi *desktop* pengelolaan pelayanan rawat jalan puskesmas yang menyatukan seluruh rantai pelayanan mulai dari pendaftaran, skrining, pemeriksaan, hingga farmasi. Aplikasi ini dikembangkan untuk mengatasi permasalahan fragmentasi rekam medis dan rendahnya deteksi dini pada fasilitas kesehatan dengan menerapkan pemantauan risiko kesehatan longitudinal pasien secara aktif, sembari memastikan sistem tetap berjalan penuh di lingkungan dengan keterbatasan koneksi internet (*offline-first*) dan mampu menyinkronkan data ke platform nasional SATUSEHAT.
+SEHATI adalah aplikasi *desktop* untuk pelayanan rawat jalan puskesmas, dari pendaftaran di loket sampai penyerahan obat di apotek. Kami merancangnya untuk dua masalah yang kami temukan pada dokumen *Topic Brainstorming*: riwayat pasien tersebar di berkas kertas dan beberapa sistem, dan petugas tidak punya cara membandingkan hasil pengukuran pasien antar-kunjungan. SEHATI menandai pasien yang mengarah ke hipertensi, obesitas, atau diabetes, lalu memasukkannya ke daftar pantau. Aplikasi menyimpan data di basis data lokal agar pelayanan tetap berjalan tanpa internet (*offline-first*), dan mengirim data ke SATUSEHAT ketika koneksi tersedia.
 
 ## 1.3 Definisi, Istilah, dan Singkatan
 
@@ -82,28 +82,28 @@ Tabel 1.4. Aturan Penomoran
 4. Dokumen *Class Diagram* Kelompok K02 G09.
 
 ## 1.6 Deskripsi Umum Dokumen (Ikhtisar)
-Dokumen SKPL ini disusun ke dalam beberapa bab dengan sistematika sebagai berikut:
-- **BAB 1: Pendahuluan**, menguraikan tujuan dokumen, lingkup masalah, definisi istilah, aturan penomoran, referensi, dan deskripsi umum dokumen.
-- **BAB 2: Deskripsi Perangkat Lunak**, menjelaskan deskripsi umum sistem, pengguna dan kebutuhan, batasan, serta lingkungan operasi perangkat lunak.
-- **BAB 3: Deskripsi Kebutuhan Perangkat Lunak**, merincikan Kebutuhan Fungsional (KF) dan Kebutuhan Non-Fungsional (KNF).
-- **BAB 4: Pemodelan Use Case**, memaparkan identifikasi aktor, daftar *use case*, diagram *use case*, serta skenario dari masing-masing *use case*.
-- **BAB 5: Pemodelan Kelas**, menjabarkan identifikasi kelas, diagram kelas per *use case*, serta diagram kelas secara keseluruhan.
-- **BAB 6: Traceability**, berisi matriks penelusuran yang menghubungkan antara Kelas, *Use Case*, dan Kebutuhan Fungsional.
+SKPL ini terdiri atas enam bab.
+- **BAB 1: Pendahuluan** memuat tujuan dokumen, lingkup masalah, istilah, aturan penomoran, dan referensi.
+- **BAB 2: Deskripsi Perangkat Lunak** menggambarkan alur bisnis puskesmas, hubungan SEHATI dengan SATUSEHAT, pengguna, batasan, dan lingkungan operasi.
+- **BAB 3: Deskripsi Kebutuhan Perangkat Lunak** memuat 24 KF dan 13 KNF beserta ID kebutuhan asalnya.
+- **BAB 4: Pemodelan Use Case** memuat tiga aktor, dua belas *use case*, *use case diagram*, dan skenario tiap *use case*.
+- **BAB 5: Pemodelan Kelas** memuat 55 kelas berkerangka ECB, diagram kelas per *use case*, dan diagram kelas keseluruhan.
+- **BAB 6: Traceability** menelusuri tiap kelas ke *use case* dan KF yang menuntutnya.
 
 ---
 
 # BAB 2: Deskripsi Perangkat Lunak
 
 ## 2.1 Deskripsi Umum Sistem
-SEHATI menangani pelayanan rawat jalan dari ujung ke ujung melalui beberapa tahap layanan: 
-1. **Pendaftaran di loket**: Petugas menelusuri data pasien, mendaftar, lalu membuka kunjungan antrean.
-2. **Skrining**: Perawat mengukur tanda vital, lalu sistem menandai risiko kondisi pasien otomatis.
-3. **Pemeriksaan**: Dokter mencatat anamnesis, diagnosis, tindakan, dan menyusun resep elektronik.
-4. **Farmasi**: Petugas menyiapkan resep lalu menyerahkan obat pada pasien dengan pemotongan stok secara otomatis.
+Pasien rawat jalan melewati empat tahap layanan di SEHATI:
+1. **Pendaftaran di loket**: Petugas Administrasi mencari data pasien, mendaftarkan pasien baru bila belum ada, lalu membuka kunjungan dan menerbitkan nomor antrean.
+2. **Skrining**: perawat mengukur tanda vital, lalu SEHATI membandingkan hasilnya dengan ambang risiko dan riwayat pengukuran pasien.
+3. **Pemeriksaan**: dokter mencatat anamnesis, diagnosis berkode ICD-10, dan tindakan, lalu menyusun resep elektronik bila pasien butuh obat.
+4. **Farmasi**: Petugas Farmasi menyiapkan resep dan menyerahkan obat. SEHATI lalu memotong stok dan menutup kunjungan.
 
-Di luar pelayanan, terdapat alur pendukung seperti penyusunan laporan, pengurusan stok, tindak lanjut daftar pantau pasien berisiko, serta sinkronisasi data rekam medis ke SATUSEHAT.
+Di luar jam pelayanan, petugas menjalankan kegiatan pendukung: menyusun laporan, mencatat obat masuk, menindaklanjuti pasien di daftar pantau, dan menyinkronkan data ke SATUSEHAT.
 
-Kedua alur tersebut dimodelkan pada dua *activity diagram* berikut, disalin dari Subbab 3.4 *Model Proses Bisnis* dokumen *Topic Brainstorming*. Gambar 1 memodelkan perjalanan satu pasien sejak tiba di loket hingga menerima obat, sedangkan Gambar 2 memodelkan kegiatan pendukung yang dijalankan di luar jam pelayanan.
+Gambar 1 dan Gambar 2 memodelkan kedua alur tersebut. Kami menyalin keduanya dari Subbab 3.4 *Model Proses Bisnis* dokumen *Topic Brainstorming*. Gambar 1 mengikuti satu pasien dari loket sampai apotek, sedangkan Gambar 2 memuat kegiatan pendukung berkala.
 
 <p align="center">
 <img alt="Activity Diagram Alur Pelayanan Rawat Jalan" src="./assets/diagram/diagram-act-1.svg" width="90%">
@@ -120,30 +120,35 @@ Kedua alur tersebut dimodelkan pada dua *activity diagram* berikut, disalin dari
 </p>
 
 ## 2.2 Deskripsi Umum Perangkat Lunak
-SEHATI merupakan aplikasi *desktop offline-first* yang mengelola secara penuh pendaftaran, pemeriksaan, peresepan elektronik, hingga pengelolaan obat di puskesmas. Aplikasi dirancang untuk menutupi kesenjangan tidak adanya pemantauan riwayat kondisi antar-waktu dengan melacak pasien berisiko. SEHATI berinteraksi dengan API dari **SATUSEHAT** Kementerian Kesehatan; sistem bekerja mencatat rekam medis pada basis data lokal dan mengirimkan kumpulan data (bundel HL7 FHIR) secara *asynchronous* ketika koneksi internet puskesmas tersedia.
+SEHATI adalah aplikasi *desktop offline-first*. Puskesmas memasangnya pada komputer loket, ruang periksa, dan apotek, dan ketiganya memakai satu basis data lokal di jaringan puskesmas.
+
+SEHATI terhubung dengan satu sistem luar, yaitu platform SATUSEHAT milik Kementerian Kesehatan. Setiap kali Petugas Farmasi mengonfirmasi penyerahan obat, SEHATI menyusun data kunjungan menjadi bundel HL7 FHIR dan menaruhnya di antrean sinkronisasi. Petugas Administrasi mengirim antrean itu ke API SATUSEHAT ketika internet tersedia. Bila internet putus, petugas mengekspor bundel sebagai berkas lalu mengunggahnya dari lokasi lain yang berjaringan.
 
 ## 2.3 Pengguna dan Kebutuhan Pengguna Perangkat Lunak
 
 | Pengguna | Kebutuhan |
 | :--- | :--- |
-| **Petugas Administrasi** | Membutuhkan fitur manajemen data pasien yang cepat, pendaftaran kunjungan, manajemen *master data*, pembuatan laporan otomatis, dan fasilitas kontrol sinkronisasi data ke SATUSEHAT. |
-| **Tenaga Klinis** | Membutuhkan tampilan riwayat pasien yang utuh dan komprehensif pada satu layar, fasilitas peringatan dini atau penanda batas normal (*skrining*), penulisan resep dengan validasi stok obat langsung, serta fitur pemantauan pasien berisiko. |
-| **Petugas Farmasi** | Membutuhkan antrean resep yang terbaca jelas dari ruang periksa, validasi status penyerahan obat, pengurusan persediaan dan inventarisasi stok (*restock*), serta peringatan obat kedaluwarsa. |
+| **Petugas Administrasi** | Mencari dan mendaftarkan pasien dengan cepat, membuka kunjungan poli, mengelola akun dan data master, menyusun laporan periodik, dan menjalankan sinkronisasi ke SATUSEHAT. |
+| **Tenaga Klinis** | Melihat riwayat dan tren tanda vital pasien pada satu layar, mendapat peringatan saat tanda vital melewati ambang risiko, menulis resep sambil melihat ketersediaan stok, dan menindaklanjuti pasien di daftar pantau. |
+| **Petugas Farmasi** | Melihat antrean resep dari ruang periksa, mengonfirmasi penyerahan obat, mencatat obat masuk, dan mendapat peringatan stok menipis maupun bets yang mendekati kedaluwarsa. |
 
 ## 2.4 Batasan Perangkat Lunak
-1. Aplikasi harus berjalan sebagai aplikasi desktop (tanpa mewajibkan akses web bagi operasional lokal) untuk menjamin pelayanan tidak terhenti akibat ketiadaan koneksi (*offline-first*).
-2. Format struktur data pengiriman rekam medis harus mengikuti standar HL7 FHIR yang ditentukan oleh regulasi SATUSEHAT Kementerian Kesehatan.
-3. Penanda risiko hanya berfungsi sebagai instrumen pengingat atau deteksi dini, dan **tidak** mengambil alih kewenangan klinis tenaga kesehatan.
-4. Akses basis data dibatasi oleh fitur otorisasi per *role* pengguna demi menjaga kerahasiaan rekam medis.
+Batasan nomor 2 sampai 4 memenuhi kebutuhan R25, R09, dan R27 yang tidak kami turunkan menjadi KF (lihat Subbab 3.1).
+1. SEHATI berjalan sebagai aplikasi desktop dengan basis data lokal, dan pelayanan tidak boleh bergantung pada koneksi internet (R28).
+2. Bundel yang SEHATI kirim ke SATUSEHAT harus mengikuti standar HL7 FHIR R4, sesuai kewajiban rekam medis elektronik terhubung SATUSEHAT pada PMK 24/2022 (R25).
+3. Penanda risiko berfungsi sebagai pengingat. Keputusan klinis tetap berada di tangan tenaga kesehatan (R09).
+4. SEHATI membatasi akses data menurut peran pengguna untuk menjaga kerahasiaan rekam medis sesuai PMK 24/2022 dan UU PDP (R27).
 
 ## 2.5 Lingkungan Operasi Perangkat Lunak
 
 | Komponen | Spesifikasi |
 | :--- | :--- |
-| **Aplikasi / Client** | Aplikasi Desktop berbasis GUI (menggunakan JavaFX/Electron atau *framework desktop* sejenis). |
-| **DBMS** | Basis Data Relasional yang beroperasi secara lokal (misal: PostgreSQL / MySQL). |
-| **Sistem Operasi** | *Cross-platform* pada lingkungan desktop seperti Windows 10/11 atau distribusi Linux modern. |
-| **Lainnya** | Komponen utilitas penjadwalan *backup* otomatis dan komponen *worker* sinkronisasi HTTP/REST API terpisah. |
+| **Aplikasi / Client** | Aplikasi desktop berbasis GUI (JavaFX, Electron, atau kerangka kerja desktop sejenis). |
+| **DBMS** | Basis data relasional yang berjalan di jaringan lokal puskesmas (PostgreSQL atau MySQL). |
+| **Sistem Operasi** | Windows 10/11 atau distribusi Linux 64-bit. |
+| **Perangkat Keras** | Komputer dengan RAM 4 GB dan ruang penyimpanan kosong 2 GB (KNF10). |
+| **Jaringan** | Jaringan lokal untuk berbagi basis data antarkomputer. SEHATI memakai internet untuk sinkronisasi SATUSEHAT saja. |
+| **Lainnya** | Penjadwal pencadangan basis data dan *worker* sinkronisasi yang memanggil REST API SATUSEHAT. |
 
 ---
 
@@ -207,7 +212,7 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 # BAB 4: Pemodelan Use Case
 
 ## 4.1 Identifikasi Aktor
-Aktor mengikuti tiga peran manusia yang ditetapkan sejak Milestone 1 dan tercantum pada Subbab 3.1 dokumen *Class Diagram*. Pasien tidak menjadi aktor karena menerima manfaat sistem tanpa menyentuhnya, sedangkan SATUSEHAT berkedudukan sebagai sistem eksternal, bukan aktor.
+Ketiga aktor berikut sama dengan peran manusia pada Milestone 1 dan Subbab 3.1 dokumen *Class Diagram*. Pasien tidak menjadi aktor karena tidak mengoperasikan aplikasi. SATUSEHAT berkedudukan sebagai sistem eksternal.
 
 | ID Aktor | Aktor | Deskripsi |
 | :--- | :--- | :--- |
