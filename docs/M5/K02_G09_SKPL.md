@@ -7,123 +7,129 @@ SPESIFIKASI KEBUTUHAN PERANGKAT LUNAK (SKPL)
 </h1>
 <br>
 
-## *Nama Perangkat Lunak*
+## SEHATI - Sistem Elektronik Pelayanan Kesehatan Terintegrasi
 
-### Untuk: *[Nama Asisten]*
+### Untuk: Made Branenda Jordhy
 
 Dipersiapkan oleh:
 | Informasi | Keterangan |
 | --- | --- |
-| Kelas | *\[Kelas\]* |
-| Kelompok | *\[Nomor Kelompok\]*  |
+| Kelas | K02 |
+| Kelompok | G09  |
 
 | NIM | Nama |
 |---|---|
-| *[NIM 1]* | *[Nama Anggota 1]* |
-| *[NIM 2]* | *[Nama Anggota 2]* |
-| *[NIM 3]* | *[Nama Anggota 3]* |
-| *[NIM 4]* | *[Nama Anggota 4]* |
-| *[NIM 5]* | *[Nama Anggota 5]* |
+| 13525008 | Malik Arsyafiandra Madani |
+| 13525044 | Steven Vanako |
+| 13525071 | Muhammad Adnan Kurniawan |
+| 13525074 | Axeleon Justin Algianto |
+| 13525110 | Fachry Azriel Fajdwani |
 ---
 
 ## Daftar Perubahan
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | *Deskripsikan perubahan yang dilakukan dari dokumen sebelumnya pada dokumen ini. Jika tidak terdapat perubahan, harap kosongkan tabel.* |
-| *B* |  |
-| *C* |  |
-| ... |  |
+| A | Pembuatan awal dokumen Spesifikasi Kebutuhan Perangkat Lunak (SKPL) untuk SEHATI. |
 
 <br>
 
 # BAB 1: Pendahuluan
 
 ## 1.1 Tujuan Penulisan Dokumen
-Tuliskan dengan ringkas tujuan dokumen SKPL ini dibuat dan siapa saja yang akan menggunakan dokumen ini.
+Dokumen Spesifikasi Kebutuhan Perangkat Lunak (SKPL) ini disusun sebagai acuan utama dalam pengembangan aplikasi SEHATI (Sistem Elektronik Pelayanan Kesehatan Terintegrasi). Tujuan dokumen ini adalah mendefinisikan dengan jelas dan spesifik seluruh kebutuhan perangkat lunak, baik fungsional maupun non-fungsional, serta batasan-batasan sistem. Dokumen ini akan digunakan oleh pengembang (*developer*) sebagai panduan implementasi, penguji (*tester*) sebagai basis pengujian kualitas, serta pemangku kepentingan (*stakeholder*) seperti pihak puskesmas untuk validasi fungsionalitas sistem akhir.
 
 ## 1.2 Lingkup Masalah
-Tuliskan dengan ringkas nama aplikasi dan deskripsi singkatnya. Bagian ini maksimal berisi satu paragraf, dapat diringkas dari BAB 1 *Analisis Permasalahan* pada dokumen *Topic Brainstorming*.
+SEHATI merupakan aplikasi *desktop* pengelolaan pelayanan rawat jalan puskesmas yang menyatukan seluruh rantai pelayanan mulai dari pendaftaran, skrining, pemeriksaan, hingga farmasi. Aplikasi ini dikembangkan untuk mengatasi permasalahan fragmentasi rekam medis dan rendahnya deteksi dini pada fasilitas kesehatan dengan menerapkan pemantauan risiko kesehatan longitudinal pasien secara aktif, sembari memastikan sistem tetap berjalan penuh di lingkungan dengan keterbatasan koneksi internet (*offline-first*) dan mampu menyinkronkan data ke platform nasional SATUSEHAT.
 
 ## 1.3 Definisi, Istilah, dan Singkatan
-Semua definisi dan singkatan yang digunakan dalam dokumen ini beserta penjelasannya.
 
 Tabel 1.3. Definisi Istilah dan Singkatan
 
 | Singkatan, Akronim, atau Istilah | Penjelasan |
 | :--- | :--- |
-| *P/L* | *Singkatan dari Perangkat Lunak, yaitu aplikasi yang memberikan perintah kepada komputer untuk menjalankan tugas tertentu.* |
-| *SKPL* | *Singkatan dari Spesifikasi Kebutuhan Perangkat Lunak, yaitu dokumen yang merangkum kriteria-kriteria yang diperlukan untuk membangun aplikasi menjalankan tugasnya.* |
-| *KF* | *Singkatan dari Kebutuhan Fungsional.* |
-| *KNF* | *Singkatan dari Kebutuhan Non-Fungsional.* |
-| *UC* | *Singkatan dari Use Case.* |
-| *EARS* | *Easy Approach to Requirements Syntax, yaitu pola penulisan kebutuhan agar konsisten dan mudah diuji.* |
-| *...* | *...* |
+| P/L | Perangkat Lunak. |
+| SKPL | Spesifikasi Kebutuhan Perangkat Lunak. |
+| KF | Kebutuhan Fungsional. |
+| KNF | Kebutuhan Non-Fungsional. |
+| UC | Use Case. |
+| EARS | *Easy Approach to Requirements Syntax*, pola penulisan kebutuhan agar konsisten dan mudah diuji. |
+| RME | Rekam Medis Elektronik. |
+| PTM | Penyakit Tidak Menular (seperti hipertensi, obesitas, diabetes). |
+| SATUSEHAT | Platform integrasi data kesehatan nasional milik Kemenkes RI. |
+| HL7 FHIR | *Health Level Seven Fast Healthcare Interoperability Resources*, standar pertukaran data kesehatan yang dipakai oleh SATUSEHAT. |
 
 ## 1.4 Aturan Penomoran
-Tuliskan aturan penomoran (ID) yang digunakan dalam dokumen ini. Gunakan pola ID yang **sama** dengan yang sudah dipakai pada dokumen-dokumen sebelumnya, jangan membuat pola baru di dokumen ini.
 
 Tabel 1.4. Aturan Penomoran
 
 | Hal/Bagian | Penomoran | Keterangan |
 | :--- | :--- | :--- |
-| *Kebutuhan Fungsional* | *KFXX* | |
-| *Kebutuhan Non-Fungsional* | *KNFXX* | |
-| *Aktor* | *AXX* | |
-| *Use Case* | *UCXX* | |
-| *Kelas* | *CXX* | |
-| *...* | *...* |
+| Kebutuhan Fungsional | KFXX | XX adalah dua digit angka berurutan |
+| Kebutuhan Non-Fungsional | KNFXX | XX adalah dua digit angka berurutan |
+| Aktor | AXX | XX adalah dua digit angka berurutan |
+| Use Case | UCXX | XX adalah dua digit angka berurutan |
+| Kelas | CXX | XX adalah dua digit angka berurutan |
 
 ## 1.5 Referensi
-Dokumentasi P/L yang dirujuk oleh dokumen ini. Referensi dapat berupa buku, panduan, ataupun dokumentasi lain yang dipakai dalam pengembangan P/L ini.
+1. Dokumen *Topic Brainstorming* Kelompok K02 G09.
+2. Dokumen *Requirement Gathering* Kelompok K02 G09.
+3. Dokumen *Use Case & Scenario Use Case* Kelompok K02 G09.
+4. Dokumen *Class Diagram* Kelompok K02 G09.
 
 ## 1.6 Deskripsi Umum Dokumen (Ikhtisar)
-Tuliskan sistematika pembahasan dokumen SKPL ini secara runut (misalnya: BAB 2 membahas deskripsi umum P/L, BAB 3 membahas kebutuhan fungsional dan non-fungsional, dst).
+Dokumen SKPL ini disusun ke dalam beberapa bab dengan sistematika sebagai berikut:
+- **BAB 1: Pendahuluan**, menguraikan tujuan dokumen, lingkup masalah, definisi istilah, aturan penomoran, referensi, dan deskripsi umum dokumen.
+- **BAB 2: Deskripsi Perangkat Lunak**, menjelaskan deskripsi umum sistem, pengguna dan kebutuhan, batasan, serta lingkungan operasi perangkat lunak.
+- **BAB 3: Deskripsi Kebutuhan Perangkat Lunak**, merincikan Kebutuhan Fungsional (KF) dan Kebutuhan Non-Fungsional (KNF).
+- **BAB 4: Pemodelan Use Case**, memaparkan identifikasi aktor, daftar *use case*, diagram *use case*, serta skenario dari masing-masing *use case*.
+- **BAB 5: Pemodelan Kelas**, menjabarkan identifikasi kelas, diagram kelas per *use case*, serta diagram kelas secara keseluruhan.
+- **BAB 6: Traceability**, berisi matriks penelusuran yang menghubungkan antara Kelas, *Use Case*, dan Kebutuhan Fungsional.
 
 ---
 
 # BAB 2: Deskripsi Perangkat Lunak
 
 ## 2.1 Deskripsi Umum Sistem
-Bagian ini dapat disalin dari BAB 1.1 *Deskripsi Umum Sistem* pada dokumen *Requirement Gathering*, disesuaikan bila ada perubahan alur bisnis. Lengkapi dengan gambaran proses bisnis dalam bentuk *Activity Diagram* (boleh disalin dan diperbarui dari 3.3 *Model Proses Bisnis* pada dokumen *Topic Brainstorming*).
+SEHATI menangani pelayanan rawat jalan dari ujung ke ujung melalui beberapa tahap layanan: 
+1. **Pendaftaran di loket**: Petugas menelusuri data pasien, mendaftar, lalu membuka kunjungan antrean.
+2. **Skrining**: Perawat mengukur tanda vital, lalu sistem menandai risiko kondisi pasien otomatis.
+3. **Pemeriksaan**: Dokter mencatat anamnesis, diagnosis, tindakan, dan menyusun resep elektronik.
+4. **Farmasi**: Petugas menyiapkan resep lalu menyerahkan obat pada pasien dengan pemotongan stok secara otomatis.
+Di luar pelayanan, terdapat alur pendukung seperti penyusunan laporan, pengurusan stok, tindak lanjut daftar pantau pasien berisiko, serta sinkronisasi data rekam medis ke SATUSEHAT.
 
 <p align="center">
-<img alt="Contoh Activity Diagram" src="./assets/diagram/diagram-act-1.avif" width="70%">
+<img alt="Activity Diagram Pelayanan Rawat Jalan" src="../M1/assets/diagram/diagram-act-1.avif" width="70%">
 </p>
 <p align="center">
-<i>Gambar 1. Contoh Activity Diagram Proses Bisnis</i>
+<i>Gambar 1. Activity Diagram Alur Pelayanan Rawat Jalan SEHATI</i>
 </p>
 
 ## 2.2 Deskripsi Umum Perangkat Lunak
-Diisi dengan deskripsi umum perangkat lunak untuk mendukung proses bisnis yang telah diuraikan pada sub-bab sebelumnya. Uraian harus menunjukkan lingkup perangkat lunak, mencakup keterkaitan perangkat lunak dengan sistem lain di luar (misalnya *Payment Gateway* atau layanan pihak ketiga lain yang dipakai).
-
-*Contoh narasi:* "*[Nama P/L]* merupakan aplikasi *[deskripsi singkat]* yang berinteraksi dengan *Payment Gateway (dummy)* untuk memproses otorisasi pembayaran. Sistem menerima input dari *Pelanggan* melalui antarmuka aplikasi dan mengirimkan permintaan transaksi ke *Payment Gateway* setiap kali pelanggan melakukan checkout."
+SEHATI merupakan aplikasi *desktop offline-first* yang mengelola secara penuh pendaftaran, pemeriksaan, peresepan elektronik, hingga pengelolaan obat di puskesmas. Aplikasi dirancang untuk menutupi kesenjangan tidak adanya pemantauan riwayat kondisi antar-waktu dengan melacak pasien berisiko. SEHATI berinteraksi dengan API dari **SATUSEHAT** Kementerian Kesehatan; sistem bekerja mencatat rekam medis pada basis data lokal dan mengirimkan kumpulan data (bundel HL7 FHIR) secara *asynchronous* ketika koneksi internet puskesmas tersedia.
 
 ## 2.3 Pengguna dan Kebutuhan Pengguna Perangkat Lunak
-Tuliskan seluruh jenis pengguna (*role*/aktor) yang terlibat dalam perangkat lunak (P/L), beserta kebutuhannya secara umum. Bagian ini dapat disalin dari 1.2 *Deskripsi Pengguna Perangkat Lunak* (dokumen Requirement Gathering) atau 3.1 *Identifikasi Aktor* (dokumen Use Case), pastikan sudah konsisten dengan aktor final yang dipakai di BAB 4.
 
 | Pengguna | Kebutuhan |
 | :--- | :--- |
-| *Pelanggan* | *Pelanggan harus dapat memesan produk, mengelola keranjang, dan menyelesaikan pembayaran melalui sistem.* |
-| *...* | *...* |
+| **Petugas Administrasi** | Membutuhkan fitur manajemen data pasien yang cepat, pendaftaran kunjungan, manajemen *master data*, pembuatan laporan otomatis, dan fasilitas kontrol sinkronisasi data ke SATUSEHAT. |
+| **Tenaga Klinis** | Membutuhkan tampilan riwayat pasien yang utuh dan komprehensif pada satu layar, fasilitas peringatan dini atau penanda batas normal (*skrining*), penulisan resep dengan validasi stok obat langsung, serta fitur pemantauan pasien berisiko. |
+| **Petugas Farmasi** | Membutuhkan antrean resep yang terbaca jelas dari ruang periksa, validasi status penyerahan obat, pengurusan persediaan dan inventarisasi stok (*restock*), serta peringatan obat kedaluwarsa. |
 
 ## 2.4 Batasan Perangkat Lunak
-Batasan yang harus dituliskan, di antaranya:
-1. *P/L harus memakai file data/API dari sistem lain (sebutkan, misal Payment Gateway dummy).*
-2. *P/L harus memakai format data yang sama dengan sistem lain.*
-3. *P/L harus berfungsi pada platform tertentu (misal: web browser modern, atau desktop Windows dan Linux).*
-4. *...*
+1. Aplikasi harus berjalan sebagai aplikasi desktop (tanpa mewajibkan akses web bagi operasional lokal) untuk menjamin pelayanan tidak terhenti akibat ketiadaan koneksi (*offline-first*).
+2. Format struktur data pengiriman rekam medis harus mengikuti standar HL7 FHIR yang ditentukan oleh regulasi SATUSEHAT Kementerian Kesehatan.
+3. Penanda risiko hanya berfungsi sebagai instrumen pengingat atau deteksi dini, dan **tidak** mengambil alih kewenangan klinis tenaga kesehatan.
+4. Akses basis data dibatasi oleh fitur otorisasi per *role* pengguna demi menjaga kerahasiaan rekam medis.
 
 ## 2.5 Lingkungan Operasi Perangkat Lunak
-Spesifikasi *operating system* atau lingkungan yang dibutuhkan P/L untuk beroperasi. Bagian ini digunakan untuk memastikan pengguna memiliki spesifikasi yang cukup untuk menjalankan P/L. Misalnya mencakup komponen server, client, OS, DBMS, tetapi tidak menutupi kemungkinan komponen lain.
 
 | Komponen | Spesifikasi |
 | :--- | :--- |
-| *Server* | *[contoh: Node.js v20, dijalankan pada layanan cloud]* |
-| *Client* | *[contoh: Web Browser modern (Chrome, Firefox terbaru)]* |
-| *DBMS* | *[contoh: PostgreSQL 15]* |
-| *OS* | *[contoh: Cross-platform (Windows/Linux/MacOS) melalui browser]* |
-| *...* | *...* |
+| **Aplikasi / Client** | Aplikasi Desktop berbasis GUI (menggunakan JavaFX/Electron atau *framework desktop* sejenis). |
+| **DBMS** | Basis Data Relasional yang beroperasi secara lokal (misal: PostgreSQL / MySQL). |
+| **Sistem Operasi** | *Cross-platform* pada lingkungan desktop seperti Windows 10/11 atau distribusi Linux modern. |
+| **Lainnya** | Komponen utilitas penjadwalan *backup* otomatis dan komponen *worker* sinkronisasi HTTP/REST API terpisah. |
 
 ---
 
