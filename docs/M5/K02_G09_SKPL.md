@@ -58,6 +58,9 @@ Tabel 1.3. Definisi Istilah dan Singkatan
 | PTM | Penyakit Tidak Menular (seperti hipertensi, obesitas, diabetes). |
 | SATUSEHAT | Platform integrasi data kesehatan nasional milik Kemenkes RI. |
 | HL7 FHIR | *Health Level Seven Fast Healthcare Interoperability Resources*, standar pertukaran data kesehatan yang dipakai oleh SATUSEHAT. |
+| ICD-10 | *International Classification of Diseases, 10th Revision*, sistem kode diagnosis standar dari WHO. |
+| NIK | Nomor Induk Kependudukan, nomor identitas 16 digit pada KTP. |
+| ECB | *Entity-Control-Boundary*, kerangka pembagian kelas menjadi antarmuka (*boundary*), pengatur alur kerja (*control*), dan data tersimpan (*entity*). |
 
 ## 1.4 Aturan Penomoran
 
@@ -65,6 +68,7 @@ Tabel 1.4. Aturan Penomoran
 
 | Hal/Bagian | Penomoran | Keterangan |
 | :--- | :--- | :--- |
+| ID Kebutuhan | RXX | XX adalah dua digit angka berurutan, mengikuti tabel Pemetaan Kebutuhan dokumen *Requirement Gathering* |
 | Kebutuhan Fungsional | KFXX | XX adalah dua digit angka berurutan |
 | Kebutuhan Non-Fungsional | KNFXX | XX adalah dua digit angka berurutan |
 | Aktor | AXX | XX adalah dua digit angka berurutan |
@@ -96,13 +100,23 @@ SEHATI menangani pelayanan rawat jalan dari ujung ke ujung melalui beberapa taha
 2. **Skrining**: Perawat mengukur tanda vital, lalu sistem menandai risiko kondisi pasien otomatis.
 3. **Pemeriksaan**: Dokter mencatat anamnesis, diagnosis, tindakan, dan menyusun resep elektronik.
 4. **Farmasi**: Petugas menyiapkan resep lalu menyerahkan obat pada pasien dengan pemotongan stok secara otomatis.
+
 Di luar pelayanan, terdapat alur pendukung seperti penyusunan laporan, pengurusan stok, tindak lanjut daftar pantau pasien berisiko, serta sinkronisasi data rekam medis ke SATUSEHAT.
 
+Kedua alur tersebut dimodelkan pada dua *activity diagram* berikut, disalin dari Subbab 3.4 *Model Proses Bisnis* dokumen *Topic Brainstorming*. Gambar 1 memodelkan perjalanan satu pasien sejak tiba di loket hingga menerima obat, sedangkan Gambar 2 memodelkan kegiatan pendukung yang dijalankan di luar jam pelayanan.
+
 <p align="center">
-<img alt="Activity Diagram Pelayanan Rawat Jalan" src="../M1/assets/diagram/diagram-act-1.avif" width="70%">
+<img alt="Activity Diagram Alur Pelayanan Rawat Jalan" src="./assets/diagram/diagram-act-1.svg" width="90%">
 </p>
 <p align="center">
 <i>Gambar 1. Activity Diagram Alur Pelayanan Rawat Jalan SEHATI</i>
+</p>
+
+<p align="center">
+<img alt="Activity Diagram Alur Kegiatan Pendukung Berkala" src="./assets/diagram/diagram-act-2.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 2. Activity Diagram Alur Kegiatan Pendukung Berkala SEHATI</i>
 </p>
 
 ## 2.2 Deskripsi Umum Perangkat Lunak
@@ -232,7 +246,7 @@ Model ini memakai dua relasi antar-*use case* berikut.
 <img alt="Use Case Diagram SEHATI" src="./assets/diagram/diagram-uc.svg" width="80%">
 </p>
 <p align="center">
-<i>Gambar 2. Use Case Diagram SEHATI</i>
+<i>Gambar 3. Use Case Diagram SEHATI</i>
 </p>
 
 ## 4.4 Skenario Use Case
@@ -642,67 +656,734 @@ Skenario berikut menyalin Subbab 3.4 dokumen *Class Diagram* (sama dengan Subbab
 
 # BAB 5: Pemodelan Kelas
 
-## 5.1 Identifikasi Kelas
-Salin ulang seluruh kelas yang telah diidentifikasi dari BAB 4.1 dokumen *Class Diagram*.
+Bab ini menyalin BAB 4 dokumen *Class Diagram*. Struktur kelas berikut menurunkan skenario *use case* pada Subbab 4.4 memakai kerangka **Entity-Control-Boundary (ECB)** sesuai arahan asistensi 22 September 2026. Tiga stereotip itu membagi tanggung jawab sebagai berikut.
 
-| ID Kelas | Nama Kelas | Deskripsi Kelas | ID Use Case |
-| :--- | :--- | :--- | :--- |
-| *C01* | *Pelanggan* | *Menyimpan data akun pelanggan yang membuat pesanan.* | *UC01, UC05* |
-| *C02* | *Pesanan* | *Menyimpan data pesanan beserta status pembayarannya.* | *UC01, UC03, UC05* |
-| *C03* | *Keranjang* | *Menyimpan sementara item yang dipilih sebelum checkout.* | *UC01, UC02* |
-| *...* | *...* | *...* | *...* |
+| Stereotip | Peran | Pola penamaan |
+| :--- | :--- | :--- |
+| Boundary | Antarmuka sisi klien yang disentuh aktor, termasuk antarmuka ke sistem luar | `<Nama>Form`, `<Nama>Gateway` |
+| Control | Alur kerja dan aturan bisnis satu use case | `<Nama>Manager` |
+| Entity | Data yang tersimpan di basis data lokal | `<Nama>Entity` |
+
+Tiap diagram pada Subbab 5.2 memuat sedikitnya satu boundary, satu control, dan satu entity. Beberapa use case memakai lebih dari satu boundary ketika aktor berpindah layar, atau lebih dari satu control ketika satu use case menjalankan dua aturan yang berbeda sifatnya. Boundary tidak pernah menyentuh entity secara langsung; seluruh lalu lintasnya lewat control.
+
+Mengikuti arahan asistensi, diagram hanya memuat nama kelas dan relasinya. Atribut dan metode masuk ke tabel di bawah tiap diagram, dan kami membatasinya pada yang menopang skenario Subbab 4.4.
+
+## 5.1 Identifikasi Kelas
+
+Lima puluh lima kelas berikut merealisasikan dua belas *use case* pada Subbab 4.2: 16 boundary, 13 control, dan 26 entity. Satu kelas dapat melayani lebih dari satu use case. BAB 6 menelusuri tiap kelas kembali ke kebutuhan fungsional yang menuntutnya.
+
+Tabel 5.1. Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Deskripsi Kelas | ID Use Case |
+| :--- | :--- | :--- | :--- | :--- |
+| C01 | LoginForm | Boundary | Layar autentikasi tempat pengguna memasukkan nama pengguna dan kata sandi. | UC01 |
+| C02 | PasienForm | Boundary | Layar pencarian dan formulir data pasien di loket pendaftaran. | UC02 |
+| C03 | KunjunganForm | Boundary | Layar pembuatan kunjungan dan penerbitan tiket antrean poli. | UC03 |
+| C04 | AntreanSkriningForm | Boundary | Layar daftar antrean skrining beserta tombol pemanggilan pasien. | UC04 |
+| C05 | SkriningForm | Boundary | Formulir pengisian keluhan awal dan tanda vital pasien. | UC04 |
+| C06 | RekamMedisForm | Boundary | Layar ringkasan rekam medis dan grafik tren tanda vital pasien. | UC05 |
+| C07 | PemeriksaanForm | Boundary | Formulir anamnesis, diagnosis ICD-10, tindakan, dan jadwal kontrol. | UC05 |
+| C08 | ResepForm | Boundary | Formulir peresepan elektronik beserta indikator stok tiap obat. | UC06 |
+| C09 | AntreanResepForm | Boundary | Layar antrean resep apotek terurut menurut waktu masuk. | UC07 |
+| C10 | PenyerahanObatForm | Boundary | Layar rincian resep dan konfirmasi penyerahan obat kepada pasien. | UC07 |
+| C11 | PersediaanForm | Boundary | Layar penerimaan obat masuk dan dasbor peringatan persediaan apotek. | UC08 |
+| C12 | DaftarPantauForm | Boundary | Layar daftar pantau pasien berisiko beserta penyaring dan pencatatan tindak lanjut. | UC09 |
+| C13 | LaporanForm | Boundary | Layar pemilihan periode dan pratinjau rekapitulasi laporan. | UC10 |
+| C14 | SinkronisasiForm | Boundary | Layar status antrean bundel beserta tombol sinkronisasi dan ekspor. | UC11 |
+| C15 | SATUSEHATGateway | Boundary | Antarmuka sistem ke layanan SATUSEHAT untuk mengirim bundel HL7 FHIR. | UC11 |
+| C16 | KonfigurasiForm | Boundary | Layar manajemen akun, data master, dan pemantauan pencadangan. | UC12 |
+| C17 | AutentikasiManager | Control | Memeriksa kredensial, membuka sesi, dan menerapkan batas akses menurut peran akun. | UC01 |
+| C18 | PasienManager | Control | Mengatur pencarian, pendaftaran, dan pemutakhiran data pasien. | UC02 |
+| C19 | KunjunganManager | Control | Membuka kunjungan, menerbitkan nomor antrean, dan menjaga penomoran tetap unik. | UC03 |
+| C20 | SkriningManager | Control | Memanggil pasien dari antrean dan menyimpan hasil skrining yang lolos validasi rentang. | UC04 |
+| C21 | RisikoManager | Control | Membandingkan tanda vital terhadap ambang dan riwayat, lalu menerbitkan penanda risiko. | UC04, UC09 |
+| C22 | PemeriksaanManager | Control | Menyusun ringkasan rekam medis, menyimpan diagnosis ICD-10, dan menjadwalkan kontrol. | UC05 |
+| C23 | ResepManager | Control | Menyusun resep, memvalidasi stok, dan meneruskan resep ke antrean apotek. | UC06 |
+| C24 | ApotekManager | Control | Melayani antrean resep, memotong stok, menutup kunjungan, dan menyiapkan bundel FHIR. | UC07 |
+| C25 | PersediaanManager | Control | Mencatat obat masuk dan menerbitkan peringatan stok menipis maupun bets mendekati kedaluwarsa. | UC08 |
+| C26 | PantauManager | Control | Menyaring daftar pantau dan menyimpan hasil tindak lanjut pasien. | UC09 |
+| C27 | LaporanManager | Control | Menghitung rekapitulasi kunjungan dan diagnosis, lalu mengekspor berkas laporan. | UC10 |
+| C28 | SinkronisasiManager | Control | Mengelola antrean bundel HL7 FHIR, pengiriman daring, dan ekspor luring. | UC11 |
+| C29 | KonfigurasiManager | Control | Mengurus akun pengguna, data master, dan penjadwalan pencadangan basis data. | UC12 |
+| C30 | PenggunaEntity | Entity | Data akun staf puskesmas beserta peran dan status aktifnya. | UC01, UC12 |
+| C31 | SesiEntity | Entity | Data sesi kerja pengguna sejak berhasil masuk sampai keluar. | UC01 |
+| C32 | AuditEntity | Entity | Catatan perubahan data beserta pelaku dan waktunya. | UC01, UC02, UC03, UC05, UC08, UC12 |
+| C33 | PasienEntity | Entity | Data diri pasien beserta nomor rekam medisnya. | UC02, UC03, UC09 |
+| C34 | RekamMedisEntity | Entity | Riwayat klinis pasien berisi diagnosis lampau, riwayat obat, dan penanda risiko aktif. | UC02, UC05, UC09 |
+| C35 | KunjunganEntity | Entity | Satu kedatangan pasien ke poli beserta nomor antrean dan statusnya. | UC03, UC04, UC05, UC07, UC10, UC11 |
+| C36 | PoliEntity | Entity | Data master poli rawat jalan beserta urutan antrean hariannya. | UC03, UC10, UC12 |
+| C37 | AntreanEntity | Entity | Daftar urut layanan pada satu titik pelayanan (skrining, poli, atau apotek). | UC03, UC04, UC06, UC07 |
+| C38 | SkriningEntity | Entity | Hasil skrining satu kunjungan beserta keluhan awal pasien. | UC04 |
+| C39 | TandaVitalEntity | Entity | Nilai pengukuran fisik pasien pada satu skrining. | UC04, UC05 |
+| C40 | AmbangRisikoEntity | Entity | Data master ambang klinis penanda risiko penyakit tidak menular. | UC04, UC12 |
+| C41 | PenandaRisikoEntity | Entity | Tanda risiko yang melekat pada kunjungan beserta jenisnya. | UC04, UC09 |
+| C42 | PemeriksaanEntity | Entity | Anamnesis, tindakan, dan hasil pemeriksaan dokter pada satu kunjungan. | UC05, UC06 |
+| C43 | DiagnosisEntity | Entity | Diagnosis kunjungan dalam bentuk kode standar ICD-10. | UC05, UC10 |
+| C44 | KodeICD10Entity | Entity | Data master kode diagnosis ICD-10. | UC05 |
+| C45 | JadwalKontrolEntity | Entity | Rencana kunjungan ulang pasien. | UC05, UC09 |
+| C46 | ResepEntity | Entity | Resep elektronik satu kunjungan beserta status pelayanannya di apotek. | UC06, UC07 |
+| C47 | ItemResepEntity | Entity | Rincian satu obat pada sebuah resep. | UC06, UC07 |
+| C48 | ObatEntity | Entity | Data master obat beserta saldo stok apotek dan ambang minimumnya. | UC06, UC07, UC08, UC12 |
+| C49 | BetsObatEntity | Entity | Satu bets sediaan obat beserta jumlah dan tanggal kedaluwarsanya. | UC07, UC08 |
+| C50 | PenerimaanObatEntity | Entity | Catatan obat masuk dari gudang farmasi atau distributor. | UC08 |
+| C51 | DaftarPantauEntity | Entity | Entri pasien berisiko atau terjadwal kontrol beserta status tindak lanjutnya. | UC04, UC09 |
+| C52 | TindakLanjutEntity | Entity | Catatan satu upaya menghubungi pasien pada daftar pantau. | UC09 |
+| C53 | LaporanEntity | Entity | Hasil rekapitulasi periodik beserta rentang tanggal dan format berkasnya. | UC10 |
+| C54 | BundelFHIREntity | Entity | Bundel HL7 FHIR satu kunjungan beserta status pengirimannya. | UC07, UC11 |
+| C55 | PencadanganEntity | Entity | Catatan pencadangan basis data lokal terjadwal. | UC12 |
 
 ## 5.2 Diagram Kelas per Use Case
-Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diagram*, lengkap dengan tabel atribut dan metode/operasinya.
 
 ### 5.2.1 Use Case UC01
 
-**Nama Use Case:** *Memesan Produk*
+**Nama Use Case:** *Masuk ke Aplikasi*
 
-<p align="center">
-<img alt="Contoh Class Diagram" src="./assets/diagram/contoh-class-diagram.webp" width="70%">
-</p>
-<p align="center">
-<i>Gambar 3. Contoh Diagram Kelas Use Case UC01</i>
-</p>
+Komposisi ECB: 1 boundary, 1 control, 3 entity.
 
-| ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Deskripsi Kelas |
 | :--- | :--- | :--- | :--- |
-| *C02* | *Pesanan* | *idPesanan, total, status* | *buatPesanan(), hitungTotal()* |
-| *C03* | *Keranjang* | *daftarItem* | *tambahItem(), checkout()* |
-| *...* | *...* | *...* | *...* |
+| C01 | LoginForm | Boundary | Layar autentikasi tempat pengguna memasukkan nama pengguna dan kata sandi. |
+| C17 | AutentikasiManager | Control | Memeriksa kredensial, membuka sesi, dan menerapkan batas akses menurut peran akun. |
+| C30 | PenggunaEntity | Entity | Data akun staf puskesmas beserta peran dan status aktifnya. |
+| C31 | SesiEntity | Entity | Data sesi kerja pengguna sejak berhasil masuk sampai keluar. |
+| C32 | AuditEntity | Entity | Catatan perubahan data beserta pelaku dan waktunya. |
 
-> Lanjutkan pola **5.2.x** untuk setiap use case pada 4.2.
+#### Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC01" src="./assets/diagram/diagram-kelas-uc01.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 4. Diagram Kelas Use Case UC01 (Masuk ke Aplikasi).</i>
+</p>
+
+`LoginForm` meneruskan kredensial ke `AutentikasiManager`, dan manager itu membaca `PenggunaEntity` lalu menulis `SesiEntity` dan `AuditEntity`. `PenggunaEntity` memegang `SesiEntity` dalam relasi **komposisi** karena sesi ikut hilang bersama akun pemiliknya.
+
+#### Atribut dan Metode
+
+| ID Kelas | Nama Kelas | Stereotip | Atribut | Metode/Operasi |
+| :--- | :--- | :--- | :--- | :--- |
+| C01 | LoginForm | Boundary | namaPengguna, kataSandi | tampilkan(), kirimKredensial(), tampilkanPesanGagal() |
+| C17 | AutentikasiManager | Control | percobaanGagal | autentikasi(), bukaSesi(), periksaHakAkses() |
+| C30 | PenggunaEntity | Entity | idPengguna, namaPengguna, kataSandiHash, peran, status | simpan(), nonaktifkan() |
+| C31 | SesiEntity | Entity | idSesi, waktuMulai, statusAktif | buka(), tutup() |
+| C32 | AuditEntity | Entity | idAudit, idPengguna, waktu, deskripsi | simpan() |
+
+### 5.2.2 Use Case UC02
+
+**Nama Use Case:** *Mengelola Data Pasien*
+
+Komposisi ECB: 1 boundary, 1 control, 3 entity.
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Deskripsi Kelas |
+| :--- | :--- | :--- | :--- |
+| C02 | PasienForm | Boundary | Layar pencarian dan formulir data pasien di loket pendaftaran. |
+| C18 | PasienManager | Control | Mengatur pencarian, pendaftaran, dan pemutakhiran data pasien. |
+| C32 | AuditEntity | Entity | Catatan perubahan data beserta pelaku dan waktunya. |
+| C33 | PasienEntity | Entity | Data diri pasien beserta nomor rekam medisnya. |
+| C34 | RekamMedisEntity | Entity | Riwayat klinis pasien berisi diagnosis lampau, riwayat obat, dan penanda risiko aktif. |
+
+#### Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC02" src="./assets/diagram/diagram-kelas-uc02.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 5. Diagram Kelas Use Case UC02 (Mengelola Data Pasien).</i>
+</p>
+
+`PasienManager` memegang validasi NIK dan penerbitan nomor rekam medis, sehingga `PasienForm` tidak menyentuh basis data secara langsung. `PasienEntity` memegang `RekamMedisEntity` lewat **komposisi** satu-ke-satu.
+
+#### Atribut dan Metode
+
+| ID Kelas | Nama Kelas | Stereotip | Atribut | Metode/Operasi |
+| :--- | :--- | :--- | :--- | :--- |
+| C02 | PasienForm | Boundary | kataKunci, dataFormulir | tampilkanHasilCari(), kirimDataPasien(), tampilkanPesanValidasi() |
+| C18 | PasienManager | Control | - | cariPasien(), daftarkanPasien(), perbaruiPasien(), validasiNIK() |
+| C32 | AuditEntity | Entity | idAudit, idPengguna, waktu, deskripsi | simpan() |
+| C33 | PasienEntity | Entity | idPasien, nik, nomorRekamMedis, nama, tanggalLahir | simpan(), perbarui() |
+| C34 | RekamMedisEntity | Entity | idRekamMedis, daftarDiagnosis, riwayatObat | tambahEntri() |
+
+### 5.2.3 Use Case UC03
+
+**Nama Use Case:** *Mengelola Kunjungan Pasien*
+
+Komposisi ECB: 1 boundary, 1 control, 5 entity.
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Deskripsi Kelas |
+| :--- | :--- | :--- | :--- |
+| C03 | KunjunganForm | Boundary | Layar pembuatan kunjungan dan penerbitan tiket antrean poli. |
+| C19 | KunjunganManager | Control | Membuka kunjungan, menerbitkan nomor antrean, dan menjaga penomoran tetap unik. |
+| C32 | AuditEntity | Entity | Catatan perubahan data beserta pelaku dan waktunya. |
+| C33 | PasienEntity | Entity | Data diri pasien beserta nomor rekam medisnya. |
+| C35 | KunjunganEntity | Entity | Satu kedatangan pasien ke poli beserta nomor antrean dan statusnya. |
+| C36 | PoliEntity | Entity | Data master poli rawat jalan beserta urutan antrean hariannya. |
+| C37 | AntreanEntity | Entity | Daftar urut layanan pada satu titik pelayanan (skrining, poli, atau apotek). |
+
+#### Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC03" src="./assets/diagram/diagram-kelas-uc03.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 6. Diagram Kelas Use Case UC03 (Mengelola Kunjungan Pasien).</i>
+</p>
+
+`KunjunganManager` menerbitkan nomor antrean lewat `PoliEntity` dan menolak kunjungan ganda, dua aturan yang tidak boleh tersebar ke layar. `AntreanEntity` menghimpun kunjungan lewat **agregasi** karena kunjungan tetap ada setelah keluar dari antrean.
+
+#### Atribut dan Metode
+
+| ID Kelas | Nama Kelas | Stereotip | Atribut | Metode/Operasi |
+| :--- | :--- | :--- | :--- | :--- |
+| C03 | KunjunganForm | Boundary | poliTerpilih | tampilkanPilihanPoli(), kirimPermintaanKunjungan(), tampilkanTiketAntrean() |
+| C19 | KunjunganManager | Control | - | bukaKunjungan(), terbitkanNomorAntrean(), cegahKunjunganGanda() |
+| C32 | AuditEntity | Entity | idAudit, idPengguna, waktu, deskripsi | simpan() |
+| C33 | PasienEntity | Entity | idPasien, nik, nomorRekamMedis, nama, tanggalLahir | simpan(), perbarui() |
+| C35 | KunjunganEntity | Entity | idKunjungan, tanggal, nomorAntrean, status | simpan(), perbaruiStatus() |
+| C36 | PoliEntity | Entity | idPoli, namaPoli, urutanTerakhir | ambilNomorBerikutnya() |
+| C37 | AntreanEntity | Entity | idAntrean, jenis, daftarEntri | ambilTerdepan(), pindahkanKeBelakang() |
+
+### 5.2.4 Use Case UC04
+
+**Nama Use Case:** *Melakukan Skrining Awal*
+
+Komposisi ECB: 2 boundary, 2 control, 7 entity.
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Deskripsi Kelas |
+| :--- | :--- | :--- | :--- |
+| C04 | AntreanSkriningForm | Boundary | Layar daftar antrean skrining beserta tombol pemanggilan pasien. |
+| C05 | SkriningForm | Boundary | Formulir pengisian keluhan awal dan tanda vital pasien. |
+| C20 | SkriningManager | Control | Memanggil pasien dari antrean dan menyimpan hasil skrining yang lolos validasi rentang. |
+| C21 | RisikoManager | Control | Membandingkan tanda vital terhadap ambang dan riwayat, lalu menerbitkan penanda risiko. |
+| C35 | KunjunganEntity | Entity | Satu kedatangan pasien ke poli beserta nomor antrean dan statusnya. |
+| C37 | AntreanEntity | Entity | Daftar urut layanan pada satu titik pelayanan (skrining, poli, atau apotek). |
+| C38 | SkriningEntity | Entity | Hasil skrining satu kunjungan beserta keluhan awal pasien. |
+| C39 | TandaVitalEntity | Entity | Nilai pengukuran fisik pasien pada satu skrining. |
+| C40 | AmbangRisikoEntity | Entity | Data master ambang klinis penanda risiko penyakit tidak menular. |
+| C41 | PenandaRisikoEntity | Entity | Tanda risiko yang melekat pada kunjungan beserta jenisnya. |
+| C51 | DaftarPantauEntity | Entity | Entri pasien berisiko atau terjadwal kontrol beserta status tindak lanjutnya. |
+
+#### Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC04" src="./assets/diagram/diagram-kelas-uc04.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 7. Diagram Kelas Use Case UC04 (Melakukan Skrining Awal).</i>
+</p>
+
+Dua boundary melayani dua layar berbeda: `AntreanSkriningForm` untuk pemanggilan pasien dan `SkriningForm` untuk pengisian tanda vital. Perbandingan nilai terhadap ambang dan riwayat kami pisahkan ke `RisikoManager` supaya `SkriningManager` cukup mengurus validasi rentang dan penyimpanan.
+
+#### Atribut dan Metode
+
+| ID Kelas | Nama Kelas | Stereotip | Atribut | Metode/Operasi |
+| :--- | :--- | :--- | :--- | :--- |
+| C04 | AntreanSkriningForm | Boundary | daftarTampil | tampilkanAntrean(), kirimPanggilan(), kirimLewati() |
+| C05 | SkriningForm | Boundary | isianKeluhan, isianUkuran | tampilkanFormulir(), kirimHasilSkrining(), tampilkanPeringatanRentang() |
+| C20 | SkriningManager | Control | - | panggilPasien(), validasiRentang(), simpanSkrining() |
+| C21 | RisikoManager | Control | - | evaluasiRisiko(), terbitkanPenanda(), masukkanKeDaftarPantau() |
+| C35 | KunjunganEntity | Entity | idKunjungan, tanggal, nomorAntrean, status | simpan(), perbaruiStatus() |
+| C37 | AntreanEntity | Entity | idAntrean, jenis, daftarEntri | ambilTerdepan(), pindahkanKeBelakang() |
+| C38 | SkriningEntity | Entity | idSkrining, keluhanAwal, waktu | simpan() |
+| C39 | TandaVitalEntity | Entity | sistolik, diastolik, beratBadan, tinggiBadan, gulaDarah | hitungIMT() |
+| C40 | AmbangRisikoEntity | Entity | idAmbang, jenisRisiko, nilaiBatas | simpan() |
+| C41 | PenandaRisikoEntity | Entity | idPenanda, jenisRisiko, tanggal, status | simpan(), cabut() |
+| C51 | DaftarPantauEntity | Entity | idEntri, jenisRisiko, statusTindakLanjut | simpan(), perbaruiStatus() |
+
+### 5.2.5 Use Case UC05
+
+**Nama Use Case:** *Melakukan Pemeriksaan Medis*
+
+Komposisi ECB: 2 boundary, 1 control, 8 entity.
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Deskripsi Kelas |
+| :--- | :--- | :--- | :--- |
+| C06 | RekamMedisForm | Boundary | Layar ringkasan rekam medis dan grafik tren tanda vital pasien. |
+| C07 | PemeriksaanForm | Boundary | Formulir anamnesis, diagnosis ICD-10, tindakan, dan jadwal kontrol. |
+| C22 | PemeriksaanManager | Control | Menyusun ringkasan rekam medis, menyimpan diagnosis ICD-10, dan menjadwalkan kontrol. |
+| C32 | AuditEntity | Entity | Catatan perubahan data beserta pelaku dan waktunya. |
+| C34 | RekamMedisEntity | Entity | Riwayat klinis pasien berisi diagnosis lampau, riwayat obat, dan penanda risiko aktif. |
+| C35 | KunjunganEntity | Entity | Satu kedatangan pasien ke poli beserta nomor antrean dan statusnya. |
+| C39 | TandaVitalEntity | Entity | Nilai pengukuran fisik pasien pada satu skrining. |
+| C42 | PemeriksaanEntity | Entity | Anamnesis, tindakan, dan hasil pemeriksaan dokter pada satu kunjungan. |
+| C43 | DiagnosisEntity | Entity | Diagnosis kunjungan dalam bentuk kode standar ICD-10. |
+| C44 | KodeICD10Entity | Entity | Data master kode diagnosis ICD-10. |
+| C45 | JadwalKontrolEntity | Entity | Rencana kunjungan ulang pasien. |
+
+#### Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC05" src="./assets/diagram/diagram-kelas-uc05.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 8. Diagram Kelas Use Case UC05 (Melakukan Pemeriksaan Medis).</i>
+</p>
+
+`RekamMedisForm` menampilkan ringkasan dan grafik tren, sedangkan `PemeriksaanForm` menerima anamnesis dan diagnosis. `PemeriksaanManager` menyusun seri tren dari `TandaVitalEntity` kunjungan lampau, sehingga boundary cukup menggambar hasilnya.
+
+#### Atribut dan Metode
+
+| ID Kelas | Nama Kelas | Stereotip | Atribut | Metode/Operasi |
+| :--- | :--- | :--- | :--- | :--- |
+| C06 | RekamMedisForm | Boundary | idPasienTampil, seriTren | tampilkanRingkasan(), tampilkanGrafikTren() |
+| C07 | PemeriksaanForm | Boundary | isianAnamnesis, kataKunciDiagnosis | tampilkanFormulir(), kirimHasilPemeriksaan(), tampilkanSaranKode() |
+| C22 | PemeriksaanManager | Control | - | susunRingkasan(), susunTren(), simpanPemeriksaan(), jadwalkanKontrol() |
+| C32 | AuditEntity | Entity | idAudit, idPengguna, waktu, deskripsi | simpan() |
+| C34 | RekamMedisEntity | Entity | idRekamMedis, daftarDiagnosis, riwayatObat | tambahEntri() |
+| C35 | KunjunganEntity | Entity | idKunjungan, tanggal, nomorAntrean, status | simpan(), perbaruiStatus() |
+| C39 | TandaVitalEntity | Entity | sistolik, diastolik, beratBadan, tinggiBadan, gulaDarah | hitungIMT() |
+| C42 | PemeriksaanEntity | Entity | idPemeriksaan, anamnesis, tindakan, terkunci | simpan(), kunci() |
+| C43 | DiagnosisEntity | Entity | idDiagnosis, kodeICD10, deskripsi | simpan() |
+| C44 | KodeICD10Entity | Entity | kode, deskripsi, bab | cari() |
+| C45 | JadwalKontrolEntity | Entity | idJadwal, tanggalRencana, status | simpan() |
+
+### 5.2.6 Use Case UC06
+
+**Nama Use Case:** *Menyusun Resep Elektronik*
+
+Komposisi ECB: 1 boundary, 1 control, 5 entity.
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Deskripsi Kelas |
+| :--- | :--- | :--- | :--- |
+| C08 | ResepForm | Boundary | Formulir peresepan elektronik beserta indikator stok tiap obat. |
+| C23 | ResepManager | Control | Menyusun resep, memvalidasi stok, dan meneruskan resep ke antrean apotek. |
+| C37 | AntreanEntity | Entity | Daftar urut layanan pada satu titik pelayanan (skrining, poli, atau apotek). |
+| C42 | PemeriksaanEntity | Entity | Anamnesis, tindakan, dan hasil pemeriksaan dokter pada satu kunjungan. |
+| C46 | ResepEntity | Entity | Resep elektronik satu kunjungan beserta status pelayanannya di apotek. |
+| C47 | ItemResepEntity | Entity | Rincian satu obat pada sebuah resep. |
+| C48 | ObatEntity | Entity | Data master obat beserta saldo stok apotek dan ambang minimumnya. |
+
+#### Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC06" src="./assets/diagram/diagram-kelas-uc06.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 9. Diagram Kelas Use Case UC06 (Menyusun Resep Elektronik).</i>
+</p>
+
+`ResepManager` memeriksa kecukupan stok sebelum resep masuk antrean apotek, jadi `ResepForm` hanya menampilkan indikator hijau atau merah yang dikirim manager. `ResepEntity` memegang `ItemResepEntity` lewat **komposisi** karena rincian item tidak bermakna di luar resepnya.
+
+#### Atribut dan Metode
+
+| ID Kelas | Nama Kelas | Stereotip | Atribut | Metode/Operasi |
+| :--- | :--- | :--- | :--- | :--- |
+| C08 | ResepForm | Boundary | isianItem, indikatorStok | tampilkanFormulir(), kirimResep(), tampilkanPeringatanStok() |
+| C23 | ResepManager | Control | - | tambahItem(), validasiStok(), kirimKeApotek() |
+| C37 | AntreanEntity | Entity | idAntrean, jenis, daftarEntri | ambilTerdepan(), pindahkanKeBelakang() |
+| C42 | PemeriksaanEntity | Entity | idPemeriksaan, anamnesis, tindakan, terkunci | simpan(), kunci() |
+| C46 | ResepEntity | Entity | idResep, waktuMasuk, status | simpan(), perbaruiStatus() |
+| C47 | ItemResepEntity | Entity | idItem, dosis, jumlah, aturanPakai | simpan() |
+| C48 | ObatEntity | Entity | idObat, namaObat, sediaan, stok, ambangMinimum | kurangiStok(), tambahStok() |
+
+### 5.2.7 Use Case UC07
+
+**Nama Use Case:** *Melayani Resep Obat*
+
+Komposisi ECB: 2 boundary, 1 control, 7 entity.
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Deskripsi Kelas |
+| :--- | :--- | :--- | :--- |
+| C09 | AntreanResepForm | Boundary | Layar antrean resep apotek terurut menurut waktu masuk. |
+| C10 | PenyerahanObatForm | Boundary | Layar rincian resep dan konfirmasi penyerahan obat kepada pasien. |
+| C24 | ApotekManager | Control | Melayani antrean resep, memotong stok, menutup kunjungan, dan menyiapkan bundel FHIR. |
+| C35 | KunjunganEntity | Entity | Satu kedatangan pasien ke poli beserta nomor antrean dan statusnya. |
+| C37 | AntreanEntity | Entity | Daftar urut layanan pada satu titik pelayanan (skrining, poli, atau apotek). |
+| C46 | ResepEntity | Entity | Resep elektronik satu kunjungan beserta status pelayanannya di apotek. |
+| C47 | ItemResepEntity | Entity | Rincian satu obat pada sebuah resep. |
+| C48 | ObatEntity | Entity | Data master obat beserta saldo stok apotek dan ambang minimumnya. |
+| C49 | BetsObatEntity | Entity | Satu bets sediaan obat beserta jumlah dan tanggal kedaluwarsanya. |
+| C54 | BundelFHIREntity | Entity | Bundel HL7 FHIR satu kunjungan beserta status pengirimannya. |
+
+#### Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC07" src="./assets/diagram/diagram-kelas-uc07.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 10. Diagram Kelas Use Case UC07 (Melayani Resep Obat).</i>
+</p>
+
+Satu konfirmasi penyerahan di `PenyerahanObatForm` memicu empat langkah di `ApotekManager`: potong stok, tandai resep selesai, tutup kunjungan, lalu susun bundel. Menaruhnya di satu control membuat keempatnya berjalan atomik saat dua petugas menekan tombol bersamaan.
+
+#### Atribut dan Metode
+
+| ID Kelas | Nama Kelas | Stereotip | Atribut | Metode/Operasi |
+| :--- | :--- | :--- | :--- | :--- |
+| C09 | AntreanResepForm | Boundary | daftarTampil | tampilkanAntrean(), pilihResep() |
+| C10 | PenyerahanObatForm | Boundary | rincianTampil | tampilkanRincian(), kirimKonfirmasi(), kirimPengembalian() |
+| C24 | ApotekManager | Control | - | layaniResep(), potongStok(), tutupKunjungan(), susunBundel() |
+| C35 | KunjunganEntity | Entity | idKunjungan, tanggal, nomorAntrean, status | simpan(), perbaruiStatus() |
+| C37 | AntreanEntity | Entity | idAntrean, jenis, daftarEntri | ambilTerdepan(), pindahkanKeBelakang() |
+| C46 | ResepEntity | Entity | idResep, waktuMasuk, status | simpan(), perbaruiStatus() |
+| C47 | ItemResepEntity | Entity | idItem, dosis, jumlah, aturanPakai | simpan() |
+| C48 | ObatEntity | Entity | idObat, namaObat, sediaan, stok, ambangMinimum | kurangiStok(), tambahStok() |
+| C49 | BetsObatEntity | Entity | nomorBets, jumlah, tanggalKedaluwarsa | kurangi() |
+| C54 | BundelFHIREntity | Entity | idBundel, isiBundel, status | simpan(), tandaiTerkirim() |
+
+### 5.2.8 Use Case UC08
+
+**Nama Use Case:** *Mengelola Persediaan Obat*
+
+Komposisi ECB: 1 boundary, 1 control, 4 entity.
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Deskripsi Kelas |
+| :--- | :--- | :--- | :--- |
+| C11 | PersediaanForm | Boundary | Layar penerimaan obat masuk dan dasbor peringatan persediaan apotek. |
+| C25 | PersediaanManager | Control | Mencatat obat masuk dan menerbitkan peringatan stok menipis maupun bets mendekati kedaluwarsa. |
+| C32 | AuditEntity | Entity | Catatan perubahan data beserta pelaku dan waktunya. |
+| C48 | ObatEntity | Entity | Data master obat beserta saldo stok apotek dan ambang minimumnya. |
+| C49 | BetsObatEntity | Entity | Satu bets sediaan obat beserta jumlah dan tanggal kedaluwarsanya. |
+| C50 | PenerimaanObatEntity | Entity | Catatan obat masuk dari gudang farmasi atau distributor. |
+
+#### Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC08" src="./assets/diagram/diagram-kelas-uc08.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 11. Diagram Kelas Use Case UC08 (Mengelola Persediaan Obat).</i>
+</p>
+
+Peringatan stok menipis dan bets mendekati kedaluwarsa terbit dari `PersediaanManager`, bukan dari entity, karena ambangnya menyangkut kebijakan apotek. `PersediaanForm` menampilkan daftar peringatan yang sudah jadi.
+
+#### Atribut dan Metode
+
+| ID Kelas | Nama Kelas | Stereotip | Atribut | Metode/Operasi |
+| :--- | :--- | :--- | :--- | :--- |
+| C11 | PersediaanForm | Boundary | isianPenerimaan, daftarPeringatan | tampilkanFormulir(), kirimPenerimaan(), tampilkanPeringatan() |
+| C25 | PersediaanManager | Control | - | catatPenerimaan(), tambahStok(), terbitkanPeringatan() |
+| C32 | AuditEntity | Entity | idAudit, idPengguna, waktu, deskripsi | simpan() |
+| C48 | ObatEntity | Entity | idObat, namaObat, sediaan, stok, ambangMinimum | kurangiStok(), tambahStok() |
+| C49 | BetsObatEntity | Entity | nomorBets, jumlah, tanggalKedaluwarsa | kurangi() |
+| C50 | PenerimaanObatEntity | Entity | idPenerimaan, nomorFaktur, tanggalTerima | simpan() |
+
+### 5.2.9 Use Case UC09
+
+**Nama Use Case:** *Mengelola Daftar Pantau Pasien*
+
+Komposisi ECB: 1 boundary, 2 control, 6 entity.
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Deskripsi Kelas |
+| :--- | :--- | :--- | :--- |
+| C12 | DaftarPantauForm | Boundary | Layar daftar pantau pasien berisiko beserta penyaring dan pencatatan tindak lanjut. |
+| C21 | RisikoManager | Control | Membandingkan tanda vital terhadap ambang dan riwayat, lalu menerbitkan penanda risiko. |
+| C26 | PantauManager | Control | Menyaring daftar pantau dan menyimpan hasil tindak lanjut pasien. |
+| C33 | PasienEntity | Entity | Data diri pasien beserta nomor rekam medisnya. |
+| C34 | RekamMedisEntity | Entity | Riwayat klinis pasien berisi diagnosis lampau, riwayat obat, dan penanda risiko aktif. |
+| C41 | PenandaRisikoEntity | Entity | Tanda risiko yang melekat pada kunjungan beserta jenisnya. |
+| C45 | JadwalKontrolEntity | Entity | Rencana kunjungan ulang pasien. |
+| C51 | DaftarPantauEntity | Entity | Entri pasien berisiko atau terjadwal kontrol beserta status tindak lanjutnya. |
+| C52 | TindakLanjutEntity | Entity | Catatan satu upaya menghubungi pasien pada daftar pantau. |
+
+#### Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC09" src="./assets/diagram/diagram-kelas-uc09.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 12. Diagram Kelas Use Case UC09 (Mengelola Daftar Pantau Pasien).</i>
+</p>
+
+`RisikoManager` muncul lagi di sini karena pasien masuk daftar pantau lewat dua jalan: penanda risiko dari skrining dan jadwal kontrol dari dokter. `PantauManager` mengurus penyaringan dan pencatatan tindak lanjutnya.
+
+#### Atribut dan Metode
+
+| ID Kelas | Nama Kelas | Stereotip | Atribut | Metode/Operasi |
+| :--- | :--- | :--- | :--- | :--- |
+| C12 | DaftarPantauForm | Boundary | penyaring, daftarTampil | tampilkanDaftar(), kirimPenyaring(), kirimTindakLanjut() |
+| C21 | RisikoManager | Control | - | evaluasiRisiko(), terbitkanPenanda(), masukkanKeDaftarPantau() |
+| C26 | PantauManager | Control | - | saringDaftar(), catatTindakLanjut(), perbaruiStatus() |
+| C33 | PasienEntity | Entity | idPasien, nik, nomorRekamMedis, nama, tanggalLahir | simpan(), perbarui() |
+| C34 | RekamMedisEntity | Entity | idRekamMedis, daftarDiagnosis, riwayatObat | tambahEntri() |
+| C41 | PenandaRisikoEntity | Entity | idPenanda, jenisRisiko, tanggal, status | simpan(), cabut() |
+| C45 | JadwalKontrolEntity | Entity | idJadwal, tanggalRencana, status | simpan() |
+| C51 | DaftarPantauEntity | Entity | idEntri, jenisRisiko, statusTindakLanjut | simpan(), perbaruiStatus() |
+| C52 | TindakLanjutEntity | Entity | idTindakLanjut, jenisKontak, hasilUpaya, statusKedatangan | simpan() |
+
+### 5.2.10 Use Case UC10
+
+**Nama Use Case:** *Menyusun Laporan Periodik*
+
+Komposisi ECB: 1 boundary, 1 control, 4 entity.
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Deskripsi Kelas |
+| :--- | :--- | :--- | :--- |
+| C13 | LaporanForm | Boundary | Layar pemilihan periode dan pratinjau rekapitulasi laporan. |
+| C27 | LaporanManager | Control | Menghitung rekapitulasi kunjungan dan diagnosis, lalu mengekspor berkas laporan. |
+| C35 | KunjunganEntity | Entity | Satu kedatangan pasien ke poli beserta nomor antrean dan statusnya. |
+| C36 | PoliEntity | Entity | Data master poli rawat jalan beserta urutan antrean hariannya. |
+| C43 | DiagnosisEntity | Entity | Diagnosis kunjungan dalam bentuk kode standar ICD-10. |
+| C53 | LaporanEntity | Entity | Hasil rekapitulasi periodik beserta rentang tanggal dan format berkasnya. |
+
+#### Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC10" src="./assets/diagram/diagram-kelas-uc10.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 13. Diagram Kelas Use Case UC10 (Menyusun Laporan Periodik).</i>
+</p>
+
+`LaporanManager` membaca kunjungan dan diagnosis pada rentang tanggal terpilih, lalu menyimpan hasilnya sebagai `LaporanEntity` supaya rekapitulasi yang sama tidak dihitung ulang saat diekspor.
+
+#### Atribut dan Metode
+
+| ID Kelas | Nama Kelas | Stereotip | Atribut | Metode/Operasi |
+| :--- | :--- | :--- | :--- | :--- |
+| C13 | LaporanForm | Boundary | tanggalMulai, tanggalAkhir | tampilkanRekapitulasi(), kirimPermintaanEkspor() |
+| C27 | LaporanManager | Control | - | hitungRekapitulasi(), ekspor() |
+| C35 | KunjunganEntity | Entity | idKunjungan, tanggal, nomorAntrean, status | simpan(), perbaruiStatus() |
+| C36 | PoliEntity | Entity | idPoli, namaPoli, urutanTerakhir | ambilNomorBerikutnya() |
+| C43 | DiagnosisEntity | Entity | idDiagnosis, kodeICD10, deskripsi | simpan() |
+| C53 | LaporanEntity | Entity | idLaporan, tanggalMulai, tanggalAkhir, format | simpan() |
+
+### 5.2.11 Use Case UC11
+
+**Nama Use Case:** *Melakukan Sinkronisasi SATUSEHAT*
+
+Komposisi ECB: 2 boundary, 1 control, 2 entity.
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Deskripsi Kelas |
+| :--- | :--- | :--- | :--- |
+| C14 | SinkronisasiForm | Boundary | Layar status antrean bundel beserta tombol sinkronisasi dan ekspor. |
+| C15 | SATUSEHATGateway | Boundary | Antarmuka sistem ke layanan SATUSEHAT untuk mengirim bundel HL7 FHIR. |
+| C28 | SinkronisasiManager | Control | Mengelola antrean bundel HL7 FHIR, pengiriman daring, dan ekspor luring. |
+| C35 | KunjunganEntity | Entity | Satu kedatangan pasien ke poli beserta nomor antrean dan statusnya. |
+| C54 | BundelFHIREntity | Entity | Bundel HL7 FHIR satu kunjungan beserta status pengirimannya. |
+
+#### Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC11" src="./assets/diagram/diagram-kelas-uc11.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 14. Diagram Kelas Use Case UC11 (Melakukan Sinkronisasi SATUSEHAT).</i>
+</p>
+
+`SATUSEHATGateway` berkedudukan sebagai boundary ke sistem luar, sejajar dengan boundary ke pengguna. `SinkronisasiManager` memutuskan mengirim atau mengekspor berkas menurut hasil `periksaKoneksi()`.
+
+#### Atribut dan Metode
+
+| ID Kelas | Nama Kelas | Stereotip | Atribut | Metode/Operasi |
+| :--- | :--- | :--- | :--- | :--- |
+| C14 | SinkronisasiForm | Boundary | daftarStatus | tampilkanStatus(), kirimPermintaanSinkron(), kirimPermintaanEkspor() |
+| C15 | SATUSEHATGateway | Boundary | alamatLayanan, token | periksaKoneksi(), kirimBundel() |
+| C28 | SinkronisasiManager | Control | jumlahTertunda | antrekanBundel(), kirimSemua(), eksporBundel() |
+| C35 | KunjunganEntity | Entity | idKunjungan, tanggal, nomorAntrean, status | simpan(), perbaruiStatus() |
+| C54 | BundelFHIREntity | Entity | idBundel, isiBundel, status | simpan(), tandaiTerkirim() |
+
+### 5.2.12 Use Case UC12
+
+**Nama Use Case:** *Mengelola Konfigurasi & Basis Data Sistem*
+
+Komposisi ECB: 1 boundary, 1 control, 6 entity.
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Deskripsi Kelas |
+| :--- | :--- | :--- | :--- |
+| C16 | KonfigurasiForm | Boundary | Layar manajemen akun, data master, dan pemantauan pencadangan. |
+| C29 | KonfigurasiManager | Control | Mengurus akun pengguna, data master, dan penjadwalan pencadangan basis data. |
+| C30 | PenggunaEntity | Entity | Data akun staf puskesmas beserta peran dan status aktifnya. |
+| C32 | AuditEntity | Entity | Catatan perubahan data beserta pelaku dan waktunya. |
+| C36 | PoliEntity | Entity | Data master poli rawat jalan beserta urutan antrean hariannya. |
+| C40 | AmbangRisikoEntity | Entity | Data master ambang klinis penanda risiko penyakit tidak menular. |
+| C48 | ObatEntity | Entity | Data master obat beserta saldo stok apotek dan ambang minimumnya. |
+| C55 | PencadanganEntity | Entity | Catatan pencadangan basis data lokal terjadwal. |
+
+#### Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC12" src="./assets/diagram/diagram-kelas-uc12.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 15. Diagram Kelas Use Case UC12 (Mengelola Konfigurasi & Basis Data Sistem).</i>
+</p>
+
+Satu `KonfigurasiManager` melayani empat jenis data master dan penjadwalan pencadangan. Tiap perubahan yang lewat manager ini menulis `AuditEntity`, memenuhi KF16 tanpa menambah control baru.
+
+#### Atribut dan Metode
+
+| ID Kelas | Nama Kelas | Stereotip | Atribut | Metode/Operasi |
+| :--- | :--- | :--- | :--- | :--- |
+| C16 | KonfigurasiForm | Boundary | tabAktif, isianData | tampilkanData(), kirimPerubahan(), tampilkanStatusPencadangan() |
+| C29 | KonfigurasiManager | Control | - | simpanAkun(), simpanDataMaster(), jalankanPencadangan() |
+| C30 | PenggunaEntity | Entity | idPengguna, namaPengguna, kataSandiHash, peran, status | simpan(), nonaktifkan() |
+| C32 | AuditEntity | Entity | idAudit, idPengguna, waktu, deskripsi | simpan() |
+| C36 | PoliEntity | Entity | idPoli, namaPoli, urutanTerakhir | ambilNomorBerikutnya() |
+| C40 | AmbangRisikoEntity | Entity | idAmbang, jenisRisiko, nilaiBatas | simpan() |
+| C48 | ObatEntity | Entity | idObat, namaObat, sediaan, stok, ambangMinimum | kurangiStok(), tambahStok() |
+| C55 | PencadanganEntity | Entity | idPencadangan, waktu, status, lokasiMedia | simpan() |
 
 ## 5.3 Diagram Kelas Keseluruhan
-Gabungkan seluruh kelas dan hubungan antarkelas dari BAB 4.3 dokumen *Class Diagram* menjadi satu diagram kelas keseluruhan. Pastikan tidak ada kelas yang terduplikasi atau tertinggal.
+
+Diagram berikut menyatukan seluruh kelas dari dua belas diagram pada Subbab 5.2 tanpa duplikasi. Susunannya berlapis menurut stereotip: boundary di dua baris teratas, control di tengah, entity di bawah. Lapisan itu memperlihatkan aturan ECB secara langsung, yaitu tidak ada garis yang melompat dari boundary ke entity.
 
 <p align="center">
-<img alt="Contoh Class Diagram Keseluruhan" src="./assets/diagram/contoh-class-diagram.webp" width="70%">
+<img alt="Diagram Kelas Keseluruhan SEHATI" src="./assets/diagram/diagram-kelas-keseluruhan.svg" width="100%">
 </p>
 <p align="center">
-<i>Gambar 4. Contoh Diagram Kelas Keseluruhan</i>
+<i>Gambar 16. Diagram Kelas Keseluruhan SEHATI.</i>
 </p>
 
-| ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
-| :--- | :--- | :--- | :--- |
-| *C01* | *Pelanggan* | *idPelanggan, nama, email* | *lihatRiwayatPesanan()* |
-| *C02* | *Pesanan* | *idPesanan, total, status* | *hitungTotal(), perbaruiStatus()* |
-| *...* | *...* | *...* | *...* |
+Beberapa entity muncul pada banyak use case. `KunjunganEntity` menyambungkan pendaftaran, skrining, pemeriksaan, peresepan, pelaporan, dan sinkronisasi. `ObatEntity` dipakai `ResepManager`, `ApotekManager`, `PersediaanManager`, dan `KonfigurasiManager`. `AuditEntity` menerima tulisan dari hampir seluruh control sebagai pemenuhan KF16.
+
+Tabel 5.2. Atribut dan Metode Seluruh Kelas
+
+| ID Kelas | Nama Kelas | Stereotip | Atribut | Metode/Operasi |
+| :--- | :--- | :--- | :--- | :--- |
+| C01 | LoginForm | Boundary | namaPengguna, kataSandi | tampilkan(), kirimKredensial(), tampilkanPesanGagal() |
+| C02 | PasienForm | Boundary | kataKunci, dataFormulir | tampilkanHasilCari(), kirimDataPasien(), tampilkanPesanValidasi() |
+| C03 | KunjunganForm | Boundary | poliTerpilih | tampilkanPilihanPoli(), kirimPermintaanKunjungan(), tampilkanTiketAntrean() |
+| C04 | AntreanSkriningForm | Boundary | daftarTampil | tampilkanAntrean(), kirimPanggilan(), kirimLewati() |
+| C05 | SkriningForm | Boundary | isianKeluhan, isianUkuran | tampilkanFormulir(), kirimHasilSkrining(), tampilkanPeringatanRentang() |
+| C06 | RekamMedisForm | Boundary | idPasienTampil, seriTren | tampilkanRingkasan(), tampilkanGrafikTren() |
+| C07 | PemeriksaanForm | Boundary | isianAnamnesis, kataKunciDiagnosis | tampilkanFormulir(), kirimHasilPemeriksaan(), tampilkanSaranKode() |
+| C08 | ResepForm | Boundary | isianItem, indikatorStok | tampilkanFormulir(), kirimResep(), tampilkanPeringatanStok() |
+| C09 | AntreanResepForm | Boundary | daftarTampil | tampilkanAntrean(), pilihResep() |
+| C10 | PenyerahanObatForm | Boundary | rincianTampil | tampilkanRincian(), kirimKonfirmasi(), kirimPengembalian() |
+| C11 | PersediaanForm | Boundary | isianPenerimaan, daftarPeringatan | tampilkanFormulir(), kirimPenerimaan(), tampilkanPeringatan() |
+| C12 | DaftarPantauForm | Boundary | penyaring, daftarTampil | tampilkanDaftar(), kirimPenyaring(), kirimTindakLanjut() |
+| C13 | LaporanForm | Boundary | tanggalMulai, tanggalAkhir | tampilkanRekapitulasi(), kirimPermintaanEkspor() |
+| C14 | SinkronisasiForm | Boundary | daftarStatus | tampilkanStatus(), kirimPermintaanSinkron(), kirimPermintaanEkspor() |
+| C15 | SATUSEHATGateway | Boundary | alamatLayanan, token | periksaKoneksi(), kirimBundel() |
+| C16 | KonfigurasiForm | Boundary | tabAktif, isianData | tampilkanData(), kirimPerubahan(), tampilkanStatusPencadangan() |
+| C17 | AutentikasiManager | Control | percobaanGagal | autentikasi(), bukaSesi(), periksaHakAkses() |
+| C18 | PasienManager | Control | - | cariPasien(), daftarkanPasien(), perbaruiPasien(), validasiNIK() |
+| C19 | KunjunganManager | Control | - | bukaKunjungan(), terbitkanNomorAntrean(), cegahKunjunganGanda() |
+| C20 | SkriningManager | Control | - | panggilPasien(), validasiRentang(), simpanSkrining() |
+| C21 | RisikoManager | Control | - | evaluasiRisiko(), terbitkanPenanda(), masukkanKeDaftarPantau() |
+| C22 | PemeriksaanManager | Control | - | susunRingkasan(), susunTren(), simpanPemeriksaan(), jadwalkanKontrol() |
+| C23 | ResepManager | Control | - | tambahItem(), validasiStok(), kirimKeApotek() |
+| C24 | ApotekManager | Control | - | layaniResep(), potongStok(), tutupKunjungan(), susunBundel() |
+| C25 | PersediaanManager | Control | - | catatPenerimaan(), tambahStok(), terbitkanPeringatan() |
+| C26 | PantauManager | Control | - | saringDaftar(), catatTindakLanjut(), perbaruiStatus() |
+| C27 | LaporanManager | Control | - | hitungRekapitulasi(), ekspor() |
+| C28 | SinkronisasiManager | Control | jumlahTertunda | antrekanBundel(), kirimSemua(), eksporBundel() |
+| C29 | KonfigurasiManager | Control | - | simpanAkun(), simpanDataMaster(), jalankanPencadangan() |
+| C30 | PenggunaEntity | Entity | idPengguna, namaPengguna, kataSandiHash, peran, status | simpan(), nonaktifkan() |
+| C31 | SesiEntity | Entity | idSesi, waktuMulai, statusAktif | buka(), tutup() |
+| C32 | AuditEntity | Entity | idAudit, idPengguna, waktu, deskripsi | simpan() |
+| C33 | PasienEntity | Entity | idPasien, nik, nomorRekamMedis, nama, tanggalLahir | simpan(), perbarui() |
+| C34 | RekamMedisEntity | Entity | idRekamMedis, daftarDiagnosis, riwayatObat | tambahEntri() |
+| C35 | KunjunganEntity | Entity | idKunjungan, tanggal, nomorAntrean, status | simpan(), perbaruiStatus() |
+| C36 | PoliEntity | Entity | idPoli, namaPoli, urutanTerakhir | ambilNomorBerikutnya() |
+| C37 | AntreanEntity | Entity | idAntrean, jenis, daftarEntri | ambilTerdepan(), pindahkanKeBelakang() |
+| C38 | SkriningEntity | Entity | idSkrining, keluhanAwal, waktu | simpan() |
+| C39 | TandaVitalEntity | Entity | sistolik, diastolik, beratBadan, tinggiBadan, gulaDarah | hitungIMT() |
+| C40 | AmbangRisikoEntity | Entity | idAmbang, jenisRisiko, nilaiBatas | simpan() |
+| C41 | PenandaRisikoEntity | Entity | idPenanda, jenisRisiko, tanggal, status | simpan(), cabut() |
+| C42 | PemeriksaanEntity | Entity | idPemeriksaan, anamnesis, tindakan, terkunci | simpan(), kunci() |
+| C43 | DiagnosisEntity | Entity | idDiagnosis, kodeICD10, deskripsi | simpan() |
+| C44 | KodeICD10Entity | Entity | kode, deskripsi, bab | cari() |
+| C45 | JadwalKontrolEntity | Entity | idJadwal, tanggalRencana, status | simpan() |
+| C46 | ResepEntity | Entity | idResep, waktuMasuk, status | simpan(), perbaruiStatus() |
+| C47 | ItemResepEntity | Entity | idItem, dosis, jumlah, aturanPakai | simpan() |
+| C48 | ObatEntity | Entity | idObat, namaObat, sediaan, stok, ambangMinimum | kurangiStok(), tambahStok() |
+| C49 | BetsObatEntity | Entity | nomorBets, jumlah, tanggalKedaluwarsa | kurangi() |
+| C50 | PenerimaanObatEntity | Entity | idPenerimaan, nomorFaktur, tanggalTerima | simpan() |
+| C51 | DaftarPantauEntity | Entity | idEntri, jenisRisiko, statusTindakLanjut | simpan(), perbaruiStatus() |
+| C52 | TindakLanjutEntity | Entity | idTindakLanjut, jenisKontak, hasilUpaya, statusKedatangan | simpan() |
+| C53 | LaporanEntity | Entity | idLaporan, tanggalMulai, tanggalAkhir, format | simpan() |
+| C54 | BundelFHIREntity | Entity | idBundel, isiBundel, status | simpan(), tandaiTerkirim() |
+| C55 | PencadanganEntity | Entity | idPencadangan, waktu, status, lokasiMedia | simpan() |
 
 ---
 
 # BAB 6: Traceability
-Salin ulang tabel Traceability dari BAB 5 dokumen *Class Diagram*, cocokkan setiap Kebutuhan Fungsional, Use Case, dan Kelas yang saling terkait.
 
-| ID Kelas | ID Use Case | ID KF |
-| :--- | :--- | :--- |
-| *C01* | *UC01, UC05* | *KF01, KF06* |
-| *C02* | *UC01, UC03, UC05* | *KF01, KF02, KF05, KF06* |
-| *C03* | *UC01, UC02* | *KF01, KF02* |
-| *...* | *...* | *...* |
+Tabel berikut menyalin tabel *traceability* dokumen *Class Diagram* dan mencocokkan tiap kelas pada BAB 5 dengan *use case* pada Subbab 4.2 serta kebutuhan fungsional pada Subbab 3.1. Tiap kelas tertelusur ke sedikitnya satu KF, dan KF01 sampai KF24 seluruhnya tercakup oleh sedikitnya satu kelas.
+
+Tabel 6.1. Traceability Kelas, Use Case, dan Kebutuhan Fungsional
+
+| ID Kelas | Nama Kelas | ID Use Case | ID KF |
+| :--- | :--- | :--- | :--- |
+| C01 | LoginForm | UC01 | KF16 |
+| C02 | PasienForm | UC02 | KF01, KF02 |
+| C03 | KunjunganForm | UC03 | KF01, KF03, KF23 |
+| C04 | AntreanSkriningForm | UC04 | KF04, KF05, KF06, KF07, KF24 |
+| C05 | SkriningForm | UC04 | KF04, KF05, KF06, KF07, KF24 |
+| C06 | RekamMedisForm | UC05 | KF08, KF09, KF10, KF12, KF22, KF24 |
+| C07 | PemeriksaanForm | UC05 | KF08, KF09, KF10, KF12, KF22, KF24 |
+| C08 | ResepForm | UC06 | KF11 |
+| C09 | AntreanResepForm | UC07 | KF13, KF14, KF23 |
+| C10 | PenyerahanObatForm | UC07 | KF13, KF14, KF23 |
+| C11 | PersediaanForm | UC08 | KF17 |
+| C12 | DaftarPantauForm | UC09 | KF12, KF18 |
+| C13 | LaporanForm | UC10 | KF19 |
+| C14 | SinkronisasiForm | UC11 | KF20, KF22 |
+| C15 | SATUSEHATGateway | UC11 | KF20, KF22 |
+| C16 | KonfigurasiForm | UC12 | KF15, KF21 |
+| C17 | AutentikasiManager | UC01 | KF16 |
+| C18 | PasienManager | UC02 | KF01, KF02 |
+| C19 | KunjunganManager | UC03 | KF01, KF03, KF23 |
+| C20 | SkriningManager | UC04 | KF04, KF05, KF06, KF07, KF24 |
+| C21 | RisikoManager | UC04, UC09 | KF07, KF12, KF18 |
+| C22 | PemeriksaanManager | UC05 | KF08, KF09, KF10, KF12, KF22, KF24 |
+| C23 | ResepManager | UC06 | KF11 |
+| C24 | ApotekManager | UC07 | KF13, KF14, KF23 |
+| C25 | PersediaanManager | UC08 | KF17 |
+| C26 | PantauManager | UC09 | KF12, KF18 |
+| C27 | LaporanManager | UC10 | KF19 |
+| C28 | SinkronisasiManager | UC11 | KF20, KF22 |
+| C29 | KonfigurasiManager | UC12 | KF15, KF21 |
+| C30 | PenggunaEntity | UC01, UC12 | KF15, KF16 |
+| C31 | SesiEntity | UC01 | KF16 |
+| C32 | AuditEntity | UC01, UC02, UC03, UC05, UC08, UC12 | KF16 |
+| C33 | PasienEntity | UC02, UC03, UC09 | KF01, KF02, KF18 |
+| C34 | RekamMedisEntity | UC02, UC05, UC09 | KF02, KF09, KF18 |
+| C35 | KunjunganEntity | UC03, UC04, UC05, UC07, UC10, UC11 | KF03, KF07, KF14, KF19, KF20, KF22, KF23 |
+| C36 | PoliEntity | UC03, UC10, UC12 | KF03, KF15, KF19 |
+| C37 | AntreanEntity | UC03, UC04, UC06, UC07 | KF03, KF04, KF13, KF23 |
+| C38 | SkriningEntity | UC04 | KF04, KF05, KF06, KF07, KF24 |
+| C39 | TandaVitalEntity | UC04, UC05 | KF05, KF06, KF07, KF08 |
+| C40 | AmbangRisikoEntity | UC04, UC12 | KF04, KF05, KF06, KF07, KF15, KF21, KF24 |
+| C41 | PenandaRisikoEntity | UC04, UC09 | KF07, KF18 |
+| C42 | PemeriksaanEntity | UC05, UC06 | KF09, KF10, KF11, KF24 |
+| C43 | DiagnosisEntity | UC05, UC10 | KF10, KF19 |
+| C44 | KodeICD10Entity | UC05 | KF08, KF09, KF10, KF12, KF22, KF24 |
+| C45 | JadwalKontrolEntity | UC05, UC09 | KF12, KF18 |
+| C46 | ResepEntity | UC06, UC07 | KF11, KF13, KF14 |
+| C47 | ItemResepEntity | UC06, UC07 | KF11, KF13, KF14 |
+| C48 | ObatEntity | UC06, UC07, UC08, UC12 | KF11, KF14, KF15, KF17 |
+| C49 | BetsObatEntity | UC07, UC08 | KF14, KF17 |
+| C50 | PenerimaanObatEntity | UC08 | KF17 |
+| C51 | DaftarPantauEntity | UC04, UC09 | KF07, KF12, KF18 |
+| C52 | TindakLanjutEntity | UC09 | KF12, KF18 |
+| C53 | LaporanEntity | UC10 | KF19 |
+| C54 | BundelFHIREntity | UC07, UC11 | KF14, KF20 |
+| C55 | PencadanganEntity | UC12 | KF15, KF21 |
+
+KF22 (operasi luring), KF23 (perubahan data bersamaan), dan KF24 (pintasan papan ketik) bersifat lintas-kelas. Ketiganya kami bebankan pada kelas yang memegang titik kritisnya: `KunjunganEntity` untuk penomoran antrean yang bersamaan, `AntreanEntity` untuk konfirmasi penyerahan yang bersamaan, `SATUSEHATGateway` untuk deteksi koneksi putus, serta `SkriningForm` dan `PemeriksaanForm` untuk pintasan papan ketik di layar pelayanan.
 
 ---
 
 # Referensi
-- Diagram UML: [https://www.drawio.com/](https://www.drawio.com/), [https://staruml.io/](https://staruml.io/)
+
+- Notasi UML: [https://www.omg.org/spec/UML/](https://www.omg.org/spec/UML/)
+- Kerangka Entity-Control-Boundary: Jacobson, I. dkk., *Object-Oriented Software Engineering: A Use Case Driven Approach*
+- Perkakas diagram: [https://www.drawio.com/](https://www.drawio.com/), [https://staruml.io/](https://staruml.io/)
+- Dokumen *Topic Brainstorming* (M1), *Requirement Gathering* (M2), *Use Case & Scenario Use Case* (M3), dan *Class Diagram* (M4) SEHATI
