@@ -31,6 +31,7 @@ Dipersiapkan oleh:
 | Revisi | Deskripsi |
 | :--- | :--- |
 | A | Pembuatan awal dokumen Spesifikasi Kebutuhan Perangkat Lunak (SKPL) untuk SEHATI. |
+| B | Perbaikan hasil asistensi: memutus DBMS pada PostgreSQL di Subbab 2.5, memperjelas rumusan union pada OS, dan melengkapi 1.5 serta Bab Referensi (dokumen milestone M1–M4, dokumentasi teknologi, regulasi, buku/artikel). |
 
 <br>
 
@@ -76,10 +77,13 @@ Tabel 1.4. Aturan Penomoran
 | Kelas | CXX | XX adalah dua digit angka berurutan |
 
 ## 1.5 Referensi
-1. Dokumen *Topic Brainstorming* Kelompok K02 G09.
-2. Dokumen *Requirement Gathering* Kelompok K02 G09.
-3. Dokumen *Use Case & Scenario Use Case* Kelompok K02 G09.
-4. Dokumen *Class Diagram* Kelompok K02 G09.
+1. Dokumen *Topic Brainstorming* (Tugas 1) SEHATI, IF2150 K02-G09, 2026.
+2. Dokumen *Requirement Gathering* (Tugas 2) SEHATI, IF2150 K02-G09, 2026.
+3. Dokumen *Use Case & Scenario Use Case* (Tugas 3) SEHATI, IF2150 K02-G09, 2026.
+4. Dokumen *Class Diagram* (Tugas 4) SEHATI, IF2150 K02-G09, 2026.
+5. Dokumentasi teknologi yang dirujuk: HL7 FHIR R4, SATUSEHAT Platform, ICD-10 WHO, dan PostgreSQL 15 (rincian pada Bab Referensi).
+6. Regulasi yang dirujuk: PMK No. 24 Tahun 2022 dan UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi (rincian pada Bab Referensi).
+7. Buku dan artikel yang dirujuk: Jacobson dkk. untuk ECB, Mavin dkk. untuk EARS, serta Profil Kesehatan Indonesia 2024 dan SKI 2023 (rincian pada Bab Referensi).
 
 ## 1.6 Deskripsi Umum Dokumen (Ikhtisar)
 SKPL ini terdiri atas enam bab.
@@ -143,9 +147,9 @@ Batasan nomor 2 sampai 4 memenuhi kebutuhan R25, R09, dan R27 yang tidak kami tu
 
 | Komponen | Spesifikasi |
 | :--- | :--- |
-| **Aplikasi / Client** | Aplikasi desktop berbasis GUI (JavaFX, Electron, atau kerangka kerja desktop sejenis). |
-| **DBMS** | Basis data relasional yang berjalan di jaringan lokal puskesmas (PostgreSQL atau MySQL). |
-| **Sistem Operasi** | Windows 10/11 atau distribusi Linux 64-bit. |
+| **Aplikasi / Client** | Aplikasi desktop berbasis GUI (kerangka kerja desktop yang mendukung operasi luring, misalnya JavaFX atau Electron; keduanya diizinkan, bukan belum diputuskan). |
+| **DBMS** | PostgreSQL 15, berjalan pada satu komputer server di jaringan lokal puskesmas dan diakses seluruh komputer client via LAN. Dipilih karena MVCC dan isolasi transaksinya memenuhi KF23/KNF11 serta tipe JSONB-nya memudahkan penyimpanan bundel FHIR (KF20). |
+| **Sistem Operasi** | Windows 10/11 64-bit dan distribusi Linux 64-bit (union: keduanya didukung sesuai KNF10). |
 | **Perangkat Keras** | Komputer dengan RAM 4 GB dan ruang penyimpanan kosong 2 GB (KNF10). |
 | **Jaringan** | Jaringan lokal untuk berbagi basis data antarkomputer. SEHATI memakai internet untuk sinkronisasi SATUSEHAT saja. |
 | **Lainnya** | Penjadwal pencadangan basis data dan *worker* sinkronisasi yang memanggil REST API SATUSEHAT. |
@@ -1388,7 +1392,28 @@ KF22 (operasi luring), KF23 (perubahan data bersamaan), dan KF24 (pintasan papan
 
 # Referensi
 
-- Notasi UML: [https://www.omg.org/spec/UML/](https://www.omg.org/spec/UML/)
-- Kerangka Entity-Control-Boundary: Jacobson, I. dkk., *Object-Oriented Software Engineering: A Use Case Driven Approach*
+## R1. Dokumen Milestone SEHATI (K02-G09)
+- [R1.1] Dokumen *Topic Brainstorming* (Tugas 1) SEHATI, IF2150 K02-G09, 2026. Dirujuk pada Subbab 1.2 dan 2.1 (latar masalah, model proses bisnis).
+- [R1.2] Dokumen *Requirement Gathering* (Tugas 2) SEHATI, IF2150 K02-G09, 2026. Dirujuk pada Subbab 1.4, 2.4, 3.1, dan 3.2 (ID kebutuhan R01–R30, KF, KNF).
+- [R1.3] Dokumen *Use Case & Scenario Use Case* (Tugas 3) SEHATI, IF2150 K02-G09, 2026. Dirujuk pada BAB 4 (aktor, UC01–UC12, skenario).
+- [R1.4] Dokumen *Class Diagram* (Tugas 4) SEHATI, IF2150 K02-G09, 2026. Dirujuk pada BAB 5 dan BAB 6 (kelas C01–C55, traceability).
+
+## R2. Dokumentasi Teknologi
+- [R2.1] HL7 International, *FHIR Release 4 (R4)*, https://hl7.org/fhir/R4/. Dirujuk pada KF14, KF20, KNF07, UC07, UC11.
+- [R2.2] Kementerian Kesehatan RI, *SATUSEHAT Platform — Dokumentasi API*, https://satusehat.kemkes.go.id/. Dirujuk pada Subbab 2.2, KF20, UC11.
+- [R2.3] World Health Organization, *International Classification of Diseases 10th Revision (ICD-10)*, https://icd.who.int/. Dirujuk pada KF10, UC05.
+- [R2.4] PostgreSQL Global Development Group, *PostgreSQL 15 Documentation*, https://www.postgresql.org/docs/15/. Dirujuk pada Subbab 2.5, KF22, KF23, KNF11.
+- [R2.5] OpenAPI Initiative / Kemenkes, dokumentasi REST API SATUSEHAT untuk autentikasi token dan pengiriman bundel (diakses via [R2.2]). Dirujuk pada C15, C28.
+- [R2.6] Dokumentasi pustaka ekspor laporan (PDF/Spreadsheet) yang dipakai implementasi KF19 — diisi mengikuti pustaka final yang dipilih tim.
+
+## R3. Regulasi
+- [R3.1] Peraturan Menteri Kesehatan No. 24 Tahun 2022 tentang Rekam Medis. Dirujuk pada Subbab 2.4 (batasan #2 dan #4), KF20.
+- [R3.2] Undang-Undang No. 27 Tahun 2022 tentang Pelindungan Data Pribadi. Dirujuk pada Subbab 2.4 (batasan #4), KF16, KNF04–KNF05.
+
+## R4. Buku dan Artikel
+- [R4.1] Jacobson, I., Christerson, M., Jonsson, P., Overgaard, G., *Object-Oriented Software Engineering: A Use Case Driven Approach*, Addison-Wesley, 1992. Dirujuk pada BAB 5 (kerangka Entity-Control-Boundary) dan notasi UML.
+- [R4.2] Object Management Group, *Unified Modeling Language (UML) Specification*, https://www.omg.org/spec/UML/. Dirujuk pada BAB 4–BAB 5.
+- [R4.3] Mavin, A. dkk., *Easy Approach to Requirements Syntax (EARS)*. Dirujuk pada Subbab 1.3 dan BAB 3 (pola penulisan KF/KNF).
+- [R4.4] Kementerian Kesehatan RI, *Profil Kesehatan Indonesia 2024*. Dirujuk pada latar masalah (M1).
+- [R4.5] Kementerian Kesehatan RI, *Survei Kesehatan Indonesia (SKI) 2023*. Dirujuk pada latar masalah prevalensi hipertensi/diabetes (M1).
 - Perkakas diagram: [https://www.drawio.com/](https://www.drawio.com/), [https://staruml.io/](https://staruml.io/)
-- Dokumen *Topic Brainstorming* (M1), *Requirement Gathering* (M2), *Use Case & Scenario Use Case* (M3), dan *Class Diagram* (M4) SEHATI
