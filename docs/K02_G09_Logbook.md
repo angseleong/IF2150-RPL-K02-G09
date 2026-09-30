@@ -26,6 +26,7 @@
 * [Milestone 2](#milestone-2)
 * [Milestone 3](#milestone-3)
 * [Milestone 4](#milestone-4)
+* [Milestone 5](#milestone-5)
 
 
 ---
@@ -135,6 +136,23 @@
 * *Draf pertama memodelkan 33 kelas domain tanpa pemisahan lapisan. Setelah asistensi, model disusun ulang menjadi 55 kelas ber-stereotip ECB dengan pola penamaan `<Nama>Form`, `<Nama>Manager`, dan `<Nama>Entity`.*
 * *Lima use case memakai lebih dari satu boundary atau control: UC04 dan UC07 karena aktor berpindah layar, UC05 karena layar rekam medis terpisah dari formulir pemeriksaan, UC09 karena berbagi RisikoManager dengan UC04, dan UC11 karena SATUSEHATGateway berkedudukan sebagai boundary ke sistem luar.*
 * *Hasil asistensi: diagram kelas per use case wajib memakai kerangka ECB, dengan boundary sebagai antarmuka sisi klien, control sebagai manager, dan entity sebagai data; tiap diagram memuat sedikitnya satu kelas dari masing-masing stereotip dan boleh lebih dari satu sesuai kebutuhan use case; penentuan atribut cukup seadanya.*
+
+---
+
+### Milestone 5
+**Periode:** 28-09-2026 - 30-09-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *28-09-2026* | *[Seluruh Anggota]* | *Menyusun draf awal SKPL: menghimpun KF01 s.d. KF24, KNF01 s.d. KNF13, 12 use case beserta skenario, dan 55 kelas ECB dari dokumen M1 s.d. M4 menjadi BAB 1 s.d. BAB 6* | *4* | *Done* | *-* |
+| *30-09-2026* | *[Seluruh Anggota]* | *Menindaklanjuti hasil asistensi: memutus DBMS pada PostgreSQL 15 di Subbab 2.5 (alasan MVCC untuk KF23/KNF11 dan JSONB untuk KF20) serta memperjelas rumusan union pada OS menjadi didukung keduanya sesuai KNF10* | *1,5* | *Done* | *Rumusan awal memakai "atau" (PostgreSQL atau MySQL, Windows atau Linux) sehingga ambigu antara belum diputuskan dan union* |
+| *30-09-2026* | *[Seluruh Anggota]* | *Melengkapi Subbab 1.5 dan Bab Referensi: merinci dokumen milestone M1 s.d. M4, dokumentasi teknologi (FHIR R4, SATUSEHAT API, ICD-10, PostgreSQL 15), regulasi (PMK 24/2022, UU PDP 27/2022), serta buku/artikel (Jacobson ECB, Mavin EARS, Profil Kesehatan 2024, SKI 2023), dan mencatatnya sebagai Revisi B pada Daftar Perubahan* | *1,5* | *Done* | *Referensi awal hanya generik tanpa tahun dan tanpa pemetaan ke bab yang merujuknya* |
+| *30-09-2026* | *[Seluruh Anggota]* | *Peninjauan silang akhir SKPL: memastikan tidak ada berkas baru, nama berkas tidak berubah, dan perubahan hanya pada Daftar Perubahan, Subbab 1.5, Subbab 2.5, serta Bab Referensi tanpa mengubah KF/KNF/UC/diagram kelas* | *1* | *Done* | *-* |
+
+**Catatan/Evaluasi Milestone 5:**
+* *SKPL disusun tanpa mengubah penomoran KF, KNF, UC, maupun kelas dari M2 s.d. M4, sehingga penelusuran antar-dokumen tetap terjaga.*
+* *Keputusan DBMS dikunci pada PostgreSQL 15; framework client tetap dibiarkan sebagai alternatif yang diizinkan (JavaFX atau Electron) dan OS sebagai union yang didukung keduanya.*
+* *Setiap entri pada Bab Referensi dipetakan ke subbab yang merujuknya agar tidak ada referensi yang tidak dipakai.*
 
 ---
 
