@@ -26,6 +26,8 @@
 * [Milestone 2](#milestone-2)
 * [Milestone 3](#milestone-3)
 * [Milestone 4](#milestone-4)
+* [Milestone 5](#milestone-5)
+* [Milestone 6](#milestone-6)
 
 ---
 
@@ -64,6 +66,21 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | *Claude (Claude Code)* | *Menyusun draf identifikasi kelas beserta atribut, metode, dan relasinya dari skenario use case Milestone 3* | *"Turunkan kandidat kelas dari skenario use case pada dokumen UC, lengkap dengan atribut, metode, dan jenis relasi antarkelasnya."* | *Draf AI dipakai sebagai titik awal. Kelompok memeriksa tiap kelas terhadap skenario Subbab 3.4, membuang kelas yang tidak berpangkal pada KF mana pun, dan menetapkan sendiri jenis relasi yang dipakai.* |
 | *Claude (Claude Code)* | *Menggambar ulang 13 diagram kelas setelah model disusun ulang mengikuti kerangka ECB hasil asistensi* | *"Gambar ulang diagram kelas tiap use case memakai stereotip boundary, control, dan entity, dengan boundary hanya berhubungan lewat control."* | *Pembagian kelas ke dalam stereotip ECB dan pola penamaannya ditetapkan kelompok berdasarkan catatan asistensi. Tata letak dan hasil gambar diperiksa satu per satu, dan diagram yang garisnya menembus kotak kelas digambar ulang.* |
 | *Claude (Claude Code)* | *Memeriksa kelengkapan penelusuran KF, aturan ECB, dan konsistensi antara diagram dengan tabel* | *"Periksa apakah ada KF yang belum tercakup kelas mana pun, apakah ada garis dari boundary langsung ke entity, dan apakah nomor gambar berurutan."* | *Hasil pemeriksaan dicocokkan ulang pada dokumen. Satu temuan ditindaklanjuti, yaitu KodeICD10Entity yang belum tersambung ke control; relasinya ke PemeriksaanManager ditambahkan setelah kelompok memastikan pencarian kode ICD-10 memang dijalankan manager tersebut.* |
+
+### Milestone 5
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| *Claude (Claude Code)* | *Meminta pendapat kedua soal pilihan DBMS setelah asisten meminta DBMS dikunci pada satu pilihan* | *"Untuk aplikasi desktop puskesmas dengan beberapa komputer yang berbagi satu basis data di LAN, apa kelebihan dan kekurangan PostgreSQL dibanding MySQL dari sisi konkurensi dan penyimpanan data JSON?"* | *Jawaban AI hanya dipakai sebagai bahan diskusi. Kelompok memutuskan sendiri PostgreSQL 15 setelah mencocokkan alasannya dengan KF20, KF23, dan KNF11, lalu menulis alasan pada Subbab 2.5 dengan kalimat sendiri.* |
+| *Claude (Claude Code)* | *Bertukar pikiran soal rumusan lingkungan operasi yang dinilai ambigu oleh asisten* | *"Kalau di dokumen tertulis 'Windows atau Linux', apakah pembaca bisa salah tangkap bahwa kami belum memutuskan? Bagaimana cara menulisnya supaya jelas bahwa keduanya didukung?"* | *AI memberi beberapa contoh rumusan. Kelompok memilih rumusan "didukung keduanya" yang sesuai KNF10 dan menerapkannya sendiri pada Subbab 2.5.* |
+| *Gemini* | *Meminta daftar jenis referensi yang biasanya dicantumkan pada dokumen SKPL sistem kesehatan* | *"Jenis referensi apa saja yang biasanya dirujuk dokumen spesifikasi kebutuhan untuk sistem informasi puskesmas yang terhubung ke SATUSEHAT?"* | *Daftar dari AI hanya dipakai sebagai pengingat kategori (standar teknis, regulasi, buku). Setiap referensi dicari dan dibaca sendiri dari sumber resminya, dan hanya referensi yang benar-benar dirujuk subbab tertentu yang dicantumkan.* |
+
+### Milestone 6
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| *Claude (Claude Code)* | *Meminta pendapat kedua soal pemilihan style arsitektur setelah asisten menyebut MVC terlalu dangkal bila dipakai sendirian* | *"Kelas kami sudah dibagi boundary, control, dan entity. Kalau dibandingkan antara MVC dan Layered Architecture, mana yang lebih nyambung dengan ECB, dan apa kekurangan masing-masing?"* | *Jawaban AI dipakai sebagai salah satu bahan diskusi. Kelompok memutuskan Layered Architecture empat lapisan dan menyusun sendiri enam alasan pada BAB 1 yang dikaitkan ke KF dan KNF SEHATI.* |
+| *Claude (Claude Code)* | *Bertukar pikiran soal view yang paling cocok untuk BAB 3* | *"Untuk sistem dengan 65 komponen dan aturan antarlapisan yang ketat, view 4+1 mana yang paling membantu pembaca memahami relasi antarkomponen?"* | *AI menyebut Logical View dan Physical View sebagai kandidat. Kelompok memutuskan memakai keduanya dan membagi pengerjaannya ke anggota yang berbeda.* |
+| *Claude (Claude Code)* | *Meminta saran cara menggambar block diagram dengan banyak komponen agar tetap terbaca* | *"Diagram logical view kami berisi 65 kotak dan puluhan garis. Ada ide supaya garisnya tidak saling tumpang tindih?"* | *Dari beberapa saran AI, kelompok memakai ide jalur bersama dengan titik percabangan untuk relasi Manager ke DataBoundary. Penempatan komponen, label relasi, dan diagramnya dikerjakan sendiri, lalu relasinya dicocokkan ulang dengan Tabel 2.2 dan diagram kelas SKPL.* |
+| *Gemini* | *Memeriksa ulang apakah seluruh komponen Tabel 2.1 sudah muncul pada diagram* | *"Ini daftar komponen di Tabel 2.1 dan daftar kotak pada diagram. Apakah ada yang terlewat atau namanya berbeda?"* | *Hasil pemeriksaan AI dicek ulang secara manual satu per satu terhadap Tabel 2.1 sebelum diagram dimasukkan ke dokumen.* |
 
 ---
 ### Pernyataan Integritas dan Persetujuan
