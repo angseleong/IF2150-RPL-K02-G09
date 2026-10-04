@@ -4,35 +4,33 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Hari\]* |
-| **Tanggal** | *\[DD/MM/YYYY\]* |
-| **Kelas** | *\[Kelas\]* |
-| **Nomor Kelompok** | *\[Nomor Kelompok\]*  |
-| **Nama Kelompok** | *\[Nama Kelompok\]*  |
-| **Nama Perangkat Lunak** | *\[Nama P/L\]*  |
-| **Dokumen** | *\[Nama Dokumen yang diasistensikan\]*  |
+| **Hari** | Jumat |
+| **Tanggal** | 02/10/2026 |
+| **Kelas** | K02 |
+| **Nomor Kelompok** | G09 |
+| **Nama Kelompok** | Cumlaude |
+| **Nama Perangkat Lunak** | SEHATI (Sistem Elektronik Pelayanan Kesehatan Terintegrasi) |
+| **Dokumen** | K02_G09_APL.md (Tugas 6 - Arsitektur Perangkat Lunak), Asistensi Akbar |
 
 ### Anggota Kelompok
 
 | NIM | Nama |
 | --- | --- |
-| *\[NIM 1\]* | *\[Nama Anggota 1\]* |
-| *\[NIM 2\]* | *\[Nama Anggota 2\]* |
-| *\[NIM 3\]* | *\[Nama Anggota 3\]* |
-| *\[NIM 4\]* | *\[Nama Anggota 4\]* |
-| *\[NIM 5\]* | *\[Nama Anggota 5\]* |
+| 13525008 | Malik Arsyafiandra Madani |
+| 13525044 | Steven Vanako |
+| 13525071 | Muhammad Adnan Kurniawan |
+| 13525074 | Axeleon Justin Algianto |
+| 13525110 | Fachry Azriel Fajdwani |
 
 ### Catatan
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
-
-**Notes for this section:**  
-*Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
+| 1. SKPL adalah baseline final; ketiga bab APL menjelaskan satu rancangan yang sama (BAB 1 pattern, BAB 2 komponen, BAB 3 relasi). |
+| 2. Pilih minimal satu style/pattern. MVC cenderung terlalu dangkal bila dipakai sendirian; Layered cocok bila UI, aturan bisnis, dan penyimpanan perlu batas yang jelas. |
+| 3. Diagram BAB 1 diisi nama komponen dan kelas milik P/L sendiri, dan Tabel 1.1 disalin persis dari Subbab 2.5 SKPL. |
+| 4. Tabel 2.1: kolom Jenis mengikuti pattern, seluruh kelas SKPL tercakup, dan seluruh use case dapat dijalankan. |
+| 5. BAB 3 minimal satu view (Logical, Process, Development, atau Physical) untuk keseluruhan sistem, memuat seluruh komponen Tabel 2.1 dengan relasi berlabel. |
 
 ## Dokumentasi
 
