@@ -56,15 +56,6 @@ Pembagian ini meneruskan kerangka *Entity-Control-Boundary* pada BAB 5 SKPL. Bou
 
 **Penerapan pada SEHATI**
 
-<!--
-TODO (Anggota 1): Gambar 1, diagram Layered Architecture yang diterapkan pada SEHATI.
-- Empat kotak lapisan tersusun dari atas ke bawah: Presentation Layer, Business Layer, Data Access Layer, Database Layer.
-- Isi tiap kotak dengan nama komponen PERSIS seperti kolom pertama Tabel 2.1 (15 Form; 13 Manager dan 26 Entity; 9 DataBoundary dan SATUSEHATGateway; BasisDataSEHATI).
-- Di dalam Business Layer, pisahkan sub-kotak "Control" (Manager) dan "Entity".
-- Panah antarlapisan mengarah ke bawah saja dan diberi label (misalnya "memanggil layanan", "membaca/menyimpan lewat", "kueri SQL (JDBC)").
-- SATUSEHAT (sandbox) digambar di luar sistem dengan garis putus-putus, terhubung ke SATUSEHATGateway.
-- Simpan sebagai ./assets/diagram/diagram-arsitektur-layered.svg, lalu ganti placeholder di bawah dengan tag <img> seperti contoh pada template.
--->
 *\[Gambar 1 menyusul: Penerapan Layered Architecture pada SEHATI\]*
 
 **Lingkungan operasi P/L**
@@ -194,35 +185,21 @@ Arsitektur SEHATI digambarkan lewat dua *view* dari model 4+1 Kruchten. *Logical
 
 ## 3.1 Logical View
 
-<!--
-TODO (Anggota 2): isi subbab Logical View.
-1. Paragraf penjelasan: apa itu Logical View (abstraksi fungsi sistem dan relasi layanan yang memenuhi kebutuhan fungsional).
-2. Paragraf alasan pemilihan: SEHATI punya 12 use case dan 24 KF yang dibagi ke banyak komponen; pembaca perlu melihat Form mana memanggil Manager mana dan Manager mana memakai Entity serta DataBoundary mana. Kaitkan dengan BAB 1 (aturan antarlapisan) dan Tabel 2.2.
-3. Gambar 2 berbentuk block diagram (contoh: ./assets/diagram/contoh-logical-view.webp) untuk KESELURUHAN sistem:
-   - Empat kelompok lapisan sesuai BAB 1; SEMUA 65 komponen Tabel 2.1 muncul dengan nama persis sama, tanpa komponen tambahan.
-   - Relasi berlabel: Form -> Manager "memanggil"; Manager -> Entity "mengolah"; Manager -> Manager (SkriningManager -> RisikoManager "meneruskan hasil skrining", PemeriksaanManager -> RisikoManager "menjadwalkan kontrol ke daftar pantau"); Manager -> DataBoundary "membaca/menyimpan lewat"; DataBoundary -> BasisDataSEHATI "kueri SQL (JDBC)".
-   - Relasi antar-Entity (komposisi/agregasi) diambil dari diagram kelas keseluruhan SKPL (docs/M5/assets/diagram/diagram-kelas-keseluruhan.svg).
-   - SATUSEHAT (sandbox) digambar di luar sistem dengan garis putus-putus.
-   - Simpan sebagai ./assets/diagram/diagram-logical-view.svg.
-4. Satu paragraf pendek di bawah gambar yang membaca diagram (mirip paragraf penjelas Gambar 2 pada template).
--->
-*\[Subbab 3.1 menyusul\]*
+*Logical View* menggambarkan SEHATI sebagai kumpulan komponen fungsional beserta layanan yang saling dipakai antarkomponen untuk memenuhi kebutuhan fungsional. *View* ini tidak membahas di komputer mana komponen dijalankan. Yang diperlihatkan adalah lapisan tempat setiap komponen berada, komponen yang dipanggilnya, dan data domain yang diolahnya.
+
+Kami memilih *Logical View* karena 12 *use case* dan 24 KF SEHATI tersebar ke 65 komponen. Pembaca perlu melihat `Form` mana memanggil `Manager` mana, serta `DataBoundary` mana yang dipakai tiap `Manager` untuk membaca dan menyimpan data. Tabel 2.2 sudah mencatat pemetaan itu per *use case*, tetapi baru dalam *view* ini terlihat bahwa seluruh relasi mematuhi aturan antarlapisan pada BAB 1: semua panah antarlapisan mengarah ke bawah, tidak ada `Form` yang melompat ke *Data Access Layer*, dan SATUSEHAT hanya tersentuh lewat `SATUSEHATGateway`.
+
+<p align="center">
+<img alt="Logical View SEHATI" src="./assets/diagram/diagram-logical-view.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 2. Logical View SEHATI</i>
+</p>
+
+Gambar 2 berbentuk *block diagram* yang memuat seluruh komponen Tabel 2.1, dikelompokkan ke empat lapisan BAB 1. *Business Layer* dibagi lagi menjadi sub-kelompok *Control* dan *Entity*. Panah putus-putus berlabel "memanggil" menghubungkan tiap `Form` ke `Manager`-nya, dan satu panah dari seluruh *Presentation Layer* ke `AutentikasiManager` menandai pemeriksaan hak akses sebelum layar dibuka (KF16). Dua relasi antar-`Manager` diambil dari diagram kelas SKPL: `SkriningManager` meneruskan hasil skrining ke `RisikoManager`, dan `PantauManager` memuat entri risiko dan jadwal kontrol dari `RisikoManager`. Panah "membuat dan mengolah" dari *Control* ke *Entity* menandai bahwa objek domain hanya dibuat dan diubah oleh `Manager`. Garis dari tiap `Manager` turun ke jalurnya sendiri, lalu bercabang ke `DataBoundary` yang dipakainya sesuai Tabel 2.2. Titik hitam menandai percabangan, sedangkan garis yang bersilangan tanpa titik tidak saling terhubung. Relasi antar-*entity* (komposisi, agregasi, dan asosiasi) disalin dari diagram kelas keseluruhan SKPL. Di lapisan bawah, setiap `DataBoundary` menjalankan kueri SQL lewat JDBC ke `BasisDataSEHATI`. `DataPencadanganBoundary` menjalankan `pg_dump`, dan `SATUSEHATGateway` mengirim bundel lewat HTTPS ke SATUSEHAT (*sandbox*), sistem luar yang digambar dengan garis putus-putus.
 
 ## 3.2 Physical View
 
-<!--
-TODO (Anggota 3): isi subbab Physical View.
-1. Paragraf penjelasan: apa itu Physical View (pemetaan komponen P/L ke node perangkat keras beserta jalur komunikasinya).
-2. Paragraf alasan pemilihan: SEHATI dipasang di beberapa komputer (loket, ruang periksa, apotek) yang berbagi satu basis data di LAN, harus tetap jalan tanpa internet (KF22, KNF09), dan hanya memakai internet untuk SATUSEHAT. Physical View juga wajib menggambarkan Tabel 1.1.
-3. Gambar 3 berupa deployment diagram:
-   - Node «device» Komputer Loket, Komputer Ruang Periksa, Komputer Apotek (Windows/Linux 64-bit, RAM 4 GB). Masing-masing berisi execution environment Java 21 + JavaFX 21 dan artifact aplikasi SEHATI (berisi Presentation, Business, dan Data Access Layer).
-   - Tuliskan komponen yang aktif di tiap node, misalnya Komputer Loket: LoginForm, PasienForm, KunjunganForm, LaporanForm, SinkronisasiForm, KonfigurasiForm; Ruang Periksa: AntreanSkriningForm, SkriningForm, RekamMedisForm, PemeriksaanForm, ResepForm, DaftarPantauForm; Apotek: AntreanResepForm, PenyerahanObatForm, PersediaanForm. Manager, Entity, dan DataBoundary boleh ditulis sebagai satu artifact bersama.
-   - Node «device» Server Basis Data: execution environment PostgreSQL 15 berisi BasisDataSEHATI, ditambah penjadwal pg_dump (DataPencadanganBoundary) dan node media cadangan terpisah.
-   - Communication path berlabel: client <-> server "LAN, JDBC/TCP 5432"; komputer loket -> SATUSEHAT (sandbox) "Internet, HTTPS REST" lewat SATUSEHATGateway.
-   - SATUSEHAT digambar sebagai node luar dengan garis putus-putus.
-   - Simpan sebagai ./assets/diagram/diagram-physical-view.svg.
-4. Satu paragraf pendek yang membaca diagram.
--->
 *\[Subbab 3.2 menyusul\]*
 
 ---
