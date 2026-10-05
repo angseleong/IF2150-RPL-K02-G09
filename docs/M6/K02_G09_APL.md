@@ -56,7 +56,12 @@ Pembagian ini meneruskan kerangka *Entity-Control-Boundary* pada BAB 5 SKPL. Bou
 
 **Penerapan pada SEHATI**
 
-*\[Gambar 1 menyusul: Penerapan Layered Architecture pada SEHATI\]*
+<p align="center">
+<img alt="Penerapan Layered Architecture pada SEHATI" src="./assets/diagram/diagram-arsitektur-layered.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 1. Penerapan Layered Architecture pada SEHATI</i>
+</p>
 
 **Lingkungan operasi P/L**
 

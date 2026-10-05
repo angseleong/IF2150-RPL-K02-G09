@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1586" width="1800" height="1586" font-family="Helvetica, Arial, sans-serif">
 <rect width="1800" height="1586" fill="#ffffff"/>
 <defs><marker id="m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#333" stroke-width="1.4"/></marker></defs>
-<text x="900" y="30" font-size="17" font-weight="bold" text-anchor="middle" fill="#111">Gambar 1. Penerapan Layered Architecture pada SEHATI</text>
+<text x="900" y="30" font-size="17" font-weight="bold" text-anchor="middle" fill="#111">Layered Architecture SEHATI</text>
 <text x="900" y="52" font-size="12" fill="#555" text-anchor="middle">Setiap lapisan hanya memakai lapisan tepat di bawahnya — tidak ada lompatan lapisan</text>
-<rect x="40" y="70" width="1720" height="218" rx="8" fill="#fafafa" stroke="#999" stroke-width="1.1" stroke-dasharray="6 4"/>
+<rect x="40" y="70" width="1750" height="218" rx="8" fill="#fafafa" stroke="#999" stroke-width="1.1" stroke-dasharray="6 4"/>
 <text x="52" y="92" font-size="13" font-weight="bold" fill="#555">Presentation Layer — 15 Form (JavaFX)</text>
 <rect x="60" y="104" width="328" height="46" rx="6" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.3"/>
 <text x="224.0" y="131.5" font-size="12.5" text-anchor="middle" fill="#111">LoginForm</text>
@@ -35,7 +35,7 @@
 <text x="1268.0" y="251.5" font-size="12.5" text-anchor="middle" fill="#111">SinkronisasiForm</text>
 <rect x="1452" y="224" width="328" height="46" rx="6" fill="#e8f2fd" stroke="#2f6fae" stroke-width="1.3"/>
 <text x="1616.0" y="251.5" font-size="12.5" text-anchor="middle" fill="#111">KonfigurasiForm</text>
-<rect x="40" y="352" width="1720" height="632" rx="8" fill="#fafafa" stroke="#999" stroke-width="1.1" stroke-dasharray="6 4"/>
+<rect x="40" y="352" width="1750" height="632" rx="8" fill="#fafafa" stroke="#999" stroke-width="1.1" stroke-dasharray="6 4"/>
 <text x="52" y="374" font-size="13" font-weight="bold" fill="#555">Business Layer — 13 Manager + 26 Entity (Java / ECB)</text>
 <text x="60" y="410" font-size="12" font-weight="bold" fill="#777">Control</text>
 <rect x="60" y="418" width="328" height="46" rx="6" fill="#fdf2e0" stroke="#b5801f" stroke-width="1.3"/>
@@ -117,8 +117,8 @@
 <text x="1616.0" y="887.5" font-size="12.5" text-anchor="middle" fill="#111">BundelFHIREntity</text>
 <rect x="60" y="920" width="328" height="46" rx="6" fill="#e9f6ec" stroke="#2f7d46" stroke-width="1.3"/>
 <text x="224.0" y="947.5" font-size="12.5" text-anchor="middle" fill="#111">PencadanganEntity</text>
-<rect x="40" y="1048" width="1720" height="158" rx="8" fill="#fafafa" stroke="#999" stroke-width="1.1" stroke-dasharray="6 4"/>
-<text x="52" y="1070" font-size="13" font-weight="bold" fill="#555">Data Access Layer — 9 DataBoundary + SATUSEHATGateway (JDBC)</text>
+<rect x="40" y="1048" width="1750" height="158" rx="8" fill="#fafafa" stroke="#999" stroke-width="1.1" stroke-dasharray="6 4"/>
+<text x="52" y="1070" font-size="13" font-weight="bold" fill="#555">Data Access Layer — 9 DataBoundary + SATUSEHATGateway (JDBC / HTTPS)</text>
 <rect x="60" y="1082" width="328" height="46" rx="6" fill="#f1ecfa" stroke="#6b4fa0" stroke-width="1.3"/>
 <text x="224.0" y="1109.5" font-size="12.5" text-anchor="middle" fill="#111">DataAkunBoundary</text>
 <rect x="408" y="1082" width="328" height="46" rx="6" fill="#f1ecfa" stroke="#6b4fa0" stroke-width="1.3"/>
@@ -139,7 +139,7 @@
 <text x="1268.0" y="1169.5" font-size="12.5" text-anchor="middle" fill="#111">DataPencadanganBoundary</text>
 <rect x="1452" y="1142" width="328" height="46" rx="6" fill="#f1ecfa" stroke="#6b4fa0" stroke-width="1.3" stroke-dasharray="6 3"/>
 <text x="1616.0" y="1169.5" font-size="12.5" text-anchor="middle" fill="#111">SATUSEHATGateway</text>
-<rect x="40" y="1270" width="1720" height="112" rx="8" fill="#fafafa" stroke="#999" stroke-width="1.1" stroke-dasharray="6 4"/>
+<rect x="40" y="1270" width="1750" height="112" rx="8" fill="#fafafa" stroke="#999" stroke-width="1.1" stroke-dasharray="6 4"/>
 <text x="52" y="1292" font-size="13" font-weight="bold" fill="#555">Database Layer — BasisDataSEHATI (PostgreSQL 15)</text>
 <rect x="60" y="1304" width="1680" height="60" rx="6" fill="#eee" stroke="#555" stroke-width="1.3"/>
 <text x="900" y="1330" font-size="13" font-weight="bold" text-anchor="middle" fill="#111">BasisDataSEHATI</text>
@@ -155,9 +155,9 @@
 <text x="1580.0" y="1250" font-size="10.5" text-anchor="middle" fill="#666">sistem eksternal</text>
 <path d="M 1616.0 1188 V 1214" fill="none" stroke="#333" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#m)"/>
 <text x="1608.0" y="1205.0" font-size="11" text-anchor="end" fill="#333">HTTPS REST</text>
-<rect x="40" y="1446" width="1720" height="110" rx="8" fill="#fff" stroke="#999" stroke-width="1" stroke-dasharray="6 4"/>
+<rect x="40" y="1446" width="1750" height="110" rx="8" fill="#fff" stroke="#999" stroke-width="1" stroke-dasharray="6 4"/>
 <text x="52" y="1470" font-size="12" fill="#333">65 komponen Tabel 2.1 = 15 Form + 13 Manager + 26 Entity + 9 DataBoundary + SATUSEHATGateway + BasisDataSEHATI.</text>
-<text x="52" y="1490" font-size="12" fill="#333">Form hanya memanggil Manager; Manager yang mengolah Entity dan memanggil DataBoundary (Tabel 2.2). Semua Form cek hak akses via AutentikasiManager.</text>
+<text x="52" y="1490" font-size="12" fill="#333">Form hanya memanggil Manager; Manager yang mengolah Entity dan memanggil DataBoundary (Tabel 2.2). Semua Form memeriksa hak akses lewat AutentikasiManager.</text>
 <text x="52" y="1510" font-size="12" fill="#333">Semua DataBoundary (kecuali SATUSEHATGateway) ke BasisDataSEHATI. SATUSEHAT hanya via SATUSEHATGateway.</text>
 <text x="52" y="1534" font-size="11" fill="#666">Teknologi: JavaFX 21 (Presentation), Java 21 (Business + Data Access), JDBC → PostgreSQL 15 via LAN, pg_dump, REST API SATUSEHAT sandbox.</text>
 </svg>
