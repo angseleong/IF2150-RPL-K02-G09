@@ -159,7 +159,7 @@
 
 
 ### Milestone 6
-**Periode:** 30-09-2026 - 04-10-2026
+**Periode:** 30-09-2026 - 05-10-2026
 
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -168,6 +168,8 @@
 | *04-10-2026* | *Muhammad Adnan Kurniawan* | *Mengganti nama berkas template menjadi K02_G09_APL.md dan K02_G09_Form-Asistensi.md, lalu mengisi form asistensi beserta lima catatan hasil asistensi akbar* | *0,5* | *Done* | *-* |
 | *04-10-2026* | *Muhammad Adnan Kurniawan* | *Menyusun BAB 1 (Layered Architecture empat lapisan, enam alasan pemilihan, Tabel 1.1, dan kaitan teknologi dengan tiap lapisan) dan BAB 2 (Tabel 2.1 berisi 65 komponen dan Tabel 2.2 pemetaan use case ke komponen)* | *4* | *Done* | *Perlu menambah sembilan DataBoundary dan BasisDataSEHATI agar Data Access Layer dan Database Layer punya komponen tersendiri tanpa menambah fitur di luar SKPL* |
 | *04-10-2026* | *Axeleon Justin Algianto* | *Menyusun Subbab 3.1 Logical View: paragraf penjelasan dan alasan pemilihan, Gambar 2 berupa block diagram seluruh 65 komponen dengan relasi berlabel, serta paragraf pembacaan diagram* | *3* | *Done* | *Dengan 65 komponen, garis relasi Manager ke Entity terlalu padat bila digambar satu per satu, sehingga digambar sebagai satu panah kelompok; relasi PemeriksaanManager ke RisikoManager tidak ditemukan pada diagram kelas SKPL dan diganti PantauManager ke RisikoManager* |
+| *04-10-2026* | *Steven Vanako* | *Membuat diagram-arsitektur-layered.svg (Gambar 1 Penerapan Layered Architecture): menyusun 65 komponen dalam empat lapisan — 15 Form Presentation, 13 Manager + 26 Entity Business, 9 DataBoundary + SATUSEHATGateway Data Access, dan BasisDataSEHATI Database — sebagai pengisi Gambar 1 pada BAB 1 APL* | *1* | *Done* | *-* |
+| *05-10-2026* | *Steven Vanako* | *Merevisi Gambar 1 Layered Architecture: menampilkan diagram-arsitektur-layered.svg pada BAB 1 APL, memperbaiki lebar bingkai lapisan menjadi width 1750, menyelaraskan judul gambar menjadi Layered Architecture SEHATI, mengoreksi label Data Access Layer menjadi (JDBC / HTTPS), serta membakukan bahasa catatan footer* | *1* | *Done* | *-* |
 
 **Catatan/Evaluasi Milestone 6:**
 * *Seluruh 55 kelas SKPL dipetakan ke empat lapisan tanpa mengganti nama kelas, sehingga penelusuran dari SKPL ke APL tetap terjaga.*
