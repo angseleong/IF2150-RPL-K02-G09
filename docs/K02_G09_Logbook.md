@@ -171,12 +171,17 @@
 | *04-10-2026* | *Steven Vanako* | *Membuat diagram-arsitektur-layered.svg (Gambar 1 Penerapan Layered Architecture): menyusun 65 komponen dalam empat lapisan — 15 Form Presentation, 13 Manager + 26 Entity Business, 9 DataBoundary + SATUSEHATGateway Data Access, dan BasisDataSEHATI Database — sebagai pengisi Gambar 1 pada BAB 1 APL* | *1* | *Done* | *-* |
 | *04-10-2026* | *Malik Arsyafiandra Madani* | *Menyusun Subbab 3.2 Physical View: paragraf penjelasan dan alasan pemilihan, Gambar 3 berupa deployment diagram (tiga jenis komputer client, Server Basis Data, Media Cadangan, dan SATUSEHAT sandbox) beserta jalur komunikasinya, serta paragraf pembacaan diagram* | *3* | *Done* | *Isi sehati-core.jar sama di tiap client sehingga kalau ditulis di setiap node gambarnya jadi terlalu penuh; rinciannya dipindah ke satu panel di bagian bawah gambar* |
 | *05-10-2026* | *Steven Vanako* | *Merevisi Gambar 1 Layered Architecture: menampilkan diagram-arsitektur-layered.svg pada BAB 1 APL, memperbaiki lebar bingkai lapisan menjadi width 1750, menyelaraskan judul gambar menjadi Layered Architecture SEHATI, mengoreksi label Data Access Layer menjadi (JDBC / HTTPS), serta membakukan bahasa catatan footer* | *1* | *Done* | *-* |
+| *05-10-2026* | *Muhammad Adnan Kurniawan* | *Meninjau silang Gambar 1, Subbab 3.1, dan Subbab 3.2 terhadap Tabel 2.1 dan Tabel 2.2, lalu menyusun daftar revisi untuk tiap anggota* | *1* | *Done* | *-* |
+| *05-10-2026* | *Muhammad Adnan Kurniawan* | *Menyelaraskan Tabel 2.1 dengan Gambar 2: SkriningForm dan DaftarPantauForm juga memanggil RisikoManager* | *0,5* | *Done* | *Panah Form ke RisikoManager pada Logical View belum tercantum di Tabel 2.1* |
 | *07-10-2026* | *Malik Arsyafiandra Madani* | *Merapikan Subbab 3.2: menamai artifact UI menjadi sehati-ui.jar pada Gambar 3 dan paragrafnya, serta menambahkan alasan pg_dump dijalankan dari Komputer Loket* | *0,5* | *Done* | *Sempat dipertimbangkan memindah pg_dump ke server, tetapi DataPencadanganBoundary berjalan di client dan pencadangan dikelola dari KonfigurasiForm, jadi tetap di Komputer Loket* |
+| *07-10-2026* | *Muhammad Adnan Kurniawan* | *Mengganti foto dokumentasi asistensi akbar M6 dengan tangkapan layar MS Teams* | *0,25* | *Done* | *Foto pada folder template masih gambar placeholder* |
+| *07-10-2026* | *[Seluruh Anggota]* | *Peninjauan akhir APL terhadap template dan hasil asistensi akbar, lalu membuat release v6.0* | *1* | *Done* | *-* |
 
 **Catatan/Evaluasi Milestone 6:**
 * *Seluruh 55 kelas SKPL dipetakan ke empat lapisan tanpa mengganti nama kelas, sehingga penelusuran dari SKPL ke APL tetap terjaga.*
 * *Gambar 2 dicek ulang terhadap Tabel 2.1: seluruh 65 komponen muncul dengan nama yang sama, dan relasi antar-entity disalin dari diagram kelas keseluruhan SKPL.*
 * *Garis Manager ke DataBoundary pada Gambar 2 sudah dicocokkan dengan Tabel 2.2: untuk setiap dari 12 use case, gabungan DataBoundary yang tersambung ke Manager-nya sama persis dengan kolom Data Access Layer pada tabel. Tidak ada Manager atau DataBoundary yang tidak tersambung.*
+* *Hasil peninjauan silang: Gambar 1 dipasang pada BAB 1, Tabel 2.1 diselaraskan dengan relasi Form ke RisikoManager pada Gambar 2, nama artifact Physical View diseragamkan, dan foto asistensi diganti dengan dokumentasi asli.*
 * *Hasil asistensi: SKPL menjadi baseline final; MVC dinilai terlalu dangkal bila dipakai sendirian; Tabel 1.1 disalin persis dari Subbab 2.5 SKPL; BAB 3 memuat minimal satu view untuk keseluruhan sistem dengan relasi berlabel.*
 
 ---
