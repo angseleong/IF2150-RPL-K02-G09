@@ -159,7 +159,7 @@
 
 
 ### Milestone 6
-**Periode:** 30-09-2026 - 05-10-2026
+**Periode:** 30-09-2026 - 07-10-2026
 
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -167,13 +167,14 @@
 | *02-10-2026* | *[Seluruh Anggota]* | *Asistensi akbar Milestone 6 bersama asisten* | *1* | *Done* | *-* |
 | *04-10-2026* | *Muhammad Adnan Kurniawan* | *Mengganti nama berkas template menjadi K02_G09_APL.md dan K02_G09_Form-Asistensi.md, lalu mengisi form asistensi beserta lima catatan hasil asistensi akbar* | *0,5* | *Done* | *-* |
 | *04-10-2026* | *Muhammad Adnan Kurniawan* | *Menyusun BAB 1 (Layered Architecture empat lapisan, enam alasan pemilihan, Tabel 1.1, dan kaitan teknologi dengan tiap lapisan) dan BAB 2 (Tabel 2.1 berisi 65 komponen dan Tabel 2.2 pemetaan use case ke komponen)* | *4* | *Done* | *Perlu menambah sembilan DataBoundary dan BasisDataSEHATI agar Data Access Layer dan Database Layer punya komponen tersendiri tanpa menambah fitur di luar SKPL* |
-| *04-10-2026* | *Axeleon Justin Algianto* | *Menyusun Subbab 3.1 Logical View: paragraf penjelasan dan alasan pemilihan, Gambar 2 berupa block diagram seluruh 65 komponen dengan relasi berlabel, serta paragraf pembacaan diagram* | *3* | *Done* | *Dengan 65 komponen, garis relasi Manager ke Entity terlalu padat bila digambar satu per satu, sehingga digambar sebagai satu panah kelompok; relasi PemeriksaanManager ke RisikoManager tidak ditemukan pada diagram kelas SKPL dan diganti PantauManager ke RisikoManager* |
+| *04-10-2026* | *Axeleon Justin Algianto* | *Menyusun Subbab 3.1 Logical View: paragraf penjelasan dan alasan pemilihan, Gambar 2 berupa block diagram seluruh 65 komponen dengan relasi berlabel, serta paragraf pembacaan diagram, lalu mencocokkan garis Manager ke DataBoundary pada diagram dengan Tabel 2.2* | *3,5* | *Done* | *Dengan 65 komponen, garis relasi Manager ke Entity terlalu padat bila digambar satu per satu, sehingga digambar sebagai satu panah kelompok; relasi PemeriksaanManager ke RisikoManager tidak ditemukan pada diagram kelas SKPL dan diganti PantauManager ke RisikoManager* |
 | *04-10-2026* | *Steven Vanako* | *Membuat diagram-arsitektur-layered.svg (Gambar 1 Penerapan Layered Architecture): menyusun 65 komponen dalam empat lapisan — 15 Form Presentation, 13 Manager + 26 Entity Business, 9 DataBoundary + SATUSEHATGateway Data Access, dan BasisDataSEHATI Database — sebagai pengisi Gambar 1 pada BAB 1 APL* | *1* | *Done* | *-* |
 | *05-10-2026* | *Steven Vanako* | *Merevisi Gambar 1 Layered Architecture: menampilkan diagram-arsitektur-layered.svg pada BAB 1 APL, memperbaiki lebar bingkai lapisan menjadi width 1750, menyelaraskan judul gambar menjadi Layered Architecture SEHATI, mengoreksi label Data Access Layer menjadi (JDBC / HTTPS), serta membakukan bahasa catatan footer* | *1* | *Done* | *-* |
 
 **Catatan/Evaluasi Milestone 6:**
 * *Seluruh 55 kelas SKPL dipetakan ke empat lapisan tanpa mengganti nama kelas, sehingga penelusuran dari SKPL ke APL tetap terjaga.*
 * *Gambar 2 dicek ulang terhadap Tabel 2.1: seluruh 65 komponen muncul dengan nama yang sama, dan relasi antar-entity disalin dari diagram kelas keseluruhan SKPL.*
+* *Garis Manager ke DataBoundary pada Gambar 2 sudah dicocokkan dengan Tabel 2.2: untuk setiap dari 12 use case, gabungan DataBoundary yang tersambung ke Manager-nya sama persis dengan kolom Data Access Layer pada tabel. Tidak ada Manager atau DataBoundary yang tidak tersambung.*
 * *Hasil asistensi: SKPL menjadi baseline final; MVC dinilai terlalu dangkal bila dipakai sendirian; Tabel 1.1 disalin persis dari Subbab 2.5 SKPL; BAB 3 memuat minimal satu view untuk keseluruhan sistem dengan relasi berlabel.*
 
 ---
