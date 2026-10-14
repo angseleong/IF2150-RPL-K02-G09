@@ -1,0 +1,23 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Farmasi
+  participant PenyerahanObatForm as :PenyerahanObatForm
+  participant ApotekManager as :ApotekManager
+  participant DataFarmasiBoundary as :DataFarmasiBoundary
+  participant DataKunjunganBoundary as :DataKunjunganBoundary
+  participant AntreanEntity as :AntreanEntity
+  A->>PenyerahanObatForm: bukaKolomCatatan()
+  PenyerahanObatForm-->>A: kolom alasan wajib diisi
+  A->>+PenyerahanObatForm: kirimPengembalian(alasan)
+  PenyerahanObatForm->>+ApotekManager: kembalikanKeDokter(idResep, alasan)
+  ApotekManager->>DataFarmasiBoundary: ambilResep(idResep)
+  DataFarmasiBoundary-->>ApotekManager: resep
+  Note over ApotekManager: status resep menjadi "dikembalikan", kunjungan tetap terbuka
+  ApotekManager->>DataFarmasiBoundary: simpanResep(resep)
+  ApotekManager->>DataKunjunganBoundary: ambilAntrean("apotek")
+  DataKunjunganBoundary-->>ApotekManager: antrean
+  ApotekManager->>AntreanEntity: keluarkan(idResep)
+  ApotekManager->>DataKunjunganBoundary: simpanAntrean(antrean)
+  ApotekManager-->>-PenyerahanObatForm: selesai
+  PenyerahanObatForm->>PenyerahanObatForm: tampilkanPesan("Resep dikembalikan ke dokter")
+  PenyerahanObatForm-->>-A: resep keluar dari antrean aktif

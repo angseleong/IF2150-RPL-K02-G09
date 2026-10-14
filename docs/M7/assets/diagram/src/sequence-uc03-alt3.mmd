@@ -1,0 +1,20 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant KunjunganForm as :KunjunganForm
+  participant KunjunganManager as :KunjunganManager
+  participant DataKunjunganBoundary as :DataKunjunganBoundary
+  participant PoliEntity as :PoliEntity
+  A->>+KunjunganForm: kirimPermintaanKunjungan()
+  KunjunganForm->>+KunjunganManager: bukaKunjungan(idPasien, idPoli)
+  KunjunganManager->>KunjunganManager: terbitkanNomorAntrean(idPoli)
+  KunjunganManager->>DataKunjunganBoundary: kunciPoli(idPoli)
+  DataKunjunganBoundary-->>KunjunganManager: poli
+  KunjunganManager->>+PoliEntity: ambilNomorBerikutnya(hariIni)
+  Note over PoliEntity: tanggalUrutan berbeda dari hariIni, urutanTerakhir direset ke 0
+  PoliEntity-->>-KunjunganManager: 1
+  KunjunganManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
+  KunjunganManager->>DataKunjunganBoundary: simpanPoli(poli)
+  KunjunganManager-->>-KunjunganForm: kunjungan
+  KunjunganForm->>KunjunganForm: tampilkanTiketAntrean(kunjungan)
+  KunjunganForm-->>-A: tiket nomor 1

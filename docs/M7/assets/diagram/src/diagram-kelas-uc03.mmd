@@ -1,0 +1,116 @@
+classDiagram
+  direction TB
+  class KunjunganForm {
+    <<boundary>>
+    -pasienTerpilih: PasienEntity
+    -poliTerpilih: PoliEntity
+    +buka(pasien: PasienEntity) void
+    +tampilkanPilihanPoli(daftarPoli: List~PoliEntity~) void
+    +kirimPermintaanKunjungan() void
+    +tampilkanTiketAntrean(kunjungan: KunjunganEntity) void
+    +tampilkanKunjunganAktif(kunjungan: KunjunganEntity) void
+  }
+  class KunjunganManager {
+    <<control>>
+    +daftarPoli() List~PoliEntity~
+    +bukaKunjungan(idPasien: int, idPoli: int) KunjunganEntity
+    -cegahKunjunganGanda(idPasien: int) KunjunganEntity
+    -terbitkanNomorAntrean(idPoli: int) int
+  }
+  class DataAkunBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +cariPengguna(nama: String) PenggunaEntity
+    +ambilPengguna(idPengguna: int) PenggunaEntity
+    +namaPenggunaDipakai(nama: String) boolean
+    +simpanPengguna(p: PenggunaEntity) void
+    +simpanSesi(s: SesiEntity) void
+    +tutupSesiAktif(idPengguna: int) void
+    +simpanAudit(a: AuditEntity) void
+  }
+  class DataPasienBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +cariParsial(kataKunci: String) List~PasienEntity~
+    +ambilPasien(idPasien: int) PasienEntity
+    +nikTerdaftar(nik: String) boolean
+    +nomorRMBerikutnya() String
+    +simpanPasien(p: PasienEntity) void
+    +ambilRekamMedis(idPasien: int) RekamMedisEntity
+    +simpanRekamMedis(rm: RekamMedisEntity) void
+  }
+  class DataKunjunganBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +ambilSemuaPoli() List~PoliEntity~
+    +kunciPoli(idPoli: int) PoliEntity
+    +simpanPoli(p: PoliEntity) void
+    +kunjunganAktif(idPasien: int, tanggal: LocalDate) KunjunganEntity
+    +ambilKunjungan(idKunjungan: int) KunjunganEntity
+    +simpanKunjungan(k: KunjunganEntity) void
+    +ambilAntrean(jenis: String) AntreanEntity
+    +simpanAntrean(a: AntreanEntity) void
+  }
+  class AuditEntity {
+    <<entity>>
+    -idAudit: long
+    -idPengguna: int
+    -waktu: LocalDateTime
+    -deskripsi: String
+    +buat(idPengguna: int, deskripsi: String)$ AuditEntity
+  }
+  class PasienEntity {
+    <<entity>>
+    -idPasien: int
+    -nik: String
+    -nomorRekamMedis: String
+    -nama: String
+    -tanggalLahir: LocalDate
+    -jenisKelamin: String
+    -alamat: String
+    -nomorTelepon: String
+    +perbarui(data: PasienEntity) void
+  }
+  class KunjunganEntity {
+    <<entity>>
+    -idKunjungan: int
+    -idPasien: int
+    -tanggal: LocalDate
+    -nomorAntrean: int
+    -status: String
+    +perbaruiStatus(status: String) void
+    +aktifHariIni() boolean
+  }
+  class PoliEntity {
+    <<entity>>
+    -idPoli: int
+    -namaPoli: String
+    -urutanTerakhir: int
+    -tanggalUrutan: LocalDate
+    +ambilNomorBerikutnya(hariIni: LocalDate) int
+  }
+  class AntreanEntity {
+    <<entity>>
+    -idAntrean: int
+    -jenis: String
+    -daftarEntri: List~Integer~
+    +tambahkan(idEntri: int) void
+    +ambilTerdepan() KunjunganEntity
+    +pindahkanKeBelakang(idEntri: int) void
+    +keluarkan(idEntri: int) void
+  }
+  KunjunganForm "1" --> "1" KunjunganManager : memanggil
+  KunjunganManager ..> AntreanEntity : mengolah
+  KunjunganManager ..> DataAkunBoundary : memakai
+  KunjunganManager ..> DataKunjunganBoundary : memakai
+  KunjunganManager ..> DataPasienBoundary : memakai
+  KunjunganManager ..> KunjunganEntity : membuat
+  KunjunganManager ..> PoliEntity : mengolah
+  DataAkunBoundary ..> AuditEntity : membaca/menyimpan
+  DataPasienBoundary ..> PasienEntity : membaca/menyimpan
+  DataKunjunganBoundary ..> KunjunganEntity : membaca/menyimpan
+  DataKunjunganBoundary ..> PoliEntity : membaca/menyimpan
+  DataKunjunganBoundary ..> AntreanEntity : membaca/menyimpan
+  PasienEntity "1" *-- "0..*" KunjunganEntity : melakukan
+  PoliEntity "1" -- "0..*" KunjunganEntity : menerima
+  AntreanEntity "1" o-- "0..*" KunjunganEntity : mengurutkan

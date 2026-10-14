@@ -1,0 +1,66 @@
+classDiagram
+  direction TB
+  class LoginForm {
+    <<boundary>>
+    -namaPengguna: String
+    -kataSandi: String
+    +tampilkan() void
+    +kirimKredensial() void
+    +tampilkanDasbor(menu: List~String~) void
+    +bukaLayar(layar: String) void
+    +tampilkanPesanGagal(pesan: String) void
+  }
+  class AutentikasiManager {
+    <<control>>
+    -percobaanGagal: int
+    +autentikasi(nama: String, sandi: String) SesiEntity
+    -bukaSesi(p: PenggunaEntity) SesiEntity
+    +periksaHakAkses(peran: String, layar: String) boolean
+  }
+  class DataAkunBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +cariPengguna(nama: String) PenggunaEntity
+    +ambilPengguna(idPengguna: int) PenggunaEntity
+    +namaPenggunaDipakai(nama: String) boolean
+    +simpanPengguna(p: PenggunaEntity) void
+    +simpanSesi(s: SesiEntity) void
+    +tutupSesiAktif(idPengguna: int) void
+    +simpanAudit(a: AuditEntity) void
+  }
+  class PenggunaEntity {
+    <<entity>>
+    -idPengguna: int
+    -namaPengguna: String
+    -kataSandiHash: String
+    -peran: String
+    -status: String
+    +cocokkanSandi(sandi: String) boolean
+    +aktif() boolean
+    +nonaktifkan() void
+  }
+  class SesiEntity {
+    <<entity>>
+    -idSesi: UUID
+    -idPengguna: int
+    -waktuMulai: LocalDateTime
+    -statusAktif: boolean
+    +habisWaktu(menit: int) boolean
+    +tutup() void
+  }
+  class AuditEntity {
+    <<entity>>
+    -idAudit: long
+    -idPengguna: int
+    -waktu: LocalDateTime
+    -deskripsi: String
+    +buat(idPengguna: int, deskripsi: String)$ AuditEntity
+  }
+  AutentikasiManager ..> DataAkunBoundary : memakai
+  AutentikasiManager ..> PenggunaEntity : mengolah
+  AutentikasiManager ..> SesiEntity : membuat
+  LoginForm "1" --> "1" AutentikasiManager : memanggil
+  DataAkunBoundary ..> PenggunaEntity : membaca/menyimpan
+  DataAkunBoundary ..> SesiEntity : membaca/menyimpan
+  DataAkunBoundary ..> AuditEntity : membaca/menyimpan
+  PenggunaEntity "1" *-- "0..*" SesiEntity : memiliki

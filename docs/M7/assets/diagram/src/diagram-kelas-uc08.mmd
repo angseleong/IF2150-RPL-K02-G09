@@ -1,0 +1,93 @@
+classDiagram
+  direction TB
+  class PersediaanForm {
+    <<boundary>>
+    -isianPenerimaan: PenerimaanObatEntity
+    -daftarPeringatan: List~String~
+    +tampilkanFormulir() void
+    +kirimPenerimaan() void
+    +tampilkanSaldo(obat: ObatEntity) void
+    +tampilkanPeringatan(peringatan: List~String~) void
+    +tampilkanPesanKesalahan(kolom: List~String~) void
+  }
+  class PersediaanManager {
+    <<control>>
+    +muatDataObat() List~ObatEntity~
+    +catatPenerimaan(p: PenerimaanObatEntity) void
+    -validasiPenerimaan(p: PenerimaanObatEntity) List~String~
+    -tambahStok(idObat: int, jumlah: int) ObatEntity
+    +terbitkanPeringatan() List~String~
+  }
+  class DataAkunBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +cariPengguna(nama: String) PenggunaEntity
+    +ambilPengguna(idPengguna: int) PenggunaEntity
+    +namaPenggunaDipakai(nama: String) boolean
+    +simpanPengguna(p: PenggunaEntity) void
+    +simpanSesi(s: SesiEntity) void
+    +tutupSesiAktif(idPengguna: int) void
+    +simpanAudit(a: AuditEntity) void
+  }
+  class DataFarmasiBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +ambilSemuaObat() List~ObatEntity~
+    +ambilObat(idObat: int) ObatEntity
+    +ambilBets(idObat: int) List~BetsObatEntity~
+    +simpanStok(o: ObatEntity, bets: List~BetsObatEntity~) void
+    +simpanPenerimaan(p: PenerimaanObatEntity) void
+    +obatPerluPeringatan(hari: int) List~ObatEntity~
+    +simpanResep(r: ResepEntity) void
+    +ambilAntreanResep() List~ResepEntity~
+    +ambilResep(idResep: int) ResepEntity
+    +kunciResep(idResep: int) ResepEntity
+  }
+  class AuditEntity {
+    <<entity>>
+    -idAudit: long
+    -idPengguna: int
+    -waktu: LocalDateTime
+    -deskripsi: String
+    +buat(idPengguna: int, deskripsi: String)$ AuditEntity
+  }
+  class ObatEntity {
+    <<entity>>
+    -idObat: int
+    -namaObat: String
+    -sediaan: String
+    -stok: int
+    -ambangMinimum: int
+    +kurangiStok(jumlah: int) void
+    +tambahStok(jumlah: int) void
+    +diBawahAmbang() boolean
+  }
+  class BetsObatEntity {
+    <<entity>>
+    -nomorBets: String
+    -idObat: int
+    -jumlah: int
+    -tanggalKedaluwarsa: LocalDate
+    +kurangi(jumlah: int) void
+    +mendekatiKedaluwarsa(hari: int) boolean
+  }
+  class PenerimaanObatEntity {
+    <<entity>>
+    -idPenerimaan: int
+    -nomorFaktur: String
+    -tanggalTerima: LocalDate
+    -daftarBets: List~BetsObatEntity~
+    +totalJumlah() int
+  }
+  PersediaanForm "1" --> "1" PersediaanManager : memanggil
+  PersediaanManager ..> BetsObatEntity : mengolah
+  PersediaanManager ..> DataAkunBoundary : memakai
+  PersediaanManager ..> DataFarmasiBoundary : memakai
+  PersediaanManager ..> ObatEntity : mengolah
+  PersediaanManager ..> PenerimaanObatEntity : mengolah
+  DataAkunBoundary ..> AuditEntity : membaca/menyimpan
+  DataFarmasiBoundary ..> ObatEntity : membaca/menyimpan
+  DataFarmasiBoundary ..> BetsObatEntity : membaca/menyimpan
+  DataFarmasiBoundary ..> PenerimaanObatEntity : membaca/menyimpan
+  ObatEntity "1" o-- "0..*" BetsObatEntity : menghimpun
+  PenerimaanObatEntity "1" *-- "1..*" BetsObatEntity : mencatat

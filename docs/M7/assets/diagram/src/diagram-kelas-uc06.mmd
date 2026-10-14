@@ -1,0 +1,107 @@
+classDiagram
+  direction TB
+  class ResepForm {
+    <<boundary>>
+    -isianItem: List~ItemResepEntity~
+    -indikatorStok: String
+    +tampilkanFormulir(kunjungan: KunjunganEntity) void
+    +kirimItem(idObat: int, jumlah: int, dosis: String, aturanPakai: String) void
+    +tampilkanIndikatorStok(tersedia: boolean, sisa: int) void
+    +kirimResep() void
+    +tampilkanPeringatanStok(sisa: int) void
+  }
+  class ResepManager {
+    <<control>>
+    +muatDataObat() List~ObatEntity~
+    +tambahItem(idObat: int, jumlah: int, dosis: String, aturanPakai: String) ItemResepEntity
+    -validasiStok(item: ItemResepEntity) boolean
+    +kirimKeApotek(idKunjungan: int, items: List~ItemResepEntity~) ResepEntity
+  }
+  class DataKunjunganBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +ambilSemuaPoli() List~PoliEntity~
+    +kunciPoli(idPoli: int) PoliEntity
+    +simpanPoli(p: PoliEntity) void
+    +kunjunganAktif(idPasien: int, tanggal: LocalDate) KunjunganEntity
+    +ambilKunjungan(idKunjungan: int) KunjunganEntity
+    +simpanKunjungan(k: KunjunganEntity) void
+    +ambilAntrean(jenis: String) AntreanEntity
+    +simpanAntrean(a: AntreanEntity) void
+  }
+  class DataFarmasiBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +ambilSemuaObat() List~ObatEntity~
+    +ambilObat(idObat: int) ObatEntity
+    +ambilBets(idObat: int) List~BetsObatEntity~
+    +simpanStok(o: ObatEntity, bets: List~BetsObatEntity~) void
+    +simpanPenerimaan(p: PenerimaanObatEntity) void
+    +obatPerluPeringatan(hari: int) List~ObatEntity~
+    +simpanResep(r: ResepEntity) void
+    +ambilAntreanResep() List~ResepEntity~
+    +ambilResep(idResep: int) ResepEntity
+    +kunciResep(idResep: int) ResepEntity
+  }
+  class AntreanEntity {
+    <<entity>>
+    -idAntrean: int
+    -jenis: String
+    -daftarEntri: List~Integer~
+    +tambahkan(idEntri: int) void
+    +ambilTerdepan() KunjunganEntity
+    +pindahkanKeBelakang(idEntri: int) void
+    +keluarkan(idEntri: int) void
+  }
+  class PemeriksaanEntity {
+    <<entity>>
+    -idPemeriksaan: int
+    -idKunjungan: int
+    -anamnesis: String
+    -tindakan: String
+    -terkunci: boolean
+    +kunci() void
+  }
+  class ResepEntity {
+    <<entity>>
+    -idResep: int
+    -idKunjungan: int
+    -waktuMasuk: LocalDateTime
+    -status: String
+    -catatan: String
+    +perbaruiStatus(status: String) void
+  }
+  class ItemResepEntity {
+    <<entity>>
+    -idItem: int
+    -idObat: int
+    -dosis: String
+    -jumlah: int
+    -aturanPakai: String
+    +cukupStok(stok: int) boolean
+  }
+  class ObatEntity {
+    <<entity>>
+    -idObat: int
+    -namaObat: String
+    -sediaan: String
+    -stok: int
+    -ambangMinimum: int
+    +kurangiStok(jumlah: int) void
+    +tambahStok(jumlah: int) void
+    +diBawahAmbang() boolean
+  }
+  ResepManager ..> PemeriksaanEntity : merujuk
+  ResepForm "1" --> "1" ResepManager : memanggil
+  ResepManager ..> AntreanEntity : mengolah
+  ResepManager ..> DataFarmasiBoundary : memakai
+  ResepManager ..> DataKunjunganBoundary : memakai
+  ResepManager ..> ItemResepEntity : membuat
+  ResepManager ..> ResepEntity : membuat
+  DataKunjunganBoundary ..> AntreanEntity : membaca/menyimpan
+  DataFarmasiBoundary ..> ResepEntity : membaca/menyimpan
+  DataFarmasiBoundary ..> ItemResepEntity : membaca/menyimpan
+  DataFarmasiBoundary ..> ObatEntity : membaca/menyimpan
+  ResepEntity "1" *-- "1..*" ItemResepEntity : memuat
+  ItemResepEntity "0..*" --> "1" ObatEntity : merujuk
+  AntreanEntity "1" o-- "0..*" ResepEntity : mengurutkan

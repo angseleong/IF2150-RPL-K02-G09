@@ -1,0 +1,50 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Farmasi
+  participant AntreanResepForm as :AntreanResepForm
+  participant PenyerahanObatForm as :PenyerahanObatForm
+  participant ApotekManager as :ApotekManager
+  participant DataFarmasiBoundary as :DataFarmasiBoundary
+  participant DataKunjunganBoundary as :DataKunjunganBoundary
+  participant DataSinkronisasiBoundary as :DataSinkronisasiBoundary
+  participant ObatEntity as :ObatEntity
+  participant BetsObatEntity as :BetsObatEntity
+  A->>+AntreanResepForm: tampilkanAntrean()
+  AntreanResepForm->>+ApotekManager: muatAntreanResep()
+  ApotekManager->>DataFarmasiBoundary: ambilAntreanResep()
+  DataFarmasiBoundary-->>ApotekManager: daftar resep
+  ApotekManager-->>-AntreanResepForm: daftar resep
+  AntreanResepForm-->>-A: antrean terurut waktu masuk
+  A->>+AntreanResepForm: pilihResep(idResep)
+  AntreanResepForm->>+ApotekManager: layaniResep(idResep)
+  ApotekManager->>DataFarmasiBoundary: ambilResep(idResep)
+  DataFarmasiBoundary-->>ApotekManager: resep
+  ApotekManager->>DataFarmasiBoundary: ambilBets(idObat)
+  DataFarmasiBoundary-->>ApotekManager: daftar bets
+  ApotekManager-->>-AntreanResepForm: resep dan bets
+  AntreanResepForm->>PenyerahanObatForm: tampilkanRincian(resep, bets)
+  deactivate AntreanResepForm
+  A->>+PenyerahanObatForm: kirimKonfirmasi()
+  PenyerahanObatForm->>+ApotekManager: serahkanObat(idResep)
+  Note over ApotekManager,DataSinkronisasiBoundary: seluruh langkah berikut berjalan dalam satu transaksi
+  ApotekManager->>DataFarmasiBoundary: kunciResep(idResep)
+  DataFarmasiBoundary-->>ApotekManager: resep (status menunggu)
+  ApotekManager->>ApotekManager: potongStok(resep)
+  loop setiap item resep
+    ApotekManager->>DataFarmasiBoundary: ambilObat(idObat)
+    DataFarmasiBoundary-->>ApotekManager: obat
+    ApotekManager->>ObatEntity: kurangiStok(jumlah)
+    ApotekManager->>BetsObatEntity: kurangi(jumlah)
+    ApotekManager->>DataFarmasiBoundary: simpanStok(obat, bets)
+  end
+  Note over ApotekManager: status resep menjadi "selesai dilayani"
+  ApotekManager->>DataFarmasiBoundary: simpanResep(resep)
+  ApotekManager->>ApotekManager: tutupKunjungan(idKunjungan)
+  ApotekManager->>DataKunjunganBoundary: ambilKunjungan(idKunjungan)
+  DataKunjunganBoundary-->>ApotekManager: kunjungan
+  ApotekManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
+  ApotekManager->>ApotekManager: susunBundel(idKunjungan)
+  ApotekManager->>DataSinkronisasiBoundary: simpanBundel(bundel)
+  ApotekManager-->>-PenyerahanObatForm: selesai
+  PenyerahanObatForm->>PenyerahanObatForm: tampilkanPesan("Obat diserahkan")
+  PenyerahanObatForm-->>-A: resep selesai dilayani

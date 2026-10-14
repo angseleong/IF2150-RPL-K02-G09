@@ -1,0 +1,26 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant PasienForm as :PasienForm
+  participant PasienManager as :PasienManager
+  participant DataPasienBoundary as :DataPasienBoundary
+  participant DataAkunBoundary as :DataAkunBoundary
+  participant PasienEntity as :PasienEntity
+  A->>+PasienForm: kirimPencarian(kataKunci)
+  PasienForm->>+PasienManager: cariPasien(kataKunci)
+  PasienManager->>DataPasienBoundary: cariParsial(kataKunci)
+  DataPasienBoundary-->>PasienManager: daftar pasien
+  PasienManager-->>-PasienForm: daftar pasien
+  PasienForm->>PasienForm: tampilkanHasilCari(daftar)
+  PasienForm-->>-A: daftar pasien yang cocok
+  A->>PasienForm: bukaFormulir(pasien)
+  A->>+PasienForm: kirimDataPasien()
+  PasienForm->>+PasienManager: perbaruiPasien(data)
+  PasienManager->>PasienManager: validasiNIK(nik)
+  PasienManager->>PasienEntity: perbarui(data)
+  Note over PasienEntity: nomorRekamMedis tidak ikut diubah
+  PasienManager->>DataPasienBoundary: simpanPasien(pasien)
+  PasienManager->>DataAkunBoundary: simpanAudit(pembaruan pasien)
+  PasienManager-->>-PasienForm: selesai
+  PasienForm->>PasienForm: tampilkanNotifikasi("Data pasien diperbarui")
+  PasienForm-->>-A: konfirmasi pembaruan

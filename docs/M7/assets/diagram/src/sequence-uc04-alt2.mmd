@@ -1,0 +1,13 @@
+sequenceDiagram
+  autonumber
+  actor A as Perawat
+  participant SkriningForm as :SkriningForm
+  participant SkriningManager as :SkriningManager
+  A->>+SkriningForm: kirimHasilSkrining()
+  SkriningForm->>+SkriningManager: simpanSkrining(idKunjungan, keluhan, tv)
+  SkriningManager->>SkriningManager: validasiRentang(tv)
+  Note over SkriningManager: contoh suhu 72 °C atau sistolik 400 mmHg, data tidak disimpan
+  SkriningManager-->>-SkriningForm: ["suhu", "sistolik"]
+  SkriningForm->>SkriningForm: tampilkanPeringatanRentang(kolom)
+  SkriningForm-->>-A: kolom bermasalah ditandai merah
+  Note over A,SkriningForm: perawat mengoreksi nilai, kembali ke langkah 4 skenario normal

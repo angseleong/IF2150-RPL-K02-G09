@@ -1,0 +1,47 @@
+sequenceDiagram
+  autonumber
+  actor A as Perawat
+  participant AntreanSkriningForm as :AntreanSkriningForm
+  participant SkriningForm as :SkriningForm
+  participant SkriningManager as :SkriningManager
+  participant RisikoManager as :RisikoManager
+  participant DataKunjunganBoundary as :DataKunjunganBoundary
+  participant DataKlinisBoundary as :DataKlinisBoundary
+  participant AntreanEntity as :AntreanEntity
+  participant TandaVitalEntity as :TandaVitalEntity
+  A->>+AntreanSkriningForm: tampilkanAntrean()
+  AntreanSkriningForm->>+SkriningManager: muatAntrean()
+  SkriningManager->>DataKunjunganBoundary: ambilAntrean("skrining")
+  DataKunjunganBoundary-->>SkriningManager: antrean
+  SkriningManager-->>-AntreanSkriningForm: daftar kunjungan
+  AntreanSkriningForm-->>-A: antrean terurut nomor
+  A->>+AntreanSkriningForm: kirimPanggilan()
+  AntreanSkriningForm->>+SkriningManager: panggilPasien()
+  SkriningManager->>DataKunjunganBoundary: ambilAntrean("skrining")
+  DataKunjunganBoundary-->>SkriningManager: antrean
+  SkriningManager->>AntreanEntity: ambilTerdepan()
+  AntreanEntity-->>SkriningManager: kunjungan
+  Note over SkriningManager: status kunjungan menjadi "sedang diskrining"
+  SkriningManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
+  SkriningManager-->>-AntreanSkriningForm: kunjungan
+  AntreanSkriningForm->>AntreanSkriningForm: perbaruiTampilan(daftar)
+  AntreanSkriningForm->>SkriningForm: tampilkanFormulir(kunjungan)
+  deactivate AntreanSkriningForm
+  A->>+SkriningForm: kirimHasilSkrining()
+  SkriningForm->>+SkriningManager: simpanSkrining(idKunjungan, keluhan, tv)
+  SkriningManager->>SkriningManager: validasiRentang(tv)
+  SkriningManager->>TandaVitalEntity: hitungIMT()
+  TandaVitalEntity-->>SkriningManager: imt
+  SkriningManager->>DataKlinisBoundary: simpanSkrining(skrining)
+  SkriningManager->>+RisikoManager: evaluasiRisiko(kunjungan, tv)
+  RisikoManager->>DataKlinisBoundary: ambilAmbang()
+  DataKlinisBoundary-->>RisikoManager: daftar ambang
+  RisikoManager->>DataKlinisBoundary: riwayatTandaVital(idPasien, 3)
+  DataKlinisBoundary-->>RisikoManager: riwayat
+  RisikoManager-->>-SkriningManager: daftar kosong (tidak berisiko)
+  Note over SkriningManager: status kunjungan menjadi "siap diperiksa dokter"
+  SkriningManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
+  SkriningManager-->>-SkriningForm: daftar galat kosong
+  SkriningForm->>RisikoManager: ambilPenanda(idKunjungan)
+  RisikoManager-->>SkriningForm: daftar kosong
+  SkriningForm-->>-A: skrining tersimpan, pasien diteruskan ke antrean poli

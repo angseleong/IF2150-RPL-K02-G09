@@ -1,0 +1,26 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant KonfigurasiForm as :KonfigurasiForm
+  participant KonfigurasiManager as :KonfigurasiManager
+  participant DataPencadanganBoundary as :DataPencadanganBoundary
+  participant PencadanganEntity as :PencadanganEntity
+  A->>+KonfigurasiForm: bukaTab("Pemeliharaan Basis Data")
+  KonfigurasiForm->>+KonfigurasiManager: muatStatusPencadangan()
+  KonfigurasiManager->>DataPencadanganBoundary: ambilTerakhir()
+  DataPencadanganBoundary-->>KonfigurasiManager: pencadangan terakhir
+  KonfigurasiManager-->>-KonfigurasiForm: pencadangan terakhir
+  KonfigurasiForm->>KonfigurasiForm: tampilkanStatusPencadangan(p)
+  KonfigurasiForm-->>-A: tanggal, ukuran, status, lokasi media
+  A->>+KonfigurasiForm: kirimPencadangan()
+  KonfigurasiForm->>+KonfigurasiManager: jalankanPencadangan()
+  KonfigurasiManager->>DataPencadanganBoundary: jalankanPgDump(lokasi)
+  DataPencadanganBoundary-->>KonfigurasiManager: pencadangan
+  KonfigurasiManager->>DataPencadanganBoundary: verifikasiArsip(pencadangan)
+  DataPencadanganBoundary-->>KonfigurasiManager: true
+  KonfigurasiManager->>PencadanganEntity: berhasil()
+  PencadanganEntity-->>KonfigurasiManager: true
+  KonfigurasiManager->>DataPencadanganBoundary: simpanCatatan(pencadangan)
+  KonfigurasiManager-->>-KonfigurasiForm: pencadangan
+  KonfigurasiForm->>KonfigurasiForm: tampilkanStatusPencadangan(p)
+  KonfigurasiForm-->>-A: waktu pencadangan terakhir diperbarui

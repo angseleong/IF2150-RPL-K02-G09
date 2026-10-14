@@ -1,0 +1,13 @@
+sequenceDiagram
+  autonumber
+  actor A as Dokter
+  participant RekamMedisForm as :RekamMedisForm
+  participant PemeriksaanManager as :PemeriksaanManager
+  participant DataKlinisBoundary as :DataKlinisBoundary
+  A->>+RekamMedisForm: tampilkanGrafikTren()
+  RekamMedisForm->>+PemeriksaanManager: susunTren(idPasien)
+  PemeriksaanManager->>DataKlinisBoundary: riwayatTandaVital(idPasien, 0)
+  DataKlinisBoundary-->>PemeriksaanManager: satu pengukuran
+  PemeriksaanManager-->>-RekamMedisForm: seri berisi satu titik
+  RekamMedisForm->>RekamMedisForm: tampilkanTabelPengukuran(nilai)
+  RekamMedisForm-->>-A: tabel hari ini dan keterangan grafik butuh minimal dua kunjungan

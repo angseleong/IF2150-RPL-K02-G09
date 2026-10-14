@@ -1,0 +1,26 @@
+sequenceDiagram
+  autonumber
+  actor A1 as Petugas Loket 1
+  actor A2 as Petugas Loket 2
+  participant KunjunganManager_1 as :KunjunganManager (Loket 1)
+  participant KunjunganManager_2 as :KunjunganManager (Loket 2)
+  participant DataKunjunganBoundary as :DataKunjunganBoundary
+  participant PoliEntity as :PoliEntity
+  A1->>KunjunganManager_1: bukaKunjungan(idPasienA, idPoli)
+  A2->>KunjunganManager_2: bukaKunjungan(idPasienB, idPoli)
+  KunjunganManager_1->>DataKunjunganBoundary: kunciPoli(idPoli)
+  DataKunjunganBoundary-->>KunjunganManager_1: poli (SELECT ... FOR UPDATE)
+  KunjunganManager_2->>DataKunjunganBoundary: kunciPoli(idPoli)
+  Note over KunjunganManager_2,DataKunjunganBoundary: menunggu kunci baris poli dilepas
+  KunjunganManager_1->>PoliEntity: ambilNomorBerikutnya(hariIni)
+  PoliEntity-->>KunjunganManager_1: 7
+  KunjunganManager_1->>DataKunjunganBoundary: simpanKunjungan(kunjunganA)
+  KunjunganManager_1->>DataKunjunganBoundary: simpanPoli(poli)
+  Note over KunjunganManager_1,DataKunjunganBoundary: COMMIT, kunci dilepas
+  DataKunjunganBoundary-->>KunjunganManager_2: poli (urutanTerakhir = 7)
+  KunjunganManager_2->>PoliEntity: ambilNomorBerikutnya(hariIni)
+  PoliEntity-->>KunjunganManager_2: 8
+  KunjunganManager_2->>DataKunjunganBoundary: simpanKunjungan(kunjunganB)
+  KunjunganManager_2->>DataKunjunganBoundary: simpanPoli(poli)
+  KunjunganManager_1-->>A1: tiket nomor 7
+  KunjunganManager_2-->>A2: tiket nomor 8

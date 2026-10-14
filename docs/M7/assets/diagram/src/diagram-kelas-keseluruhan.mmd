@@ -1,0 +1,297 @@
+classDiagram
+  direction TB
+  class LoginForm {
+    <<boundary>>
+  }
+  class PasienForm {
+    <<boundary>>
+  }
+  class KunjunganForm {
+    <<boundary>>
+  }
+  class AntreanSkriningForm {
+    <<boundary>>
+  }
+  class SkriningForm {
+    <<boundary>>
+  }
+  class RekamMedisForm {
+    <<boundary>>
+  }
+  class PemeriksaanForm {
+    <<boundary>>
+  }
+  class ResepForm {
+    <<boundary>>
+  }
+  class AntreanResepForm {
+    <<boundary>>
+  }
+  class PenyerahanObatForm {
+    <<boundary>>
+  }
+  class PersediaanForm {
+    <<boundary>>
+  }
+  class DaftarPantauForm {
+    <<boundary>>
+  }
+  class LaporanForm {
+    <<boundary>>
+  }
+  class SinkronisasiForm {
+    <<boundary>>
+  }
+  class SATUSEHATGateway {
+    <<boundary>>
+  }
+  class KonfigurasiForm {
+    <<boundary>>
+  }
+  class AutentikasiManager {
+    <<control>>
+  }
+  class PasienManager {
+    <<control>>
+  }
+  class KunjunganManager {
+    <<control>>
+  }
+  class SkriningManager {
+    <<control>>
+  }
+  class RisikoManager {
+    <<control>>
+  }
+  class PemeriksaanManager {
+    <<control>>
+  }
+  class ResepManager {
+    <<control>>
+  }
+  class ApotekManager {
+    <<control>>
+  }
+  class PersediaanManager {
+    <<control>>
+  }
+  class PantauManager {
+    <<control>>
+  }
+  class LaporanManager {
+    <<control>>
+  }
+  class SinkronisasiManager {
+    <<control>>
+  }
+  class KonfigurasiManager {
+    <<control>>
+  }
+  class PenggunaEntity {
+    <<entity>>
+  }
+  class SesiEntity {
+    <<entity>>
+  }
+  class AuditEntity {
+    <<entity>>
+  }
+  class PasienEntity {
+    <<entity>>
+  }
+  class RekamMedisEntity {
+    <<entity>>
+  }
+  class KunjunganEntity {
+    <<entity>>
+  }
+  class PoliEntity {
+    <<entity>>
+  }
+  class AntreanEntity {
+    <<entity>>
+  }
+  class SkriningEntity {
+    <<entity>>
+  }
+  class TandaVitalEntity {
+    <<entity>>
+  }
+  class AmbangRisikoEntity {
+    <<entity>>
+  }
+  class PenandaRisikoEntity {
+    <<entity>>
+  }
+  class PemeriksaanEntity {
+    <<entity>>
+  }
+  class DiagnosisEntity {
+    <<entity>>
+  }
+  class KodeICD10Entity {
+    <<entity>>
+  }
+  class JadwalKontrolEntity {
+    <<entity>>
+  }
+  class ResepEntity {
+    <<entity>>
+  }
+  class ItemResepEntity {
+    <<entity>>
+  }
+  class ObatEntity {
+    <<entity>>
+  }
+  class BetsObatEntity {
+    <<entity>>
+  }
+  class PenerimaanObatEntity {
+    <<entity>>
+  }
+  class DaftarPantauEntity {
+    <<entity>>
+  }
+  class TindakLanjutEntity {
+    <<entity>>
+  }
+  class LaporanEntity {
+    <<entity>>
+  }
+  class BundelFHIREntity {
+    <<entity>>
+  }
+  class PencadanganEntity {
+    <<entity>>
+  }
+  class DataAkunBoundary {
+    <<boundary>>
+  }
+  class DataPasienBoundary {
+    <<boundary>>
+  }
+  class DataKunjunganBoundary {
+    <<boundary>>
+  }
+  class DataKlinisBoundary {
+    <<boundary>>
+  }
+  class DataPantauBoundary {
+    <<boundary>>
+  }
+  class DataFarmasiBoundary {
+    <<boundary>>
+  }
+  class DataLaporanBoundary {
+    <<boundary>>
+  }
+  class DataSinkronisasiBoundary {
+    <<boundary>>
+  }
+  class DataPencadanganBoundary {
+    <<boundary>>
+  }
+  DataLaporanBoundary ..> KunjunganEntity : agregasi
+  DataLaporanBoundary ..> PoliEntity : agregasi
+  DataLaporanBoundary ..> DiagnosisEntity : agregasi
+  AntreanResepForm "1" --> "1" ApotekManager : memanggil
+  AntreanResepForm "1" --> "1" PenyerahanObatForm : membuka
+  AntreanSkriningForm "1" --> "1" SkriningForm : membuka
+  AntreanSkriningForm "1" --> "1" SkriningManager : memanggil
+  ApotekManager ..> DataFarmasiBoundary : memakai
+  ApotekManager ..> DataKunjunganBoundary : memakai
+  ApotekManager ..> DataSinkronisasiBoundary : memakai
+  AutentikasiManager ..> DataAkunBoundary : memakai
+  DaftarPantauForm "1" --> "1" PantauManager : memanggil
+  DaftarPantauForm "1" --> "1" RisikoManager : memanggil
+  KonfigurasiForm "1" --> "1" KonfigurasiManager : memanggil
+  KonfigurasiManager ..> DataAkunBoundary : memakai
+  KonfigurasiManager ..> DataFarmasiBoundary : memakai
+  KonfigurasiManager ..> DataKlinisBoundary : memakai
+  KonfigurasiManager ..> DataKunjunganBoundary : memakai
+  KonfigurasiManager ..> DataPencadanganBoundary : memakai
+  KunjunganForm "1" --> "1" KunjunganManager : memanggil
+  KunjunganManager ..> DataAkunBoundary : memakai
+  KunjunganManager ..> DataKunjunganBoundary : memakai
+  KunjunganManager ..> DataPasienBoundary : memakai
+  LaporanForm "1" --> "1" LaporanManager : memanggil
+  LaporanManager ..> DataLaporanBoundary : memakai
+  LoginForm "1" --> "1" AutentikasiManager : memanggil
+  PantauManager ..> DataPantauBoundary : memakai
+  PantauManager ..> DataPasienBoundary : memakai
+  PantauManager ..> RisikoManager : memanggil
+  PasienForm "1" --> "1" PasienManager : memanggil
+  PasienManager ..> DataAkunBoundary : memakai
+  PasienManager ..> DataPasienBoundary : memakai
+  PemeriksaanForm "1" --> "1" PemeriksaanManager : memanggil
+  PemeriksaanManager ..> DataAkunBoundary : memakai
+  PemeriksaanManager ..> DataKlinisBoundary : memakai
+  PemeriksaanManager ..> DataKunjunganBoundary : memakai
+  PemeriksaanManager ..> DataPasienBoundary : memakai
+  PenyerahanObatForm "1" --> "1" ApotekManager : memanggil
+  PersediaanForm "1" --> "1" PersediaanManager : memanggil
+  PersediaanManager ..> DataAkunBoundary : memakai
+  PersediaanManager ..> DataFarmasiBoundary : memakai
+  RekamMedisForm "1" --> "1" AutentikasiManager : memanggil
+  RekamMedisForm "1" --> "1" PemeriksaanForm : membuka
+  RekamMedisForm "1" --> "1" PemeriksaanManager : memanggil
+  ResepForm "1" --> "1" ResepManager : memanggil
+  ResepManager ..> DataFarmasiBoundary : memakai
+  ResepManager ..> DataKunjunganBoundary : memakai
+  RisikoManager ..> DataKlinisBoundary : memakai
+  RisikoManager ..> DataPantauBoundary : memakai
+  SinkronisasiForm "1" --> "1" SinkronisasiManager : memanggil
+  SinkronisasiManager ..> DataSinkronisasiBoundary : memakai
+  SinkronisasiManager ..> SATUSEHATGateway : memakai
+  SkriningForm "1" --> "1" RisikoManager : memanggil
+  SkriningForm "1" --> "1" SkriningManager : memanggil
+  SkriningManager ..> DataKlinisBoundary : memakai
+  SkriningManager ..> DataKunjunganBoundary : memakai
+  SkriningManager ..> RisikoManager : memanggil
+  DataAkunBoundary ..> PenggunaEntity : membaca/menyimpan
+  DataAkunBoundary ..> SesiEntity : membaca/menyimpan
+  DataAkunBoundary ..> AuditEntity : membaca/menyimpan
+  DataPasienBoundary ..> PasienEntity : membaca/menyimpan
+  DataPasienBoundary ..> RekamMedisEntity : membaca/menyimpan
+  DataKunjunganBoundary ..> KunjunganEntity : membaca/menyimpan
+  DataKunjunganBoundary ..> PoliEntity : membaca/menyimpan
+  DataKunjunganBoundary ..> AntreanEntity : membaca/menyimpan
+  DataKlinisBoundary ..> SkriningEntity : membaca/menyimpan
+  DataKlinisBoundary ..> TandaVitalEntity : membaca/menyimpan
+  DataKlinisBoundary ..> AmbangRisikoEntity : membaca/menyimpan
+  DataKlinisBoundary ..> PenandaRisikoEntity : membaca/menyimpan
+  DataKlinisBoundary ..> PemeriksaanEntity : membaca/menyimpan
+  DataKlinisBoundary ..> DiagnosisEntity : membaca/menyimpan
+  DataKlinisBoundary ..> KodeICD10Entity : membaca/menyimpan
+  DataKlinisBoundary ..> JadwalKontrolEntity : membaca/menyimpan
+  DataFarmasiBoundary ..> ResepEntity : membaca/menyimpan
+  DataFarmasiBoundary ..> ItemResepEntity : membaca/menyimpan
+  DataFarmasiBoundary ..> ObatEntity : membaca/menyimpan
+  DataFarmasiBoundary ..> BetsObatEntity : membaca/menyimpan
+  DataFarmasiBoundary ..> PenerimaanObatEntity : membaca/menyimpan
+  DataPantauBoundary ..> DaftarPantauEntity : membaca/menyimpan
+  DataPantauBoundary ..> TindakLanjutEntity : membaca/menyimpan
+  DataLaporanBoundary ..> LaporanEntity : membaca/menyimpan
+  DataSinkronisasiBoundary ..> BundelFHIREntity : membaca/menyimpan
+  DataPencadanganBoundary ..> PencadanganEntity : membaca/menyimpan
+  PenggunaEntity "1" *-- "0..*" SesiEntity : memiliki
+  PasienEntity "1" *-- "1" RekamMedisEntity : memiliki
+  PasienEntity "1" *-- "0..*" KunjunganEntity : melakukan
+  RekamMedisEntity "1" o-- "0..*" KunjunganEntity : menghimpun
+  PoliEntity "1" -- "0..*" KunjunganEntity : menerima
+  AntreanEntity "1" o-- "0..*" KunjunganEntity : mengurutkan
+  KunjunganEntity "1" *-- "0..1" SkriningEntity : memiliki
+  SkriningEntity "1" *-- "1" TandaVitalEntity : mencatat
+  KunjunganEntity "1" *-- "0..1" PemeriksaanEntity : memiliki
+  PemeriksaanEntity "1" *-- "1..*" DiagnosisEntity : menetapkan
+  DiagnosisEntity "0..*" --> "1" KodeICD10Entity : memakai kode
+  PenandaRisikoEntity "0..*" -- "0..1" DaftarPantauEntity : memicu
+  JadwalKontrolEntity "0..1" -- "0..1" DaftarPantauEntity : memicu
+  DaftarPantauEntity "1" *-- "0..*" TindakLanjutEntity : mencatat
+  ResepEntity "1" *-- "1..*" ItemResepEntity : memuat
+  ItemResepEntity "0..*" --> "1" ObatEntity : merujuk
+  ObatEntity "1" o-- "0..*" BetsObatEntity : menghimpun
+  PenerimaanObatEntity "1" *-- "1..*" BetsObatEntity : mencatat
+  AntreanEntity "1" o-- "0..*" ResepEntity : mengurutkan
+  KunjunganEntity "1" -- "0..1" BundelFHIREntity : dikirim sebagai

@@ -1,0 +1,40 @@
+sequenceDiagram
+  autonumber
+  actor A as Dokter
+  participant ResepForm as :ResepForm
+  participant ResepManager as :ResepManager
+  participant DataFarmasiBoundary as :DataFarmasiBoundary
+  participant DataKunjunganBoundary as :DataKunjunganBoundary
+  participant ItemResepEntity as :ItemResepEntity
+  participant ResepEntity as :ResepEntity
+  participant AntreanEntity as :AntreanEntity
+  A->>+ResepForm: tampilkanFormulir(kunjungan)
+  ResepForm->>+ResepManager: muatDataObat()
+  ResepManager->>DataFarmasiBoundary: ambilSemuaObat()
+  DataFarmasiBoundary-->>ResepManager: daftar obat dan stok
+  ResepManager-->>-ResepForm: daftar obat
+  ResepForm-->>-A: formulir peresepan
+  A->>+ResepForm: kirimItem(idObat, jumlah, dosis, aturanPakai)
+  ResepForm->>+ResepManager: tambahItem(idObat, jumlah, dosis, aturanPakai)
+  ResepManager->>DataFarmasiBoundary: ambilObat(idObat)
+  DataFarmasiBoundary-->>ResepManager: obat
+  ResepManager->>ItemResepEntity: «create»
+  ResepManager->>ResepManager: validasiStok(item)
+  ResepManager->>ItemResepEntity: cukupStok(obat.stok)
+  ItemResepEntity-->>ResepManager: true
+  ResepManager-->>-ResepForm: item
+  ResepForm->>ResepForm: tampilkanIndikatorStok(true, sisa)
+  ResepForm-->>-A: indikator hijau "Tersedia"
+  A->>+ResepForm: kirimResep()
+  ResepForm->>+ResepManager: kirimKeApotek(idKunjungan, items)
+  loop setiap item resep
+    ResepManager->>ResepManager: validasiStok(item)
+  end
+  ResepManager->>ResepEntity: «create»(idKunjungan, items)
+  ResepManager->>DataFarmasiBoundary: simpanResep(resep)
+  ResepManager->>DataKunjunganBoundary: ambilAntrean("apotek")
+  DataKunjunganBoundary-->>ResepManager: antrean
+  ResepManager->>AntreanEntity: tambahkan(idResep)
+  ResepManager->>DataKunjunganBoundary: simpanAntrean(antrean)
+  ResepManager-->>-ResepForm: resep
+  ResepForm-->>-A: resep masuk antrean apotek

@@ -1,0 +1,18 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant LaporanForm as :LaporanForm
+  participant LaporanManager as :LaporanManager
+  participant DataLaporanBoundary as :DataLaporanBoundary
+  participant LaporanEntity as :LaporanEntity
+  A->>+LaporanForm: kirimRentang()
+  LaporanForm->>+LaporanManager: hitungRekapitulasi(mulai, akhir)
+  LaporanManager->>LaporanManager: validasiRentang(mulai, akhir)
+  LaporanManager->>DataLaporanBoundary: agregasiKunjungan(mulai, akhir)
+  DataLaporanBoundary-->>LaporanManager: laporan bernilai nol
+  LaporanManager->>LaporanEntity: kosong()
+  LaporanEntity-->>LaporanManager: true
+  LaporanManager-->>-LaporanForm: laporan bernilai nol
+  LaporanForm->>LaporanForm: tampilkanRekapitulasi(laporan)
+  LaporanForm->>LaporanForm: kunciTombolEkspor()
+  LaporanForm-->>-A: "Tidak ada data pelayanan pada rentang tanggal terpilih"

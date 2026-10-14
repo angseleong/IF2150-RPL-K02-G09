@@ -1,0 +1,20 @@
+sequenceDiagram
+  autonumber
+  actor A1 as Petugas Farmasi 1
+  actor A2 as Petugas Farmasi 2
+  participant ApotekManager_1 as :ApotekManager (Loket 1)
+  participant ApotekManager_2 as :ApotekManager (Loket 2)
+  participant DataFarmasiBoundary as :DataFarmasiBoundary
+  A1->>ApotekManager_1: serahkanObat(idResep)
+  A2->>ApotekManager_2: serahkanObat(idResep)
+  ApotekManager_1->>DataFarmasiBoundary: kunciResep(idResep)
+  DataFarmasiBoundary-->>ApotekManager_1: resep (status menunggu)
+  ApotekManager_2->>DataFarmasiBoundary: kunciResep(idResep)
+  Note over ApotekManager_2,DataFarmasiBoundary: menunggu kunci baris resep dilepas
+  ApotekManager_1->>ApotekManager_1: potongStok(resep)
+  ApotekManager_1->>DataFarmasiBoundary: simpanResep(resep selesai)
+  Note over ApotekManager_1,DataFarmasiBoundary: COMMIT, kunci dilepas
+  ApotekManager_1-->>A1: obat diserahkan
+  DataFarmasiBoundary-->>ApotekManager_2: resep (status selesai)
+  ApotekManager_2-->>A2: ditolak, "Resep sudah selesai dilayani"
+  Note over ApotekManager_2: stok tidak dipotong dua kali

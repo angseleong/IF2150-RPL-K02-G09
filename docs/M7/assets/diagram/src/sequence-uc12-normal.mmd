@@ -1,0 +1,39 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant KonfigurasiForm as :KonfigurasiForm
+  participant KonfigurasiManager as :KonfigurasiManager
+  participant DataAkunBoundary as :DataAkunBoundary
+  participant DataKunjunganBoundary as :DataKunjunganBoundary
+  participant DataFarmasiBoundary as :DataFarmasiBoundary
+  participant DataKlinisBoundary as :DataKlinisBoundary
+  participant PenggunaEntity as :PenggunaEntity
+  A->>+KonfigurasiForm: tampilkanData()
+  KonfigurasiForm->>+KonfigurasiManager: muatDataMaster()
+  KonfigurasiManager->>DataKunjunganBoundary: ambilSemuaPoli()
+  DataKunjunganBoundary-->>KonfigurasiManager: daftar poli
+  KonfigurasiManager->>DataFarmasiBoundary: ambilSemuaObat()
+  DataFarmasiBoundary-->>KonfigurasiManager: daftar obat
+  KonfigurasiManager->>DataKlinisBoundary: ambilAmbang()
+  DataKlinisBoundary-->>KonfigurasiManager: daftar ambang
+  KonfigurasiManager-->>-KonfigurasiForm: data master
+  KonfigurasiForm-->>-A: tab Akun, Data Master, Pemeliharaan
+  A->>KonfigurasiForm: bukaTab("Akun Pengguna")
+  A->>+KonfigurasiForm: kirimPerubahan()
+  KonfigurasiForm->>+KonfigurasiManager: simpanAkun(pengguna, sandi)
+  KonfigurasiManager->>DataAkunBoundary: namaPenggunaDipakai(nama)
+  DataAkunBoundary-->>KonfigurasiManager: false
+  KonfigurasiManager->>PenggunaEntity: «create»(nama, hash(sandi), peran)
+  KonfigurasiManager->>DataAkunBoundary: simpanPengguna(pengguna)
+  KonfigurasiManager->>DataAkunBoundary: simpanAudit(akun baru)
+  KonfigurasiManager-->>-KonfigurasiForm: selesai
+  KonfigurasiForm->>KonfigurasiForm: tampilkanPesan("Akun ditambahkan")
+  KonfigurasiForm-->>-A: daftar akun diperbarui
+  A->>KonfigurasiForm: bukaTab("Data Master")
+  A->>+KonfigurasiForm: kirimPerubahan()
+  KonfigurasiForm->>+KonfigurasiManager: simpanDataMaster(ambang)
+  KonfigurasiManager->>DataKlinisBoundary: simpanAmbang(ambang)
+  KonfigurasiManager->>DataAkunBoundary: simpanAudit(ubah ambang)
+  KonfigurasiManager-->>-KonfigurasiForm: selesai
+  KonfigurasiForm->>KonfigurasiForm: tampilkanPesan("Ambang baru berlaku untuk skrining berikutnya")
+  KonfigurasiForm-->>-A: pengaturan tersimpan

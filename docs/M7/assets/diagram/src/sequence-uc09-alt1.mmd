@@ -1,0 +1,16 @@
+sequenceDiagram
+  autonumber
+  actor A as Tenaga Klinis
+  participant DaftarPantauForm as :DaftarPantauForm
+  participant PantauManager as :PantauManager
+  participant DataPantauBoundary as :DataPantauBoundary
+  participant TindakLanjutEntity as :TindakLanjutEntity
+  A->>+DaftarPantauForm: kirimTindakLanjut()
+  DaftarPantauForm->>+PantauManager: catatTindakLanjut(idEntri, tindakLanjut)
+  PantauManager->>TindakLanjutEntity: terhubung()
+  TindakLanjutEntity-->>PantauManager: false
+  PantauManager->>DataPantauBoundary: simpanTindakLanjut(idEntri, tindakLanjut)
+  PantauManager->>PantauManager: perbaruiStatus(idEntri, "perlu dihubungi ulang")
+  PantauManager->>DataPantauBoundary: simpanEntri(entri)
+  PantauManager-->>-DaftarPantauForm: selesai
+  DaftarPantauForm-->>-A: pasien tetap di prioritas daftar pantau

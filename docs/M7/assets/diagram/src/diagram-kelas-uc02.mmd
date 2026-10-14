@@ -1,0 +1,79 @@
+classDiagram
+  direction TB
+  class PasienForm {
+    <<boundary>>
+    -kataKunci: String
+    -dataFormulir: PasienEntity
+    +tampilkan() void
+    +kirimPencarian(kataKunci: String) void
+    +tampilkanHasilCari(hasil: List~PasienEntity~) void
+    +bukaFormulir(pasien: PasienEntity) void
+    +kirimDataPasien() void
+    +tampilkanPesanValidasi(pesan: String) void
+    +tampilkanNotifikasi(pesan: String) void
+  }
+  class PasienManager {
+    <<control>>
+    +cariPasien(kataKunci: String) List~PasienEntity~
+    +daftarkanPasien(data: PasienEntity) PasienEntity
+    +perbaruiPasien(data: PasienEntity) void
+    +validasiNIK(nik: String) boolean
+    -terbitkanNomorRM() String
+  }
+  class DataAkunBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +cariPengguna(nama: String) PenggunaEntity
+    +ambilPengguna(idPengguna: int) PenggunaEntity
+    +namaPenggunaDipakai(nama: String) boolean
+    +simpanPengguna(p: PenggunaEntity) void
+    +simpanSesi(s: SesiEntity) void
+    +tutupSesiAktif(idPengguna: int) void
+    +simpanAudit(a: AuditEntity) void
+  }
+  class DataPasienBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +cariParsial(kataKunci: String) List~PasienEntity~
+    +ambilPasien(idPasien: int) PasienEntity
+    +nikTerdaftar(nik: String) boolean
+    +nomorRMBerikutnya() String
+    +simpanPasien(p: PasienEntity) void
+    +ambilRekamMedis(idPasien: int) RekamMedisEntity
+    +simpanRekamMedis(rm: RekamMedisEntity) void
+  }
+  class AuditEntity {
+    <<entity>>
+    -idAudit: long
+    -idPengguna: int
+    -waktu: LocalDateTime
+    -deskripsi: String
+    +buat(idPengguna: int, deskripsi: String)$ AuditEntity
+  }
+  class PasienEntity {
+    <<entity>>
+    -idPasien: int
+    -nik: String
+    -nomorRekamMedis: String
+    -nama: String
+    -tanggalLahir: LocalDate
+    -jenisKelamin: String
+    -alamat: String
+    -nomorTelepon: String
+    +perbarui(data: PasienEntity) void
+  }
+  class RekamMedisEntity {
+    <<entity>>
+    -idRekamMedis: int
+    -daftarDiagnosis: List~DiagnosisEntity~
+    -riwayatObat: List~String~
+    +tambahEntri(catatan: String) void
+  }
+  PasienForm "1" --> "1" PasienManager : memanggil
+  PasienManager ..> DataAkunBoundary : memakai
+  PasienManager ..> DataPasienBoundary : memakai
+  PasienManager ..> PasienEntity : membuat
+  DataAkunBoundary ..> AuditEntity : membaca/menyimpan
+  DataPasienBoundary ..> PasienEntity : membaca/menyimpan
+  DataPasienBoundary ..> RekamMedisEntity : membaca/menyimpan
+  PasienEntity "1" *-- "1" RekamMedisEntity : memiliki

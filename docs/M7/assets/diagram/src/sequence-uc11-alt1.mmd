@@ -1,0 +1,23 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant SinkronisasiForm as :SinkronisasiForm
+  participant SinkronisasiManager as :SinkronisasiManager
+  participant DataSinkronisasiBoundary as :DataSinkronisasiBoundary
+  participant SATUSEHATGateway as :SATUSEHATGateway
+  A->>+SinkronisasiForm: kirimPermintaanSinkron()
+  SinkronisasiForm->>+SinkronisasiManager: kirimSemua()
+  SinkronisasiManager->>SATUSEHATGateway: periksaKoneksi()
+  SATUSEHATGateway-->>SinkronisasiManager: false
+  SinkronisasiManager-->>-SinkronisasiForm: ditahan, kondisi luring
+  SinkronisasiForm->>SinkronisasiForm: tampilkanTombolEkspor()
+  SinkronisasiForm-->>-A: bundel tetap di antrean lokal
+  A->>+SinkronisasiForm: kirimPermintaanEkspor(lokasi)
+  SinkronisasiForm->>+SinkronisasiManager: eksporBundel(lokasi)
+  SinkronisasiManager->>DataSinkronisasiBoundary: ambilTertunda()
+  DataSinkronisasiBoundary-->>SinkronisasiManager: bundel tertunda
+  SinkronisasiManager->>DataSinkronisasiBoundary: tulisArsipTerenkripsi(daftar, lokasi)
+  DataSinkronisasiBoundary-->>SinkronisasiManager: lokasi berkas
+  SinkronisasiManager-->>-SinkronisasiForm: lokasi berkas
+  SinkronisasiForm->>SinkronisasiForm: tampilkanPesan("Bundel diekspor ke media eksternal")
+  SinkronisasiForm-->>-A: berkas arsip terenkripsi

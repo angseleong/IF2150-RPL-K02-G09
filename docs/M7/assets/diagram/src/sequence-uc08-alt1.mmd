@@ -1,0 +1,23 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Farmasi
+  participant PersediaanForm as :PersediaanForm
+  participant PersediaanManager as :PersediaanManager
+  participant DataFarmasiBoundary as :DataFarmasiBoundary
+  participant ObatEntity as :ObatEntity
+  participant BetsObatEntity as :BetsObatEntity
+  A->>+PersediaanForm: tampilkanFormulir()
+  PersediaanForm->>+PersediaanManager: terbitkanPeringatan()
+  PersediaanManager->>DataFarmasiBoundary: obatPerluPeringatan(90)
+  DataFarmasiBoundary-->>PersediaanManager: daftar obat
+  loop setiap obat
+    PersediaanManager->>ObatEntity: diBawahAmbang()
+    ObatEntity-->>PersediaanManager: boolean
+    PersediaanManager->>DataFarmasiBoundary: ambilBets(idObat)
+    DataFarmasiBoundary-->>PersediaanManager: daftar bets
+    PersediaanManager->>BetsObatEntity: mendekatiKedaluwarsa(90)
+    BetsObatEntity-->>PersediaanManager: boolean
+  end
+  PersediaanManager-->>-PersediaanForm: daftar peringatan
+  PersediaanForm->>PersediaanForm: tampilkanPeringatan(peringatan)
+  PersediaanForm-->>-A: obat menipis dan bets mendekati kedaluwarsa

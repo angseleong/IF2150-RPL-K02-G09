@@ -1,0 +1,14 @@
+sequenceDiagram
+  autonumber
+  actor A as Dokter
+  participant PemeriksaanForm as :PemeriksaanForm
+  participant PemeriksaanManager as :PemeriksaanManager
+  participant DataKlinisBoundary as :DataKlinisBoundary
+  A->>+PemeriksaanForm: kirimKataKunciDiagnosis(kataKunci)
+  PemeriksaanForm->>+PemeriksaanManager: cariKodeICD10(kataKunci)
+  PemeriksaanManager->>DataKlinisBoundary: cariKodeICD10(kataKunci)
+  DataKlinisBoundary-->>PemeriksaanManager: daftar kosong
+  PemeriksaanManager-->>-PemeriksaanForm: daftar kosong
+  PemeriksaanForm->>PemeriksaanForm: tampilkanPesan("Kode diagnosis ICD-10 tidak ditemukan")
+  PemeriksaanForm-->>-A: minta istilah lain atau kode bab
+  Note over A,PemeriksaanForm: dokter mengetik istilah yang tepat, kembali ke langkah 4 skenario normal
