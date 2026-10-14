@@ -28,6 +28,7 @@
 * [Milestone 4](#milestone-4)
 * [Milestone 5](#milestone-5)
 * [Milestone 6](#milestone-6)
+* [Milestone 7](#milestone-7)
 
 
 ---
@@ -183,6 +184,27 @@
 * *Garis Manager ke DataBoundary pada Gambar 2 sudah dicocokkan dengan Tabel 2.2: untuk setiap dari 12 use case, gabungan DataBoundary yang tersambung ke Manager-nya sama persis dengan kolom Data Access Layer pada tabel. Tidak ada Manager atau DataBoundary yang tidak tersambung.*
 * *Hasil peninjauan silang: Gambar 1 dipasang pada BAB 1, Tabel 2.1 diselaraskan dengan relasi Form ke RisikoManager pada Gambar 2, nama artifact Physical View diseragamkan, dan foto asistensi diganti dengan dokumentasi asli.*
 * *Hasil asistensi: SKPL menjadi baseline final; MVC dinilai terlalu dangkal bila dipakai sendirian; Tabel 1.1 disalin persis dari Subbab 2.5 SKPL; BAB 3 memuat minimal satu view untuk keseluruhan sistem dengan relasi berlabel.*
+
+---
+
+### Milestone 7
+**Periode:** 07-10-2026 - 14-10-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *07-10-2026* | *[Seluruh Anggota]* | *Menyinkronkan repository dengan rilis Milestone 7 dan mempelajari template Tugas 7 Deskripsi Perancangan Perangkat Lunak* | *1* | *Done* | *-* |
+| *08-10-2026* | *[Seluruh Anggota]* | *Menyepakati aturan perancangan: pola Form ke Manager ke DataBoundary pada setiap sequence diagram, ID kelas C01 s.d. C55 dipertahankan dan kelas akses data diberi C56 s.d. C64, serta metode simpan() dipindahkan dari entity ke DataBoundary* | *1* | *Done* | *-* |
+| *09-10-2026* | *Muhammad Adnan Kurniawan* | *Mengganti nama berkas menjadi K02_G09_DPPL.md, menyusun BAB 1 (tujuan, lingkup, istilah, penomoran, referensi), dan menyusun BAB 2 dari APL: lingkungan implementasi beserta bahasa, development tools, dan filing system, Layered Architecture, Tabel 2.3, Tabel 2.4, serta Logical View dan Physical View* | *3* | *Done* | *Nomor tabel dan rujukan subbab dari APL harus disesuaikan dengan penomoran DPPL* |
+| *10-10-2026* | *Steven Vanako* | *Merealisasikan UC01 s.d. UC04: tabel identifikasi kelas, 15 sequence diagram (skenario normal dan alternatif), dan 4 diagram kelas per use case* | *4* | *Done* | *Skenario dua petugas menerbitkan antrean bersamaan (UC03 alternatif 2) perlu dua lifeline Manager dan note penguncian baris* |
+| *11-10-2026* | *Malik Arsyafiandra Madani* | *Merealisasikan UC05 s.d. UC08: tabel identifikasi kelas, 13 sequence diagram, dan 4 diagram kelas per use case* | *4* | *Done* | *Pemeriksaan hak akses pada UC05 alternatif 1 menambahkan AutentikasiManager ke kelas UC05* |
+| *12-10-2026* | *Fachry Azriel Fajdwani* | *Merealisasikan UC09 s.d. UC12: tabel identifikasi kelas, 14 sequence diagram, dan 4 diagram kelas per use case* | *4* | *Done* | *-* |
+| *13-10-2026* | *Axeleon Justin Algianto* | *Menetapkan atribut dan metode bertipe untuk 64 kelas perancangan, menyusun BAB 4 (diagram kelas keseluruhan, Tabel 4.1, dan catatan perbedaan dengan kelas analisis SKPL) serta BAB 5 matriks kerunutan* | *4* | *Done* | *Diagram kelas keseluruhan terlalu padat bila relasi Manager ke Entity ikut digambar, sehingga relasi itu cukup ditampilkan pada diagram kelas per use case* |
+| *14-10-2026* | *Axeleon Justin Algianto* | *Peninjauan silang DPPL: memastikan setiap pesan pada 42 sequence diagram ada sebagai metode di kelas tujuannya, metode privat hanya dipanggil oleh kelasnya sendiri, setiap kelas pada diagram punya relasi, serta nomor gambar dan tabel berurutan* | *1,5* | *Done* | *-* |
+
+**Catatan/Evaluasi Milestone 7:**
+* *Seluruh 42 skenario pada Subbab 4.4 SKPL (12 normal dan 30 alternatif) punya sequence diagram sendiri, dan nama kelas serta ID-nya tidak berubah dari SKPL dan APL.*
+* *Kelas perancangan berbeda dari kelas analisis pada empat hal: sembilan DataBoundary ditambahkan, penyimpanan dipindah dari entity ke DataBoundary, setiap atribut dan metode diberi tipe, dan metode ditambah atau dihapus sesuai kebutuhan sequence diagram. Keempatnya dicatat pada BAB 4 DPPL.*
+* *Seluruh diagram ditulis dalam Mermaid dan sumbernya disimpan di docs/M7/assets/diagram/src agar dapat disunting anggota lain.*
 
 ---
 

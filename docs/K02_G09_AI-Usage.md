@@ -28,6 +28,7 @@
 * [Milestone 4](#milestone-4)
 * [Milestone 5](#milestone-5)
 * [Milestone 6](#milestone-6)
+* [Milestone 7](#milestone-7)
 
 ---
 
@@ -81,6 +82,14 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | *Claude (Claude Code)* | *Bertukar pikiran soal view yang paling cocok untuk BAB 3* | *"Untuk sistem dengan 65 komponen dan aturan antarlapisan yang ketat, view 4+1 mana yang paling membantu pembaca memahami relasi antarkomponen?"* | *AI menyebut Logical View dan Physical View sebagai kandidat. Kelompok memutuskan memakai keduanya dan membagi pengerjaannya ke anggota yang berbeda.* |
 | *Claude (Claude Code)* | *Meminta saran cara menggambar block diagram dengan banyak komponen agar tetap terbaca* | *"Diagram logical view kami berisi 65 kotak dan puluhan garis. Ada ide supaya garisnya tidak saling tumpang tindih?"* | *Dari beberapa saran AI, kelompok memakai ide jalur bersama dengan titik percabangan untuk relasi Manager ke DataBoundary. Penempatan komponen, label relasi, dan diagramnya dikerjakan sendiri, lalu relasinya dicocokkan ulang dengan Tabel 2.2 dan diagram kelas SKPL.* |
 | *Gemini* | *Memeriksa ulang apakah seluruh komponen Tabel 2.1 sudah muncul pada diagram* | *"Ini daftar komponen di Tabel 2.1 dan daftar kotak pada diagram. Apakah ada yang terlewat atau namanya berbeda?"* | *Hasil pemeriksaan AI dicek ulang secara manual satu per satu terhadap Tabel 2.1 sebelum diagram dimasukkan ke dokumen.* |
+
+### Milestone 7
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| *Claude (Claude Code)* | *Meminta pendapat kedua soal letak metode penyimpanan pada kelas perancangan* | *"Di SKPL, entity kami punya metode simpan(). Di APL kami sudah punya DataBoundary di Data Access Layer. Lebih baik simpan() tetap di entity atau dipindah ke DataBoundary? Apa untung-ruginya?"* | *Jawaban AI dipakai sebagai bahan diskusi. Kelompok memutuskan memindahkan penyimpanan ke DataBoundary agar Business Layer tidak bergantung pada basis data, lalu mencatat alasan perubahan ini sendiri pada BAB 4 DPPL.* |
+| *Claude (Claude Code)* | *Bertukar pikiran soal cara menggambarkan skenario konkurensi pada sequence diagram* | *"Skenario alternatif kami ada yang berupa dua petugas menekan tombol bersamaan. Bagaimana cara yang lazim menggambarkannya di sequence diagram supaya penguncian barisnya terlihat?"* | *Dari beberapa ide AI, kelompok memilih dua lifeline instans Manager dan note penguncian baris. Urutan pesan dan titik COMMIT pada UC03 dan UC07 disusun sendiri sesuai transaksi PostgreSQL yang dirancang.* |
+| *Claude (Claude Code)* | *Meminta perbandingan perkakas untuk menggambar 42 sequence diagram dan 13 diagram kelas secara konsisten* | *"Kami perlu membuat puluhan sequence diagram dan diagram kelas yang nama metodenya harus konsisten. Lebih praktis pakai draw.io, StarUML, PlantUML, atau Mermaid?"* | *Kelompok memilih Mermaid karena diagram ditulis sebagai teks dan dapat ditinjau lewat Git. Seluruh isi diagram, yaitu kelas, metode, dan urutan pesan, ditulis sendiri dari skenario Subbab 4.4 SKPL.* |
+| *Gemini* | *Memeriksa ulang konsistensi nama metode antara sequence diagram dan diagram kelas* | *"Ini daftar pesan pada sequence diagram dan daftar metode tiap kelas. Apakah ada pesan yang metodenya tidak ada di kelas tujuan?"* | *Temuan AI dicocokkan ulang secara manual pada dokumen. Kelompok sendiri yang memutuskan perbaikannya, yaitu menambah metode yang kurang atau mengganti nama pesan.* |
 
 ---
 ### Pernyataan Integritas dan Persetujuan
