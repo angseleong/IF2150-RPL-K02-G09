@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 610 160" width="610" height="160" role="img" aria-label="Logo SEHATI">
+  <title>SEHATI</title>
+  <rect x="10" y="10" width="140" height="140" rx="32" fill="#0F766E"/>
+  <path d="M80 122 L38 80 A23 23 0 0 1 80 48 A23 23 0 0 1 122 80 Z" fill="#FFFFFF"/>
+  <polyline points="30,84 56,84 66,66 78,102 90,58 100,84 130,84" fill="none" stroke="#0F766E" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="178" y="92" font-family="Helvetica, Arial, sans-serif" font-size="64" font-weight="700" letter-spacing="3" fill="#0F766E" stroke="#0F766E" stroke-width="3" stroke-linejoin="round">SEHATI</text>
+  <text x="180" y="124" font-family="Helvetica, Arial, sans-serif" font-size="17.5" fill="#475569">Sistem Elektronik Pelayanan Kesehatan Terintegrasi</text>
+</svg>

@@ -9,6 +9,10 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 
 ## SEHATI - Sistem Elektronik Pelayanan Kesehatan Terintegrasi
 
+<p align="center">
+<img alt="Logo SEHATI" src="./assets/logo-sehati.svg" width="60%">
+</p>
+
 ### Untuk: Made Branenda Jordhy
 
 Dipersiapkan oleh:
@@ -33,10 +37,8 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* |  |
-| *B* |  |
-| *C* |  |
-| ... |  |
+| A | Pembuatan awal DPPL SEHATI: BAB 1 dan BAB 2 dari SKPL dan APL, realisasi dua belas *use case* dengan 42 *sequence diagram*, diagram kelas keseluruhan, dan matriks kerunutan. |
+| B | Perbaikan hasil asistensi: menambahkan logo, menggambar ulang *sequence diagram* dengan notasi *boundary*, *control*, dan *entity*, mengalirkan UC03 dan UC07 alternatif 2 lewat `Form`, serta memangkas diagram kelas per *use case* sesuai metode yang dipakai. |
 
 ---
 
@@ -298,6 +300,8 @@ Seluruh client terhubung ke «device» Server Basis Data lewat jalur berlabel "L
 # BAB 3: Realisasi Use Case
 
 Setiap *use case* direalisasikan dengan pola yang sama mengikuti Subbab 2.2: aktor berinteraksi dengan `Form`, `Form` memanggil `Manager`, `Manager` membaca dan menyimpan data lewat `DataBoundary`, lalu `DataBoundary` menjalankan kueri JDBC ke PostgreSQL. Objek `Entity` hanya dibuat dan diubah oleh `Manager`. Pada *sequence diagram*, panah utuh adalah pemanggilan metode, panah putus-putus adalah nilai kembalian, dan pesan «create» menandai pembuatan objek baru. Nomor urut pesan dicantumkan pada setiap panah. Setiap pesan yang menuju kelas SEHATI adalah metode yang tercantum pada diagram kelas *use case* tersebut dan pada Tabel 4.1.
+
+Kami menggambar setiap *lifeline* dengan ikon UML sesuai stereotipnya: `Form`, `DataBoundary`, dan `SATUSEHATGateway` sebagai *boundary*, `Manager` sebagai *control*, dan kelas berakhiran `Entity` sebagai *entity*. Fragmen `loop` menandai langkah berulang, `par` menandai dua petugas yang bekerja bersamaan, dan `critical` menandai langkah yang harus selesai dalam satu transaksi. Diagram kelas tiap *use case* hanya memuat atribut dan metode yang dipakai *use case* itu, sedangkan Tabel 4.1 memuat daftar lengkapnya.
 
 ## 3.1 Use Case Masuk ke Aplikasi
 
