@@ -1,10 +1,10 @@
 sequenceDiagram
   autonumber
   actor A as Perawat
-  participant RekamMedisForm as :RekamMedisForm
-  participant PemeriksaanForm as :PemeriksaanForm
-  participant AutentikasiManager as :AutentikasiManager
-  participant PemeriksaanManager as :PemeriksaanManager
+  participant RekamMedisForm@{ "type": "boundary" } as :RekamMedisForm
+  participant PemeriksaanForm@{ "type": "boundary" } as :PemeriksaanForm
+  participant AutentikasiManager@{ "type": "control" } as :AutentikasiManager
+  participant PemeriksaanManager@{ "type": "control" } as :PemeriksaanManager
   A->>+RekamMedisForm: tampilkanRingkasan(kunjungan)
   RekamMedisForm->>+AutentikasiManager: periksaHakAkses("Perawat", "PemeriksaanForm")
   AutentikasiManager-->>-RekamMedisForm: false

@@ -1,11 +1,10 @@
 sequenceDiagram
   autonumber
   actor A as Pengguna
-  participant LoginForm as :LoginForm
-  participant AutentikasiManager as :AutentikasiManager
-  participant DataAkunBoundary as :DataAkunBoundary
-  participant PenggunaEntity as :PenggunaEntity
-  participant SesiEntity as :SesiEntity
+  participant LoginForm@{ "type": "boundary" } as :LoginForm
+  participant AutentikasiManager@{ "type": "control" } as :AutentikasiManager
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
+  participant PenggunaEntity@{ "type": "entity" } as :PenggunaEntity
   A->>LoginForm: tampilkan()
   LoginForm-->>A: layar autentikasi
   A->>+LoginForm: kirimKredensial()
@@ -17,6 +16,7 @@ sequenceDiagram
   AutentikasiManager->>PenggunaEntity: cocokkanSandi(sandi)
   PenggunaEntity-->>AutentikasiManager: true
   AutentikasiManager->>AutentikasiManager: bukaSesi(pengguna)
+  create participant SesiEntity@{ "type": "entity" } as :SesiEntity
   AutentikasiManager->>SesiEntity: «create»
   AutentikasiManager->>DataAkunBoundary: simpanSesi(sesi)
   AutentikasiManager->>DataAkunBoundary: simpanAudit(audit masuk)

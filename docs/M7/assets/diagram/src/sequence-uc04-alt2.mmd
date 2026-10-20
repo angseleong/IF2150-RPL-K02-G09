@@ -1,8 +1,8 @@
 sequenceDiagram
   autonumber
   actor A as Perawat
-  participant SkriningForm as :SkriningForm
-  participant SkriningManager as :SkriningManager
+  participant SkriningForm@{ "type": "boundary" } as :SkriningForm
+  participant SkriningManager@{ "type": "control" } as :SkriningManager
   A->>+SkriningForm: kirimHasilSkrining()
   SkriningForm->>+SkriningManager: simpanSkrining(idKunjungan, keluhan, tv)
   SkriningManager->>SkriningManager: validasiRentang(tv)

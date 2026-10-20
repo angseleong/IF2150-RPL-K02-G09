@@ -249,6 +249,33 @@ classDiagram
   SkriningManager ..> DataKlinisBoundary : memakai
   SkriningManager ..> DataKunjunganBoundary : memakai
   SkriningManager ..> RisikoManager : memanggil
+  AutentikasiManager ..> PenggunaEntity : mengolah
+  AutentikasiManager ..> SesiEntity : membuat
+  PasienManager ..> PasienEntity : membuat
+  KunjunganManager ..> AntreanEntity : mengolah
+  KunjunganManager ..> KunjunganEntity : membuat
+  KunjunganManager ..> PoliEntity : mengolah
+  SkriningManager ..> AntreanEntity : mengolah
+  SkriningManager ..> KunjunganEntity : mengolah
+  SkriningManager ..> TandaVitalEntity : mengolah
+  RisikoManager ..> AmbangRisikoEntity : mengolah
+  PemeriksaanManager ..> KunjunganEntity : mengolah
+  PemeriksaanManager ..> PemeriksaanEntity : mengolah
+  ResepManager ..> AntreanEntity : mengolah
+  ResepManager ..> ItemResepEntity : membuat
+  ResepManager ..> ResepEntity : membuat
+  ResepManager ..> PemeriksaanEntity : merujuk
+  ApotekManager ..> AntreanEntity : mengolah
+  ApotekManager ..> BetsObatEntity : mengolah
+  ApotekManager ..> ObatEntity : mengolah
+  PersediaanManager ..> BetsObatEntity : mengolah
+  PersediaanManager ..> ObatEntity : mengolah
+  PersediaanManager ..> PenerimaanObatEntity : mengolah
+  PantauManager ..> TindakLanjutEntity : mengolah
+  LaporanManager ..> LaporanEntity : mengolah
+  SinkronisasiManager ..> BundelFHIREntity : mengolah
+  KonfigurasiManager ..> PencadanganEntity : mengolah
+  KonfigurasiManager ..> PenggunaEntity : membuat
   DataAkunBoundary ..> PenggunaEntity : membaca/menyimpan
   DataAkunBoundary ..> SesiEntity : membaca/menyimpan
   DataAkunBoundary ..> AuditEntity : membaca/menyimpan

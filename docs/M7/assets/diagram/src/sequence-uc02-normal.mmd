@@ -1,11 +1,10 @@
 sequenceDiagram
   autonumber
   actor A as Petugas Administrasi
-  participant PasienForm as :PasienForm
-  participant PasienManager as :PasienManager
-  participant DataPasienBoundary as :DataPasienBoundary
-  participant DataAkunBoundary as :DataAkunBoundary
-  participant PasienEntity as :PasienEntity
+  participant PasienForm@{ "type": "boundary" } as :PasienForm
+  participant PasienManager@{ "type": "control" } as :PasienManager
+  participant DataPasienBoundary@{ "type": "boundary" } as :DataPasienBoundary
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
   A->>PasienForm: tampilkan()
   A->>+PasienForm: kirimPencarian(kataKunci)
   PasienForm->>+PasienManager: cariPasien(kataKunci)
@@ -23,6 +22,7 @@ sequenceDiagram
   PasienManager->>PasienManager: terbitkanNomorRM()
   PasienManager->>DataPasienBoundary: nomorRMBerikutnya()
   DataPasienBoundary-->>PasienManager: nomorRM
+  create participant PasienEntity@{ "type": "entity" } as :PasienEntity
   PasienManager->>PasienEntity: «create»(data, nomorRM)
   PasienManager->>DataPasienBoundary: simpanPasien(pasien)
   Note over DataPasienBoundary: baris rekam medis pasien ikut dibuat dalam transaksi yang sama

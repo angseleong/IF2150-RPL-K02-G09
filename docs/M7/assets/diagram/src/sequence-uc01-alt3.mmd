@@ -1,8 +1,8 @@
 sequenceDiagram
   autonumber
   actor A as Pengguna
-  participant LoginForm as :LoginForm
-  participant AutentikasiManager as :AutentikasiManager
+  participant LoginForm@{ "type": "boundary" } as :LoginForm
+  participant AutentikasiManager@{ "type": "control" } as :AutentikasiManager
   Note over LoginForm: menu di luar wewenang sudah disembunyikan saat dasbor disusun
   A->>+LoginForm: bukaLayar("PemeriksaanForm")
   LoginForm->>+AutentikasiManager: periksaHakAkses("Perawat", "PemeriksaanForm")

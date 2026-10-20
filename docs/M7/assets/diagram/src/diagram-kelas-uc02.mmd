@@ -23,24 +23,15 @@ classDiagram
   class DataAkunBoundary {
     <<boundary>>
     -koneksi: Connection
-    +cariPengguna(nama: String) PenggunaEntity
-    +ambilPengguna(idPengguna: int) PenggunaEntity
-    +namaPenggunaDipakai(nama: String) boolean
-    +simpanPengguna(p: PenggunaEntity) void
-    +simpanSesi(s: SesiEntity) void
-    +tutupSesiAktif(idPengguna: int) void
     +simpanAudit(a: AuditEntity) void
   }
   class DataPasienBoundary {
     <<boundary>>
     -koneksi: Connection
     +cariParsial(kataKunci: String) List~PasienEntity~
-    +ambilPasien(idPasien: int) PasienEntity
     +nikTerdaftar(nik: String) boolean
     +nomorRMBerikutnya() String
     +simpanPasien(p: PasienEntity) void
-    +ambilRekamMedis(idPasien: int) RekamMedisEntity
-    +simpanRekamMedis(rm: RekamMedisEntity) void
   }
   class AuditEntity {
     <<entity>>
@@ -48,7 +39,6 @@ classDiagram
     -idPengguna: int
     -waktu: LocalDateTime
     -deskripsi: String
-    +buat(idPengguna: int, deskripsi: String)$ AuditEntity
   }
   class PasienEntity {
     <<entity>>
@@ -67,7 +57,6 @@ classDiagram
     -idRekamMedis: int
     -daftarDiagnosis: List~DiagnosisEntity~
     -riwayatObat: List~String~
-    +tambahEntri(catatan: String) void
   }
   PasienForm "1" --> "1" PasienManager : memanggil
   PasienManager ..> DataAkunBoundary : memakai

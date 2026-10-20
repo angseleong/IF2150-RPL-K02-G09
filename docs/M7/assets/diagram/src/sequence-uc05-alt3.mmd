@@ -1,11 +1,11 @@
 sequenceDiagram
   autonumber
   actor A as Dokter
-  participant RekamMedisForm as :RekamMedisForm
-  participant PemeriksaanForm as :PemeriksaanForm
-  participant PemeriksaanManager as :PemeriksaanManager
-  participant DataPasienBoundary as :DataPasienBoundary
-  participant DataKlinisBoundary as :DataKlinisBoundary
+  participant RekamMedisForm@{ "type": "boundary" } as :RekamMedisForm
+  participant PemeriksaanForm@{ "type": "boundary" } as :PemeriksaanForm
+  participant PemeriksaanManager@{ "type": "control" } as :PemeriksaanManager
+  participant DataPasienBoundary@{ "type": "boundary" } as :DataPasienBoundary
+  participant DataKlinisBoundary@{ "type": "boundary" } as :DataKlinisBoundary
   Note over RekamMedisForm,DataKlinisBoundary: internet putus, seluruh panggilan tetap berjalan lewat LAN ke PostgreSQL
   A->>+RekamMedisForm: tampilkanRingkasan(kunjungan)
   RekamMedisForm->>RekamMedisForm: tampilkanIndikatorLuring()

@@ -1,10 +1,10 @@
 sequenceDiagram
   autonumber
   actor A as Pengguna
-  participant LoginForm as :LoginForm
-  participant AutentikasiManager as :AutentikasiManager
-  participant DataAkunBoundary as :DataAkunBoundary
-  participant PenggunaEntity as :PenggunaEntity
+  participant LoginForm@{ "type": "boundary" } as :LoginForm
+  participant AutentikasiManager@{ "type": "control" } as :AutentikasiManager
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
+  participant PenggunaEntity@{ "type": "entity" } as :PenggunaEntity
   A->>+LoginForm: kirimKredensial()
   LoginForm->>+AutentikasiManager: autentikasi(nama, sandi)
   AutentikasiManager->>+DataAkunBoundary: cariPengguna(nama)

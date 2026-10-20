@@ -21,11 +21,7 @@ classDiagram
     <<boundary>>
     -koneksi: Connection
     +cariPengguna(nama: String) PenggunaEntity
-    +ambilPengguna(idPengguna: int) PenggunaEntity
-    +namaPenggunaDipakai(nama: String) boolean
-    +simpanPengguna(p: PenggunaEntity) void
     +simpanSesi(s: SesiEntity) void
-    +tutupSesiAktif(idPengguna: int) void
     +simpanAudit(a: AuditEntity) void
   }
   class PenggunaEntity {
@@ -37,7 +33,6 @@ classDiagram
     -status: String
     +cocokkanSandi(sandi: String) boolean
     +aktif() boolean
-    +nonaktifkan() void
   }
   class SesiEntity {
     <<entity>>
@@ -45,8 +40,6 @@ classDiagram
     -idPengguna: int
     -waktuMulai: LocalDateTime
     -statusAktif: boolean
-    +habisWaktu(menit: int) boolean
-    +tutup() void
   }
   class AuditEntity {
     <<entity>>
@@ -54,7 +47,6 @@ classDiagram
     -idPengguna: int
     -waktu: LocalDateTime
     -deskripsi: String
-    +buat(idPengguna: int, deskripsi: String)$ AuditEntity
   }
   AutentikasiManager ..> DataAkunBoundary : memakai
   AutentikasiManager ..> PenggunaEntity : mengolah

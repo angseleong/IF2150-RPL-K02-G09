@@ -1,14 +1,14 @@
 sequenceDiagram
   autonumber
   actor A as Dokter
-  participant ResepForm as :ResepForm
-  participant ResepManager as :ResepManager
-  participant DataFarmasiBoundary as :DataFarmasiBoundary
-  participant ItemResepEntity as :ItemResepEntity
+  participant ResepForm@{ "type": "boundary" } as :ResepForm
+  participant ResepManager@{ "type": "control" } as :ResepManager
+  participant DataFarmasiBoundary@{ "type": "boundary" } as :DataFarmasiBoundary
   A->>+ResepForm: kirimItem(idObat, jumlah, dosis, aturanPakai)
   ResepForm->>+ResepManager: tambahItem(idObat, jumlah, dosis, aturanPakai)
   ResepManager->>DataFarmasiBoundary: ambilObat(idObat)
   DataFarmasiBoundary-->>ResepManager: obat
+  create participant ItemResepEntity@{ "type": "entity" } as :ItemResepEntity
   ResepManager->>ItemResepEntity: «create»
   ResepManager->>ResepManager: validasiStok(item)
   ResepManager->>ItemResepEntity: cukupStok(obat.stok)

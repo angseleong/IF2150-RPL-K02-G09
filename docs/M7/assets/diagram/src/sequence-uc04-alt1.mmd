@@ -1,16 +1,17 @@
 sequenceDiagram
   autonumber
   actor A as Perawat
-  participant AntreanSkriningForm as :AntreanSkriningForm
-  participant SkriningManager as :SkriningManager
-  participant DataKunjunganBoundary as :DataKunjunganBoundary
-  participant AntreanEntity as :AntreanEntity
+  participant AntreanSkriningForm@{ "type": "boundary" } as :AntreanSkriningForm
+  participant SkriningManager@{ "type": "control" } as :SkriningManager
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant AntreanEntity@{ "type": "entity" } as :AntreanEntity
+  participant KunjunganEntity@{ "type": "entity" } as :KunjunganEntity
   A->>+AntreanSkriningForm: kirimLewati()
   AntreanSkriningForm->>+SkriningManager: lewatiPasien(idKunjungan)
   SkriningManager->>DataKunjunganBoundary: ambilAntrean("skrining")
   DataKunjunganBoundary-->>SkriningManager: antrean
   SkriningManager->>AntreanEntity: pindahkanKeBelakang(idKunjungan)
-  Note over SkriningManager: status kunjungan menjadi "tidak hadir"
+  SkriningManager->>KunjunganEntity: perbaruiStatus("tidak hadir")
   SkriningManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
   SkriningManager->>DataKunjunganBoundary: simpanAntrean(antrean)
   SkriningManager->>AntreanEntity: ambilTerdepan()

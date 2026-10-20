@@ -1,9 +1,9 @@
 sequenceDiagram
   autonumber
   actor A as Dokter
-  participant PemeriksaanForm as :PemeriksaanForm
-  participant PemeriksaanManager as :PemeriksaanManager
-  participant DataKlinisBoundary as :DataKlinisBoundary
+  participant PemeriksaanForm@{ "type": "boundary" } as :PemeriksaanForm
+  participant PemeriksaanManager@{ "type": "control" } as :PemeriksaanManager
+  participant DataKlinisBoundary@{ "type": "boundary" } as :DataKlinisBoundary
   A->>+PemeriksaanForm: kirimKataKunciDiagnosis(kataKunci)
   PemeriksaanForm->>+PemeriksaanManager: cariKodeICD10(kataKunci)
   PemeriksaanManager->>DataKlinisBoundary: cariKodeICD10(kataKunci)

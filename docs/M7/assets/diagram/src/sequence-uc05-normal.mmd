@@ -1,14 +1,15 @@
 sequenceDiagram
   autonumber
   actor A as Dokter
-  participant RekamMedisForm as :RekamMedisForm
-  participant PemeriksaanForm as :PemeriksaanForm
-  participant PemeriksaanManager as :PemeriksaanManager
-  participant DataPasienBoundary as :DataPasienBoundary
-  participant DataKlinisBoundary as :DataKlinisBoundary
-  participant DataKunjunganBoundary as :DataKunjunganBoundary
-  participant DataAkunBoundary as :DataAkunBoundary
-  participant PemeriksaanEntity as :PemeriksaanEntity
+  participant RekamMedisForm@{ "type": "boundary" } as :RekamMedisForm
+  participant PemeriksaanForm@{ "type": "boundary" } as :PemeriksaanForm
+  participant PemeriksaanManager@{ "type": "control" } as :PemeriksaanManager
+  participant DataPasienBoundary@{ "type": "boundary" } as :DataPasienBoundary
+  participant DataKlinisBoundary@{ "type": "boundary" } as :DataKlinisBoundary
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
+  participant KunjunganEntity@{ "type": "entity" } as :KunjunganEntity
+  participant PemeriksaanEntity@{ "type": "entity" } as :PemeriksaanEntity
   A->>+RekamMedisForm: tampilkanRingkasan(kunjungan)
   RekamMedisForm->>+PemeriksaanManager: susunRingkasan(idKunjungan)
   PemeriksaanManager->>DataKunjunganBoundary: ambilKunjungan(idKunjungan)
@@ -48,7 +49,7 @@ sequenceDiagram
   DataKlinisBoundary-->>PemeriksaanManager: pemeriksaan
   PemeriksaanManager->>PemeriksaanEntity: kunci()
   PemeriksaanManager->>DataKlinisBoundary: simpanPemeriksaan(pemeriksaan, diagnosis)
-  Note over PemeriksaanManager: status kunjungan menjadi "selesai diperiksa"
+  PemeriksaanManager->>KunjunganEntity: perbaruiStatus("selesai diperiksa")
   PemeriksaanManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
   PemeriksaanManager->>DataAkunBoundary: simpanAudit(pemeriksaan dikunci)
   PemeriksaanManager-->>-PemeriksaanForm: selesai

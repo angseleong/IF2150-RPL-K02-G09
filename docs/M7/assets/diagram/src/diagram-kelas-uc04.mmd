@@ -31,16 +31,10 @@ classDiagram
     -terbitkanPenanda(idKunjungan: int, jenis: String) PenandaRisikoEntity
     -masukkanKeDaftarPantau(idPasien: int, jenis: String) void
     +ambilPenanda(idKunjungan: int) List~PenandaRisikoEntity~
-    +muatEntriAktif() List~DaftarPantauEntity~
   }
   class DataKunjunganBoundary {
     <<boundary>>
     -koneksi: Connection
-    +ambilSemuaPoli() List~PoliEntity~
-    +kunciPoli(idPoli: int) PoliEntity
-    +simpanPoli(p: PoliEntity) void
-    +kunjunganAktif(idPasien: int, tanggal: LocalDate) KunjunganEntity
-    +ambilKunjungan(idKunjungan: int) KunjunganEntity
     +simpanKunjungan(k: KunjunganEntity) void
     +ambilAntrean(jenis: String) AntreanEntity
     +simpanAntrean(a: AntreanEntity) void
@@ -49,24 +43,15 @@ classDiagram
     <<boundary>>
     -koneksi: Connection
     +simpanSkrining(s: SkriningEntity) void
-    +ambilSkrining(idKunjungan: int) SkriningEntity
     +riwayatTandaVital(idPasien: int, batas: int) List~TandaVitalEntity~
     +ambilAmbang() List~AmbangRisikoEntity~
-    +simpanAmbang(a: AmbangRisikoEntity) void
     +simpanPenanda(p: PenandaRisikoEntity) void
     +penandaKunjungan(idKunjungan: int) List~PenandaRisikoEntity~
-    +cariKodeICD10(kataKunci: String) List~KodeICD10Entity~
-    +simpanPemeriksaan(p: PemeriksaanEntity, d: DiagnosisEntity) void
-    +ambilPemeriksaan(idKunjungan: int) PemeriksaanEntity
-    +simpanJadwalKontrol(j: JadwalKontrolEntity) void
-    +ambilJadwalKontrol() List~JadwalKontrolEntity~
   }
   class DataPantauBoundary {
     <<boundary>>
     -koneksi: Connection
-    +ambilEntri() List~DaftarPantauEntity~
     +simpanEntri(e: DaftarPantauEntity) void
-    +simpanTindakLanjut(idEntri: int, t: TindakLanjutEntity) void
   }
   class KunjunganEntity {
     <<entity>>
@@ -76,17 +61,14 @@ classDiagram
     -nomorAntrean: int
     -status: String
     +perbaruiStatus(status: String) void
-    +aktifHariIni() boolean
   }
   class AntreanEntity {
     <<entity>>
     -idAntrean: int
     -jenis: String
     -daftarEntri: List~Integer~
-    +tambahkan(idEntri: int) void
     +ambilTerdepan() KunjunganEntity
     +pindahkanKeBelakang(idEntri: int) void
-    +keluarkan(idEntri: int) void
   }
   class SkriningEntity {
     <<entity>>
@@ -94,7 +76,6 @@ classDiagram
     -idKunjungan: int
     -keluhanAwal: String
     -waktu: LocalDateTime
-    +lampirkanTandaVital(tv: TandaVitalEntity) void
   }
   class TandaVitalEntity {
     <<entity>>
@@ -121,7 +102,6 @@ classDiagram
     -jenisRisiko: String
     -tanggal: LocalDate
     -status: String
-    +cabut() void
   }
   class DaftarPantauEntity {
     <<entity>>
@@ -129,7 +109,6 @@ classDiagram
     -idPasien: int
     -jenisRisiko: String
     -statusTindakLanjut: String
-    +perbaruiStatus(status: String) void
   }
   AntreanSkriningForm "1" --> "1" SkriningForm : membuka
   AntreanSkriningForm "1" --> "1" SkriningManager : memanggil
@@ -141,6 +120,7 @@ classDiagram
   SkriningManager ..> AntreanEntity : mengolah
   SkriningManager ..> DataKlinisBoundary : memakai
   SkriningManager ..> DataKunjunganBoundary : memakai
+  SkriningManager ..> KunjunganEntity : mengolah
   SkriningManager ..> RisikoManager : memanggil
   SkriningManager ..> TandaVitalEntity : mengolah
   DataKunjunganBoundary ..> KunjunganEntity : membaca/menyimpan

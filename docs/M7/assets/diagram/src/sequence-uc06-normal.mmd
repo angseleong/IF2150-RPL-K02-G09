@@ -1,13 +1,11 @@
 sequenceDiagram
   autonumber
   actor A as Dokter
-  participant ResepForm as :ResepForm
-  participant ResepManager as :ResepManager
-  participant DataFarmasiBoundary as :DataFarmasiBoundary
-  participant DataKunjunganBoundary as :DataKunjunganBoundary
-  participant ItemResepEntity as :ItemResepEntity
-  participant ResepEntity as :ResepEntity
-  participant AntreanEntity as :AntreanEntity
+  participant ResepForm@{ "type": "boundary" } as :ResepForm
+  participant ResepManager@{ "type": "control" } as :ResepManager
+  participant DataFarmasiBoundary@{ "type": "boundary" } as :DataFarmasiBoundary
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant AntreanEntity@{ "type": "entity" } as :AntreanEntity
   A->>+ResepForm: tampilkanFormulir(kunjungan)
   ResepForm->>+ResepManager: muatDataObat()
   ResepManager->>DataFarmasiBoundary: ambilSemuaObat()
@@ -18,6 +16,7 @@ sequenceDiagram
   ResepForm->>+ResepManager: tambahItem(idObat, jumlah, dosis, aturanPakai)
   ResepManager->>DataFarmasiBoundary: ambilObat(idObat)
   DataFarmasiBoundary-->>ResepManager: obat
+  create participant ItemResepEntity@{ "type": "entity" } as :ItemResepEntity
   ResepManager->>ItemResepEntity: «create»
   ResepManager->>ResepManager: validasiStok(item)
   ResepManager->>ItemResepEntity: cukupStok(obat.stok)
@@ -30,6 +29,7 @@ sequenceDiagram
   loop setiap item resep
     ResepManager->>ResepManager: validasiStok(item)
   end
+  create participant ResepEntity@{ "type": "entity" } as :ResepEntity
   ResepManager->>ResepEntity: «create»(idKunjungan, items)
   ResepManager->>DataFarmasiBoundary: simpanResep(resep)
   ResepManager->>DataKunjunganBoundary: ambilAntrean("apotek")

@@ -1,14 +1,13 @@
 sequenceDiagram
   autonumber
   actor A as Petugas Administrasi
-  participant KunjunganForm as :KunjunganForm
-  participant KunjunganManager as :KunjunganManager
-  participant DataKunjunganBoundary as :DataKunjunganBoundary
-  participant DataPasienBoundary as :DataPasienBoundary
-  participant DataAkunBoundary as :DataAkunBoundary
-  participant PoliEntity as :PoliEntity
-  participant KunjunganEntity as :KunjunganEntity
-  participant AntreanEntity as :AntreanEntity
+  participant KunjunganForm@{ "type": "boundary" } as :KunjunganForm
+  participant KunjunganManager@{ "type": "control" } as :KunjunganManager
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant DataPasienBoundary@{ "type": "boundary" } as :DataPasienBoundary
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
+  participant PoliEntity@{ "type": "entity" } as :PoliEntity
+  participant AntreanEntity@{ "type": "entity" } as :AntreanEntity
   A->>+KunjunganForm: buka(pasien)
   KunjunganForm->>+KunjunganManager: daftarPoli()
   KunjunganManager->>DataKunjunganBoundary: ambilSemuaPoli()
@@ -21,22 +20,24 @@ sequenceDiagram
   KunjunganManager->>KunjunganManager: cegahKunjunganGanda(idPasien)
   KunjunganManager->>DataKunjunganBoundary: kunjunganAktif(idPasien, hariIni)
   DataKunjunganBoundary-->>KunjunganManager: null
-  Note over KunjunganManager,DataKunjunganBoundary: langkah berikut berjalan dalam satu transaksi
-  KunjunganManager->>KunjunganManager: terbitkanNomorAntrean(idPoli)
-  KunjunganManager->>DataKunjunganBoundary: kunciPoli(idPoli)
-  DataKunjunganBoundary-->>KunjunganManager: poli (baris terkunci)
-  KunjunganManager->>PoliEntity: ambilNomorBerikutnya(hariIni)
-  PoliEntity-->>KunjunganManager: nomorAntrean
-  KunjunganManager->>KunjunganEntity: «create»(idPasien, idPoli, nomorAntrean)
-  KunjunganManager->>DataPasienBoundary: ambilRekamMedis(idPasien)
-  DataPasienBoundary-->>KunjunganManager: rekamMedis
-  KunjunganManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
-  KunjunganManager->>DataKunjunganBoundary: simpanPoli(poli)
-  KunjunganManager->>DataKunjunganBoundary: ambilAntrean("skrining")
-  DataKunjunganBoundary-->>KunjunganManager: antrean
-  KunjunganManager->>AntreanEntity: tambahkan(idKunjungan)
-  KunjunganManager->>DataKunjunganBoundary: simpanAntrean(antrean)
-  KunjunganManager->>DataAkunBoundary: simpanAudit(kunjungan baru)
+  critical [satu transaksi]
+    KunjunganManager->>KunjunganManager: terbitkanNomorAntrean(idPoli)
+    KunjunganManager->>DataKunjunganBoundary: kunciPoli(idPoli)
+    DataKunjunganBoundary-->>KunjunganManager: poli (baris terkunci)
+    KunjunganManager->>PoliEntity: ambilNomorBerikutnya(hariIni)
+    PoliEntity-->>KunjunganManager: nomorAntrean
+    create participant KunjunganEntity@{ "type": "entity" } as :KunjunganEntity
+    KunjunganManager->>KunjunganEntity: «create»(idPasien, idPoli, nomorAntrean)
+    KunjunganManager->>DataPasienBoundary: ambilRekamMedis(idPasien)
+    DataPasienBoundary-->>KunjunganManager: rekamMedis
+    KunjunganManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
+    KunjunganManager->>DataKunjunganBoundary: simpanPoli(poli)
+    KunjunganManager->>DataKunjunganBoundary: ambilAntrean("skrining")
+    DataKunjunganBoundary-->>KunjunganManager: antrean
+    KunjunganManager->>AntreanEntity: tambahkan(idKunjungan)
+    KunjunganManager->>DataKunjunganBoundary: simpanAntrean(antrean)
+    KunjunganManager->>DataAkunBoundary: simpanAudit(kunjungan baru)
+  end
   KunjunganManager-->>-KunjunganForm: kunjungan
   KunjunganForm->>KunjunganForm: tampilkanTiketAntrean(kunjungan)
   KunjunganForm-->>-A: tiket antrean poli

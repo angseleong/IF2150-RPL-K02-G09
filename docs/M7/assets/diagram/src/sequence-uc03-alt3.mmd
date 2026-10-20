@@ -1,10 +1,10 @@
 sequenceDiagram
   autonumber
   actor A as Petugas Administrasi
-  participant KunjunganForm as :KunjunganForm
-  participant KunjunganManager as :KunjunganManager
-  participant DataKunjunganBoundary as :DataKunjunganBoundary
-  participant PoliEntity as :PoliEntity
+  participant KunjunganForm@{ "type": "boundary" } as :KunjunganForm
+  participant KunjunganManager@{ "type": "control" } as :KunjunganManager
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant PoliEntity@{ "type": "entity" } as :PoliEntity
   A->>+KunjunganForm: kirimPermintaanKunjungan()
   KunjunganForm->>+KunjunganManager: bukaKunjungan(idPasien, idPoli)
   KunjunganManager->>KunjunganManager: terbitkanNomorAntrean(idPoli)

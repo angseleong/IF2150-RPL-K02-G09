@@ -1,14 +1,15 @@
 sequenceDiagram
   autonumber
   actor A as Perawat
-  participant AntreanSkriningForm as :AntreanSkriningForm
-  participant SkriningForm as :SkriningForm
-  participant SkriningManager as :SkriningManager
-  participant RisikoManager as :RisikoManager
-  participant DataKunjunganBoundary as :DataKunjunganBoundary
-  participant DataKlinisBoundary as :DataKlinisBoundary
-  participant AntreanEntity as :AntreanEntity
-  participant TandaVitalEntity as :TandaVitalEntity
+  participant AntreanSkriningForm@{ "type": "boundary" } as :AntreanSkriningForm
+  participant SkriningForm@{ "type": "boundary" } as :SkriningForm
+  participant SkriningManager@{ "type": "control" } as :SkriningManager
+  participant RisikoManager@{ "type": "control" } as :RisikoManager
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant DataKlinisBoundary@{ "type": "boundary" } as :DataKlinisBoundary
+  participant AntreanEntity@{ "type": "entity" } as :AntreanEntity
+  participant KunjunganEntity@{ "type": "entity" } as :KunjunganEntity
+  participant TandaVitalEntity@{ "type": "entity" } as :TandaVitalEntity
   A->>+AntreanSkriningForm: tampilkanAntrean()
   AntreanSkriningForm->>+SkriningManager: muatAntrean()
   SkriningManager->>DataKunjunganBoundary: ambilAntrean("skrining")
@@ -21,7 +22,7 @@ sequenceDiagram
   DataKunjunganBoundary-->>SkriningManager: antrean
   SkriningManager->>AntreanEntity: ambilTerdepan()
   AntreanEntity-->>SkriningManager: kunjungan
-  Note over SkriningManager: status kunjungan menjadi "sedang diskrining"
+  SkriningManager->>KunjunganEntity: perbaruiStatus("sedang diskrining")
   SkriningManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
   SkriningManager-->>-AntreanSkriningForm: kunjungan
   AntreanSkriningForm->>AntreanSkriningForm: perbaruiTampilan(daftar)
@@ -39,7 +40,7 @@ sequenceDiagram
   RisikoManager->>DataKlinisBoundary: riwayatTandaVital(idPasien, 3)
   DataKlinisBoundary-->>RisikoManager: riwayat
   RisikoManager-->>-SkriningManager: daftar kosong (tidak berisiko)
-  Note over SkriningManager: status kunjungan menjadi "siap diperiksa dokter"
+  SkriningManager->>KunjunganEntity: perbaruiStatus("siap diperiksa dokter")
   SkriningManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
   SkriningManager-->>-SkriningForm: daftar galat kosong
   SkriningForm->>RisikoManager: ambilPenanda(idKunjungan)

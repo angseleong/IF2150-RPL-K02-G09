@@ -23,9 +23,6 @@ classDiagram
   }
   class AutentikasiManager {
     <<control>>
-    -percobaanGagal: int
-    +autentikasi(nama: String, sandi: String) SesiEntity
-    -bukaSesi(p: PenggunaEntity) SesiEntity
     +periksaHakAkses(peran: String, layar: String) boolean
   }
   class PemeriksaanManager {
@@ -40,52 +37,29 @@ classDiagram
   class DataAkunBoundary {
     <<boundary>>
     -koneksi: Connection
-    +cariPengguna(nama: String) PenggunaEntity
-    +ambilPengguna(idPengguna: int) PenggunaEntity
-    +namaPenggunaDipakai(nama: String) boolean
-    +simpanPengguna(p: PenggunaEntity) void
-    +simpanSesi(s: SesiEntity) void
-    +tutupSesiAktif(idPengguna: int) void
     +simpanAudit(a: AuditEntity) void
   }
   class DataPasienBoundary {
     <<boundary>>
     -koneksi: Connection
-    +cariParsial(kataKunci: String) List~PasienEntity~
-    +ambilPasien(idPasien: int) PasienEntity
-    +nikTerdaftar(nik: String) boolean
-    +nomorRMBerikutnya() String
-    +simpanPasien(p: PasienEntity) void
     +ambilRekamMedis(idPasien: int) RekamMedisEntity
-    +simpanRekamMedis(rm: RekamMedisEntity) void
   }
   class DataKunjunganBoundary {
     <<boundary>>
     -koneksi: Connection
-    +ambilSemuaPoli() List~PoliEntity~
-    +kunciPoli(idPoli: int) PoliEntity
-    +simpanPoli(p: PoliEntity) void
-    +kunjunganAktif(idPasien: int, tanggal: LocalDate) KunjunganEntity
     +ambilKunjungan(idKunjungan: int) KunjunganEntity
     +simpanKunjungan(k: KunjunganEntity) void
-    +ambilAntrean(jenis: String) AntreanEntity
-    +simpanAntrean(a: AntreanEntity) void
   }
   class DataKlinisBoundary {
     <<boundary>>
     -koneksi: Connection
-    +simpanSkrining(s: SkriningEntity) void
     +ambilSkrining(idKunjungan: int) SkriningEntity
     +riwayatTandaVital(idPasien: int, batas: int) List~TandaVitalEntity~
-    +ambilAmbang() List~AmbangRisikoEntity~
-    +simpanAmbang(a: AmbangRisikoEntity) void
-    +simpanPenanda(p: PenandaRisikoEntity) void
     +penandaKunjungan(idKunjungan: int) List~PenandaRisikoEntity~
     +cariKodeICD10(kataKunci: String) List~KodeICD10Entity~
     +simpanPemeriksaan(p: PemeriksaanEntity, d: DiagnosisEntity) void
     +ambilPemeriksaan(idKunjungan: int) PemeriksaanEntity
     +simpanJadwalKontrol(j: JadwalKontrolEntity) void
-    +ambilJadwalKontrol() List~JadwalKontrolEntity~
   }
   class AuditEntity {
     <<entity>>
@@ -93,14 +67,12 @@ classDiagram
     -idPengguna: int
     -waktu: LocalDateTime
     -deskripsi: String
-    +buat(idPengguna: int, deskripsi: String)$ AuditEntity
   }
   class RekamMedisEntity {
     <<entity>>
     -idRekamMedis: int
     -daftarDiagnosis: List~DiagnosisEntity~
     -riwayatObat: List~String~
-    +tambahEntri(catatan: String) void
   }
   class KunjunganEntity {
     <<entity>>
@@ -110,7 +82,6 @@ classDiagram
     -nomorAntrean: int
     -status: String
     +perbaruiStatus(status: String) void
-    +aktifHariIni() boolean
   }
   class TandaVitalEntity {
     <<entity>>
@@ -121,7 +92,6 @@ classDiagram
     -suhu: double
     -nadi: int
     -gulaDarah: Integer
-    +hitungIMT() double
   }
   class PemeriksaanEntity {
     <<entity>>
@@ -137,14 +107,12 @@ classDiagram
     -idDiagnosis: int
     -kodeICD10: String
     -deskripsi: String
-    +ringkas() String
   }
   class KodeICD10Entity {
     <<entity>>
     -kode: String
     -deskripsi: String
     -bab: String
-    +cocok(kataKunci: String) boolean
   }
   class JadwalKontrolEntity {
     <<entity>>
@@ -152,13 +120,13 @@ classDiagram
     -idPasien: int
     -tanggalRencana: LocalDate
     -status: String
-    +tandaiSelesai() void
   }
   PemeriksaanForm "1" --> "1" PemeriksaanManager : memanggil
   PemeriksaanManager ..> DataAkunBoundary : memakai
   PemeriksaanManager ..> DataKlinisBoundary : memakai
   PemeriksaanManager ..> DataKunjunganBoundary : memakai
   PemeriksaanManager ..> DataPasienBoundary : memakai
+  PemeriksaanManager ..> KunjunganEntity : mengolah
   PemeriksaanManager ..> PemeriksaanEntity : mengolah
   RekamMedisForm "1" --> "1" AutentikasiManager : memanggil
   RekamMedisForm "1" --> "1" PemeriksaanForm : membuka

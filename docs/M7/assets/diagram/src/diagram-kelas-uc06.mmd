@@ -20,12 +20,6 @@ classDiagram
   class DataKunjunganBoundary {
     <<boundary>>
     -koneksi: Connection
-    +ambilSemuaPoli() List~PoliEntity~
-    +kunciPoli(idPoli: int) PoliEntity
-    +simpanPoli(p: PoliEntity) void
-    +kunjunganAktif(idPasien: int, tanggal: LocalDate) KunjunganEntity
-    +ambilKunjungan(idKunjungan: int) KunjunganEntity
-    +simpanKunjungan(k: KunjunganEntity) void
     +ambilAntrean(jenis: String) AntreanEntity
     +simpanAntrean(a: AntreanEntity) void
   }
@@ -34,14 +28,7 @@ classDiagram
     -koneksi: Connection
     +ambilSemuaObat() List~ObatEntity~
     +ambilObat(idObat: int) ObatEntity
-    +ambilBets(idObat: int) List~BetsObatEntity~
-    +simpanStok(o: ObatEntity, bets: List~BetsObatEntity~) void
-    +simpanPenerimaan(p: PenerimaanObatEntity) void
-    +obatPerluPeringatan(hari: int) List~ObatEntity~
     +simpanResep(r: ResepEntity) void
-    +ambilAntreanResep() List~ResepEntity~
-    +ambilResep(idResep: int) ResepEntity
-    +kunciResep(idResep: int) ResepEntity
   }
   class AntreanEntity {
     <<entity>>
@@ -49,9 +36,6 @@ classDiagram
     -jenis: String
     -daftarEntri: List~Integer~
     +tambahkan(idEntri: int) void
-    +ambilTerdepan() KunjunganEntity
-    +pindahkanKeBelakang(idEntri: int) void
-    +keluarkan(idEntri: int) void
   }
   class PemeriksaanEntity {
     <<entity>>
@@ -60,7 +44,6 @@ classDiagram
     -anamnesis: String
     -tindakan: String
     -terkunci: boolean
-    +kunci() void
   }
   class ResepEntity {
     <<entity>>
@@ -69,7 +52,6 @@ classDiagram
     -waktuMasuk: LocalDateTime
     -status: String
     -catatan: String
-    +perbaruiStatus(status: String) void
   }
   class ItemResepEntity {
     <<entity>>
@@ -87,9 +69,6 @@ classDiagram
     -sediaan: String
     -stok: int
     -ambangMinimum: int
-    +kurangiStok(jumlah: int) void
-    +tambahStok(jumlah: int) void
-    +diBawahAmbang() boolean
   }
   ResepManager ..> PemeriksaanEntity : merujuk
   ResepForm "1" --> "1" ResepManager : memanggil

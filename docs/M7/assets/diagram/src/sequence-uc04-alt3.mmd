@@ -1,13 +1,13 @@
 sequenceDiagram
   autonumber
   actor A as Perawat
-  participant SkriningForm as :SkriningForm
-  participant SkriningManager as :SkriningManager
-  participant RisikoManager as :RisikoManager
-  participant DataKlinisBoundary as :DataKlinisBoundary
-  participant DataPantauBoundary as :DataPantauBoundary
-  participant DataKunjunganBoundary as :DataKunjunganBoundary
-  participant AmbangRisikoEntity as :AmbangRisikoEntity
+  participant SkriningForm@{ "type": "boundary" } as :SkriningForm
+  participant SkriningManager@{ "type": "control" } as :SkriningManager
+  participant RisikoManager@{ "type": "control" } as :RisikoManager
+  participant DataKlinisBoundary@{ "type": "boundary" } as :DataKlinisBoundary
+  participant DataPantauBoundary@{ "type": "boundary" } as :DataPantauBoundary
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant AmbangRisikoEntity@{ "type": "entity" } as :AmbangRisikoEntity
   A->>+SkriningForm: kirimHasilSkrining()
   SkriningForm->>+SkriningManager: simpanSkrining(idKunjungan, keluhan, tv)
   SkriningManager->>SkriningManager: validasiRentang(tv)

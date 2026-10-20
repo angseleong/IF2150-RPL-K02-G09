@@ -1,9 +1,9 @@
 sequenceDiagram
   autonumber
   actor A as Petugas Administrasi
-  participant PasienForm as :PasienForm
-  participant PasienManager as :PasienManager
-  participant DataPasienBoundary as :DataPasienBoundary
+  participant PasienForm@{ "type": "boundary" } as :PasienForm
+  participant PasienManager@{ "type": "control" } as :PasienManager
+  participant DataPasienBoundary@{ "type": "boundary" } as :DataPasienBoundary
   A->>+PasienForm: kirimDataPasien()
   PasienForm->>+PasienManager: daftarkanPasien(data)
   PasienManager->>PasienManager: validasiNIK(nik)
