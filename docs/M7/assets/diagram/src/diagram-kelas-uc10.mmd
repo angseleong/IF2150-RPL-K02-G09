@@ -31,8 +31,6 @@ classDiagram
     -tanggal: LocalDate
     -nomorAntrean: int
     -status: String
-    +perbaruiStatus(status: String) void
-    +aktifHariIni() boolean
   }
   class PoliEntity {
     <<entity>>
@@ -40,14 +38,12 @@ classDiagram
     -namaPoli: String
     -urutanTerakhir: int
     -tanggalUrutan: LocalDate
-    +ambilNomorBerikutnya(hariIni: LocalDate) int
   }
   class DiagnosisEntity {
     <<entity>>
     -idDiagnosis: int
     -kodeICD10: String
     -deskripsi: String
-    +ringkas() String
   }
   class LaporanEntity {
     <<entity>>

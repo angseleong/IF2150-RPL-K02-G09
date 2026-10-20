@@ -1,8 +1,8 @@
 sequenceDiagram
   autonumber
   actor A as Petugas Administrasi
-  participant LaporanForm as :LaporanForm
-  participant LaporanManager as :LaporanManager
+  participant LaporanForm@{ "type": "boundary" } as :LaporanForm
+  participant LaporanManager@{ "type": "control" } as :LaporanManager
   A->>+LaporanForm: kirimRentang()
   LaporanForm->>+LaporanManager: hitungRekapitulasi(mulai, akhir)
   LaporanManager->>LaporanManager: validasiRentang(mulai, akhir)

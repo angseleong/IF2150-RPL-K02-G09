@@ -1,10 +1,10 @@
 sequenceDiagram
   autonumber
   actor A as Petugas Administrasi
-  participant LaporanForm as :LaporanForm
-  participant LaporanManager as :LaporanManager
-  participant DataLaporanBoundary as :DataLaporanBoundary
-  participant LaporanEntity as :LaporanEntity
+  participant LaporanForm@{ "type": "boundary" } as :LaporanForm
+  participant LaporanManager@{ "type": "control" } as :LaporanManager
+  participant DataLaporanBoundary@{ "type": "boundary" } as :DataLaporanBoundary
+  participant LaporanEntity@{ "type": "entity" } as :LaporanEntity
   A->>LaporanForm: tampilkan()
   LaporanForm-->>A: parameter rentang tanggal dan poli
   A->>+LaporanForm: kirimRentang()

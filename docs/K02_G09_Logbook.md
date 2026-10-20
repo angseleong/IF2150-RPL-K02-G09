@@ -188,7 +188,7 @@
 ---
 
 ### Milestone 7
-**Periode:** 07-10-2026 - 14-10-2026
+**Periode:** 07-10-2026 - 21-10-2026
 
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -201,6 +201,7 @@
 | *13-10-2026* | *Axeleon Justin Algianto* | *Menetapkan atribut dan metode bertipe untuk 64 kelas perancangan, menyusun BAB 4 (diagram kelas keseluruhan, Tabel 4.1, dan catatan perbedaan dengan kelas analisis SKPL) serta BAB 5 matriks kerunutan* | *4* | *Done* | *Diagram kelas keseluruhan terlalu padat bila relasi Manager ke Entity ikut digambar, sehingga relasi itu cukup ditampilkan pada diagram kelas per use case* |
 | *14-10-2026* | *Axeleon Justin Algianto* | *Peninjauan silang DPPL: memastikan setiap pesan pada 42 sequence diagram ada sebagai metode di kelas tujuannya, metode privat hanya dipanggil oleh kelasnya sendiri, setiap kelas pada diagram punya relasi, serta nomor gambar dan tabel berurutan* | *1,5* | *Done* | *-* |
 | *20-10-2026* | *Steven Vanako* | *Memperbaiki DPPL final: menambahkan notasi BCE pada 22 sequence diagram UC01 s.d. UC06, memindahkan «create» ke create participant, mengganti note status dengan pemanggilan metode entity dan note transaksi dengan fragmen critical, menambah par serta activation bar pada UC03 alternatif 2, memangkas diagram kelas UC01 s.d. UC06, serta melengkapi relasi Manager ke Entity pada diagram kelas keseluruhan dan menandai AuditEntity.buat() sebagai static di Tabel 4.1* | *4* | *Done* | *-* |
+| *20-10-2026* | *Malik Arsyafiandra Madani* | *Memperbaiki DPPL final: menambahkan notasi BCE pada 20 sequence diagram UC07 s.d. UC12, memindahkan «create» ke create participant dan menambah «create» BundelFHIREntity pada UC07 skenario normal, mengganti note status dengan pemanggilan metode entity dan note transaksi dengan fragmen critical, menambah PenyerahanObatForm, par, critical, serta activation bar pada UC07 alternatif 2, memangkas diagram kelas UC07 s.d. UC12, serta menambah relasi ApotekManager ke ResepEntity dan BundelFHIREntity pada diagram kelas keseluruhan* | *4* | *Done* | *Penulisan critical [satu transaksi] menghasilkan label berkurung ganda pada SVG, sehingga ditulis critical satu transaksi* |
 
 **Catatan/Evaluasi Milestone 7:**
 * *Seluruh 42 skenario pada Subbab 4.4 SKPL (12 normal dan 30 alternatif) punya sequence diagram sendiri, dan nama kelas serta ID-nya tidak berubah dari SKPL dan APL.*

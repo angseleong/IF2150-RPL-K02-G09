@@ -24,11 +24,9 @@ classDiagram
   class DataAkunBoundary {
     <<boundary>>
     -koneksi: Connection
-    +cariPengguna(nama: String) PenggunaEntity
     +ambilPengguna(idPengguna: int) PenggunaEntity
     +namaPenggunaDipakai(nama: String) boolean
     +simpanPengguna(p: PenggunaEntity) void
-    +simpanSesi(s: SesiEntity) void
     +tutupSesiAktif(idPengguna: int) void
     +simpanAudit(a: AuditEntity) void
   }
@@ -36,43 +34,17 @@ classDiagram
     <<boundary>>
     -koneksi: Connection
     +ambilSemuaPoli() List~PoliEntity~
-    +kunciPoli(idPoli: int) PoliEntity
-    +simpanPoli(p: PoliEntity) void
-    +kunjunganAktif(idPasien: int, tanggal: LocalDate) KunjunganEntity
-    +ambilKunjungan(idKunjungan: int) KunjunganEntity
-    +simpanKunjungan(k: KunjunganEntity) void
-    +ambilAntrean(jenis: String) AntreanEntity
-    +simpanAntrean(a: AntreanEntity) void
   }
   class DataKlinisBoundary {
     <<boundary>>
     -koneksi: Connection
-    +simpanSkrining(s: SkriningEntity) void
-    +ambilSkrining(idKunjungan: int) SkriningEntity
-    +riwayatTandaVital(idPasien: int, batas: int) List~TandaVitalEntity~
     +ambilAmbang() List~AmbangRisikoEntity~
     +simpanAmbang(a: AmbangRisikoEntity) void
-    +simpanPenanda(p: PenandaRisikoEntity) void
-    +penandaKunjungan(idKunjungan: int) List~PenandaRisikoEntity~
-    +cariKodeICD10(kataKunci: String) List~KodeICD10Entity~
-    +simpanPemeriksaan(p: PemeriksaanEntity, d: DiagnosisEntity) void
-    +ambilPemeriksaan(idKunjungan: int) PemeriksaanEntity
-    +simpanJadwalKontrol(j: JadwalKontrolEntity) void
-    +ambilJadwalKontrol() List~JadwalKontrolEntity~
   }
   class DataFarmasiBoundary {
     <<boundary>>
     -koneksi: Connection
     +ambilSemuaObat() List~ObatEntity~
-    +ambilObat(idObat: int) ObatEntity
-    +ambilBets(idObat: int) List~BetsObatEntity~
-    +simpanStok(o: ObatEntity, bets: List~BetsObatEntity~) void
-    +simpanPenerimaan(p: PenerimaanObatEntity) void
-    +obatPerluPeringatan(hari: int) List~ObatEntity~
-    +simpanResep(r: ResepEntity) void
-    +ambilAntreanResep() List~ResepEntity~
-    +ambilResep(idResep: int) ResepEntity
-    +kunciResep(idResep: int) ResepEntity
   }
   class DataPencadanganBoundary {
     <<boundary>>
@@ -90,8 +62,6 @@ classDiagram
     -kataSandiHash: String
     -peran: String
     -status: String
-    +cocokkanSandi(sandi: String) boolean
-    +aktif() boolean
     +nonaktifkan() void
   }
   class AuditEntity {
@@ -100,7 +70,6 @@ classDiagram
     -idPengguna: int
     -waktu: LocalDateTime
     -deskripsi: String
-    +buat(idPengguna: int, deskripsi: String)$ AuditEntity
   }
   class PoliEntity {
     <<entity>>
@@ -108,14 +77,12 @@ classDiagram
     -namaPoli: String
     -urutanTerakhir: int
     -tanggalUrutan: LocalDate
-    +ambilNomorBerikutnya(hariIni: LocalDate) int
   }
   class AmbangRisikoEntity {
     <<entity>>
     -idAmbang: int
     -jenisRisiko: String
     -nilaiBatas: double
-    +dilampaui(nilai: double) boolean
   }
   class ObatEntity {
     <<entity>>
@@ -124,9 +91,6 @@ classDiagram
     -sediaan: String
     -stok: int
     -ambangMinimum: int
-    +kurangiStok(jumlah: int) void
-    +tambahStok(jumlah: int) void
-    +diBawahAmbang() boolean
   }
   class PencadanganEntity {
     <<entity>>

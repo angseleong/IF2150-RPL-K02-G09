@@ -1,9 +1,9 @@
 sequenceDiagram
   autonumber
   actor A as Petugas Administrasi
-  participant KonfigurasiForm as :KonfigurasiForm
-  participant KonfigurasiManager as :KonfigurasiManager
-  participant DataAkunBoundary as :DataAkunBoundary
+  participant KonfigurasiForm@{ "type": "boundary" } as :KonfigurasiForm
+  participant KonfigurasiManager@{ "type": "control" } as :KonfigurasiManager
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
   A->>+KonfigurasiForm: kirimPerubahan()
   KonfigurasiForm->>+KonfigurasiManager: simpanAkun(pengguna, sandi)
   KonfigurasiManager->>DataAkunBoundary: namaPenggunaDipakai(nama)

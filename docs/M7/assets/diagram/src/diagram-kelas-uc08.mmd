@@ -21,12 +21,6 @@ classDiagram
   class DataAkunBoundary {
     <<boundary>>
     -koneksi: Connection
-    +cariPengguna(nama: String) PenggunaEntity
-    +ambilPengguna(idPengguna: int) PenggunaEntity
-    +namaPenggunaDipakai(nama: String) boolean
-    +simpanPengguna(p: PenggunaEntity) void
-    +simpanSesi(s: SesiEntity) void
-    +tutupSesiAktif(idPengguna: int) void
     +simpanAudit(a: AuditEntity) void
   }
   class DataFarmasiBoundary {
@@ -38,10 +32,6 @@ classDiagram
     +simpanStok(o: ObatEntity, bets: List~BetsObatEntity~) void
     +simpanPenerimaan(p: PenerimaanObatEntity) void
     +obatPerluPeringatan(hari: int) List~ObatEntity~
-    +simpanResep(r: ResepEntity) void
-    +ambilAntreanResep() List~ResepEntity~
-    +ambilResep(idResep: int) ResepEntity
-    +kunciResep(idResep: int) ResepEntity
   }
   class AuditEntity {
     <<entity>>
@@ -49,7 +39,6 @@ classDiagram
     -idPengguna: int
     -waktu: LocalDateTime
     -deskripsi: String
-    +buat(idPengguna: int, deskripsi: String)$ AuditEntity
   }
   class ObatEntity {
     <<entity>>
@@ -58,7 +47,6 @@ classDiagram
     -sediaan: String
     -stok: int
     -ambangMinimum: int
-    +kurangiStok(jumlah: int) void
     +tambahStok(jumlah: int) void
     +diBawahAmbang() boolean
   }
@@ -68,7 +56,6 @@ classDiagram
     -idObat: int
     -jumlah: int
     -tanggalKedaluwarsa: LocalDate
-    +kurangi(jumlah: int) void
     +mendekatiKedaluwarsa(hari: int) boolean
   }
   class PenerimaanObatEntity {

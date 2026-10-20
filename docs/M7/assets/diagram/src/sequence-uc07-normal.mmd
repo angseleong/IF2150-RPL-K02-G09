@@ -1,14 +1,15 @@
 sequenceDiagram
   autonumber
   actor A as Petugas Farmasi
-  participant AntreanResepForm as :AntreanResepForm
-  participant PenyerahanObatForm as :PenyerahanObatForm
-  participant ApotekManager as :ApotekManager
-  participant DataFarmasiBoundary as :DataFarmasiBoundary
-  participant DataKunjunganBoundary as :DataKunjunganBoundary
-  participant DataSinkronisasiBoundary as :DataSinkronisasiBoundary
-  participant ObatEntity as :ObatEntity
-  participant BetsObatEntity as :BetsObatEntity
+  participant AntreanResepForm@{ "type": "boundary" } as :AntreanResepForm
+  participant PenyerahanObatForm@{ "type": "boundary" } as :PenyerahanObatForm
+  participant ApotekManager@{ "type": "control" } as :ApotekManager
+  participant DataFarmasiBoundary@{ "type": "boundary" } as :DataFarmasiBoundary
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant DataSinkronisasiBoundary@{ "type": "boundary" } as :DataSinkronisasiBoundary
+  participant ResepEntity@{ "type": "entity" } as :ResepEntity
+  participant ObatEntity@{ "type": "entity" } as :ObatEntity
+  participant BetsObatEntity@{ "type": "entity" } as :BetsObatEntity
   A->>+AntreanResepForm: tampilkanAntrean()
   AntreanResepForm->>+ApotekManager: muatAntreanResep()
   ApotekManager->>DataFarmasiBoundary: ambilAntreanResep()
@@ -26,25 +27,28 @@ sequenceDiagram
   deactivate AntreanResepForm
   A->>+PenyerahanObatForm: kirimKonfirmasi()
   PenyerahanObatForm->>+ApotekManager: serahkanObat(idResep)
-  Note over ApotekManager,DataSinkronisasiBoundary: seluruh langkah berikut berjalan dalam satu transaksi
-  ApotekManager->>DataFarmasiBoundary: kunciResep(idResep)
-  DataFarmasiBoundary-->>ApotekManager: resep (status menunggu)
-  ApotekManager->>ApotekManager: potongStok(resep)
-  loop setiap item resep
-    ApotekManager->>DataFarmasiBoundary: ambilObat(idObat)
-    DataFarmasiBoundary-->>ApotekManager: obat
-    ApotekManager->>ObatEntity: kurangiStok(jumlah)
-    ApotekManager->>BetsObatEntity: kurangi(jumlah)
-    ApotekManager->>DataFarmasiBoundary: simpanStok(obat, bets)
+  critical satu transaksi
+    ApotekManager->>DataFarmasiBoundary: kunciResep(idResep)
+    DataFarmasiBoundary-->>ApotekManager: resep (status menunggu)
+    ApotekManager->>ApotekManager: potongStok(resep)
+    loop setiap item resep
+      ApotekManager->>DataFarmasiBoundary: ambilObat(idObat)
+      DataFarmasiBoundary-->>ApotekManager: obat
+      ApotekManager->>ObatEntity: kurangiStok(jumlah)
+      ApotekManager->>BetsObatEntity: kurangi(jumlah)
+      ApotekManager->>DataFarmasiBoundary: simpanStok(obat, bets)
+    end
+    ApotekManager->>ResepEntity: perbaruiStatus("selesai dilayani")
+    ApotekManager->>DataFarmasiBoundary: simpanResep(resep)
+    ApotekManager->>ApotekManager: tutupKunjungan(idKunjungan)
+    ApotekManager->>DataKunjunganBoundary: ambilKunjungan(idKunjungan)
+    DataKunjunganBoundary-->>ApotekManager: kunjungan
+    ApotekManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
+    ApotekManager->>ApotekManager: susunBundel(idKunjungan)
+    create participant BundelFHIREntity@{ "type": "entity" } as :BundelFHIREntity
+    ApotekManager->>BundelFHIREntity: «create»(idKunjungan, isiBundel)
+    ApotekManager->>DataSinkronisasiBoundary: simpanBundel(bundel)
   end
-  Note over ApotekManager: status resep menjadi "selesai dilayani"
-  ApotekManager->>DataFarmasiBoundary: simpanResep(resep)
-  ApotekManager->>ApotekManager: tutupKunjungan(idKunjungan)
-  ApotekManager->>DataKunjunganBoundary: ambilKunjungan(idKunjungan)
-  DataKunjunganBoundary-->>ApotekManager: kunjungan
-  ApotekManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
-  ApotekManager->>ApotekManager: susunBundel(idKunjungan)
-  ApotekManager->>DataSinkronisasiBoundary: simpanBundel(bundel)
   ApotekManager-->>-PenyerahanObatForm: selesai
   PenyerahanObatForm->>PenyerahanObatForm: tampilkanPesan("Obat diserahkan")
   PenyerahanObatForm-->>-A: resep selesai dilayani

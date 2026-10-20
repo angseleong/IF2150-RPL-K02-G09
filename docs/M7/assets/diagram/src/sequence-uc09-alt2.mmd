@@ -1,9 +1,9 @@
 sequenceDiagram
   autonumber
   actor A as Tenaga Klinis
-  participant DaftarPantauForm as :DaftarPantauForm
-  participant PantauManager as :PantauManager
-  participant RisikoManager as :RisikoManager
+  participant DaftarPantauForm@{ "type": "boundary" } as :DaftarPantauForm
+  participant PantauManager@{ "type": "control" } as :PantauManager
+  participant RisikoManager@{ "type": "control" } as :RisikoManager
   A->>+DaftarPantauForm: kirimPenyaring(jenisRisiko, mulai, akhir)
   DaftarPantauForm->>+PantauManager: saringDaftar(jenisRisiko, mulai, akhir)
   PantauManager->>+RisikoManager: muatEntriAktif()

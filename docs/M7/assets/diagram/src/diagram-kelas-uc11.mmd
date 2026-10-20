@@ -27,7 +27,6 @@ classDiagram
   class DataSinkronisasiBoundary {
     <<boundary>>
     -koneksi: Connection
-    +simpanBundel(b: BundelFHIREntity) void
     +ambilTertunda() List~BundelFHIREntity~
     +perbaruiBundel(b: BundelFHIREntity) void
     +tulisArsipTerenkripsi(daftar: List~BundelFHIREntity~, lokasi: String) String
@@ -39,8 +38,6 @@ classDiagram
     -tanggal: LocalDate
     -nomorAntrean: int
     -status: String
-    +perbaruiStatus(status: String) void
-    +aktifHariIni() boolean
   }
   class BundelFHIREntity {
     <<entity>>

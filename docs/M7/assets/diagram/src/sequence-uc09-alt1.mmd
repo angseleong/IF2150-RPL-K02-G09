@@ -1,10 +1,10 @@
 sequenceDiagram
   autonumber
   actor A as Tenaga Klinis
-  participant DaftarPantauForm as :DaftarPantauForm
-  participant PantauManager as :PantauManager
-  participant DataPantauBoundary as :DataPantauBoundary
-  participant TindakLanjutEntity as :TindakLanjutEntity
+  participant DaftarPantauForm@{ "type": "boundary" } as :DaftarPantauForm
+  participant PantauManager@{ "type": "control" } as :PantauManager
+  participant DataPantauBoundary@{ "type": "boundary" } as :DataPantauBoundary
+  participant TindakLanjutEntity@{ "type": "entity" } as :TindakLanjutEntity
   A->>+DaftarPantauForm: kirimTindakLanjut()
   DaftarPantauForm->>+PantauManager: catatTindakLanjut(idEntri, tindakLanjut)
   PantauManager->>TindakLanjutEntity: terhubung()

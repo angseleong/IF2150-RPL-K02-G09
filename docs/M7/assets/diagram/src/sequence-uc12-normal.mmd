@@ -1,13 +1,12 @@
 sequenceDiagram
   autonumber
   actor A as Petugas Administrasi
-  participant KonfigurasiForm as :KonfigurasiForm
-  participant KonfigurasiManager as :KonfigurasiManager
-  participant DataAkunBoundary as :DataAkunBoundary
-  participant DataKunjunganBoundary as :DataKunjunganBoundary
-  participant DataFarmasiBoundary as :DataFarmasiBoundary
-  participant DataKlinisBoundary as :DataKlinisBoundary
-  participant PenggunaEntity as :PenggunaEntity
+  participant KonfigurasiForm@{ "type": "boundary" } as :KonfigurasiForm
+  participant KonfigurasiManager@{ "type": "control" } as :KonfigurasiManager
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant DataFarmasiBoundary@{ "type": "boundary" } as :DataFarmasiBoundary
+  participant DataKlinisBoundary@{ "type": "boundary" } as :DataKlinisBoundary
   A->>+KonfigurasiForm: tampilkanData()
   KonfigurasiForm->>+KonfigurasiManager: muatDataMaster()
   KonfigurasiManager->>DataKunjunganBoundary: ambilSemuaPoli()
@@ -23,6 +22,7 @@ sequenceDiagram
   KonfigurasiForm->>+KonfigurasiManager: simpanAkun(pengguna, sandi)
   KonfigurasiManager->>DataAkunBoundary: namaPenggunaDipakai(nama)
   DataAkunBoundary-->>KonfigurasiManager: false
+  create participant PenggunaEntity@{ "type": "entity" } as :PenggunaEntity
   KonfigurasiManager->>PenggunaEntity: «create»(nama, hash(sandi), peran)
   KonfigurasiManager->>DataAkunBoundary: simpanPengguna(pengguna)
   KonfigurasiManager->>DataAkunBoundary: simpanAudit(akun baru)

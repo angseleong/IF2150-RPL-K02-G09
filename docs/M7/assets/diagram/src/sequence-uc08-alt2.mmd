@@ -1,8 +1,8 @@
 sequenceDiagram
   autonumber
   actor A as Petugas Farmasi
-  participant PersediaanForm as :PersediaanForm
-  participant PersediaanManager as :PersediaanManager
+  participant PersediaanForm@{ "type": "boundary" } as :PersediaanForm
+  participant PersediaanManager@{ "type": "control" } as :PersediaanManager
   A->>+PersediaanForm: kirimPenerimaan()
   PersediaanForm->>+PersediaanManager: catatPenerimaan(penerimaan)
   PersediaanManager->>PersediaanManager: validasiPenerimaan(penerimaan)

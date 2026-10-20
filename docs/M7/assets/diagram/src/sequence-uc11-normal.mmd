@@ -1,11 +1,11 @@
 sequenceDiagram
   autonumber
   actor A as Petugas Administrasi
-  participant SinkronisasiForm as :SinkronisasiForm
-  participant SinkronisasiManager as :SinkronisasiManager
-  participant DataSinkronisasiBoundary as :DataSinkronisasiBoundary
-  participant SATUSEHATGateway as :SATUSEHATGateway
-  participant BundelFHIREntity as :BundelFHIREntity
+  participant SinkronisasiForm@{ "type": "boundary" } as :SinkronisasiForm
+  participant SinkronisasiManager@{ "type": "control" } as :SinkronisasiManager
+  participant DataSinkronisasiBoundary@{ "type": "boundary" } as :DataSinkronisasiBoundary
+  participant SATUSEHATGateway@{ "type": "boundary" } as :SATUSEHATGateway
+  participant BundelFHIREntity@{ "type": "entity" } as :BundelFHIREntity
   participant SS as SATUSEHAT (sandbox)
   A->>+SinkronisasiForm: tampilkanStatus()
   SinkronisasiForm->>+SinkronisasiManager: muatStatus()

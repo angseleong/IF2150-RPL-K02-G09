@@ -1,10 +1,10 @@
 sequenceDiagram
   autonumber
   actor A as Petugas Administrasi
-  participant SinkronisasiForm as :SinkronisasiForm
-  participant SinkronisasiManager as :SinkronisasiManager
-  participant DataSinkronisasiBoundary as :DataSinkronisasiBoundary
-  participant SATUSEHATGateway as :SATUSEHATGateway
+  participant SinkronisasiForm@{ "type": "boundary" } as :SinkronisasiForm
+  participant SinkronisasiManager@{ "type": "control" } as :SinkronisasiManager
+  participant DataSinkronisasiBoundary@{ "type": "boundary" } as :DataSinkronisasiBoundary
+  participant SATUSEHATGateway@{ "type": "boundary" } as :SATUSEHATGateway
   A->>+SinkronisasiForm: kirimPermintaanSinkron()
   SinkronisasiForm->>+SinkronisasiManager: kirimSemua()
   SinkronisasiManager->>SATUSEHATGateway: periksaKoneksi()

@@ -2,19 +2,33 @@ sequenceDiagram
   autonumber
   actor A1 as Petugas Farmasi 1
   actor A2 as Petugas Farmasi 2
-  participant ApotekManager_1 as :ApotekManager (Loket 1)
-  participant ApotekManager_2 as :ApotekManager (Loket 2)
-  participant DataFarmasiBoundary as :DataFarmasiBoundary
-  A1->>ApotekManager_1: serahkanObat(idResep)
-  A2->>ApotekManager_2: serahkanObat(idResep)
-  ApotekManager_1->>DataFarmasiBoundary: kunciResep(idResep)
-  DataFarmasiBoundary-->>ApotekManager_1: resep (status menunggu)
-  ApotekManager_2->>DataFarmasiBoundary: kunciResep(idResep)
-  Note over ApotekManager_2,DataFarmasiBoundary: menunggu kunci baris resep dilepas
-  ApotekManager_1->>ApotekManager_1: potongStok(resep)
-  ApotekManager_1->>DataFarmasiBoundary: simpanResep(resep selesai)
-  Note over ApotekManager_1,DataFarmasiBoundary: COMMIT, kunci dilepas
-  ApotekManager_1-->>A1: obat diserahkan
-  DataFarmasiBoundary-->>ApotekManager_2: resep (status selesai)
-  ApotekManager_2-->>A2: ditolak, "Resep sudah selesai dilayani"
-  Note over ApotekManager_2: stok tidak dipotong dua kali
+  participant PenyerahanObatForm_1@{ "type": "boundary" } as :PenyerahanObatForm (Loket 1)
+  participant PenyerahanObatForm_2@{ "type": "boundary" } as :PenyerahanObatForm (Loket 2)
+  participant ApotekManager_1@{ "type": "control" } as :ApotekManager (Loket 1)
+  participant ApotekManager_2@{ "type": "control" } as :ApotekManager (Loket 2)
+  participant DataFarmasiBoundary@{ "type": "boundary" } as :DataFarmasiBoundary
+  par Petugas Farmasi 1
+    A1->>+PenyerahanObatForm_1: kirimKonfirmasi()
+    PenyerahanObatForm_1->>+ApotekManager_1: serahkanObat(idResep)
+    critical satu transaksi
+      ApotekManager_1->>DataFarmasiBoundary: kunciResep(idResep)
+      DataFarmasiBoundary-->>ApotekManager_1: resep (status menunggu)
+      ApotekManager_1->>ApotekManager_1: potongStok(resep)
+      ApotekManager_1->>DataFarmasiBoundary: simpanResep(resep selesai)
+    end
+    ApotekManager_1-->>-PenyerahanObatForm_1: selesai
+    PenyerahanObatForm_1->>PenyerahanObatForm_1: tampilkanPesan("Obat diserahkan")
+    PenyerahanObatForm_1-->>-A1: obat diserahkan
+  and Petugas Farmasi 2
+    A2->>+PenyerahanObatForm_2: kirimKonfirmasi()
+    PenyerahanObatForm_2->>+ApotekManager_2: serahkanObat(idResep)
+    critical satu transaksi
+      ApotekManager_2->>DataFarmasiBoundary: kunciResep(idResep)
+      Note over ApotekManager_2,DataFarmasiBoundary: menunggu kunci baris resep dilepas
+      DataFarmasiBoundary-->>ApotekManager_2: resep (status selesai)
+    end
+    Note over ApotekManager_2: stok tidak dipotong dua kali
+    ApotekManager_2-->>-PenyerahanObatForm_2: ditolak, resep sudah selesai
+    PenyerahanObatForm_2->>PenyerahanObatForm_2: tampilkanPesan("Resep sudah selesai dilayani")
+    PenyerahanObatForm_2-->>-A2: penyerahan ditolak
+  end

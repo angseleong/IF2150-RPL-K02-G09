@@ -1,11 +1,11 @@
 sequenceDiagram
   autonumber
   actor A as Petugas Farmasi
-  participant PersediaanForm as :PersediaanForm
-  participant PersediaanManager as :PersediaanManager
-  participant DataFarmasiBoundary as :DataFarmasiBoundary
-  participant ObatEntity as :ObatEntity
-  participant BetsObatEntity as :BetsObatEntity
+  participant PersediaanForm@{ "type": "boundary" } as :PersediaanForm
+  participant PersediaanManager@{ "type": "control" } as :PersediaanManager
+  participant DataFarmasiBoundary@{ "type": "boundary" } as :DataFarmasiBoundary
+  participant ObatEntity@{ "type": "entity" } as :ObatEntity
+  participant BetsObatEntity@{ "type": "entity" } as :BetsObatEntity
   A->>+PersediaanForm: tampilkanFormulir()
   PersediaanForm->>+PersediaanManager: terbitkanPeringatan()
   PersediaanManager->>DataFarmasiBoundary: obatPerluPeringatan(90)
