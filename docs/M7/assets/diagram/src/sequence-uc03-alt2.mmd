@@ -11,7 +11,7 @@ sequenceDiagram
   par Petugas Loket 1
     A1->>+KunjunganForm_1: kirimPermintaanKunjungan()
     KunjunganForm_1->>+KunjunganManager_1: bukaKunjungan(idPasienA, idPoli)
-    critical [satu transaksi]
+    critical satu transaksi
       KunjunganManager_1->>DataKunjunganBoundary: kunciPoli(idPoli)
       DataKunjunganBoundary-->>KunjunganManager_1: poli (SELECT ... FOR UPDATE)
       KunjunganManager_1->>PoliEntity: ambilNomorBerikutnya(hariIni)
@@ -24,7 +24,7 @@ sequenceDiagram
   and Petugas Loket 2
     A2->>+KunjunganForm_2: kirimPermintaanKunjungan()
     KunjunganForm_2->>+KunjunganManager_2: bukaKunjungan(idPasienB, idPoli)
-    critical [satu transaksi]
+    critical satu transaksi
       KunjunganManager_2->>DataKunjunganBoundary: kunciPoli(idPoli)
       Note over KunjunganManager_2,DataKunjunganBoundary: menunggu kunci baris poli dilepas
       DataKunjunganBoundary-->>KunjunganManager_2: poli (urutanTerakhir = 7)

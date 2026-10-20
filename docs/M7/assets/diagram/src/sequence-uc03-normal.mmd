@@ -20,7 +20,7 @@ sequenceDiagram
   KunjunganManager->>KunjunganManager: cegahKunjunganGanda(idPasien)
   KunjunganManager->>DataKunjunganBoundary: kunjunganAktif(idPasien, hariIni)
   DataKunjunganBoundary-->>KunjunganManager: null
-  critical [satu transaksi]
+  critical satu transaksi
     KunjunganManager->>KunjunganManager: terbitkanNomorAntrean(idPoli)
     KunjunganManager->>DataKunjunganBoundary: kunciPoli(idPoli)
     DataKunjunganBoundary-->>KunjunganManager: poli (baris terkunci)
