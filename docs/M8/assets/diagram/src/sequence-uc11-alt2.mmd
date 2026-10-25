@@ -1,0 +1,30 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant SinkronisasiForm@{ "type": "boundary" } as :SinkronisasiForm
+  participant SinkronisasiManager@{ "type": "control" } as :SinkronisasiManager
+  participant DataSinkronisasiBoundary@{ "type": "boundary" } as :DataSinkronisasiBoundary
+  participant SATUSEHATGateway@{ "type": "boundary" } as :SATUSEHATGateway
+  participant BundelFHIREntity@{ "type": "entity" } as :BundelFHIREntity
+  participant SS as SATUSEHAT (sandbox)
+  A->>+SinkronisasiForm: kirimPermintaanSinkron()
+  SinkronisasiForm->>+SinkronisasiManager: kirimSemua()
+  SinkronisasiManager->>DataSinkronisasiBoundary: ambilTertunda()
+  DataSinkronisasiBoundary-->>SinkronisasiManager: bundel tertunda
+  loop setiap bundel
+    SinkronisasiManager->>SATUSEHATGateway: kirimBundel(bundel)
+    SATUSEHATGateway->>SS: POST Bundle (HTTPS REST, FHIR R4)
+    alt bundel diterima
+      SS-->>SATUSEHATGateway: 201 Created
+      SATUSEHATGateway-->>SinkronisasiManager: respons berhasil
+      SinkronisasiManager->>BundelFHIREntity: tandaiTerkirim(kode)
+    else bundel ditolak
+      SS-->>SATUSEHATGateway: 400 OperationOutcome
+      SATUSEHATGateway-->>SinkronisasiManager: respons gagal, alasan
+      SinkronisasiManager->>BundelFHIREntity: tandaiGagal(alasan)
+    end
+    SinkronisasiManager->>DataSinkronisasiBoundary: perbaruiBundel(bundel)
+  end
+  SinkronisasiManager-->>-SinkronisasiForm: hasil pengiriman
+  SinkronisasiForm->>SinkronisasiForm: tampilkanHasil(hasil)
+  SinkronisasiForm-->>-A: bundel "Gagal Kirim" beserta alasan penolakan

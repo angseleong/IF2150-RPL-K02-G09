@@ -1,0 +1,103 @@
+classDiagram
+  direction TB
+  class DaftarPantauForm {
+    <<boundary>>
+    -penyaring: String
+    -daftarTampil: List~DaftarPantauEntity~
+    +tampilkanDaftar() void
+    +kirimPenyaring(jenisRisiko: String, mulai: LocalDate, akhir: LocalDate) void
+    +bukaFormulirTindakLanjut(idEntri: int) void
+    +kirimTindakLanjut() void
+    +tampilkanKeterangan(pesan: String) void
+  }
+  class RisikoManager {
+    <<control>>
+    +muatEntriAktif() List~DaftarPantauEntity~
+  }
+  class PantauManager {
+    <<control>>
+    +saringDaftar(jenisRisiko: String, mulai: LocalDate, akhir: LocalDate) List~DaftarPantauEntity~
+    +catatTindakLanjut(idEntri: int, t: TindakLanjutEntity) void
+    -perbaruiStatus(idEntri: int, status: String) void
+  }
+  class DataPasienBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +ambilPasien(idPasien: int) PasienEntity
+    +ambilRekamMedis(idPasien: int) RekamMedisEntity
+    +simpanRekamMedis(rm: RekamMedisEntity) void
+  }
+  class DataKlinisBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +ambilJadwalKontrol() List~JadwalKontrolEntity~
+  }
+  class DataPantauBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +ambilEntri() List~DaftarPantauEntity~
+    +simpanEntri(e: DaftarPantauEntity) void
+    +simpanTindakLanjut(idEntri: int, t: TindakLanjutEntity) void
+  }
+  class PasienEntity {
+    <<entity>>
+    -idPasien: int
+    -nik: String
+    -nomorRekamMedis: String
+    -nama: String
+    -nomorTelepon: String
+  }
+  class RekamMedisEntity {
+    <<entity>>
+    -idRekamMedis: int
+    -daftarDiagnosis: List~DiagnosisEntity~
+    -riwayatObat: List~String~
+  }
+  class PenandaRisikoEntity {
+    <<entity>>
+    -idPenanda: int
+    -idKunjungan: int
+    -jenisRisiko: String
+    -tanggal: LocalDate
+    -status: String
+  }
+  class JadwalKontrolEntity {
+    <<entity>>
+    -idJadwal: int
+    -idPasien: int
+    -tanggalRencana: LocalDate
+    -status: String
+  }
+  class DaftarPantauEntity {
+    <<entity>>
+    -idEntri: int
+    -idPasien: int
+    -jenisRisiko: String
+    -statusTindakLanjut: String
+  }
+  class TindakLanjutEntity {
+    <<entity>>
+    -idTindakLanjut: int
+    -jenisKontak: String
+    -hasilUpaya: String
+    -statusKedatangan: String
+    +terhubung() boolean
+  }
+  DaftarPantauForm "1" --> "1" PantauManager : memanggil
+  DaftarPantauForm "1" --> "1" RisikoManager : memanggil
+  PantauManager ..> DataPantauBoundary : memakai
+  PantauManager ..> DataPasienBoundary : memakai
+  PantauManager ..> RisikoManager : memanggil
+  PantauManager ..> TindakLanjutEntity : mengolah
+  RisikoManager ..> DataKlinisBoundary : memakai
+  RisikoManager ..> DataPantauBoundary : memakai
+  DataPasienBoundary ..> PasienEntity : membaca/menyimpan
+  DataPasienBoundary ..> RekamMedisEntity : membaca/menyimpan
+  DataKlinisBoundary ..> PenandaRisikoEntity : membaca/menyimpan
+  DataKlinisBoundary ..> JadwalKontrolEntity : membaca/menyimpan
+  DataPantauBoundary ..> DaftarPantauEntity : membaca/menyimpan
+  DataPantauBoundary ..> TindakLanjutEntity : membaca/menyimpan
+  PasienEntity "1" *-- "1" RekamMedisEntity : memiliki
+  PenandaRisikoEntity "0..*" -- "0..1" DaftarPantauEntity : memicu
+  JadwalKontrolEntity "0..1" -- "0..1" DaftarPantauEntity : memicu
+  DaftarPantauEntity "1" *-- "0..*" TindakLanjutEntity : mencatat

@@ -1,0 +1,28 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant LaporanForm@{ "type": "boundary" } as :LaporanForm
+  participant LaporanManager@{ "type": "control" } as :LaporanManager
+  participant DataLaporanBoundary@{ "type": "boundary" } as :DataLaporanBoundary
+  participant LaporanEntity@{ "type": "entity" } as :LaporanEntity
+  A->>LaporanForm: tampilkan()
+  LaporanForm-->>A: parameter rentang tanggal dan poli
+  A->>+LaporanForm: kirimRentang()
+  LaporanForm->>+LaporanManager: hitungRekapitulasi(mulai, akhir)
+  LaporanManager->>LaporanManager: validasiRentang(mulai, akhir)
+  LaporanManager->>DataLaporanBoundary: agregasiKunjungan(mulai, akhir)
+  Note over DataLaporanBoundary: kueri agregasi kunjungan per poli, status, dan sepuluh diagnosis terbanyak
+  DataLaporanBoundary-->>LaporanManager: laporan
+  LaporanManager->>LaporanEntity: kosong()
+  LaporanEntity-->>LaporanManager: false
+  LaporanManager-->>-LaporanForm: laporan
+  LaporanForm->>LaporanForm: tampilkanRekapitulasi(laporan)
+  LaporanForm-->>-A: pratinjau rekapitulasi
+  A->>+LaporanForm: kirimPermintaanEkspor("PDF", direktori)
+  LaporanForm->>+LaporanManager: ekspor(laporan, "PDF", direktori)
+  LaporanManager->>DataLaporanBoundary: tulisBerkas(laporan, "PDF", direktori)
+  DataLaporanBoundary-->>LaporanManager: lokasi berkas
+  LaporanManager->>DataLaporanBoundary: simpanLaporan(laporan)
+  LaporanManager-->>-LaporanForm: lokasi berkas
+  LaporanForm->>LaporanForm: tampilkanPesan("Berkas berhasil dibuat")
+  LaporanForm-->>-A: notifikasi berkas dibuat

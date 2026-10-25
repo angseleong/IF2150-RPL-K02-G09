@@ -1,0 +1,40 @@
+sequenceDiagram
+  autonumber
+  actor A as Dokter
+  participant ResepForm@{ "type": "boundary" } as :ResepForm
+  participant ResepManager@{ "type": "control" } as :ResepManager
+  participant DataFarmasiBoundary@{ "type": "boundary" } as :DataFarmasiBoundary
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant AntreanEntity@{ "type": "entity" } as :AntreanEntity
+  A->>+ResepForm: tampilkanFormulir(kunjungan)
+  ResepForm->>+ResepManager: muatDataObat()
+  ResepManager->>DataFarmasiBoundary: ambilSemuaObat()
+  DataFarmasiBoundary-->>ResepManager: daftar obat dan stok
+  ResepManager-->>-ResepForm: daftar obat
+  ResepForm-->>-A: formulir peresepan
+  A->>+ResepForm: kirimItem(idObat, jumlah, dosis, aturanPakai)
+  ResepForm->>+ResepManager: tambahItem(idObat, jumlah, dosis, aturanPakai)
+  ResepManager->>DataFarmasiBoundary: ambilObat(idObat)
+  DataFarmasiBoundary-->>ResepManager: obat
+  create participant ItemResepEntity@{ "type": "entity" } as :ItemResepEntity
+  ResepManager->>ItemResepEntity: «create»
+  ResepManager->>ResepManager: validasiStok(item)
+  ResepManager->>ItemResepEntity: cukupStok(obat.stok)
+  ItemResepEntity-->>ResepManager: true
+  ResepManager-->>-ResepForm: item
+  ResepForm->>ResepForm: tampilkanIndikatorStok(true, sisa)
+  ResepForm-->>-A: indikator hijau "Tersedia"
+  A->>+ResepForm: kirimResep()
+  ResepForm->>+ResepManager: kirimKeApotek(idKunjungan, items)
+  loop setiap item resep
+    ResepManager->>ResepManager: validasiStok(item)
+  end
+  create participant ResepEntity@{ "type": "entity" } as :ResepEntity
+  ResepManager->>ResepEntity: «create»(idKunjungan, items)
+  ResepManager->>DataFarmasiBoundary: simpanResep(resep)
+  ResepManager->>DataKunjunganBoundary: ambilAntrean("apotek")
+  DataKunjunganBoundary-->>ResepManager: antrean
+  ResepManager->>AntreanEntity: tambahkan(idResep)
+  ResepManager->>DataKunjunganBoundary: simpanAntrean(antrean)
+  ResepManager-->>-ResepForm: resep
+  ResepForm-->>-A: resep masuk antrean apotek

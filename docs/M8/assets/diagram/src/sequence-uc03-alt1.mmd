@@ -1,0 +1,14 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant KunjunganForm@{ "type": "boundary" } as :KunjunganForm
+  participant KunjunganManager@{ "type": "control" } as :KunjunganManager
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  A->>+KunjunganForm: kirimPermintaanKunjungan()
+  KunjunganForm->>+KunjunganManager: bukaKunjungan(idPasien, idPoli)
+  KunjunganManager->>KunjunganManager: cegahKunjunganGanda(idPasien)
+  KunjunganManager->>+DataKunjunganBoundary: kunjunganAktif(idPasien, hariIni)
+  DataKunjunganBoundary-->>-KunjunganManager: kunjunganAktif
+  KunjunganManager-->>-KunjunganForm: ditolak, kunjunganAktif
+  KunjunganForm->>KunjunganForm: tampilkanKunjunganAktif(kunjunganAktif)
+  KunjunganForm-->>-A: nomor antrean dan poli yang sedang berjalan

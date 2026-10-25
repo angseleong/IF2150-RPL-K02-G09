@@ -1,0 +1,25 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant KonfigurasiForm@{ "type": "boundary" } as :KonfigurasiForm
+  participant KonfigurasiManager@{ "type": "control" } as :KonfigurasiManager
+  participant DataPencadanganBoundary@{ "type": "boundary" } as :DataPencadanganBoundary
+  participant PencadanganEntity@{ "type": "entity" } as :PencadanganEntity
+  A->>+KonfigurasiForm: tampilkanData()
+  KonfigurasiForm->>+KonfigurasiManager: muatStatusPencadangan()
+  KonfigurasiManager->>DataPencadanganBoundary: ambilTerakhir()
+  DataPencadanganBoundary-->>KonfigurasiManager: pencadangan terakhir
+  KonfigurasiManager->>PencadanganEntity: berhasil()
+  PencadanganEntity-->>KonfigurasiManager: false
+  KonfigurasiManager-->>-KonfigurasiForm: pencadangan gagal
+  KonfigurasiForm->>KonfigurasiForm: tampilkanStatusPencadangan(p)
+  KonfigurasiForm-->>-A: peringatan kegagalan pencadangan
+  A->>+KonfigurasiForm: kirimPencadangan()
+  KonfigurasiForm->>+KonfigurasiManager: jalankanPencadangan()
+  Note over KonfigurasiManager,DataPencadanganBoundary: sama dengan langkah 2 skenario alternatif 1
+  KonfigurasiManager->>DataPencadanganBoundary: jalankanPgDump(lokasi)
+  DataPencadanganBoundary-->>KonfigurasiManager: pencadangan
+  KonfigurasiManager->>DataPencadanganBoundary: simpanCatatan(pencadangan)
+  KonfigurasiManager-->>-KonfigurasiForm: pencadangan
+  KonfigurasiForm->>KonfigurasiForm: tampilkanStatusPencadangan(p)
+  KonfigurasiForm-->>-A: peringatan hilang

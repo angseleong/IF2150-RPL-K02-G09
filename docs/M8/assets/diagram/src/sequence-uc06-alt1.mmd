@@ -1,0 +1,20 @@
+sequenceDiagram
+  autonumber
+  actor A as Dokter
+  participant ResepForm@{ "type": "boundary" } as :ResepForm
+  participant ResepManager@{ "type": "control" } as :ResepManager
+  participant DataFarmasiBoundary@{ "type": "boundary" } as :DataFarmasiBoundary
+  A->>+ResepForm: kirimItem(idObat, jumlah, dosis, aturanPakai)
+  ResepForm->>+ResepManager: tambahItem(idObat, jumlah, dosis, aturanPakai)
+  ResepManager->>DataFarmasiBoundary: ambilObat(idObat)
+  DataFarmasiBoundary-->>ResepManager: obat
+  create participant ItemResepEntity@{ "type": "entity" } as :ItemResepEntity
+  ResepManager->>ItemResepEntity: «create»
+  ResepManager->>ResepManager: validasiStok(item)
+  ResepManager->>ItemResepEntity: cukupStok(obat.stok)
+  ItemResepEntity-->>ResepManager: false
+  ResepManager-->>-ResepForm: item (stok kurang, sisa)
+  ResepForm->>ResepForm: tampilkanIndikatorStok(false, sisa)
+  ResepForm->>ResepForm: tampilkanPeringatanStok(sisa)
+  ResepForm-->>-A: indikator merah "Stok Kurang" dan sisa stok
+  Note over A,ResepForm: tombol "Kirim ke Apotek" ditahan sampai dokter mengganti obat atau jumlah, lalu kembali ke langkah 3 skenario normal

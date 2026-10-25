@@ -1,0 +1,136 @@
+classDiagram
+  direction TB
+  class AntreanSkriningForm {
+    <<boundary>>
+    -daftarTampil: List~KunjunganEntity~
+    +tampilkanAntrean() void
+    +kirimPanggilan() void
+    +kirimLewati() void
+    +perbaruiTampilan(daftar: List~KunjunganEntity~) void
+  }
+  class SkriningForm {
+    <<boundary>>
+    -isianKeluhan: String
+    -isianUkuran: TandaVitalEntity
+    +tampilkanFormulir(kunjungan: KunjunganEntity) void
+    +kirimHasilSkrining() void
+    +tampilkanPeringatanRentang(kolom: List~String~) void
+    +tampilkanPenandaRisiko(penanda: List~PenandaRisikoEntity~) void
+  }
+  class SkriningManager {
+    <<control>>
+    +muatAntrean() List~KunjunganEntity~
+    +panggilPasien() KunjunganEntity
+    +lewatiPasien(idKunjungan: int) KunjunganEntity
+    +simpanSkrining(idKunjungan: int, keluhan: String, tv: TandaVitalEntity) List~String~
+    -validasiRentang(tv: TandaVitalEntity) List~String~
+  }
+  class RisikoManager {
+    <<control>>
+    +evaluasiRisiko(kunjungan: KunjunganEntity, tv: TandaVitalEntity) List~PenandaRisikoEntity~
+    -terbitkanPenanda(idKunjungan: int, jenis: String) PenandaRisikoEntity
+    -masukkanKeDaftarPantau(idPasien: int, jenis: String) void
+    +ambilPenanda(idKunjungan: int) List~PenandaRisikoEntity~
+  }
+  class DataKunjunganBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +simpanKunjungan(k: KunjunganEntity) void
+    +ambilAntrean(jenis: String) AntreanEntity
+    +simpanAntrean(a: AntreanEntity) void
+  }
+  class DataKlinisBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +simpanSkrining(s: SkriningEntity) void
+    +riwayatTandaVital(idPasien: int, batas: int) List~TandaVitalEntity~
+    +ambilAmbang() List~AmbangRisikoEntity~
+    +simpanPenanda(p: PenandaRisikoEntity) void
+    +penandaKunjungan(idKunjungan: int) List~PenandaRisikoEntity~
+  }
+  class DataPantauBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +simpanEntri(e: DaftarPantauEntity) void
+  }
+  class KunjunganEntity {
+    <<entity>>
+    -idKunjungan: int
+    -idPasien: int
+    -tanggal: LocalDate
+    -nomorAntrean: int
+    -status: String
+    +perbaruiStatus(status: String) void
+  }
+  class AntreanEntity {
+    <<entity>>
+    -idAntrean: int
+    -jenis: String
+    -daftarEntri: List~Integer~
+    +ambilTerdepan() KunjunganEntity
+    +pindahkanKeBelakang(idEntri: int) void
+  }
+  class SkriningEntity {
+    <<entity>>
+    -idSkrining: int
+    -idKunjungan: int
+    -keluhanAwal: String
+    -waktu: LocalDateTime
+  }
+  class TandaVitalEntity {
+    <<entity>>
+    -sistolik: int
+    -diastolik: int
+    -beratBadan: double
+    -tinggiBadan: double
+    -suhu: double
+    -nadi: int
+    -gulaDarah: Integer
+    +hitungIMT() double
+  }
+  class AmbangRisikoEntity {
+    <<entity>>
+    -idAmbang: int
+    -jenisRisiko: String
+    -nilaiBatas: double
+    +dilampaui(nilai: double) boolean
+  }
+  class PenandaRisikoEntity {
+    <<entity>>
+    -idPenanda: int
+    -idKunjungan: int
+    -jenisRisiko: String
+    -tanggal: LocalDate
+    -status: String
+  }
+  class DaftarPantauEntity {
+    <<entity>>
+    -idEntri: int
+    -idPasien: int
+    -jenisRisiko: String
+    -statusTindakLanjut: String
+  }
+  AntreanSkriningForm "1" --> "1" SkriningForm : membuka
+  AntreanSkriningForm "1" --> "1" SkriningManager : memanggil
+  RisikoManager ..> AmbangRisikoEntity : mengolah
+  RisikoManager ..> DataKlinisBoundary : memakai
+  RisikoManager ..> DataPantauBoundary : memakai
+  SkriningForm "1" --> "1" RisikoManager : memanggil
+  SkriningForm "1" --> "1" SkriningManager : memanggil
+  SkriningManager ..> AntreanEntity : mengolah
+  SkriningManager ..> DataKlinisBoundary : memakai
+  SkriningManager ..> DataKunjunganBoundary : memakai
+  SkriningManager ..> KunjunganEntity : mengolah
+  SkriningManager ..> RisikoManager : memanggil
+  SkriningManager ..> TandaVitalEntity : mengolah
+  DataKunjunganBoundary ..> KunjunganEntity : membaca/menyimpan
+  DataKunjunganBoundary ..> AntreanEntity : membaca/menyimpan
+  DataKlinisBoundary ..> SkriningEntity : membaca/menyimpan
+  DataKlinisBoundary ..> TandaVitalEntity : membaca/menyimpan
+  DataKlinisBoundary ..> AmbangRisikoEntity : membaca/menyimpan
+  DataKlinisBoundary ..> PenandaRisikoEntity : membaca/menyimpan
+  DataPantauBoundary ..> DaftarPantauEntity : membaca/menyimpan
+  AntreanEntity "1" o-- "0..*" KunjunganEntity : mengurutkan
+  KunjunganEntity "1" *-- "0..1" SkriningEntity : memiliki
+  SkriningEntity "1" *-- "1" TandaVitalEntity : mencatat
+  PenandaRisikoEntity "0..*" -- "0..1" DaftarPantauEntity : memicu

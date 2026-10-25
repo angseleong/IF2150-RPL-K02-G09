@@ -1,0 +1,19 @@
+sequenceDiagram
+  autonumber
+  actor A as Pengguna
+  participant LoginForm@{ "type": "boundary" } as :LoginForm
+  participant AutentikasiManager@{ "type": "control" } as :AutentikasiManager
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
+  participant PenggunaEntity@{ "type": "entity" } as :PenggunaEntity
+  A->>+LoginForm: kirimKredensial()
+  LoginForm->>+AutentikasiManager: autentikasi(nama, sandi)
+  AutentikasiManager->>+DataAkunBoundary: cariPengguna(nama)
+  DataAkunBoundary-->>-AutentikasiManager: pengguna
+  AutentikasiManager->>PenggunaEntity: cocokkanSandi(sandi)
+  PenggunaEntity-->>AutentikasiManager: false
+  Note over AutentikasiManager: percobaanGagal bertambah satu
+  AutentikasiManager->>DataAkunBoundary: simpanAudit(percobaan gagal)
+  AutentikasiManager-->>-LoginForm: null
+  LoginForm->>LoginForm: tampilkanPesanGagal("Nama pengguna atau kata sandi salah")
+  LoginForm-->>-A: kolom kata sandi dikosongkan
+  Note over A,LoginForm: pengguna mengisi ulang kredensial, kembali ke langkah 2 skenario normal

@@ -1,0 +1,13 @@
+sequenceDiagram
+  autonumber
+  actor A as Tenaga Klinis
+  participant DaftarPantauForm@{ "type": "boundary" } as :DaftarPantauForm
+  participant PantauManager@{ "type": "control" } as :PantauManager
+  participant RisikoManager@{ "type": "control" } as :RisikoManager
+  A->>+DaftarPantauForm: kirimPenyaring(jenisRisiko, mulai, akhir)
+  DaftarPantauForm->>+PantauManager: saringDaftar(jenisRisiko, mulai, akhir)
+  PantauManager->>+RisikoManager: muatEntriAktif()
+  RisikoManager-->>-PantauManager: entri aktif
+  PantauManager-->>-DaftarPantauForm: daftar kosong
+  DaftarPantauForm->>DaftarPantauForm: tampilkanKeterangan("Tidak ada pasien yang cocok dengan kriteria saringan")
+  DaftarPantauForm-->>-A: tabel kosong dan keterangan

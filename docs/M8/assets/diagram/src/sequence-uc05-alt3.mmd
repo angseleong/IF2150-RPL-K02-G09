@@ -1,0 +1,25 @@
+sequenceDiagram
+  autonumber
+  actor A as Dokter
+  participant RekamMedisForm@{ "type": "boundary" } as :RekamMedisForm
+  participant PemeriksaanForm@{ "type": "boundary" } as :PemeriksaanForm
+  participant PemeriksaanManager@{ "type": "control" } as :PemeriksaanManager
+  participant DataPasienBoundary@{ "type": "boundary" } as :DataPasienBoundary
+  participant DataKlinisBoundary@{ "type": "boundary" } as :DataKlinisBoundary
+  Note over RekamMedisForm,DataKlinisBoundary: internet putus, seluruh panggilan tetap berjalan lewat LAN ke PostgreSQL
+  A->>+RekamMedisForm: tampilkanRingkasan(kunjungan)
+  RekamMedisForm->>RekamMedisForm: tampilkanIndikatorLuring()
+  RekamMedisForm->>+PemeriksaanManager: susunRingkasan(idKunjungan)
+  PemeriksaanManager->>DataPasienBoundary: ambilRekamMedis(idPasien)
+  DataPasienBoundary-->>PemeriksaanManager: rekamMedis
+  PemeriksaanManager-->>-RekamMedisForm: ringkasan
+  RekamMedisForm->>+PemeriksaanManager: susunTren(idPasien)
+  PemeriksaanManager->>DataKlinisBoundary: riwayatTandaVital(idPasien, 0)
+  DataKlinisBoundary-->>PemeriksaanManager: seri tanda vital
+  PemeriksaanManager-->>-RekamMedisForm: seri tren
+  RekamMedisForm-->>-A: ringkasan dan grafik dengan indikator "Luring"
+  A->>+PemeriksaanForm: kirimHasilPemeriksaan()
+  PemeriksaanForm->>+PemeriksaanManager: simpanPemeriksaan(idKunjungan, pemeriksaan, diagnosis)
+  PemeriksaanManager->>DataKlinisBoundary: simpanPemeriksaan(pemeriksaan, diagnosis)
+  PemeriksaanManager-->>-PemeriksaanForm: selesai
+  PemeriksaanForm-->>-A: diagnosis tersimpan di basis data lokal

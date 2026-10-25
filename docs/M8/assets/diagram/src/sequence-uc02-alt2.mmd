@@ -1,0 +1,19 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant PasienForm@{ "type": "boundary" } as :PasienForm
+  participant PasienManager@{ "type": "control" } as :PasienManager
+  participant DataPasienBoundary@{ "type": "boundary" } as :DataPasienBoundary
+  A->>+PasienForm: kirimDataPasien()
+  PasienForm->>+PasienManager: daftarkanPasien(data)
+  PasienManager->>PasienManager: validasiNIK(nik)
+  alt NIK bukan 16 digit numerik
+    PasienManager-->>PasienForm: galat "NIK tidak valid"
+  else NIK sudah dimiliki pasien lain
+    PasienManager->>+DataPasienBoundary: nikTerdaftar(nik)
+    DataPasienBoundary-->>-PasienManager: true
+    PasienManager-->>-PasienForm: galat "NIK sudah terdaftar"
+  end
+  PasienForm->>PasienForm: tampilkanPesanValidasi(pesan)
+  PasienForm-->>-A: kolom NIK ditandai merah
+  Note over A,PasienForm: petugas mengoreksi NIK, kembali ke langkah 4 skenario normal

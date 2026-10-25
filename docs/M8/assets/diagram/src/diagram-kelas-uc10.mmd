@@ -1,0 +1,64 @@
+classDiagram
+  direction TB
+  class LaporanForm {
+    <<boundary>>
+    -tanggalMulai: LocalDate
+    -tanggalAkhir: LocalDate
+    +tampilkan() void
+    +kirimRentang() void
+    +tampilkanRekapitulasi(laporan: LaporanEntity) void
+    +kirimPermintaanEkspor(format: String, direktori: String) void
+    +kunciTombolEkspor() void
+    +tampilkanPesan(pesan: String) void
+  }
+  class LaporanManager {
+    <<control>>
+    +hitungRekapitulasi(mulai: LocalDate, akhir: LocalDate) LaporanEntity
+    -validasiRentang(mulai: LocalDate, akhir: LocalDate) boolean
+    +ekspor(laporan: LaporanEntity, format: String, direktori: String) String
+  }
+  class DataLaporanBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +agregasiKunjungan(mulai: LocalDate, akhir: LocalDate) LaporanEntity
+    +simpanLaporan(l: LaporanEntity) void
+    +tulisBerkas(l: LaporanEntity, format: String, direktori: String) String
+  }
+  class KunjunganEntity {
+    <<entity>>
+    -idKunjungan: int
+    -idPasien: int
+    -tanggal: LocalDate
+    -nomorAntrean: int
+    -status: String
+  }
+  class PoliEntity {
+    <<entity>>
+    -idPoli: int
+    -namaPoli: String
+    -urutanTerakhir: int
+    -tanggalUrutan: LocalDate
+  }
+  class DiagnosisEntity {
+    <<entity>>
+    -idDiagnosis: int
+    -kodeICD10: String
+    -deskripsi: String
+  }
+  class LaporanEntity {
+    <<entity>>
+    -idLaporan: int
+    -tanggalMulai: LocalDate
+    -tanggalAkhir: LocalDate
+    -format: String
+    -ringkasan: String
+    +kosong() boolean
+  }
+  DataLaporanBoundary ..> KunjunganEntity : agregasi
+  DataLaporanBoundary ..> PoliEntity : agregasi
+  DataLaporanBoundary ..> DiagnosisEntity : agregasi
+  LaporanForm "1" --> "1" LaporanManager : memanggil
+  LaporanManager ..> DataLaporanBoundary : memakai
+  LaporanManager ..> LaporanEntity : mengolah
+  DataLaporanBoundary ..> LaporanEntity : membaca/menyimpan
+  PoliEntity "1" -- "0..*" KunjunganEntity : menerima

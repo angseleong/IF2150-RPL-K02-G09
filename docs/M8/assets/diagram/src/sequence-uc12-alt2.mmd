@@ -1,0 +1,14 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant KonfigurasiForm@{ "type": "boundary" } as :KonfigurasiForm
+  participant KonfigurasiManager@{ "type": "control" } as :KonfigurasiManager
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
+  A->>+KonfigurasiForm: kirimPerubahan()
+  KonfigurasiForm->>+KonfigurasiManager: simpanAkun(pengguna, sandi)
+  KonfigurasiManager->>DataAkunBoundary: namaPenggunaDipakai(nama)
+  DataAkunBoundary-->>KonfigurasiManager: true
+  KonfigurasiManager-->>-KonfigurasiForm: galat nama pengguna sudah dipakai
+  KonfigurasiForm->>KonfigurasiForm: tampilkanPesan("Nama pengguna sudah terdaftar")
+  KonfigurasiForm-->>-A: kolom nama pengguna ditandai
+  Note over A,KonfigurasiForm: petugas mengganti nama pengguna, kembali ke langkah 3 skenario normal

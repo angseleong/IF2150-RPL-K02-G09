@@ -1,0 +1,36 @@
+sequenceDiagram
+  autonumber
+  actor A as Perawat
+  participant SkriningForm@{ "type": "boundary" } as :SkriningForm
+  participant SkriningManager@{ "type": "control" } as :SkriningManager
+  participant RisikoManager@{ "type": "control" } as :RisikoManager
+  participant DataKlinisBoundary@{ "type": "boundary" } as :DataKlinisBoundary
+  participant DataPantauBoundary@{ "type": "boundary" } as :DataPantauBoundary
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant AmbangRisikoEntity@{ "type": "entity" } as :AmbangRisikoEntity
+  A->>+SkriningForm: kirimHasilSkrining()
+  SkriningForm->>+SkriningManager: simpanSkrining(idKunjungan, keluhan, tv)
+  SkriningManager->>SkriningManager: validasiRentang(tv)
+  SkriningManager->>DataKlinisBoundary: simpanSkrining(skrining)
+  SkriningManager->>+RisikoManager: evaluasiRisiko(kunjungan, tv)
+  RisikoManager->>DataKlinisBoundary: ambilAmbang()
+  DataKlinisBoundary-->>RisikoManager: daftar ambang
+  RisikoManager->>DataKlinisBoundary: riwayatTandaVital(idPasien, 3)
+  DataKlinisBoundary-->>RisikoManager: riwayat tiga kunjungan
+  loop setiap jenis risiko
+    RisikoManager->>AmbangRisikoEntity: dilampaui(nilai)
+    AmbangRisikoEntity-->>RisikoManager: true
+    RisikoManager->>RisikoManager: terbitkanPenanda(idKunjungan, jenis)
+    RisikoManager->>DataKlinisBoundary: simpanPenanda(penanda)
+    RisikoManager->>RisikoManager: masukkanKeDaftarPantau(idPasien, jenis)
+    RisikoManager->>DataPantauBoundary: simpanEntri(entri)
+  end
+  RisikoManager-->>-SkriningManager: daftar penanda
+  SkriningManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
+  SkriningManager-->>-SkriningForm: daftar galat kosong
+  SkriningForm->>+RisikoManager: ambilPenanda(idKunjungan)
+  RisikoManager->>DataKlinisBoundary: penandaKunjungan(idKunjungan)
+  DataKlinisBoundary-->>RisikoManager: daftar penanda
+  RisikoManager-->>-SkriningForm: daftar penanda
+  SkriningForm->>SkriningForm: tampilkanPenandaRisiko(penanda)
+  SkriningForm-->>-A: ikon dan warna merah pada berkas kunjungan

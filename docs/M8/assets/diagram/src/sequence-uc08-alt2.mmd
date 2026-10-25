@@ -1,0 +1,13 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Farmasi
+  participant PersediaanForm@{ "type": "boundary" } as :PersediaanForm
+  participant PersediaanManager@{ "type": "control" } as :PersediaanManager
+  A->>+PersediaanForm: kirimPenerimaan()
+  PersediaanForm->>+PersediaanManager: catatPenerimaan(penerimaan)
+  PersediaanManager->>PersediaanManager: validasiPenerimaan(penerimaan)
+  Note over PersediaanManager: jumlah ≤ 0 atau tanggal kedaluwarsa sudah lewat, tidak ada yang disimpan
+  PersediaanManager-->>-PersediaanForm: ["jumlah", "tanggalKedaluwarsa"]
+  PersediaanForm->>PersediaanForm: tampilkanPesanKesalahan(kolom)
+  PersediaanForm-->>-A: kolom yang tidak memenuhi syarat
+  Note over A,PersediaanForm: petugas memperbaiki isian, kembali ke langkah 2 skenario normal

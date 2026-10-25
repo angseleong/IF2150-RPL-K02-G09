@@ -1,0 +1,30 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Farmasi
+  participant PersediaanForm@{ "type": "boundary" } as :PersediaanForm
+  participant PersediaanManager@{ "type": "control" } as :PersediaanManager
+  participant DataFarmasiBoundary@{ "type": "boundary" } as :DataFarmasiBoundary
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
+  participant PenerimaanObatEntity@{ "type": "entity" } as :PenerimaanObatEntity
+  participant ObatEntity@{ "type": "entity" } as :ObatEntity
+  A->>+PersediaanForm: tampilkanFormulir()
+  PersediaanForm->>+PersediaanManager: muatDataObat()
+  PersediaanManager->>DataFarmasiBoundary: ambilSemuaObat()
+  DataFarmasiBoundary-->>PersediaanManager: daftar obat
+  PersediaanManager-->>-PersediaanForm: daftar obat
+  PersediaanForm-->>-A: formulir penerimaan obat masuk
+  A->>+PersediaanForm: kirimPenerimaan()
+  PersediaanForm->>+PersediaanManager: catatPenerimaan(penerimaan)
+  PersediaanManager->>PersediaanManager: validasiPenerimaan(penerimaan)
+  PersediaanManager->>PenerimaanObatEntity: totalJumlah()
+  PenerimaanObatEntity-->>PersediaanManager: jumlah
+  PersediaanManager->>PersediaanManager: tambahStok(idObat, jumlah)
+  PersediaanManager->>DataFarmasiBoundary: ambilObat(idObat)
+  DataFarmasiBoundary-->>PersediaanManager: obat
+  PersediaanManager->>ObatEntity: tambahStok(jumlah)
+  PersediaanManager->>DataFarmasiBoundary: simpanPenerimaan(penerimaan)
+  PersediaanManager->>DataFarmasiBoundary: simpanStok(obat, bets)
+  PersediaanManager->>DataAkunBoundary: simpanAudit(obat masuk)
+  PersediaanManager-->>-PersediaanForm: obat
+  PersediaanForm->>PersediaanForm: tampilkanSaldo(obat)
+  PersediaanForm-->>-A: saldo persediaan diperbarui

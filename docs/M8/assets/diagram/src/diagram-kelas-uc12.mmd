@@ -1,0 +1,117 @@
+classDiagram
+  direction TB
+  class KonfigurasiForm {
+    <<boundary>>
+    -tabAktif: String
+    -isianData: String
+    +tampilkanData() void
+    +bukaTab(tab: String) void
+    +kirimPerubahan() void
+    +kirimNonaktifkan(idPengguna: int) void
+    +kirimPencadangan() void
+    +tampilkanStatusPencadangan(p: PencadanganEntity) void
+    +tampilkanPesan(pesan: String) void
+  }
+  class KonfigurasiManager {
+    <<control>>
+    +muatDataMaster() void
+    +simpanAkun(p: PenggunaEntity, sandi: String) void
+    +nonaktifkanAkun(idPengguna: int) void
+    +simpanDataMaster(a: AmbangRisikoEntity) void
+    +muatStatusPencadangan() PencadanganEntity
+    +jalankanPencadangan() PencadanganEntity
+  }
+  class DataAkunBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +ambilPengguna(idPengguna: int) PenggunaEntity
+    +namaPenggunaDipakai(nama: String) boolean
+    +simpanPengguna(p: PenggunaEntity) void
+    +tutupSesiAktif(idPengguna: int) void
+    +simpanAudit(a: AuditEntity) void
+  }
+  class DataKunjunganBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +ambilSemuaPoli() List~PoliEntity~
+  }
+  class DataKlinisBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +ambilAmbang() List~AmbangRisikoEntity~
+    +simpanAmbang(a: AmbangRisikoEntity) void
+  }
+  class DataFarmasiBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +ambilSemuaObat() List~ObatEntity~
+  }
+  class DataPencadanganBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    -lokasiMedia: String
+    +ambilTerakhir() PencadanganEntity
+    +jalankanPgDump(lokasi: String) PencadanganEntity
+    +verifikasiArsip(p: PencadanganEntity) boolean
+    +simpanCatatan(p: PencadanganEntity) void
+  }
+  class PenggunaEntity {
+    <<entity>>
+    -idPengguna: int
+    -namaPengguna: String
+    -kataSandiHash: String
+    -peran: String
+    -status: String
+    +nonaktifkan() void
+  }
+  class AuditEntity {
+    <<entity>>
+    -idAudit: long
+    -idPengguna: int
+    -waktu: LocalDateTime
+    -deskripsi: String
+  }
+  class PoliEntity {
+    <<entity>>
+    -idPoli: int
+    -namaPoli: String
+    -urutanTerakhir: int
+    -tanggalUrutan: LocalDate
+  }
+  class AmbangRisikoEntity {
+    <<entity>>
+    -idAmbang: int
+    -jenisRisiko: String
+    -nilaiBatas: double
+  }
+  class ObatEntity {
+    <<entity>>
+    -idObat: int
+    -namaObat: String
+    -sediaan: String
+    -stok: int
+    -ambangMinimum: int
+  }
+  class PencadanganEntity {
+    <<entity>>
+    -idPencadangan: int
+    -waktu: LocalDateTime
+    -status: String
+    -lokasiMedia: String
+    -ukuranBerkas: long
+    +berhasil() boolean
+  }
+  KonfigurasiForm "1" --> "1" KonfigurasiManager : memanggil
+  KonfigurasiManager ..> DataAkunBoundary : memakai
+  KonfigurasiManager ..> DataFarmasiBoundary : memakai
+  KonfigurasiManager ..> DataKlinisBoundary : memakai
+  KonfigurasiManager ..> DataKunjunganBoundary : memakai
+  KonfigurasiManager ..> DataPencadanganBoundary : memakai
+  KonfigurasiManager ..> PencadanganEntity : mengolah
+  KonfigurasiManager ..> PenggunaEntity : membuat
+  DataAkunBoundary ..> PenggunaEntity : membaca/menyimpan
+  DataAkunBoundary ..> AuditEntity : membaca/menyimpan
+  DataKunjunganBoundary ..> PoliEntity : membaca/menyimpan
+  DataKlinisBoundary ..> AmbangRisikoEntity : membaca/menyimpan
+  DataFarmasiBoundary ..> ObatEntity : membaca/menyimpan
+  DataPencadanganBoundary ..> PencadanganEntity : membaca/menyimpan

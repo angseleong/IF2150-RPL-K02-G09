@@ -1,0 +1,12 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant LaporanForm@{ "type": "boundary" } as :LaporanForm
+  participant LaporanManager@{ "type": "control" } as :LaporanManager
+  A->>+LaporanForm: kirimRentang()
+  LaporanForm->>+LaporanManager: hitungRekapitulasi(mulai, akhir)
+  LaporanManager->>LaporanManager: validasiRentang(mulai, akhir)
+  Note over LaporanManager: tanggal akhir lebih awal dari tanggal mulai, kueri tidak dijalankan
+  LaporanManager-->>-LaporanForm: galat rentang tidak valid
+  LaporanForm->>LaporanForm: tampilkanPesan("Perbaiki urutan tanggal")
+  LaporanForm-->>-A: penghitungan ditolak

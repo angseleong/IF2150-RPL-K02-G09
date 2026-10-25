@@ -1,0 +1,29 @@
+sequenceDiagram
+  autonumber
+  actor A as Pengguna
+  participant LoginForm@{ "type": "boundary" } as :LoginForm
+  participant AutentikasiManager@{ "type": "control" } as :AutentikasiManager
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
+  participant PenggunaEntity@{ "type": "entity" } as :PenggunaEntity
+  A->>LoginForm: tampilkan()
+  LoginForm-->>A: layar autentikasi
+  A->>+LoginForm: kirimKredensial()
+  LoginForm->>+AutentikasiManager: autentikasi(nama, sandi)
+  AutentikasiManager->>+DataAkunBoundary: cariPengguna(nama)
+  DataAkunBoundary-->>-AutentikasiManager: pengguna
+  AutentikasiManager->>PenggunaEntity: aktif()
+  PenggunaEntity-->>AutentikasiManager: true
+  AutentikasiManager->>PenggunaEntity: cocokkanSandi(sandi)
+  PenggunaEntity-->>AutentikasiManager: true
+  AutentikasiManager->>AutentikasiManager: bukaSesi(pengguna)
+  create participant SesiEntity@{ "type": "entity" } as :SesiEntity
+  AutentikasiManager->>SesiEntity: «create»
+  AutentikasiManager->>DataAkunBoundary: simpanSesi(sesi)
+  AutentikasiManager->>DataAkunBoundary: simpanAudit(audit masuk)
+  AutentikasiManager-->>-LoginForm: sesi
+  loop setiap layar pada menu
+    LoginForm->>AutentikasiManager: periksaHakAkses(peran, layar)
+    AutentikasiManager-->>LoginForm: boolean
+  end
+  LoginForm->>LoginForm: tampilkanDasbor(menu)
+  LoginForm-->>-A: dasbor sesuai peran

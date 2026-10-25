@@ -1,0 +1,32 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant PasienForm@{ "type": "boundary" } as :PasienForm
+  participant PasienManager@{ "type": "control" } as :PasienManager
+  participant DataPasienBoundary@{ "type": "boundary" } as :DataPasienBoundary
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
+  A->>PasienForm: tampilkan()
+  A->>+PasienForm: kirimPencarian(kataKunci)
+  PasienForm->>+PasienManager: cariPasien(kataKunci)
+  PasienManager->>+DataPasienBoundary: cariParsial(kataKunci)
+  DataPasienBoundary-->>-PasienManager: daftar kosong
+  PasienManager-->>-PasienForm: daftar kosong
+  PasienForm->>PasienForm: tampilkanHasilCari(daftar)
+  PasienForm-->>-A: "Data pasien tidak ditemukan"
+  A->>PasienForm: bukaFormulir(null)
+  A->>+PasienForm: kirimDataPasien()
+  PasienForm->>+PasienManager: daftarkanPasien(data)
+  PasienManager->>PasienManager: validasiNIK(nik)
+  PasienManager->>+DataPasienBoundary: nikTerdaftar(nik)
+  DataPasienBoundary-->>-PasienManager: false
+  PasienManager->>PasienManager: terbitkanNomorRM()
+  PasienManager->>DataPasienBoundary: nomorRMBerikutnya()
+  DataPasienBoundary-->>PasienManager: nomorRM
+  create participant PasienEntity@{ "type": "entity" } as :PasienEntity
+  PasienManager->>PasienEntity: «create»(data, nomorRM)
+  PasienManager->>DataPasienBoundary: simpanPasien(pasien)
+  Note over DataPasienBoundary: baris rekam medis pasien ikut dibuat dalam transaksi yang sama
+  PasienManager->>DataAkunBoundary: simpanAudit(pendaftaran pasien)
+  PasienManager-->>-PasienForm: pasien
+  PasienForm->>PasienForm: tampilkanNotifikasi("Pendaftaran berhasil")
+  PasienForm-->>-A: nomor rekam medis baru

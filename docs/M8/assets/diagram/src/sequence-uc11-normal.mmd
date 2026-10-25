@@ -1,0 +1,35 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant SinkronisasiForm@{ "type": "boundary" } as :SinkronisasiForm
+  participant SinkronisasiManager@{ "type": "control" } as :SinkronisasiManager
+  participant DataSinkronisasiBoundary@{ "type": "boundary" } as :DataSinkronisasiBoundary
+  participant SATUSEHATGateway@{ "type": "boundary" } as :SATUSEHATGateway
+  participant BundelFHIREntity@{ "type": "entity" } as :BundelFHIREntity
+  participant SS as SATUSEHAT (sandbox)
+  A->>+SinkronisasiForm: tampilkanStatus()
+  SinkronisasiForm->>+SinkronisasiManager: muatStatus()
+  SinkronisasiManager->>DataSinkronisasiBoundary: ambilTertunda()
+  DataSinkronisasiBoundary-->>SinkronisasiManager: bundel tertunda
+  SinkronisasiManager->>SATUSEHATGateway: periksaKoneksi()
+  SATUSEHATGateway-->>SinkronisasiManager: true
+  SinkronisasiManager-->>-SinkronisasiForm: daftar status
+  SinkronisasiForm-->>-A: jumlah tertunda dan indikator daring
+  A->>+SinkronisasiForm: kirimPermintaanSinkron()
+  SinkronisasiForm->>+SinkronisasiManager: kirimSemua()
+  Note over SinkronisasiManager: berjalan di thread latar, layar lain tetap bisa dipakai
+  SinkronisasiManager->>SATUSEHATGateway: periksaKoneksi()
+  SATUSEHATGateway-->>SinkronisasiManager: true
+  SinkronisasiManager->>DataSinkronisasiBoundary: ambilTertunda()
+  DataSinkronisasiBoundary-->>SinkronisasiManager: bundel tertunda
+  loop setiap bundel
+    SinkronisasiManager->>+SATUSEHATGateway: kirimBundel(bundel)
+    SATUSEHATGateway->>SS: POST Bundle (HTTPS REST, FHIR R4)
+    SS-->>SATUSEHATGateway: 201 Created, kode penerimaan
+    SATUSEHATGateway-->>-SinkronisasiManager: respons berhasil
+    SinkronisasiManager->>BundelFHIREntity: tandaiTerkirim(kode)
+    SinkronisasiManager->>DataSinkronisasiBoundary: perbaruiBundel(bundel)
+  end
+  SinkronisasiManager-->>-SinkronisasiForm: hasil pengiriman
+  SinkronisasiForm->>SinkronisasiForm: tampilkanHasil(hasil)
+  SinkronisasiForm-->>-A: status tiap bundel, antrean terkirim kosong

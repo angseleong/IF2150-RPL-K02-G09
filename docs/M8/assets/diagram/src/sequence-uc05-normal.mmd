@@ -1,0 +1,56 @@
+sequenceDiagram
+  autonumber
+  actor A as Dokter
+  participant RekamMedisForm@{ "type": "boundary" } as :RekamMedisForm
+  participant PemeriksaanForm@{ "type": "boundary" } as :PemeriksaanForm
+  participant PemeriksaanManager@{ "type": "control" } as :PemeriksaanManager
+  participant DataPasienBoundary@{ "type": "boundary" } as :DataPasienBoundary
+  participant DataKlinisBoundary@{ "type": "boundary" } as :DataKlinisBoundary
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
+  participant KunjunganEntity@{ "type": "entity" } as :KunjunganEntity
+  participant PemeriksaanEntity@{ "type": "entity" } as :PemeriksaanEntity
+  A->>+RekamMedisForm: tampilkanRingkasan(kunjungan)
+  RekamMedisForm->>+PemeriksaanManager: susunRingkasan(idKunjungan)
+  PemeriksaanManager->>DataKunjunganBoundary: ambilKunjungan(idKunjungan)
+  DataKunjunganBoundary-->>PemeriksaanManager: kunjungan
+  PemeriksaanManager->>DataPasienBoundary: ambilRekamMedis(idPasien)
+  DataPasienBoundary-->>PemeriksaanManager: rekamMedis
+  PemeriksaanManager->>DataKlinisBoundary: ambilSkrining(idKunjungan)
+  DataKlinisBoundary-->>PemeriksaanManager: skrining hari ini
+  PemeriksaanManager->>DataKlinisBoundary: penandaKunjungan(idKunjungan)
+  DataKlinisBoundary-->>PemeriksaanManager: penanda aktif
+  PemeriksaanManager-->>-RekamMedisForm: ringkasan
+  RekamMedisForm-->>-A: ringkasan rekam medis satu layar
+  A->>+RekamMedisForm: tampilkanGrafikTren()
+  RekamMedisForm->>+PemeriksaanManager: susunTren(idPasien)
+  PemeriksaanManager->>DataKlinisBoundary: riwayatTandaVital(idPasien, 0)
+  DataKlinisBoundary-->>PemeriksaanManager: seri tanda vital
+  PemeriksaanManager-->>-RekamMedisForm: seri tren
+  RekamMedisForm-->>-A: grafik garis antar-kunjungan
+  A->>+PemeriksaanForm: kirimKataKunciDiagnosis(kataKunci)
+  PemeriksaanForm->>+PemeriksaanManager: cariKodeICD10(kataKunci)
+  PemeriksaanManager->>DataKlinisBoundary: cariKodeICD10(kataKunci)
+  DataKlinisBoundary-->>PemeriksaanManager: daftar kode
+  PemeriksaanManager-->>-PemeriksaanForm: daftar kode
+  PemeriksaanForm->>PemeriksaanForm: tampilkanSaranKode(daftar)
+  PemeriksaanForm-->>-A: saran kode ICD-10
+  A->>+PemeriksaanForm: kirimHasilPemeriksaan()
+  PemeriksaanForm->>+PemeriksaanManager: simpanPemeriksaan(idKunjungan, pemeriksaan, diagnosis)
+  PemeriksaanManager->>DataKlinisBoundary: simpanPemeriksaan(pemeriksaan, diagnosis)
+  PemeriksaanManager-->>-PemeriksaanForm: selesai
+  PemeriksaanForm->>+PemeriksaanManager: jadwalkanKontrol(idPasien, tanggal)
+  PemeriksaanManager->>DataKlinisBoundary: simpanJadwalKontrol(jadwal)
+  PemeriksaanManager-->>-PemeriksaanForm: jadwal
+  PemeriksaanForm-->>-A: ringkasan pemeriksaan
+  A->>+PemeriksaanForm: kirimFinal()
+  PemeriksaanForm->>+PemeriksaanManager: kunciRekamMedis(idKunjungan)
+  PemeriksaanManager->>DataKlinisBoundary: ambilPemeriksaan(idKunjungan)
+  DataKlinisBoundary-->>PemeriksaanManager: pemeriksaan
+  PemeriksaanManager->>PemeriksaanEntity: kunci()
+  PemeriksaanManager->>DataKlinisBoundary: simpanPemeriksaan(pemeriksaan, diagnosis)
+  PemeriksaanManager->>KunjunganEntity: perbaruiStatus("selesai diperiksa")
+  PemeriksaanManager->>DataKunjunganBoundary: simpanKunjungan(kunjungan)
+  PemeriksaanManager->>DataAkunBoundary: simpanAudit(pemeriksaan dikunci)
+  PemeriksaanManager-->>-PemeriksaanForm: selesai
+  PemeriksaanForm-->>-A: rekam medis kunjungan terkunci

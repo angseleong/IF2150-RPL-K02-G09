@@ -1,0 +1,38 @@
+sequenceDiagram
+  autonumber
+  actor A1 as Petugas Loket 1
+  actor A2 as Petugas Loket 2
+  participant KunjunganForm_1@{ "type": "boundary" } as :KunjunganForm (Loket 1)
+  participant KunjunganForm_2@{ "type": "boundary" } as :KunjunganForm (Loket 2)
+  participant KunjunganManager_1@{ "type": "control" } as :KunjunganManager (Loket 1)
+  participant KunjunganManager_2@{ "type": "control" } as :KunjunganManager (Loket 2)
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant PoliEntity@{ "type": "entity" } as :PoliEntity
+  par Petugas Loket 1
+    A1->>+KunjunganForm_1: kirimPermintaanKunjungan()
+    KunjunganForm_1->>+KunjunganManager_1: bukaKunjungan(idPasienA, idPoli)
+    critical satu transaksi
+      KunjunganManager_1->>DataKunjunganBoundary: kunciPoli(idPoli)
+      DataKunjunganBoundary-->>KunjunganManager_1: poli (SELECT ... FOR UPDATE)
+      KunjunganManager_1->>PoliEntity: ambilNomorBerikutnya(hariIni)
+      PoliEntity-->>KunjunganManager_1: 7
+      KunjunganManager_1->>DataKunjunganBoundary: simpanKunjungan(kunjunganA)
+      KunjunganManager_1->>DataKunjunganBoundary: simpanPoli(poli)
+    end
+    KunjunganManager_1-->>-KunjunganForm_1: kunjunganA
+    KunjunganForm_1-->>-A1: tiket nomor 7
+  and Petugas Loket 2
+    A2->>+KunjunganForm_2: kirimPermintaanKunjungan()
+    KunjunganForm_2->>+KunjunganManager_2: bukaKunjungan(idPasienB, idPoli)
+    critical satu transaksi
+      KunjunganManager_2->>DataKunjunganBoundary: kunciPoli(idPoli)
+      Note over KunjunganManager_2,DataKunjunganBoundary: menunggu kunci baris poli dilepas
+      DataKunjunganBoundary-->>KunjunganManager_2: poli (urutanTerakhir = 7)
+      KunjunganManager_2->>PoliEntity: ambilNomorBerikutnya(hariIni)
+      PoliEntity-->>KunjunganManager_2: 8
+      KunjunganManager_2->>DataKunjunganBoundary: simpanKunjungan(kunjunganB)
+      KunjunganManager_2->>DataKunjunganBoundary: simpanPoli(poli)
+    end
+    KunjunganManager_2-->>-KunjunganForm_2: kunjunganB
+    KunjunganForm_2-->>-A2: tiket nomor 8
+  end

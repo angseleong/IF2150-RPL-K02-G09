@@ -1,0 +1,57 @@
+classDiagram
+  direction TB
+  class SinkronisasiForm {
+    <<boundary>>
+    -daftarStatus: List~BundelFHIREntity~
+    +tampilkanStatus() void
+    +kirimPermintaanSinkron() void
+    +tampilkanHasil(hasil: List~BundelFHIREntity~) void
+    +tampilkanTombolEkspor() void
+    +kirimPermintaanEkspor(lokasi: String) void
+    +tampilkanPesan(pesan: String) void
+  }
+  class SinkronisasiManager {
+    <<control>>
+    -jumlahTertunda: int
+    +muatStatus() List~BundelFHIREntity~
+    +kirimSemua() List~BundelFHIREntity~
+    +eksporBundel(lokasi: String) String
+  }
+  class SATUSEHATGateway {
+    <<boundary>>
+    -alamatLayanan: String
+    -token: String
+    +periksaKoneksi() boolean
+    +kirimBundel(bundel: BundelFHIREntity) ResponsKirim
+  }
+  class DataSinkronisasiBoundary {
+    <<boundary>>
+    -koneksi: Connection
+    +ambilTertunda() List~BundelFHIREntity~
+    +perbaruiBundel(b: BundelFHIREntity) void
+    +tulisArsipTerenkripsi(daftar: List~BundelFHIREntity~, lokasi: String) String
+  }
+  class KunjunganEntity {
+    <<entity>>
+    -idKunjungan: int
+    -idPasien: int
+    -tanggal: LocalDate
+    -nomorAntrean: int
+    -status: String
+  }
+  class BundelFHIREntity {
+    <<entity>>
+    -idBundel: int
+    -idKunjungan: int
+    -isiBundel: String
+    -status: String
+    -alasanGagal: String
+    +tandaiTerkirim(kode: String) void
+    +tandaiGagal(alasan: String) void
+  }
+  SinkronisasiForm "1" --> "1" SinkronisasiManager : memanggil
+  SinkronisasiManager ..> BundelFHIREntity : mengolah
+  SinkronisasiManager ..> DataSinkronisasiBoundary : memakai
+  SinkronisasiManager ..> SATUSEHATGateway : memakai
+  DataSinkronisasiBoundary ..> BundelFHIREntity : membaca/menyimpan
+  KunjunganEntity "1" -- "0..1" BundelFHIREntity : dikirim sebagai

@@ -1,0 +1,39 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant KonfigurasiForm@{ "type": "boundary" } as :KonfigurasiForm
+  participant KonfigurasiManager@{ "type": "control" } as :KonfigurasiManager
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
+  participant DataKunjunganBoundary@{ "type": "boundary" } as :DataKunjunganBoundary
+  participant DataFarmasiBoundary@{ "type": "boundary" } as :DataFarmasiBoundary
+  participant DataKlinisBoundary@{ "type": "boundary" } as :DataKlinisBoundary
+  A->>+KonfigurasiForm: tampilkanData()
+  KonfigurasiForm->>+KonfigurasiManager: muatDataMaster()
+  KonfigurasiManager->>DataKunjunganBoundary: ambilSemuaPoli()
+  DataKunjunganBoundary-->>KonfigurasiManager: daftar poli
+  KonfigurasiManager->>DataFarmasiBoundary: ambilSemuaObat()
+  DataFarmasiBoundary-->>KonfigurasiManager: daftar obat
+  KonfigurasiManager->>DataKlinisBoundary: ambilAmbang()
+  DataKlinisBoundary-->>KonfigurasiManager: daftar ambang
+  KonfigurasiManager-->>-KonfigurasiForm: data master
+  KonfigurasiForm-->>-A: tab Akun, Data Master, Pemeliharaan
+  A->>KonfigurasiForm: bukaTab("Akun Pengguna")
+  A->>+KonfigurasiForm: kirimPerubahan()
+  KonfigurasiForm->>+KonfigurasiManager: simpanAkun(pengguna, sandi)
+  KonfigurasiManager->>DataAkunBoundary: namaPenggunaDipakai(nama)
+  DataAkunBoundary-->>KonfigurasiManager: false
+  create participant PenggunaEntity@{ "type": "entity" } as :PenggunaEntity
+  KonfigurasiManager->>PenggunaEntity: «create»(nama, hash(sandi), peran)
+  KonfigurasiManager->>DataAkunBoundary: simpanPengguna(pengguna)
+  KonfigurasiManager->>DataAkunBoundary: simpanAudit(akun baru)
+  KonfigurasiManager-->>-KonfigurasiForm: selesai
+  KonfigurasiForm->>KonfigurasiForm: tampilkanPesan("Akun ditambahkan")
+  KonfigurasiForm-->>-A: daftar akun diperbarui
+  A->>KonfigurasiForm: bukaTab("Data Master")
+  A->>+KonfigurasiForm: kirimPerubahan()
+  KonfigurasiForm->>+KonfigurasiManager: simpanDataMaster(ambang)
+  KonfigurasiManager->>DataKlinisBoundary: simpanAmbang(ambang)
+  KonfigurasiManager->>DataAkunBoundary: simpanAudit(ubah ambang)
+  KonfigurasiManager-->>-KonfigurasiForm: selesai
+  KonfigurasiForm->>KonfigurasiForm: tampilkanPesan("Ambang baru berlaku untuk skrining berikutnya")
+  KonfigurasiForm-->>-A: pengaturan tersimpan

@@ -1,0 +1,41 @@
+sequenceDiagram
+  autonumber
+  actor A as Tenaga Klinis
+  participant DaftarPantauForm@{ "type": "boundary" } as :DaftarPantauForm
+  participant PantauManager@{ "type": "control" } as :PantauManager
+  participant RisikoManager@{ "type": "control" } as :RisikoManager
+  participant DataPantauBoundary@{ "type": "boundary" } as :DataPantauBoundary
+  participant DataKlinisBoundary@{ "type": "boundary" } as :DataKlinisBoundary
+  participant DataPasienBoundary@{ "type": "boundary" } as :DataPasienBoundary
+  participant TindakLanjutEntity@{ "type": "entity" } as :TindakLanjutEntity
+  A->>+DaftarPantauForm: tampilkanDaftar()
+  DaftarPantauForm->>+RisikoManager: muatEntriAktif()
+  RisikoManager->>DataPantauBoundary: ambilEntri()
+  DataPantauBoundary-->>RisikoManager: entri penanda risiko
+  RisikoManager->>DataKlinisBoundary: ambilJadwalKontrol()
+  DataKlinisBoundary-->>RisikoManager: jadwal kontrol
+  RisikoManager-->>-DaftarPantauForm: entri aktif
+  DaftarPantauForm-->>-A: daftar pantau dan penyaring
+  A->>+DaftarPantauForm: kirimPenyaring(jenisRisiko, mulai, akhir)
+  DaftarPantauForm->>+PantauManager: saringDaftar(jenisRisiko, mulai, akhir)
+  PantauManager->>+RisikoManager: muatEntriAktif()
+  RisikoManager-->>-PantauManager: entri aktif
+  loop setiap entri yang lolos saringan
+    PantauManager->>DataPasienBoundary: ambilPasien(idPasien)
+    DataPasienBoundary-->>PantauManager: identitas dan kontak
+  end
+  PantauManager-->>-DaftarPantauForm: daftar tersaring
+  DaftarPantauForm-->>-A: sasaran pemantauan hari ini
+  A->>DaftarPantauForm: bukaFormulirTindakLanjut(idEntri)
+  A->>+DaftarPantauForm: kirimTindakLanjut()
+  DaftarPantauForm->>+PantauManager: catatTindakLanjut(idEntri, tindakLanjut)
+  PantauManager->>TindakLanjutEntity: terhubung()
+  TindakLanjutEntity-->>PantauManager: true
+  PantauManager->>DataPantauBoundary: simpanTindakLanjut(idEntri, tindakLanjut)
+  PantauManager->>DataPasienBoundary: ambilRekamMedis(idPasien)
+  DataPasienBoundary-->>PantauManager: rekamMedis
+  PantauManager->>DataPasienBoundary: simpanRekamMedis(rekamMedis)
+  PantauManager->>PantauManager: perbaruiStatus(idEntri, "selesai ditindaklanjuti")
+  PantauManager->>DataPantauBoundary: simpanEntri(entri)
+  PantauManager-->>-DaftarPantauForm: selesai
+  DaftarPantauForm-->>-A: status entri diperbarui

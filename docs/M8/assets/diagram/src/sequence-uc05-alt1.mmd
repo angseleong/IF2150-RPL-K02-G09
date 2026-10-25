@@ -1,0 +1,15 @@
+sequenceDiagram
+  autonumber
+  actor A as Perawat
+  participant RekamMedisForm@{ "type": "boundary" } as :RekamMedisForm
+  participant PemeriksaanForm@{ "type": "boundary" } as :PemeriksaanForm
+  participant AutentikasiManager@{ "type": "control" } as :AutentikasiManager
+  participant PemeriksaanManager@{ "type": "control" } as :PemeriksaanManager
+  A->>+RekamMedisForm: tampilkanRingkasan(kunjungan)
+  RekamMedisForm->>+AutentikasiManager: periksaHakAkses("Perawat", "PemeriksaanForm")
+  AutentikasiManager-->>-RekamMedisForm: false
+  RekamMedisForm->>+PemeriksaanManager: susunRingkasan(idKunjungan)
+  PemeriksaanManager-->>-RekamMedisForm: ringkasan
+  RekamMedisForm->>RekamMedisForm: aturModeBacaSaja()
+  RekamMedisForm->>PemeriksaanForm: kunciKolomKlinis()
+  RekamMedisForm-->>-A: mode baca saja dan keterangan batas wewenang

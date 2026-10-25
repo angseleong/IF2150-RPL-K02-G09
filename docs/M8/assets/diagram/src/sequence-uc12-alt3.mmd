@@ -1,0 +1,18 @@
+sequenceDiagram
+  autonumber
+  actor A as Petugas Administrasi
+  participant KonfigurasiForm@{ "type": "boundary" } as :KonfigurasiForm
+  participant KonfigurasiManager@{ "type": "control" } as :KonfigurasiManager
+  participant DataAkunBoundary@{ "type": "boundary" } as :DataAkunBoundary
+  participant PenggunaEntity@{ "type": "entity" } as :PenggunaEntity
+  A->>+KonfigurasiForm: kirimNonaktifkan(idPengguna)
+  KonfigurasiForm->>+KonfigurasiManager: nonaktifkanAkun(idPengguna)
+  KonfigurasiManager->>DataAkunBoundary: ambilPengguna(idPengguna)
+  DataAkunBoundary-->>KonfigurasiManager: pengguna
+  KonfigurasiManager->>PenggunaEntity: nonaktifkan()
+  KonfigurasiManager->>DataAkunBoundary: simpanPengguna(pengguna)
+  KonfigurasiManager->>DataAkunBoundary: tutupSesiAktif(idPengguna)
+  KonfigurasiManager->>DataAkunBoundary: simpanAudit(akun dinonaktifkan)
+  KonfigurasiManager-->>-KonfigurasiForm: selesai
+  KonfigurasiForm->>KonfigurasiForm: tampilkanPesan("Akun dinonaktifkan")
+  KonfigurasiForm-->>-A: status akun nonaktif
