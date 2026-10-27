@@ -1263,7 +1263,7 @@ Algoritma ditulis sebagai *pseudocode* dengan empat kesepakatan berikut.
 1. **Akses data.** `Manager` tidak menyimpan objek `DataBoundary` sebagai atribut, sesuai relasi dependensi «memakai» pada Gambar 58. Di awal operasi, `Manager` membuka satu koneksi JDBC lalu membuat objek `DataBoundary` yang dibutuhkan dengan koneksi tersebut. Pada *pseudocode*, objek itu ditulis dengan nama kelasnya tanpa akhiran `Boundary` dan berhuruf kecil di depan, misalnya `dataKunjungan` untuk `DataKunjunganBoundary`. Pelaku yang dicatat pada jejak audit ditulis `idPenggunaSesi`, yaitu `idPengguna` milik `SesiEntity` yang dibuka `AutentikasiManager` saat pengguna masuk di komputer tersebut.
 2. **Transaksi.** Langkah di antara `MULAI TRANSAKSI` dan `AKHIR TRANSAKSI` berjalan pada satu koneksi dengan *auto-commit* dimatikan. Bila seluruh langkah berhasil, perubahan disimpan (COMMIT). Bila satu langkah gagal atau melempar pengecualian, seluruh perubahan dibatalkan (ROLLBACK). Blok ini sama dengan fragmen `critical` pada *sequence diagram* dan memenuhi KF23, KNF03, KNF11, dan KNF13.
 3. **Penolakan.** Masukan yang melanggar aturan bisnis ditolak dengan `IllegalArgumentException`, sedangkan keadaan data yang tidak mengizinkan operasi (misalnya akun nonaktif atau resep yang sudah dilayani) ditolak dengan `IllegalStateException`. Keduanya berasal dari pustaka standar Java dan membawa pesan yang ditampilkan `Form` kepada aktor. Operasi yang pada *sequence diagram* mengembalikan daftar galat, yaitu `SkriningManager.simpanSkrining()`, tetap mengembalikan daftar tersebut.
-4. **Kueri.** Kueri SQL dicantumkan pada operasi `DataBoundary` yang menjalankannya (Subbab 5.56 sampai 5.64), bukan pada `Manager` yang memanggilnya, agar setiap kueri hanya ditulis sekali.
+4. **Kueri.** Kueri SQL dicantumkan pada operasi `DataBoundary` yang menjalankannya (Subbab 5.56 sampai 5.64), bukan pada `Manager` yang memanggilnya, agar setiap kueri hanya ditulis sekali. Nama tabel adalah nama *entity* tanpa akhiran `Entity` dalam huruf kecil bergaris bawah, misalnya `bets_obat` untuk `BetsObatEntity`, dan nama kolom adalah nama atribut dalam bentuk yang sama, misalnya `tanggal_kedaluwarsa`. Tanda `?` adalah parameter `PreparedStatement` yang diisi berurutan, sehingga masukan pengguna tidak pernah disambung langsung ke teks kueri.
 
 ## 5.1 – 5.16 Kelas Boundary (C01 – C16)
 
@@ -2148,7 +2148,7 @@ FUNGSI kirimSemua() -> List<BundelFHIREntity>
         LEMPAR IllegalStateException("Koneksi internet terputus, bundel ditahan")   // SinkronisasiForm menampilkan tombol "Ekspor Bundel"
     AKHIR JIKA
     dataSinkronisasi <- DataSinkronisasiBoundary(koneksi)
-    daftar <- dataSinkronisasi.ambilTertunda()       // status "tertunda" atau "gagal"
+    daftar <- dataSinkronisasi.ambilTertunda()       // status "tertunda" atau "gagal kirim"
     jumlahTertunda <- 0
     UNTUK SETIAP b DI daftar
         respons <- gateway.kirimBundel(b)
@@ -2286,9 +2286,633 @@ Hasil gagal tetap disimpan sebagai catatan. `muatStatusPencadangan()` selalu men
 
 > *Sedang dikerjakan.* Subbab 5.30 sampai 5.55 merinci 26 kelas `Entity` pada *Business Layer*, mengikuti pola Subbab 5.17.
 
-## 5.56 – 5.64 Kelas Akses Data (C56 – C64)
+## 5.56 Kelas DataAkunBoundary
 
-> *Sedang dikerjakan.* Subbab 5.56 sampai 5.64 merinci sembilan kelas `DataBoundary` beserta kueri SQL setiap operasinya (ID Q-CXX-YY), mengikuti pola Subbab 5.17.
+**Nama Kelas:** DataAkunBoundary  
+**ID Kelas:** C56
+
+Tabel 5.56.1. Operasi Kelas DataAkunBoundary
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `cariPengguna(nama: String): PenggunaEntity` | public | Mengambil akun yang nama penggunanya persis sama dengan masukan (Q-C56-01). Mengembalikan `null` bila nama tidak terdaftar (UC01). |
+| `ambilPengguna(idPengguna: int): PenggunaEntity` | public | Mengambil akun berdasarkan ID (Q-C56-02) untuk disunting atau dinonaktifkan dari `KonfigurasiForm` (UC12). |
+| `namaPenggunaDipakai(nama: String): boolean` | public | Mengembalikan `true` bila nama pengguna sudah dipakai akun lain, aktif maupun nonaktif (Q-C56-03, skenario alternatif 2 UC12). |
+| `simpanPengguna(p: PenggunaEntity): void` | public | Menyisipkan akun baru (Q-C56-04) atau memutakhirkan *hash* kata sandi, peran, dan status akun lama (Q-C56-05). Nama pengguna tidak ikut diubah karena keunikannya hanya diperiksa saat akun dibuat. |
+| `simpanSesi(s: SesiEntity): void` | public | Menyimpan sesi baru saat pengguna masuk, atau memutakhirkan status sesi yang ditutup (Q-C56-06). |
+| `tutupSesiAktif(idPengguna: int): void` | public | Menandai seluruh sesi aktif milik satu akun sebagai tidak aktif (Q-C56-07). Dipanggil saat akun dinonaktifkan (skenario alternatif 3 UC12). |
+| `simpanAudit(a: AuditEntity): void` | public | Menambah satu catatan jejak audit (Q-C56-08). Kelas ini sengaja tidak memiliki operasi untuk mengubah atau menghapus audit (KF16, KNF05). |
+
+Tabel 5.56.2. Atribut Kelas DataAkunBoundary
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `koneksi` | private | `Connection` |
+
+`koneksi` adalah objek `java.sql.Connection` yang diterima lewat konstruktor dari `Manager` pemanggil (kesepakatan 1). Atribut ini dan lima aturan berikut berlaku sama untuk kesembilan kelas akses data, C56 sampai C64.
+
+1. **Transaksi milik `Manager`.** `DataBoundary` tidak membuka, menutup, COMMIT, atau ROLLBACK koneksi yang diterimanya, karena batas transaksi ditentukan `Manager` (kesepakatan 2). Pengecualiannya adalah operasi yang menjalankan lebih dari satu kueri tulis, misalnya `simpanPasien()` atau `simpanPemeriksaan()`. Bila operasi seperti itu dipanggil di luar blok `MULAI TRANSAKSI` (`koneksi.getAutoCommit()` bernilai `true`), operasi membungkus kuerinya sendiri dalam satu transaksi agar data tidak pernah tersimpan setengah (KNF13). Polanya ditulis lengkap pada Algo-C59-02.
+2. **Sisip atau mutakhirkan.** Operasi `simpanX()` menjalankan INSERT bila ID pada *entity* masih 0 dan UPDATE bila ID sudah terisi. ID baru dibangkitkan basis data (kolom `GENERATED ALWAYS AS IDENTITY`), dikembalikan lewat `RETURNING`, lalu diisikan ke objek *entity*, sehingga `Manager` dapat langsung memakainya, misalnya `kunjungan.idKunjungan` pada Algo-C19-01.
+3. **Penolakan dari basis data.** Pelanggaran *constraint* diterjemahkan ke pengecualian pada kesepakatan 3. SQLState `23505` (*unique violation*) dan `23514` (*check violation*) menjadi `IllegalArgumentException` berisi pesan yang dapat dibaca aktor, misalnya "NIK sudah terdaftar". Galat lain, misalnya koneksi LAN terputus, menjadi `IllegalStateException("Basis data tidak dapat dihubungi")`, sedangkan rincian teknisnya ditulis ke log aplikasi.
+4. **Penguncian baris.** Kueri ber-`FOR UPDATE` (Q-C58-02, Q-C58-09, Q-C61-02, Q-C61-03, dan Q-C61-15) menahan kunci baris sampai transaksi `Manager` selesai. Bila dipanggil di luar transaksi, kunci langsung dilepas begitu kueri selesai, sehingga operasi baca biasa tidak tertahan lama.
+5. **Hak akses basis data.** Aplikasi masuk ke PostgreSQL dengan satu peran, `sehati_app`. Peran ini hanya diberi hak `SELECT` dan `INSERT` pada tabel `audit`, tanpa `UPDATE`, `DELETE`, maupun `TRUNCATE`, sehingga jejak audit tidak dapat diubah atau dihapus dari aplikasi (KNF05).
+
+Nama tabel dan kolom pada kueri mengikuti kesepakatan 4. Beberapa tabel memiliki kolom yang tidak muncul sebagai atribut *entity*. Kolom tersebut berupa kunci asing penghubung relasi pada Gambar 58, misalnya `kunjungan.id_poli` dan `item_resep.id_resep`, dan masing-masing dijelaskan pada keterangan kueri yang memakainya.
+
+Tabel 5.56.3. Kueri Kelas DataAkunBoundary
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C56-01 | `SELECT id_pengguna, nama_pengguna, kata_sandi_hash, peran, status`<br>`FROM pengguna WHERE nama_pengguna = ?` | `cariPengguna()`. Kolom `nama_pengguna` ber-*constraint* UNIQUE, sehingga hasilnya paling banyak satu baris. |
+| Q-C56-02 | `SELECT id_pengguna, nama_pengguna, kata_sandi_hash, peran, status`<br>`FROM pengguna WHERE id_pengguna = ?` | `ambilPengguna()`. |
+| Q-C56-03 | `SELECT EXISTS (SELECT 1 FROM pengguna WHERE nama_pengguna = ?)` | `namaPenggunaDipakai()`. |
+| Q-C56-04 | `INSERT INTO pengguna (nama_pengguna, kata_sandi_hash, peran, status)`<br>`VALUES (?, ?, ?, ?) RETURNING id_pengguna` | `simpanPengguna()` untuk akun baru. Bila dua petugas membuat nama yang sama pada saat bersamaan, UNIQUE pada `nama_pengguna` menolak salah satunya (aturan 3). |
+| Q-C56-05 | `UPDATE pengguna SET kata_sandi_hash = ?, peran = ?, status = ?`<br>`WHERE id_pengguna = ?` | `simpanPengguna()` untuk akun lama. |
+| Q-C56-06 | `INSERT INTO sesi (id_sesi, id_pengguna, waktu_mulai, status_aktif)`<br>`VALUES (?, ?, ?, ?)`<br>`ON CONFLICT (id_sesi) DO UPDATE SET status_aktif = EXCLUDED.status_aktif` | `simpanSesi()`. `id_sesi` bertipe UUID yang dibangkitkan di Java, sehingga sesi baru dan sesi yang ditutup memakai kueri yang sama. |
+| Q-C56-07 | `UPDATE sesi SET status_aktif = FALSE`<br>`WHERE id_pengguna = ? AND status_aktif` | `tutupSesiAktif()`. |
+| Q-C56-08 | `INSERT INTO audit (id_pengguna, waktu, deskripsi) VALUES (?, ?, ?)` | `simpanAudit()`. Kolom `audit.id_pengguna` sengaja tidak diberi *foreign key* karena nilai 0 dipakai untuk percobaan masuk dengan nama yang tidak dikenal (Algo-C17-01). |
+
+## 5.57 Kelas DataPasienBoundary
+
+**Nama Kelas:** DataPasienBoundary  
+**ID Kelas:** C57
+
+Tabel 5.57.1. Operasi Kelas DataPasienBoundary
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `cariParsial(kataKunci: String): List<PasienEntity>` | public | Mencari pasien yang NIK, nama, atau nomor rekam medisnya memuat kata kunci (Q-C57-01, KF01). Hasil dibatasi 50 baris terurut nama (KNF01). |
+| `ambilPasien(idPasien: int): PasienEntity` | public | Mengambil data diri satu pasien (Q-C57-02) untuk penyuntingan (UC02) dan untuk kontak pasien pada daftar pantau (UC09). |
+| `nikTerdaftar(nik: String): boolean` | public | Mengembalikan `true` bila NIK sudah dipakai pasien mana pun (Q-C57-03, KF02). |
+| `nomorRMBerikutnya(): String` | public | Mengambil nomor rekam medis berikutnya dari *sequence* `seq_nomor_rm` (Q-C57-04, KF02). |
+| `simpanPasien(p: PasienEntity): void` | public | Untuk pasien baru, menyisipkan data pasien lalu membuat baris rekam medisnya (Q-C57-05, Q-C57-06). Untuk pasien lama, memutakhirkan data diri tanpa menyentuh nomor rekam medis (Q-C57-07). |
+| `ambilRekamMedis(idPasien: int): RekamMedisEntity` | public | Mengambil rekam medis pasien beserta diagnosis lampau dan riwayat obatnya (Q-C57-08 sampai Q-C57-10, KF09). |
+| `simpanRekamMedis(rm: RekamMedisEntity): void` | public | Menyisipkan entri yang ditambahkan lewat `RekamMedisEntity.tambahEntri()` sejak rekam medis dimuat (Q-C57-11), misalnya hasil tindak lanjut pada UC09. Entri lama tidak pernah diubah. |
+
+Tabel 5.57.2. Atribut Kelas DataPasienBoundary
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `koneksi` | private | `Connection` |
+
+`koneksi` dan aturan pemakaiannya sama dengan Subbab 5.56.
+
+Tabel 5.57.3. Kueri Kelas DataPasienBoundary
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C57-01 | `SELECT id_pasien, nik, nomor_rekam_medis, nama, tanggal_lahir,`<br>`jenis_kelamin, alamat, nomor_telepon`<br>`FROM pasien`<br>`WHERE nik LIKE ? OR nomor_rekam_medis ILIKE ? OR nama ILIKE ?`<br>`ORDER BY nama LIMIT 50` | `cariParsial()`. Ketiga parameter berisi pola yang sama, yaitu kata kunci yang diapit `%` (Algo-C57-01). |
+| Q-C57-02 | `SELECT id_pasien, nik, nomor_rekam_medis, nama, tanggal_lahir,`<br>`jenis_kelamin, alamat, nomor_telepon`<br>`FROM pasien WHERE id_pasien = ?` | `ambilPasien()`. |
+| Q-C57-03 | `SELECT EXISTS (SELECT 1 FROM pasien WHERE nik = ?)` | `nikTerdaftar()`. |
+| Q-C57-04 | `SELECT concat('RM-', lpad(nextval('seq_nomor_rm')::text, 6, '0'))` | `nomorRMBerikutnya()`. Menghasilkan nomor seperti `RM-000123`. `nextval()` tidak pernah memberikan nilai yang sama kepada dua transaksi, juga saat dua loket mendaftar bersamaan. Nomor milik transaksi yang di-ROLLBACK dilewati, bukan dipakai ulang, sehingga nomor tetap unik (KF02). |
+| Q-C57-05 | `INSERT INTO pasien (nik, nomor_rekam_medis, nama, tanggal_lahir,`<br>`jenis_kelamin, alamat, nomor_telepon)`<br>`VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id_pasien` | `simpanPasien()` untuk pasien baru. UNIQUE pada `nik` menolak NIK ganda yang lolos dari `nikTerdaftar()` karena didaftarkan bersamaan (catatan Algo-C18-01). |
+| Q-C57-06 | `INSERT INTO rekam_medis (id_pasien) VALUES (?) RETURNING id_rekam_medis` | `simpanPasien()` untuk pasien baru, dalam transaksi yang sama dengan Q-C57-05. `rekam_medis.id_pasien` ber-UNIQUE sehingga satu pasien memiliki tepat satu rekam medis. |
+| Q-C57-07 | `UPDATE pasien SET nik = ?, nama = ?, tanggal_lahir = ?, jenis_kelamin = ?,`<br>`alamat = ?, nomor_telepon = ?`<br>`WHERE id_pasien = ?` | `simpanPasien()` untuk pasien lama. Kolom `nomor_rekam_medis` tidak termasuk (KF02). |
+| Q-C57-08 | `SELECT id_rekam_medis FROM rekam_medis WHERE id_pasien = ?` | `ambilRekamMedis()`. |
+| Q-C57-09 | `SELECT d.id_diagnosis, d.kode_icd10, d.deskripsi`<br>`FROM diagnosis d`<br>`JOIN pemeriksaan pm ON pm.id_pemeriksaan = d.id_pemeriksaan`<br>`JOIN kunjungan k ON k.id_kunjungan = pm.id_kunjungan`<br>`WHERE k.id_pasien = ? AND pm.terkunci`<br>`ORDER BY k.tanggal DESC` | `ambilRekamMedis()`, mengisi `daftarDiagnosis`. Hanya diagnosis dari pemeriksaan yang sudah dikunci yang dianggap diagnosis lampau, sehingga draf yang masih dapat berubah tidak ikut tampil. |
+| Q-C57-10 | `SELECT k.tanggal, o.nama_obat, o.sediaan, ir.jumlah, ir.dosis, ir.aturan_pakai`<br>`FROM item_resep ir`<br>`JOIN resep r ON r.id_resep = ir.id_resep`<br>`JOIN kunjungan k ON k.id_kunjungan = r.id_kunjungan`<br>`JOIN obat o ON o.id_obat = ir.id_obat`<br>`WHERE k.id_pasien = ? AND r.status = 'selesai dilayani'`<br>`ORDER BY k.tanggal DESC, o.nama_obat` | `ambilRekamMedis()`, mengisi `riwayatObat`. Setiap baris disusun menjadi satu teks, misalnya "2026-10-12 Amlodipin 5 mg tablet ×30, 1×1 sesudah makan". Hanya resep yang obatnya sudah diserahkan yang masuk riwayat. |
+| Q-C57-11 | `INSERT INTO catatan_rekam_medis (id_rekam_medis, waktu, isi)`<br>`VALUES (?, ?, ?)` | `simpanRekamMedis()`, dijalankan sekali untuk setiap entri baru. Tabel `catatan_rekam_medis` menampung entri dari `tambahEntri()` dan hanya dapat ditambah. |
+
+### 5.57.1 Algoritma Pencarian Parsial Pasien
+
+**Nama Kelas:** DataPasienBoundary  
+**Nama Operasi:** `cariParsial(kataKunci: String): List<PasienEntity>`  
+**ID Algoritma:** Algo-C57-01
+
+```text
+FUNGSI cariParsial(kataKunci) -> List<PasienEntity>
+    teks <- kataKunci tanpa spasi di awal dan akhir
+    teks <- sisipkan "\" di depan setiap "\", "%", dan "_" pada teks   // dianggap huruf biasa, bukan wildcard
+    pola <- "%" + teks + "%"
+    baris <- jalankan Q-C57-01 dengan (pola, pola, pola)
+    KEMBALIKAN setiap baris sebagai PasienEntity
+```
+
+`LIKE` dengan `%` di depan tidak dapat memakai indeks B-tree biasa. Untuk memenuhi KNF01 (di bawah 2 detik pada 50.000 rekam medis), kolom `nik`, `nama`, dan `nomor_rekam_medis` diberi indeks GIN `gin_trgm_ops` dari ekstensi `pg_trgm` bawaan PostgreSQL. Indeks trigram efektif mulai tiga karakter, sesuai syarat "sedikitnya 3 karakter" pada KNF01. Tanda `%` dan `_` yang diketik petugas diloloskan agar tidak terbaca sebagai *wildcard*, dan kata kunci tetap dikirim sebagai parameter `PreparedStatement`, bukan disambung ke teks kueri.
+
+## 5.58 Kelas DataKunjunganBoundary
+
+**Nama Kelas:** DataKunjunganBoundary  
+**ID Kelas:** C58
+
+Tabel 5.58.1. Operasi Kelas DataKunjunganBoundary
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `ambilSemuaPoli(): List<PoliEntity>` | public | Mengambil seluruh poli terurut nama (Q-C58-01) untuk `KunjunganForm` (UC03) dan tab data master `KonfigurasiForm` (UC12). |
+| `kunciPoli(idPoli: int): PoliEntity` | public | Mengambil satu poli sekaligus mengunci barisnya (Q-C58-02). Hanya dipanggil di dalam transaksi `bukaKunjungan()` (Algo-C19-02). Transaksi lain yang mengunci poli yang sama tertahan sampai transaksi ini selesai (KF23, KNF11). |
+| `simpanPoli(p: PoliEntity): void` | public | Menyisipkan poli baru dari data master (Q-C58-03) atau memutakhirkan nama dan urutan antrean poli (Q-C58-04). |
+| `kunjunganAktif(idPasien: int, tanggal: LocalDate): KunjunganEntity` | public | Mengambil kunjungan pasien pada tanggal tersebut yang belum berstatus "selesai" (Q-C58-05), atau `null` bila tidak ada (skenario alternatif 1 UC03). |
+| `ambilKunjungan(idKunjungan: int): KunjunganEntity` | public | Mengambil satu kunjungan berdasarkan ID (Q-C58-06). |
+| `simpanKunjungan(k: KunjunganEntity): void` | public | Menyisipkan kunjungan baru (Q-C58-07) atau memutakhirkan status kunjungan lama (Q-C58-08). |
+| `ambilAntrean(jenis: String): AntreanEntity` | public | Mengambil antrean "skrining" atau "apotek" beserta isinya, terurut posisi, sambil mengunci baris antrean (Q-C58-09, Q-C58-10, Algo-C58-01). |
+| `simpanAntrean(a: AntreanEntity): void` | public | Menulis ulang seluruh isi antrean sesuai urutan pada `daftarEntri` (Q-C58-11, Q-C58-12, Algo-C58-01). |
+
+Tabel 5.58.2. Atribut Kelas DataKunjunganBoundary
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `koneksi` | private | `Connection` |
+
+`koneksi` dan aturan pemakaiannya sama dengan Subbab 5.56.
+
+Tabel 5.58.3. Kueri Kelas DataKunjunganBoundary
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C58-01 | `SELECT id_poli, nama_poli, urutan_terakhir, tanggal_urutan`<br>`FROM poli ORDER BY nama_poli` | `ambilSemuaPoli()`. |
+| Q-C58-02 | `SELECT id_poli, nama_poli, urutan_terakhir, tanggal_urutan`<br>`FROM poli WHERE id_poli = ? FOR UPDATE` | `kunciPoli()`. Loket kedua yang membuka kunjungan ke poli yang sama tertahan di kueri ini sampai loket pertama COMMIT, lalu membaca `urutan_terakhir` yang sudah bertambah (skenario alternatif 2 UC03). |
+| Q-C58-03 | `INSERT INTO poli (nama_poli, urutan_terakhir, tanggal_urutan)`<br>`VALUES (?, 0, CURRENT_DATE) RETURNING id_poli` | `simpanPoli()` untuk poli baru. |
+| Q-C58-04 | `UPDATE poli SET nama_poli = ?, urutan_terakhir = ?, tanggal_urutan = ?`<br>`WHERE id_poli = ?` | `simpanPoli()` untuk poli lama. |
+| Q-C58-05 | `SELECT id_kunjungan, id_pasien, id_poli, tanggal, nomor_antrean, status`<br>`FROM kunjungan`<br>`WHERE id_pasien = ? AND tanggal = ? AND status <> 'selesai'` | `kunjunganAktif()`. Tabel `kunjungan` diberi indeks unik parsial `(id_pasien, tanggal) WHERE status <> 'selesai'`. Bila dua loket membuka kunjungan untuk pasien yang sama pada saat bersamaan, Q-C58-07 milik loket kedua ditolak dan transaksinya di-ROLLBACK (aturan 3). |
+| Q-C58-06 | `SELECT id_kunjungan, id_pasien, id_poli, tanggal, nomor_antrean, status`<br>`FROM kunjungan WHERE id_kunjungan = ?` | `ambilKunjungan()`. |
+| Q-C58-07 | `INSERT INTO kunjungan (id_pasien, id_poli, tanggal, nomor_antrean, status)`<br>`VALUES (?, ?, ?, ?, ?) RETURNING id_kunjungan` | `simpanKunjungan()` untuk kunjungan baru. Kolom `id_poli` mencatat poli tujuan untuk rekapitulasi per poli (Q-C62-01). |
+| Q-C58-08 | `UPDATE kunjungan SET status = ? WHERE id_kunjungan = ?` | `simpanKunjungan()` untuk kunjungan lama. Setelah dibuka, hanya status kunjungan yang berubah. |
+| Q-C58-09 | `SELECT id_antrean, jenis FROM antrean WHERE jenis = ? FOR UPDATE` | `ambilAntrean()`. Kunci baris antrean mencegah *lost update* pada isi antrean (Algo-C58-01). |
+| Q-C58-10 | `SELECT id_entri FROM antrean_entri WHERE id_antrean = ? ORDER BY urutan` | `ambilAntrean()`, mengisi `daftarEntri`. Tabel `antrean_entri` menyimpan isi `daftarEntri` satu baris per entri. |
+| Q-C58-11 | `DELETE FROM antrean_entri WHERE id_antrean = ?` | `simpanAntrean()`, mengosongkan isi lama. |
+| Q-C58-12 | `INSERT INTO antrean_entri (id_antrean, urutan, id_entri) VALUES (?, ?, ?)` | `simpanAntrean()`, dijalankan sebagai *batch* JDBC dengan `urutan` 1 sampai n. |
+
+### 5.58.1 Algoritma Pembacaan dan Penyimpanan Antrean
+
+**Nama Kelas:** DataKunjunganBoundary  
+**Nama Operasi:** `ambilAntrean(jenis: String): AntreanEntity` dan `simpanAntrean(a: AntreanEntity): void`  
+**ID Algoritma:** Algo-C58-01
+
+```text
+FUNGSI ambilAntrean(jenis) -> AntreanEntity
+    baris <- jalankan Q-C58-09 dengan jenis          // baris antrean terkunci bila di dalam transaksi
+    JIKA baris kosong MAKA
+        LEMPAR IllegalArgumentException("Jenis antrean tidak dikenal: " + jenis)
+    AKHIR JIKA
+    a <- AntreanEntity baru(baris.id_antrean, baris.jenis)
+    UNTUK SETIAP r DI jalankan Q-C58-10 dengan a.idAntrean
+        tambahkan r.id_entri ke a.daftarEntri
+    AKHIR UNTUK
+    KEMBALIKAN a
+
+PROSEDUR simpanAntrean(a)                           // dua kueri tulis: aturan 1 Subbab 5.56
+    jalankan Q-C58-11 dengan a.idAntrean
+    UNTUK i <- 1 SAMPAI ukuran(a.daftarEntri)
+        tambahkan (a.idAntrean, i, a.daftarEntri[i]) ke batch Q-C58-12
+    AKHIR UNTUK
+    eksekusi batch
+```
+
+`AntreanEntity` diubah di memori lewat `tambahkan()`, `pindahkanKeBelakang()`, atau `keluarkan()`, lalu disimpan utuh. Pola baca-ubah-tulis ini rawan *lost update*. Dua loket yang membuka kunjungan ke poli berbeda tidak saling menunggu di `kunciPoli()`, tetapi keduanya menambah entri ke antrean "skrining" yang sama. Tanpa kunci, loket kedua akan menulis ulang daftar yang dibacanya sebelum loket pertama COMMIT, sehingga satu pasien hilang dari antrean. `FOR UPDATE` pada Q-C58-09 membuat transaksi kedua menunggu sampai transaksi pertama selesai, lalu membaca daftar yang sudah berisi pasien pertama (KF23, KNF11). Dua baris antrean, "skrining" berisi `idKunjungan` dan "apotek" berisi `idResep`, dibuat sekali saat basis data dipasang.
+
+## 5.59 Kelas DataKlinisBoundary
+
+**Nama Kelas:** DataKlinisBoundary  
+**ID Kelas:** C59
+
+Tabel 5.59.1. Operasi Kelas DataKlinisBoundary
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `simpanSkrining(s: SkriningEntity): void` | public | Menyimpan hasil skrining beserta tanda vital yang dilampirkan padanya dalam satu transaksi (Q-C59-01, Q-C59-02, KF05). |
+| `ambilSkrining(idKunjungan: int): SkriningEntity` | public | Mengambil skrining satu kunjungan beserta tanda vitalnya (Q-C59-03) untuk ringkasan rekam medis (KF09), atau `null` bila pasien belum diskrining. |
+| `riwayatTandaVital(idPasien: int, batas: int): List<TandaVitalEntity>` | public | Bila `batas` lebih dari 0, mengembalikan `batas` pengukuran terakhir sebelum hari ini untuk evaluasi risiko (Q-C59-04, KF07). Bila `batas` = 0, mengembalikan seluruh pengukuran termasuk hari ini, terurut dari yang terlama, untuk grafik tren (Q-C59-05, KF08). Lihat Algo-C59-01. |
+| `ambilAmbang(): List<AmbangRisikoEntity>` | public | Mengambil ambang ketiga jenis risiko dari data master (Q-C59-06). |
+| `simpanAmbang(a: AmbangRisikoEntity): void` | public | Memutakhirkan nilai batas satu ambang risiko (Q-C59-07, KF15). |
+| `simpanPenanda(p: PenandaRisikoEntity): void` | public | Menyisipkan penanda risiko baru (Q-C59-08) atau memutakhirkan status penanda yang dicabut (Q-C59-09). |
+| `penandaKunjungan(idKunjungan: int): List<PenandaRisikoEntity>` | public | Mengambil penanda risiko aktif satu kunjungan (Q-C59-10) untuk `SkriningForm` dan ringkasan rekam medis (KF07, KF09). |
+| `cariKodeICD10(kataKunci: String): List<KodeICD10Entity>` | public | Mencari kode ICD-10 yang kodenya berawalan kata kunci atau deskripsinya memuat kata kunci (Q-C59-11, KF10). Paling banyak 20 baris. |
+| `simpanPemeriksaan(p: PemeriksaanEntity, d: DiagnosisEntity): void` | public | Menyisipkan atau menimpa hasil pemeriksaan satu kunjungan (Q-C59-12), lalu diagnosisnya bila `d` tidak `null` (Q-C59-13). Menolak perubahan pada pemeriksaan yang sudah dikunci (Algo-C59-02). |
+| `ambilPemeriksaan(idKunjungan: int): PemeriksaanEntity` | public | Mengambil hasil pemeriksaan satu kunjungan (Q-C59-14), atau `null` bila belum ada. |
+| `simpanJadwalKontrol(j: JadwalKontrolEntity): void` | public | Menyisipkan jadwal kunjungan ulang (Q-C59-15, KF12) atau memutakhirkan statusnya (Q-C59-16). |
+| `ambilJadwalKontrol(): List<JadwalKontrolEntity>` | public | Mengambil jadwal berstatus "terjadwal" yang belum memicu entri daftar pantau (Q-C59-17), untuk Algo-C21-02. |
+
+Tabel 5.59.2. Atribut Kelas DataKlinisBoundary
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `koneksi` | private | `Connection` |
+
+`koneksi` dan aturan pemakaiannya sama dengan Subbab 5.56.
+
+Tabel 5.59.3. Kueri Kelas DataKlinisBoundary
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C59-01 | `INSERT INTO skrining (id_kunjungan, keluhan_awal, waktu) VALUES (?, ?, ?)`<br>`RETURNING id_skrining` | `simpanSkrining()`. `skrining.id_kunjungan` ber-UNIQUE karena satu kunjungan memiliki satu skrining. |
+| Q-C59-02 | `INSERT INTO tanda_vital (id_skrining, sistolik, diastolik, berat_badan,`<br>`tinggi_badan, suhu, nadi, gula_darah)`<br>`VALUES (?, ?, ?, ?, ?, ?, ?, ?)` | `simpanSkrining()`, dalam transaksi yang sama dengan Q-C59-01. `gula_darah` boleh NULL (KF05). Tabel `tanda_vital` juga diberi CHECK dengan rentang yang sama dengan Algo-C20-02 sebagai pengaman kedua bila ada kesalahan di lapisan atas (KNF02). |
+| Q-C59-03 | `SELECT s.id_skrining, s.id_kunjungan, s.keluhan_awal, s.waktu,`<br>`tv.sistolik, tv.diastolik, tv.berat_badan, tv.tinggi_badan,`<br>`tv.suhu, tv.nadi, tv.gula_darah`<br>`FROM skrining s JOIN tanda_vital tv ON tv.id_skrining = s.id_skrining`<br>`WHERE s.id_kunjungan = ?` | `ambilSkrining()`. |
+| Q-C59-04 | `SELECT tv.sistolik, tv.diastolik, tv.berat_badan, tv.tinggi_badan,`<br>`tv.suhu, tv.nadi, tv.gula_darah`<br>`FROM tanda_vital tv`<br>`JOIN skrining s ON s.id_skrining = tv.id_skrining`<br>`JOIN kunjungan k ON k.id_kunjungan = s.id_kunjungan`<br>`WHERE k.id_pasien = ? AND k.tanggal < CURRENT_DATE`<br>`ORDER BY s.waktu DESC LIMIT ?` | `riwayatTandaVital()` dengan `batas` > 0. |
+| Q-C59-05 | `SELECT s.waktu, tv.sistolik, tv.diastolik, tv.berat_badan, tv.tinggi_badan,`<br>`tv.suhu, tv.nadi, tv.gula_darah`<br>`FROM tanda_vital tv`<br>`JOIN skrining s ON s.id_skrining = tv.id_skrining`<br>`JOIN kunjungan k ON k.id_kunjungan = s.id_kunjungan`<br>`WHERE k.id_pasien = ?`<br>`ORDER BY s.waktu` | `riwayatTandaVital()` dengan `batas` = 0. Kolom `s.waktu` menjadi sumbu-x grafik tren (KF08). |
+| Q-C59-06 | `SELECT id_ambang, jenis_risiko, nilai_batas FROM ambang_risiko`<br>`ORDER BY jenis_risiko` | `ambilAmbang()`. |
+| Q-C59-07 | `UPDATE ambang_risiko SET nilai_batas = ? WHERE id_ambang = ?` | `simpanAmbang()`. Jenis risiko tetap tiga sesuai KF07 (hipertensi, obesitas, indikasi diabetes), sehingga yang diubah hanya nilainya. CHECK `nilai_batas > 0` mengulang aturan pada `KonfigurasiManager.simpanDataMaster()`. |
+| Q-C59-08 | `INSERT INTO penanda_risiko (id_kunjungan, jenis_risiko, tanggal, status)`<br>`VALUES (?, ?, ?, ?) RETURNING id_penanda` | `simpanPenanda()` untuk penanda baru. |
+| Q-C59-09 | `UPDATE penanda_risiko SET status = ? WHERE id_penanda = ?` | `simpanPenanda()` setelah `PenandaRisikoEntity.cabut()`. |
+| Q-C59-10 | `SELECT id_penanda, id_kunjungan, jenis_risiko, tanggal, status`<br>`FROM penanda_risiko`<br>`WHERE id_kunjungan = ? AND status = 'aktif'`<br>`ORDER BY jenis_risiko` | `penandaKunjungan()`. |
+| Q-C59-11 | `SELECT kode, deskripsi, bab FROM kode_icd10`<br>`WHERE kode ILIKE ? OR deskripsi ILIKE ?`<br>`ORDER BY (kode ILIKE ?) DESC, kode LIMIT 20` | `cariKodeICD10()`. Parameter pertama dan ketiga berisi `kataKunci%` (awalan kode), parameter kedua berisi `%kataKunci%`, keduanya diloloskan seperti Algo-C57-01. Kode yang awalannya cocok, misalnya `I10` untuk kata kunci "I1", tampil paling atas. `deskripsi` diberi indeks GIN `gin_trgm_ops`. |
+| Q-C59-12 | `INSERT INTO pemeriksaan (id_kunjungan, anamnesis, tindakan, terkunci)`<br>`VALUES (?, ?, ?, ?)`<br>`ON CONFLICT (id_kunjungan) DO UPDATE`<br>`SET anamnesis = EXCLUDED.anamnesis, tindakan = EXCLUDED.tindakan,`<br>`terkunci = EXCLUDED.terkunci`<br>`WHERE pemeriksaan.terkunci = FALSE`<br>`RETURNING id_pemeriksaan` | `simpanPemeriksaan()`. Bila baris lama sudah terkunci, klausa `WHERE` membatalkan UPDATE dan `RETURNING` tidak mengembalikan baris (Algo-C59-02). |
+| Q-C59-13 | `INSERT INTO diagnosis (id_pemeriksaan, kode_icd10, deskripsi) VALUES (?, ?, ?)`<br>`ON CONFLICT (id_pemeriksaan) DO UPDATE`<br>`SET kode_icd10 = EXCLUDED.kode_icd10, deskripsi = EXCLUDED.deskripsi` | `simpanPemeriksaan()` bila `d` tidak `null`. `diagnosis.kode_icd10` adalah *foreign key* ke `kode_icd10.kode`, sehingga diagnosis hanya dapat berupa kode ICD-10 yang terdaftar (KF10). |
+| Q-C59-14 | `SELECT id_pemeriksaan, id_kunjungan, anamnesis, tindakan, terkunci`<br>`FROM pemeriksaan WHERE id_kunjungan = ?` | `ambilPemeriksaan()`. |
+| Q-C59-15 | `INSERT INTO jadwal_kontrol (id_pasien, tanggal_rencana, status)`<br>`VALUES (?, ?, ?) RETURNING id_jadwal` | `simpanJadwalKontrol()` untuk jadwal baru. |
+| Q-C59-16 | `UPDATE jadwal_kontrol SET status = ? WHERE id_jadwal = ?` | `simpanJadwalKontrol()` setelah `JadwalKontrolEntity.tandaiSelesai()`. |
+| Q-C59-17 | `SELECT jk.id_jadwal, jk.id_pasien, jk.tanggal_rencana, jk.status`<br>`FROM jadwal_kontrol jk`<br>`WHERE jk.status = 'terjadwal'`<br>`AND NOT EXISTS (SELECT 1 FROM daftar_pantau dp WHERE dp.id_jadwal = jk.id_jadwal)`<br>`ORDER BY jk.tanggal_rencana, jk.id_jadwal` | `ambilJadwalKontrol()`. Jadwal yang sudah memicu entri tidak dikembalikan, sehingga Algo-C21-02 tidak membuat entri ganda untuk satu jadwal. |
+
+### 5.59.1 Algoritma Pengambilan Riwayat Tanda Vital
+
+**Nama Kelas:** DataKlinisBoundary  
+**Nama Operasi:** `riwayatTandaVital(idPasien: int, batas: int): List<TandaVitalEntity>`  
+**ID Algoritma:** Algo-C59-01
+
+```text
+FUNGSI riwayatTandaVital(idPasien, batas) -> List<TandaVitalEntity>
+    JIKA batas < 0 MAKA
+        LEMPAR IllegalArgumentException("Batas riwayat tidak boleh negatif")
+    AKHIR JIKA
+    JIKA batas > 0 MAKA
+        baris <- jalankan Q-C59-04 dengan (idPasien, batas)   // sebelum hari ini, terbaru lebih dulu
+    SELAIN ITU
+        baris <- jalankan Q-C59-05 dengan idPasien            // seluruh riwayat, terlama lebih dulu
+    AKHIR JIKA
+    KEMBALIKAN setiap baris sebagai TandaVitalEntity
+```
+
+Operasi ini dipakai dua pemanggil dengan kebutuhan berbeda. `RisikoManager.evaluasiRisiko()` membutuhkan tiga kunjungan sebelumnya, sedangkan pengukuran hari ini sudah tersimpan oleh `simpanSkrining()` sesaat sebelumnya (Algo-C20-01). Karena itu Q-C59-04 menyaring `k.tanggal < CURRENT_DATE`, sesuai catatan Algo-C21-01. `PemeriksaanManager.susunTren()` membutuhkan seluruh titik termasuk hari ini dalam urutan waktu untuk grafik garis. Indeks `kunjungan (id_pasien, tanggal)` dan `skrining (id_kunjungan)` membuat kedua kueri cukup membaca baris milik satu pasien.
+
+### 5.59.2 Algoritma Penyimpanan Pemeriksaan
+
+**Nama Kelas:** DataKlinisBoundary  
+**Nama Operasi:** `simpanPemeriksaan(p: PemeriksaanEntity, d: DiagnosisEntity): void`  
+**ID Algoritma:** Algo-C59-02
+
+```text
+PROSEDUR simpanPemeriksaan(p, d)
+    transaksiSendiri <- koneksi.getAutoCommit()      // true bila dipanggil di luar transaksi (Algo-C22-01)
+    JIKA transaksiSendiri MAKA koneksi.setAutoCommit(false) AKHIR JIKA
+    COBA
+        baris <- jalankan Q-C59-12 dengan (p.idKunjungan, p.anamnesis, p.tindakan, p.terkunci)
+        JIKA baris kosong MAKA                       // baris lama terkunci, UPDATE dibatalkan klausa WHERE
+            LEMPAR IllegalStateException("Rekam medis kunjungan ini sudah dikunci")
+        AKHIR JIKA
+        p.idPemeriksaan <- baris.id_pemeriksaan
+        JIKA d ≠ null MAKA
+            jalankan Q-C59-13 dengan (p.idPemeriksaan, d.kodeICD10, d.deskripsi)
+        AKHIR JIKA
+        JIKA transaksiSendiri MAKA COMMIT AKHIR JIKA
+    TANGKAP galat
+        JIKA transaksiSendiri MAKA ROLLBACK AKHIR JIKA
+        LEMPAR ULANG galat
+    AKHIRNYA
+        JIKA transaksiSendiri MAKA koneksi.setAutoCommit(true) AKHIR JIKA
+    AKHIR COBA
+```
+
+Algo-C22-01 memeriksa status kunci lewat `ambilPemeriksaan()` sebelum memanggil operasi ini, tetapi pemeriksaan itu berjalan di luar transaksi. Di antara pemeriksaan dan penyimpanan, dokter lain dapat saja mengunci rekam medis yang sama dari komputer lain. Klausa `WHERE pemeriksaan.terkunci = FALSE` pada Q-C59-12 menutup celah tersebut di basis data. Saat `kunciRekamMedis()` memanggil operasi ini dengan `p.terkunci` bernilai `true` dan `d` bernilai `null`, baris lama masih belum terkunci sehingga UPDATE tetap berjalan dan mengunci baris itu. Pola `transaksiSendiri` di atas adalah wujud aturan 1 Subbab 5.56 dan juga dipakai `simpanSkrining()`, `simpanPasien()`, `simpanAntrean()`, `simpanStok()`, `simpanPenerimaan()`, dan `simpanResep()`.
+
+## 5.60 Kelas DataPantauBoundary
+
+**Nama Kelas:** DataPantauBoundary  
+**ID Kelas:** C60
+
+Tabel 5.60.1. Operasi Kelas DataPantauBoundary
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `ambilEntri(): List<DaftarPantauEntity>` | public | Mengambil entri daftar pantau yang belum berstatus "selesai ditindaklanjuti" beserta tanggal pemicunya (Q-C60-01, KF18). |
+| `simpanEntri(e: DaftarPantauEntity): void` | public | Menyisipkan entri baru beserta pemicunya (Q-C60-02 sampai Q-C60-04, Algo-C60-01) atau memutakhirkan status tindak lanjut entri lama (Q-C60-05). |
+| `simpanTindakLanjut(idEntri: int, t: TindakLanjutEntity): void` | public | Menyisipkan satu upaya tindak lanjut pada entri tersebut (Q-C60-06, KF18). Setiap upaya disimpan sebagai baris baru, termasuk upaya yang gagal (skenario alternatif 1 UC09). |
+
+Tabel 5.60.2. Atribut Kelas DataPantauBoundary
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `koneksi` | private | `Connection` |
+
+`koneksi` dan aturan pemakaiannya sama dengan Subbab 5.56.
+
+Tabel 5.60.3. Kueri Kelas DataPantauBoundary
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C60-01 | `SELECT dp.id_entri, dp.id_pasien, dp.jenis_risiko, dp.status_tindak_lanjut,`<br>`COALESCE(pr.tanggal, jk.tanggal_rencana) AS tanggal_pemicu`<br>`FROM daftar_pantau dp`<br>`LEFT JOIN penanda_risiko pr ON pr.id_penanda = dp.id_penanda`<br>`LEFT JOIN jadwal_kontrol jk ON jk.id_jadwal = dp.id_jadwal`<br>`WHERE dp.status_tindak_lanjut <> 'selesai ditindaklanjuti'`<br>`ORDER BY tanggal_pemicu, dp.id_entri` | `ambilEntri()`. `tanggal_pemicu` adalah tanggal penanda risiko atau tanggal rencana jadwal kontrol yang memicu entri, dan dipakai `PantauManager.saringDaftar()` untuk penyaring rentang tanggal. |
+| Q-C60-02 | `INSERT INTO daftar_pantau (id_pasien, jenis_risiko, status_tindak_lanjut,`<br>`id_penanda, id_jadwal)`<br>`VALUES (?, ?, ?, ?, ?) RETURNING id_entri` | `simpanEntri()` untuk entri baru. CHECK `(id_penanda IS NULL) <> (id_jadwal IS NULL)` memastikan setiap entri dipicu tepat satu penanda atau satu jadwal (relasi «memicu» pada Gambar 58). |
+| Q-C60-03 | `SELECT pr.id_penanda FROM penanda_risiko pr`<br>`JOIN kunjungan k ON k.id_kunjungan = pr.id_kunjungan`<br>`WHERE k.id_pasien = ? AND pr.jenis_risiko = ?`<br>`ORDER BY pr.id_penanda DESC LIMIT 1` | `simpanEntri()` untuk entri risiko, mencari penanda pemicunya. |
+| Q-C60-04 | `SELECT jk.id_jadwal FROM jadwal_kontrol jk`<br>`WHERE jk.id_pasien = ? AND jk.status = 'terjadwal'`<br>`AND NOT EXISTS (SELECT 1 FROM daftar_pantau dp WHERE dp.id_jadwal = jk.id_jadwal)`<br>`ORDER BY jk.tanggal_rencana, jk.id_jadwal LIMIT 1` | `simpanEntri()` untuk entri "kunjungan ulang", mencari jadwal pemicunya. |
+| Q-C60-05 | `UPDATE daftar_pantau SET status_tindak_lanjut = ? WHERE id_entri = ?` | `simpanEntri()` untuk entri lama. |
+| Q-C60-06 | `INSERT INTO tindak_lanjut (id_entri, jenis_kontak, hasil_upaya,`<br>`status_kedatangan, waktu)`<br>`VALUES (?, ?, ?, ?, ?) RETURNING id_tindak_lanjut` | `simpanTindakLanjut()`. Kolom `id_entri` mewujudkan komposisi `DaftarPantauEntity`–`TindakLanjutEntity`, dan `waktu` mengurutkan riwayat upaya. |
+
+### 5.60.1 Algoritma Penyimpanan Entri Daftar Pantau
+
+**Nama Kelas:** DataPantauBoundary  
+**Nama Operasi:** `simpanEntri(e: DaftarPantauEntity): void`  
+**ID Algoritma:** Algo-C60-01
+
+```text
+PROSEDUR simpanEntri(e)
+    JIKA e.idEntri ≠ 0 MAKA
+        jalankan Q-C60-05 dengan (e.statusTindakLanjut, e.idEntri)
+        KEMBALI
+    AKHIR JIKA
+    idPenanda <- null
+    idJadwal  <- null
+    JIKA e.jenisRisiko = "kunjungan ulang" MAKA
+        idJadwal <- jalankan Q-C60-04 dengan e.idPasien                  // jadwal terdekat yang belum punya entri
+    SELAIN ITU
+        idPenanda <- jalankan Q-C60-03 dengan (e.idPasien, e.jenisRisiko) // penanda yang baru diterbitkan
+    AKHIR JIKA
+    JIKA idPenanda = null DAN idJadwal = null MAKA
+        LEMPAR IllegalStateException("Entri daftar pantau tidak memiliki pemicu")
+    AKHIR JIKA
+    e.idEntri <- jalankan Q-C60-02 dengan (e.idPasien, e.jenisRisiko, e.statusTindakLanjut,
+                                           idPenanda, idJadwal)
+```
+
+`DaftarPantauEntity` tidak membawa ID pemicunya, sehingga `simpanEntri()` mencarinya sendiri. Untuk entri risiko, pemicunya adalah penanda terbaru milik pasien dengan jenis yang sama. Penanda itu pasti penanda yang benar karena `masukkanKeDaftarPantau()` selalu dipanggil tepat setelah `terbitkanPenanda()` untuk pasien dan jenis yang sama (Algo-C21-01). Untuk entri "kunjungan ulang", pemicunya adalah jadwal terdekat milik pasien yang belum memiliki entri, dengan urutan yang sama seperti Q-C59-17 yang dipakai Algo-C21-02. Dengan begitu, setiap jadwal mendapat tepat satu entri.
+
+## 5.61 Kelas DataFarmasiBoundary
+
+**Nama Kelas:** DataFarmasiBoundary  
+**ID Kelas:** C61
+
+Tabel 5.61.1. Operasi Kelas DataFarmasiBoundary
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `ambilSemuaObat(): List<ObatEntity>` | public | Mengambil seluruh obat beserta saldo stoknya, terurut nama (Q-C61-01), untuk `ResepForm`, `PersediaanForm`, dan `KonfigurasiForm` (KF11, KF15, KF17). |
+| `ambilObat(idObat: int): ObatEntity` | public | Mengambil satu obat sambil mengunci barisnya (Q-C61-02), atau `null` bila obat tidak ada pada data master. Di dalam transaksi `potongStok()` dan `tambahStok()`, kunci ini mencegah *lost update* pada saldo stok (KF23, KNF11). |
+| `ambilBets(idObat: int): List<BetsObatEntity>` | public | Mengambil bets obat yang masih bersisa, terurut tanggal kedaluwarsa paling dekat (Q-C61-03). Urutan ini menjadi dasar aturan FEFO pada Algo-C24-02. |
+| `simpanStok(o: ObatEntity, bets: List<BetsObatEntity>): void` | public | Menulis saldo stok obat (Q-C61-04) dan jumlah setiap bets pada daftar (Q-C61-05) dalam satu transaksi. Nilai yang ditulis adalah nilai akhir pada objek, bukan selisih. |
+| `simpanPenerimaan(p: PenerimaanObatEntity): void` | public | Menyisipkan catatan penerimaan (Q-C61-06) dan setiap bets yang diterima (Q-C61-07). Menolak nomor bets yang sudah tercatat untuk obat yang sama (Algo-C61-01, KF17). |
+| `obatPerluPeringatan(hari: int): List<ObatEntity>` | public | Mengambil obat yang stoknya di bawah ambang minimum atau memiliki bets bersisa yang kedaluwarsa dalam `hari` hari atau kurang (Q-C61-08, KF17). |
+| `simpanResep(r: ResepEntity): void` | public | Untuk resep baru, menyisipkan resep beserta seluruh itemnya (Q-C61-09, Q-C61-10). Untuk resep lama, memutakhirkan status dan catatannya (Q-C61-11). |
+| `ambilAntreanResep(): List<ResepEntity>` | public | Mengambil resep berstatus "menunggu" terurut waktu masuk beserta itemnya (Q-C61-12, Q-C61-14, KF13). |
+| `ambilResep(idResep: int): ResepEntity` | public | Mengambil satu resep beserta itemnya tanpa mengunci (Q-C61-13, Q-C61-14). |
+| `kunciResep(idResep: int): ResepEntity` | public | Mengambil satu resep beserta itemnya sambil mengunci baris resep (Q-C61-15, Q-C61-14). Hanya dipanggil di dalam transaksi `serahkanObat()` (Algo-C24-01, skenario alternatif 2 UC07). |
+
+Tabel 5.61.2. Atribut Kelas DataFarmasiBoundary
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `koneksi` | private | `Connection` |
+
+`koneksi` dan aturan pemakaiannya sama dengan Subbab 5.56.
+
+Tabel 5.61.3. Kueri Kelas DataFarmasiBoundary
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C61-01 | `SELECT id_obat, nama_obat, sediaan, stok, ambang_minimum`<br>`FROM obat ORDER BY nama_obat` | `ambilSemuaObat()`. |
+| Q-C61-02 | `SELECT id_obat, nama_obat, sediaan, stok, ambang_minimum`<br>`FROM obat WHERE id_obat = ? FOR UPDATE` | `ambilObat()`. Dua petugas apotek yang menyerahkan resep berbeda berisi obat yang sama saling menunggu di kueri ini, sehingga petugas kedua membaca stok yang sudah dipotong petugas pertama. |
+| Q-C61-03 | `SELECT nomor_bets, id_obat, jumlah, tanggal_kedaluwarsa`<br>`FROM bets_obat WHERE id_obat = ? AND jumlah > 0`<br>`ORDER BY tanggal_kedaluwarsa, nomor_bets FOR UPDATE` | `ambilBets()`. |
+| Q-C61-04 | `UPDATE obat SET stok = ? WHERE id_obat = ?` | `simpanStok()`. CHECK `stok >= 0` pada tabel `obat` menjadi pengaman terakhir terhadap stok negatif. |
+| Q-C61-05 | `UPDATE bets_obat SET jumlah = ? WHERE id_obat = ? AND nomor_bets = ?` | `simpanStok()`, dijalankan sebagai *batch* untuk setiap bets. CHECK `jumlah >= 0` berlaku seperti Q-C61-04. |
+| Q-C61-06 | `INSERT INTO penerimaan_obat (nomor_faktur, tanggal_terima) VALUES (?, ?)`<br>`RETURNING id_penerimaan` | `simpanPenerimaan()`. |
+| Q-C61-07 | `INSERT INTO bets_obat (id_obat, nomor_bets, jumlah, tanggal_kedaluwarsa,`<br>`id_penerimaan) VALUES (?, ?, ?, ?, ?)` | `simpanPenerimaan()`, dijalankan sebagai *batch* untuk setiap bets. Kunci primer `bets_obat` adalah `(id_obat, nomor_bets)`, sama dengan identitas `BetsObatEntity`. Kolom `id_penerimaan` menautkan bets ke faktur asalnya (agregasi `PenerimaanObatEntity`–`BetsObatEntity`). |
+| Q-C61-08 | `SELECT o.id_obat, o.nama_obat, o.sediaan, o.stok, o.ambang_minimum`<br>`FROM obat o`<br>`WHERE o.stok < o.ambang_minimum`<br>`OR EXISTS (SELECT 1 FROM bets_obat b WHERE b.id_obat = o.id_obat`<br>`AND b.jumlah > 0 AND b.tanggal_kedaluwarsa <= CURRENT_DATE + ?)`<br>`ORDER BY o.nama_obat` | `obatPerluPeringatan()`. Perbandingan `stok < ambang_minimum` sama dengan `ObatEntity.diBawahAmbang()`, sehingga setiap obat yang dikembalikan memang memicu sedikitnya satu peringatan pada Algo-C25-03. |
+| Q-C61-09 | `INSERT INTO resep (id_kunjungan, waktu_masuk, status, catatan)`<br>`VALUES (?, ?, ?, ?) RETURNING id_resep` | `simpanResep()` untuk resep baru. |
+| Q-C61-10 | `INSERT INTO item_resep (id_resep, id_obat, dosis, jumlah, aturan_pakai)`<br>`VALUES (?, ?, ?, ?, ?) RETURNING id_item` | `simpanResep()` untuk resep baru, dijalankan untuk setiap item. Kolom `id_resep` mewujudkan komposisi `ResepEntity`–`ItemResepEntity`. |
+| Q-C61-11 | `UPDATE resep SET status = ?, catatan = ? WHERE id_resep = ?` | `simpanResep()` untuk resep lama, misalnya "selesai dilayani" (Algo-C24-01) atau "dikembalikan" beserta alasannya (skenario alternatif 1 UC07). Item resep tidak berubah setelah resep dikirim. |
+| Q-C61-12 | `SELECT id_resep, id_kunjungan, waktu_masuk, status, catatan FROM resep`<br>`WHERE status = 'menunggu' ORDER BY waktu_masuk, id_resep` | `ambilAntreanResep()`. |
+| Q-C61-13 | `SELECT id_resep, id_kunjungan, waktu_masuk, status, catatan`<br>`FROM resep WHERE id_resep = ?` | `ambilResep()`. |
+| Q-C61-14 | `SELECT id_item, id_resep, id_obat, dosis, jumlah, aturan_pakai`<br>`FROM item_resep WHERE id_resep = ANY (?)`<br>`ORDER BY id_resep, id_obat` | `ambilAntreanResep()`, `ambilResep()`, dan `kunciResep()`, mengisi item setiap resep. Parameternya larik ID resep, sehingga seluruh item satu antrean diambil dengan satu kueri. Urutan `id_obat` dijelaskan pada catatan Algo-C61-01. |
+| Q-C61-15 | `SELECT id_resep, id_kunjungan, waktu_masuk, status, catatan`<br>`FROM resep WHERE id_resep = ? FOR UPDATE` | `kunciResep()`. Petugas kedua yang menekan "Obat Diserahkan" untuk resep yang sama tertahan di sini, lalu membaca status "selesai dilayani" dan ditolak (Algo-C24-01). |
+
+### 5.61.1 Algoritma Penyimpanan Penerimaan Obat
+
+**Nama Kelas:** DataFarmasiBoundary  
+**Nama Operasi:** `simpanPenerimaan(p: PenerimaanObatEntity): void`  
+**ID Algoritma:** Algo-C61-01
+
+```text
+PROSEDUR simpanPenerimaan(p)                         // dipanggil di dalam transaksi catatPenerimaan (Algo-C25-01)
+    p.idPenerimaan <- jalankan Q-C61-06 dengan (p.nomorFaktur, p.tanggalTerima)
+    UNTUK SETIAP b DI p.daftarBets
+        tambahkan (b.idObat, b.nomorBets, b.jumlah, b.tanggalKedaluwarsa, p.idPenerimaan) ke batch Q-C61-07
+    AKHIR UNTUK
+    COBA
+        eksekusi batch
+    TANGKAP SQLException dengan SQLState 23505
+        LEMPAR IllegalArgumentException("nomorBets")   // PersediaanForm menandai kolom nomor bets
+    AKHIR COBA
+```
+
+`simpanStok()` menulis nilai akhir, bukan selisih. Pada Algo-C25-01, `simpanStok(obat, p.daftarBets)` dipanggil setelah operasi ini dengan bets yang baru saja disisipkan, sehingga Q-C61-05 menulis jumlah yang sama dan yang benar-benar berubah hanya saldo `obat.stok`. Karena jumlah bets ditulis sebagai nilai akhir, bets dengan nomor yang sudah tercatat tidak boleh diterima lagi; jumlah lamanya akan tertimpa jumlah penerimaan baru. Kunci primer `(id_obat, nomor_bets)` menolak kasus itu, dan seluruh transaksi `catatPenerimaan()` di-ROLLBACK sehingga stok tidak ikut bertambah. Pesan pengecualian berisi nama kolom, sama dengan pengecualian dari `validasiPenerimaan()` (Algo-C25-02).
+
+Q-C61-14 mengurutkan item menurut `id_obat` agar `potongStok()` selalu mengunci baris obat dalam urutan yang sama. Tanpa urutan ini, dua petugas yang menyerahkan resep berisi obat A dan B dengan urutan item terbalik dapat saling menunggu kunci (*deadlock*), dan PostgreSQL akan membatalkan salah satu transaksi.
+
+## 5.62 Kelas DataLaporanBoundary
+
+**Nama Kelas:** DataLaporanBoundary  
+**ID Kelas:** C62
+
+Tabel 5.62.1. Operasi Kelas DataLaporanBoundary
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `agregasiKunjungan(mulai: LocalDate, akhir: LocalDate): LaporanEntity` | public | Menghitung jumlah kunjungan per poli, jumlah kunjungan per status, dan sepuluh diagnosis terbanyak dalam rentang tanggal (Q-C62-01 sampai Q-C62-03), lalu menyusunnya menjadi `LaporanEntity` (Algo-C62-01, KF19). |
+| `simpanLaporan(l: LaporanEntity): void` | public | Menyimpan catatan laporan yang diekspor (Q-C62-04). |
+| `tulisBerkas(l: LaporanEntity, format: String, direktori: String): String` | public | Menulis laporan sebagai berkas PDF atau CSV pada direktori pilihan pengguna, lalu mengembalikan lokasi lengkap berkasnya (Algo-C62-02, KF19). |
+
+Tabel 5.62.2. Atribut Kelas DataLaporanBoundary
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `koneksi` | private | `Connection` |
+
+`koneksi` dan aturan pemakaiannya sama dengan Subbab 5.56.
+
+Tabel 5.62.3. Kueri Kelas DataLaporanBoundary
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C62-01 | `SELECT p.nama_poli, COUNT(*) AS jumlah`<br>`FROM kunjungan k JOIN poli p ON p.id_poli = k.id_poli`<br>`WHERE k.tanggal BETWEEN ? AND ?`<br>`GROUP BY p.nama_poli ORDER BY p.nama_poli` | `agregasiKunjungan()`, rekapitulasi per poli. Indeks `kunjungan (tanggal)` membatasi pembacaan pada rentang yang diminta. |
+| Q-C62-02 | `SELECT k.status, COUNT(*) AS jumlah FROM kunjungan k`<br>`WHERE k.tanggal BETWEEN ? AND ?`<br>`GROUP BY k.status ORDER BY k.status` | `agregasiKunjungan()`, rekapitulasi per status. Jumlah seluruh baris ini menjadi total kunjungan. |
+| Q-C62-03 | `SELECT d.kode_icd10, i.deskripsi, COUNT(*) AS jumlah`<br>`FROM diagnosis d`<br>`JOIN pemeriksaan pm ON pm.id_pemeriksaan = d.id_pemeriksaan`<br>`JOIN kunjungan k ON k.id_kunjungan = pm.id_kunjungan`<br>`JOIN kode_icd10 i ON i.kode = d.kode_icd10`<br>`WHERE k.tanggal BETWEEN ? AND ? AND pm.terkunci`<br>`GROUP BY d.kode_icd10, i.deskripsi`<br>`ORDER BY jumlah DESC, d.kode_icd10 LIMIT 10` | `agregasiKunjungan()`, sepuluh diagnosis terbanyak. Seperti Q-C57-09, hanya diagnosis final (pemeriksaan terkunci) yang dihitung. |
+| Q-C62-04 | `INSERT INTO laporan (tanggal_mulai, tanggal_akhir, format, ringkasan)`<br>`VALUES (?, ?, ?, ?) RETURNING id_laporan` | `simpanLaporan()`. |
+
+### 5.62.1 Algoritma Agregasi Kunjungan
+
+**Nama Kelas:** DataLaporanBoundary  
+**Nama Operasi:** `agregasiKunjungan(mulai: LocalDate, akhir: LocalDate): LaporanEntity`  
+**ID Algoritma:** Algo-C62-01
+
+```text
+FUNGSI agregasiKunjungan(mulai, akhir) -> LaporanEntity
+    mulai transaksi baca saja dengan isolasi REPEATABLE READ   // ketiga kueri membaca potret data yang sama
+    perPoli   <- jalankan Q-C62-01 dengan (mulai, akhir)
+    perStatus <- jalankan Q-C62-02 dengan (mulai, akhir)
+    teratas   <- jalankan Q-C62-03 dengan (mulai, akhir)
+    COMMIT
+    total <- jumlah kolom jumlah pada perStatus
+    baris <- ["total;semua kunjungan;" + total]
+    UNTUK SETIAP r DI perPoli   tambahkan "poli;" + label(r.nama_poli) + ";" + r.jumlah ke baris
+    UNTUK SETIAP r DI perStatus tambahkan "status;" + label(r.status) + ";" + r.jumlah ke baris
+    UNTUK SETIAP r DI teratas   tambahkan "diagnosis;" + label(r.kode_icd10 + " " + r.deskripsi) + ";" + r.jumlah ke baris
+    KEMBALIKAN LaporanEntity baru(mulai, akhir, ringkasan <- baris digabung dengan pemisah baris baru)
+
+FUNGSI label(teks) -> String                         // fungsi bantu lokal
+    KEMBALIKAN teks dengan setiap ";" diganti ","
+```
+
+Loket tetap dapat membuka kunjungan saat laporan dihitung. Transaksi REPEATABLE READ membuat ketiga kueri membaca potret data yang sama, sehingga total per poli selalu sama dengan total per status. `ringkasan` berisi satu baris per angka dengan format `bagian;label;jumlah`, sehingga `tulisBerkas()` dapat langsung menulisnya sebagai CSV dan `LaporanEntity.kosong()` cukup memeriksa baris `total`. Atribut `format` masih kosong sampai `LaporanManager.ekspor()` mengisinya (Algo-C27-02).
+
+### 5.62.2 Algoritma Penulisan Berkas Laporan
+
+**Nama Kelas:** DataLaporanBoundary  
+**Nama Operasi:** `tulisBerkas(l: LaporanEntity, format: String, direktori: String): String`  
+**ID Algoritma:** Algo-C62-02
+
+```text
+FUNGSI tulisBerkas(l, format, direktori) -> String
+    nama      <- "laporan-sehati_" + l.tanggalMulai + "_" + l.tanggalAkhir + "." + huruf kecil(format)
+    tujuan    <- direktori / nama
+    sementara <- berkas sementara baru di direktori yang sama
+    COBA
+        JIKA format = "CSV" MAKA
+            tulis "bagian;label;jumlah" lalu setiap baris l.ringkasan ke sementara (UTF-8)
+        SELAIN ITU
+            dokumen <- PDDocument baru                          // Apache PDFBox
+            tulis judul, rentang tanggal, total kunjungan, lalu satu tabel untuk setiap bagian
+            simpan dokumen ke sementara
+        AKHIR JIKA
+        pindahkan sementara ke tujuan dengan ATOMIC_MOVE, menimpa berkas bernama sama
+    TANGKAP IOException
+        hapus sementara bila ada
+        LEMPAR UncheckedIOException("Berkas laporan tidak dapat ditulis ke " + direktori)
+    AKHIR COBA
+    KEMBALIKAN tujuan
+```
+
+Berkas ditulis ke berkas sementara lebih dulu, lalu dipindahkan dengan `Files.move(..., ATOMIC_MOVE)`. Bila aplikasi berhenti di tengah penulisan, direktori pengguna tidak pernah berisi laporan setengah jadi (KNF13). CSV memakai pemisah titik koma agar langsung terbaca sebagai kolom oleh aplikasi lembar kerja berpengaturan bahasa Indonesia.
+
+## 5.63 Kelas DataSinkronisasiBoundary
+
+**Nama Kelas:** DataSinkronisasiBoundary  
+**ID Kelas:** C63
+
+Tabel 5.63.1. Operasi Kelas DataSinkronisasiBoundary
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `simpanBundel(b: BundelFHIREntity): void` | public | Memasukkan bundel baru ke antrean sinkronisasi dengan status "tertunda" (Q-C63-01, KF14). Dipanggil di dalam transaksi `serahkanObat()`. |
+| `ambilTertunda(): List<BundelFHIREntity>` | public | Mengambil bundel berstatus "tertunda" atau "gagal kirim" terurut waktu masuk antrean (Q-C63-02, KF20). |
+| `perbaruiBundel(b: BundelFHIREntity): void` | public | Menyimpan status dan alasan gagal satu bundel setelah respons SATUSEHAT diterima (Q-C63-03, skenario alternatif 2 UC11). |
+| `tulisArsipTerenkripsi(daftar: List<BundelFHIREntity>, lokasi: String): String` | public | Menulis seluruh bundel pada daftar ke satu berkas terenkripsi di `lokasi`, lalu mengembalikan lokasi lengkap berkasnya (Algo-C63-01, KF20). |
+
+Tabel 5.63.2. Atribut Kelas DataSinkronisasiBoundary
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `koneksi` | private | `Connection` |
+
+`koneksi` dan aturan pemakaiannya sama dengan Subbab 5.56.
+
+Tabel 5.63.3. Kueri Kelas DataSinkronisasiBoundary
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C63-01 | `INSERT INTO bundel_fhir (id_kunjungan, isi_bundel, status, alasan_gagal)`<br>`VALUES (?, ?::jsonb, 'tertunda', NULL) RETURNING id_bundel` | `simpanBundel()`. Konversi `::jsonb` membuat PostgreSQL mengurai isi bundel. Bundel yang bukan JSON utuh ditolak, dan transaksi `serahkanObat()` di-ROLLBACK seluruhnya sehingga tidak ada bundel parsial di antrean (KNF03). `bundel_fhir.id_kunjungan` ber-UNIQUE karena setiap kunjungan menghasilkan satu bundel. |
+| Q-C63-02 | `SELECT id_bundel, id_kunjungan, isi_bundel::text, status, alasan_gagal`<br>`FROM bundel_fhir WHERE status IN ('tertunda', 'gagal kirim')`<br>`ORDER BY id_bundel` | `ambilTertunda()`. Status "gagal kirim" mengikuti istilah skenario alternatif 1 UC11 pada SKPL. |
+| Q-C63-03 | `UPDATE bundel_fhir SET status = ?, alasan_gagal = ? WHERE id_bundel = ?` | `perbaruiBundel()`. Dijalankan langsung untuk setiap bundel tanpa menunggu bundel lain (catatan Algo-C28-01). |
+
+### 5.63.1 Algoritma Penulisan Arsip Bundel Terenkripsi
+
+**Nama Kelas:** DataSinkronisasiBoundary  
+**Nama Operasi:** `tulisArsipTerenkripsi(daftar: List<BundelFHIREntity>, lokasi: String): String`  
+**ID Algoritma:** Algo-C63-01
+
+```text
+FUNGSI tulisArsipTerenkripsi(daftar, lokasi) -> String
+    isi    <- "[" + (b.isiBundel untuk setiap b DI daftar, digabung dengan ",") + "]"   // larik JSON bundel FHIR
+    frasa  <- frasa sandi ekspor dari berkas konfigurasi SEHATI pada Komputer Loket
+    garam  <- 16 bita acak dari SecureRandom
+    iv     <- 12 bita acak dari SecureRandom
+    kunci  <- PBKDF2WithHmacSHA256(frasa, garam, 600000 iterasi, 256 bit)
+    sandi  <- enkripsi "AES/GCM/NoPadding" atas isi (UTF-8) dengan kunci dan iv
+    nama   <- "sehati-bundel_" + waktu sekarang berformat yyyyMMdd-HHmmss + ".enc"
+    tulis garam, iv, lalu sandi ke berkas sementara di lokasi
+    pindahkan berkas sementara ke lokasi / nama dengan ATOMIC_MOVE
+    KEMBALIKAN lokasi / nama
+```
+
+Berkas ekspor berisi data klinis pasien dan dibawa keluar puskesmas, sehingga isinya dienkripsi. AES-GCM dan PBKDF2 tersedia pada paket `javax.crypto` bawaan Java 21, sehingga tidak ada pustaka tambahan di luar Tabel 2.1. *Tag* autentikasi GCM membuat berkas yang rusak atau diubah saat dibawa langsung ketahuan ketika didekripsi. Garam dan IV disimpan di awal berkas agar penerima cukup mengetahui frasa sandinya. Status bundel tidak diubah oleh operasi ini dan tetap "tertunda" sampai benar-benar diunggah (Algo-C28-02).
+
+## 5.64 Kelas DataPencadanganBoundary
+
+**Nama Kelas:** DataPencadanganBoundary  
+**ID Kelas:** C64
+
+Tabel 5.64.1. Operasi Kelas DataPencadanganBoundary
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `ambilTerakhir(): PencadanganEntity` | public | Mengambil catatan pencadangan terbaru (Q-C64-01) untuk dasbor administrasi, atau `null` bila belum pernah ada pencadangan (KF21). |
+| `jalankanPgDump(lokasi: String): PencadanganEntity` | public | Menjalankan `pg_dump` ke folder `lokasi` dan mengembalikan catatan berstatus "berhasil" atau "gagal" yang belum disimpan (Algo-C64-01, KF21, KNF06). |
+| `verifikasiArsip(p: PencadanganEntity): boolean` | public | Memastikan arsip hasil `pg_dump` dapat dibaca utuh oleh `pg_restore` dan memuat data pasien (Algo-C64-02). |
+| `simpanCatatan(p: PencadanganEntity): void` | public | Menyimpan catatan pencadangan, berhasil maupun gagal (Q-C64-02). |
+
+Tabel 5.64.2. Atribut Kelas DataPencadanganBoundary
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `koneksi` | private | `Connection` |
+| `lokasiMedia` | private | `String` |
+
+`koneksi` dan aturan pemakaiannya sama dengan Subbab 5.56. `lokasiMedia` adalah folder pada HDD eksternal Media Cadangan (Gambar 3) yang dibaca dari berkas konfigurasi SEHATI saat objek dibuat. `jalankanPgDump()` memakai folder ini bila parameter `lokasi` kosong.
+
+Tabel 5.64.3. Kueri Kelas DataPencadanganBoundary
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C64-01 | `SELECT id_pencadangan, waktu, status, lokasi_media, ukuran_berkas`<br>`FROM pencadangan ORDER BY waktu DESC LIMIT 1` | `ambilTerakhir()`. |
+| Q-C64-02 | `INSERT INTO pencadangan (waktu, status, lokasi_media, ukuran_berkas)`<br>`VALUES (?, ?, ?, ?) RETURNING id_pencadangan` | `simpanCatatan()`. Kolom `lokasi_media` menyimpan lokasi lengkap berkas arsip, bukan hanya foldernya. |
+
+### 5.64.1 Algoritma Menjalankan pg_dump
+
+**Nama Kelas:** DataPencadanganBoundary  
+**Nama Operasi:** `jalankanPgDump(lokasi: String): PencadanganEntity`  
+**ID Algoritma:** Algo-C64-01
+
+```text
+FUNGSI jalankanPgDump(lokasi) -> PencadanganEntity
+    folder <- lokasi JIKA lokasi tidak kosong, SELAIN ITU lokasiMedia
+    berkas <- folder / ("sehati_" + waktu sekarang berformat yyyyMMdd-HHmm + ".dump")
+    p <- PencadanganEntity baru(waktu sekarang, status "gagal", lokasiMedia berkas, ukuranBerkas 0)
+    JIKA folder tidak ada ATAU tidak dapat ditulis MAKA
+        KEMBALIKAN p                                  // HDD eksternal tidak terpasang (skenario alternatif 4 UC12)
+    AKHIR JIKA
+    proses <- jalankan ["pg_dump", "--host", alamatServer, "--port", "5432", "--username", "sehati_app",
+                        "--format=custom", "--file", berkas, "sehati"]
+              dengan variabel lingkungan PGPASSFILE menunjuk berkas .pgpass SEHATI
+    selesai <- tunggu proses paling lama 30 menit
+    JIKA selesai DAN kode keluar proses = 0 MAKA
+        p.status       <- "berhasil"
+        p.ukuranBerkas <- ukuran berkas dalam bita
+    SELAIN ITU
+        hentikan proses bila masih berjalan
+        hapus berkas yang tidak utuh
+    AKHIR JIKA
+    KEMBALIKAN p
+```
+
+`pg_dump` membaca seluruh tabel dalam satu transaksi berisolasi *snapshot*, sehingga arsip menggambarkan basis data pada satu titik waktu tanpa mengunci tabel untuk penulisan. Petugas di loket, ruang periksa, dan apotek tetap dapat bekerja selama pencadangan berjalan (KNF06). Format `custom` menghasilkan arsip terkompresi yang dapat diperiksa dan dipulihkan per tabel oleh `pg_restore`. Kata sandi basis data dibaca dari berkas `.pgpass` yang hanya dapat dibaca akun sistem operasi SEHATI, bukan dari argumen perintah yang dapat terlihat pada daftar proses. `alamatServer` diambil dari berkas konfigurasi yang sama dengan alamat JDBC.
+
+### 5.64.2 Algoritma Verifikasi Arsip
+
+**Nama Kelas:** DataPencadanganBoundary  
+**Nama Operasi:** `verifikasiArsip(p: PencadanganEntity): boolean`  
+**ID Algoritma:** Algo-C64-02
+
+```text
+FUNGSI verifikasiArsip(p) -> boolean
+    JIKA berkas p.lokasiMedia tidak ada ATAU ukurannya 0 MAKA
+        KEMBALIKAN false
+    AKHIR JIKA
+    daftarIsi <- keluaran ["pg_restore", "--list", p.lokasiMedia]
+    JIKA kode keluar ≠ 0 ATAU daftarIsi tidak memuat "TABLE DATA public pasien" MAKA
+        KEMBALIKAN false
+    AKHIR JIKA
+    proses <- jalankan ["pg_restore", "--file=-", p.lokasiMedia]   // susun skrip pemulihan ke keluaran standar
+    buang seluruh keluaran standar proses
+    KEMBALIKAN kode keluar proses = 0
+```
+
+Langkah pertama hanya membaca daftar isi arsip dan memastikan data tabel `pasien` ikut tercadang. Langkah kedua membaca seluruh blok data tanpa menyentuh basis data mana pun, sehingga arsip yang terpotong, misalnya karena HDD eksternal tercabut di tengah proses, gagal diverifikasi. `KonfigurasiManager` kemudian menandai catatan seperti itu "gagal verifikasi" (Algo-C29-03).
 
 <br>
 
