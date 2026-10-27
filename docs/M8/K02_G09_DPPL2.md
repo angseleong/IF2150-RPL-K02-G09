@@ -1265,9 +1265,810 @@ Algoritma ditulis sebagai *pseudocode* dengan empat kesepakatan berikut.
 3. **Penolakan.** Masukan yang melanggar aturan bisnis ditolak dengan `IllegalArgumentException`, sedangkan keadaan data yang tidak mengizinkan operasi (misalnya akun nonaktif atau resep yang sudah dilayani) ditolak dengan `IllegalStateException`. Keduanya berasal dari pustaka standar Java dan membawa pesan yang ditampilkan `Form` kepada aktor. Operasi yang pada *sequence diagram* mengembalikan daftar galat, yaitu `SkriningManager.simpanSkrining()`, tetap mengembalikan daftar tersebut.
 4. **Kueri.** Kueri SQL dicantumkan pada operasi `DataBoundary` yang menjalankannya (Subbab 5.56 sampai 5.64), bukan pada `Manager` yang memanggilnya, agar setiap kueri hanya ditulis sekali. Nama tabel adalah nama *entity* tanpa akhiran `Entity` dalam huruf kecil bergaris bawah, misalnya `bets_obat` untuk `BetsObatEntity`, dan nama kolom adalah nama atribut dalam bentuk yang sama, misalnya `tanggal_kedaluwarsa`. Tanda `?` adalah parameter `PreparedStatement` yang diisi berurutan, sehingga masukan pengguna tidak pernah disambung langsung ke teks kueri.
 
-## 5.1 – 5.16 Kelas Boundary (C01 – C16)
+## 5.1 Kelas LoginForm
 
-> *Sedang dikerjakan.* Subbab 5.1 sampai 5.16 merinci lima belas `Form` pada *Presentation Layer* dan `SATUSEHATGateway`, mengikuti pola Subbab 5.17.
+**Nama Kelas:** LoginForm  
+**ID Kelas:** C01
+
+Subbab 5.1 sampai 5.16 merinci lima belas kelas `Form` di *Presentation Layer* dan `SATUSEHATGateway` (Subbab 5.15). Setiap `Form` adalah satu layar JavaFX (Bab 6), atributnya adalah isian dan keadaan layar, dan operasinya terbagi dua: operasi `kirimX()` dipanggil pengguna lewat tombol atau pintasan papan ketik lalu meneruskan isiannya ke `Manager`, sedangkan operasi `tampilkanX()` menampilkan hasil `Manager` kepada pengguna. `Form` tidak menjalankan kueri dan tidak menyimpan aturan bisnis, sehingga seluruh keputusan bisnis tetap berada di `Manager`. Pada *pseudocode*, `Manager` yang dipanggil `Form` ditulis dengan nama kelasnya berhuruf kecil di depan, misalnya `pasienManager` untuk `PasienManager`. Isian layar yang berupa teks dan angka dibaca dari kolom JavaFX, lalu diubah ke tipe atribut sebelum dikirim.
+
+Tabel 5.1.1. Operasi Kelas LoginForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkan(): void` | public | Menampilkan layar autentikasi dengan kedua kolom kosong dan kursor pada kolom nama pengguna. Dipanggil saat aplikasi dibuka dan setiap kali sesi berakhir, termasuk saat pengguna diam 15 menit (UC01, KNF04). |
+| `kirimKredensial(): void` | public | Mengambil nama pengguna dan kata sandi dari kolom, memanggil `AutentikasiManager.autentikasi()`, lalu menyusun dasbor bila sesi berhasil dibuka (UC01, Algo-C01-01). |
+| `tampilkanDasbor(menu: List<String>): void` | public | Menggambar dasbor yang hanya berisi layar pada `menu`, yaitu layar yang diizinkan bagi peran pengguna. Layar di luar wewenang tidak digambar sama sekali (KF16, skenario alternatif 3 UC01). |
+| `bukaLayar(layar: String): void` | public | Memeriksa hak akses sekali lagi lewat `AutentikasiManager.periksaHakAkses()` sebelum layar dibuka, karena layar dapat dituju lewat jalan lain selain menu, misalnya pintasan papan ketik (KF16, KNF05, Algo-C01-02). |
+| `tampilkanPesanGagal(pesan: String): void` | public | Menampilkan pesan merah di bawah kolom kata sandi. Pesan untuk nama yang tidak dikenal dan kata sandi yang salah sama, sesuai catatan Algo-C17-01. |
+
+Tabel 5.1.2. Atribut Kelas LoginForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `namaPengguna` | private | `String` |
+| `kataSandi` | private | `String` |
+
+`kataSandi` dibaca dari `PasswordField` dan ditimpa dengan teks kosong segera setelah autentikasi selesai, berhasil maupun gagal, sehingga kata sandi tidak tertinggal di memori layar. Peran pengguna bukan atribut `LoginForm`. Peran dibawa bersama `SesiEntity` pada konteks sesi aplikasi JavaFX, yaitu pegangan objek yang dipakai bersama oleh seluruh layar dan bukan kelas perancangan tersendiri, sehingga setiap `Form` dapat memanggil `periksaHakAkses()` dengan peran yang sama.
+
+### 5.1.1 Algoritma Pengiriman Kredensial
+
+**Nama Kelas:** LoginForm  
+**Nama Operasi:** `kirimKredensial(): void`  
+**ID Algoritma:** Algo-C01-01
+
+```text
+KONSTANTA DAFTAR_MENU <- [PasienForm, KunjunganForm, AntreanSkriningForm, RekamMedisForm, AntreanResepForm,
+                          PersediaanForm, DaftarPantauForm, LaporanForm, SinkronisasiForm, KonfigurasiForm]
+
+PROSEDUR kirimKredensial()
+    nama <- namaPengguna tanpa spasi di awal dan akhir
+    JIKA nama kosong ATAU kataSandi kosong MAKA
+        tampilkanPesanGagal("Nama pengguna dan kata sandi wajib diisi")
+        KEMBALI
+    AKHIR JIKA
+    COBA
+        sesi <- autentikasiManager.autentikasi(nama, kataSandi)
+    TANGKAP IllegalStateException galat                  // akun nonaktif
+        kataSandi <- ""
+        tampilkanPesanGagal(galat.pesan)
+        KEMBALI
+    AKHIR COBA
+    kataSandi <- ""
+    JIKA sesi = null MAKA
+        tampilkanPesanGagal("Nama pengguna atau kata sandi salah")
+        KEMBALI                                           // kolom kata sandi kosong, kolom nama tetap terisi
+    AKHIR JIKA
+    menu <- daftar kosong
+    UNTUK SETIAP layar DI DAFTAR_MENU
+        JIKA autentikasiManager.periksaHakAkses(peran sesi, layar) MAKA
+            tambahkan layar ke menu
+        AKHIR JIKA
+    AKHIR UNTUK
+    tampilkanDasbor(menu)
+```
+
+`DAFTAR_MENU` memuat sepuluh layar yang dibuka langsung dari dasbor. `SkriningForm`, `PemeriksaanForm`, `ResepForm`, dan `PenyerahanObatForm` tidak ada di dasbor karena layar itu dibuka dari layar induknya: `AntreanSkriningForm`, `RekamMedisForm`, dan `AntreanResepForm`. Pemeriksaan hak akses tetap berlaku untuk keempatnya (Algo-C01-02).
+
+### 5.1.2 Algoritma Pembukaan Layar
+
+**Nama Kelas:** LoginForm  
+**Nama Operasi:** `bukaLayar(layar: String): void`  
+**ID Algoritma:** Algo-C01-02
+
+```text
+PROSEDUR bukaLayar(layar)
+    JIKA autentikasiManager.periksaHakAkses(peran sesi, layar) MAKA
+        tampilkan layar
+    SELAIN ITU
+        tampilkanPesanGagal("Peran " + peran sesi + " tidak berwenang membuka layar ini")
+    AKHIR JIKA
+```
+
+Prosedur ini merealisasikan skenario alternatif 3 UC01. Setiap `Form` memanggil `periksaHakAkses()` dengan cara yang sama sebelum layarnya dibuka, sehingga hak akses tidak hanya bergantung pada menu yang disembunyikan (KNF05).
+
+## 5.2 Kelas PasienForm
+
+**Nama Kelas:** PasienForm  
+**ID Kelas:** C02
+
+Tabel 5.2.1. Operasi Kelas PasienForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkan(): void` | public | Membuka layar pendaftaran dengan kolom pencarian aktif dan tabel hasil kosong (UC02). |
+| `kirimPencarian(kataKunci: String): void` | public | Meneruskan kata kunci ke `PasienManager.cariPasien()` setiap kali isi kolom pencarian berubah dan panjangnya sedikitnya 3 karakter (KF01, KNF01, Algo-C02-01). |
+| `tampilkanHasilCari(hasil: List<PasienEntity>): void` | public | Mengisi tabel dengan pasien yang cocok. Bila `hasil` kosong, tabel menampilkan "Data pasien tidak ditemukan" dan tombol "Pasien Baru" disorot (skenario alternatif 2 UC02). |
+| `bukaFormulir(pasien: PasienEntity): void` | public | Membuka formulir data pasien. Bila `pasien` terisi, kolom diisi data pasien itu untuk disunting dan nomor rekam medis ditampilkan tanpa dapat diubah. Bila `null`, formulir kosong dibuka untuk pendaftaran baru (KF02). |
+| `kirimDataPasien(): void` | public | Membaca isian formulir lalu memanggil `daftarkanPasien()` untuk pasien baru atau `perbaruiPasien()` untuk pasien lama (Algo-C02-02). |
+| `tampilkanPesanValidasi(pesan: String): void` | public | Menandai kolom NIK merah dan menampilkan `pesan` di bawahnya, misalnya "NIK tidak valid" atau "NIK sudah terdaftar" (KF02). Isian lain tidak dihapus. |
+| `tampilkanNotifikasi(pesan: String): void` | public | Menampilkan notifikasi hijau sementara, misalnya "Pendaftaran berhasil" beserta nomor rekam medis baru. |
+
+Tabel 5.2.2. Atribut Kelas PasienForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `kataKunci` | private | `String` |
+| `dataFormulir` | private | `PasienEntity` |
+
+`dataFormulir` menampung isian formulir. Nilai `idPasien` yang masih 0 menandai pendaftaran baru, dan nilai yang sudah terisi menandai penyuntingan pasien lama, sejalan dengan aturan sisip atau mutakhirkan pada Subbab 5.56.
+
+### 5.2.1 Algoritma Pencarian Pasien
+
+**Nama Kelas:** PasienForm  
+**Nama Operasi:** `kirimPencarian(kataKunci: String): void`  
+**ID Algoritma:** Algo-C02-01
+
+```text
+PROSEDUR kirimPencarian(kataKunci)                // dipicu setiap perubahan isi kolom pencarian
+    teks <- kataKunci tanpa spasi di awal dan akhir
+    JIKA panjang(teks) < 3 MAKA
+        tampilkanHasilCari(daftar kosong tanpa pesan "tidak ditemukan")
+        KEMBALI
+    AKHIR JIKA
+    tunggu 250 milidetik; batalkan bila isi kolom berubah lagi dalam waktu itu
+    hasil <- pasienManager.cariPasien(teks)      // dijalankan di thread latar agar kolom tetap responsif
+    tampilkanHasilCari(hasil)
+```
+
+Pencarian baru dikirim bila kata kunci sedikitnya 3 karakter, sesuai syarat KNF01 dan indeks trigram pada Algo-C57-01. Jeda 250 milidetik mencegah satu kueri untuk setiap ketukan tombol saat petugas mengetik cepat. Hasil pencarian lama yang baru tiba setelah kata kunci berubah dibuang.
+
+### 5.2.2 Algoritma Pengiriman Data Pasien
+
+**Nama Kelas:** PasienForm  
+**Nama Operasi:** `kirimDataPasien(): void`  
+**ID Algoritma:** Algo-C02-02
+
+```text
+PROSEDUR kirimDataPasien()
+    JIKA nama, tanggal lahir, jenis kelamin, atau alamat pada dataFormulir kosong MAKA
+        tandai kolom yang kosong
+        KEMBALI
+    AKHIR JIKA
+    COBA
+        JIKA dataFormulir.idPasien = 0 MAKA
+            pasien <- pasienManager.daftarkanPasien(dataFormulir)
+            tampilkanNotifikasi("Pendaftaran berhasil, nomor rekam medis " + pasien.nomorRekamMedis)
+        SELAIN ITU
+            pasienManager.perbaruiPasien(dataFormulir)
+            tampilkanNotifikasi("Data pasien diperbarui")
+        AKHIR JIKA
+    TANGKAP IllegalArgumentException galat
+        tampilkanPesanValidasi(galat.pesan)
+    AKHIR COBA
+```
+
+Pemeriksaan isian kosong hanya mencegah pengiriman yang pasti ditolak. Validasi NIK dan keunikannya tetap dijalankan `PasienManager` (Algo-C18-01), karena aturan itu harus berlaku untuk pemanggil mana pun.
+
+## 5.3 Kelas KunjunganForm
+
+**Nama Kelas:** KunjunganForm  
+**ID Kelas:** C03
+
+Tabel 5.3.1. Operasi Kelas KunjunganForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `buka(pasien: PasienEntity): void` | public | Membuka layar kunjungan untuk pasien terpilih, memuat daftar poli lewat `KunjunganManager.daftarPoli()`, lalu memanggil `tampilkanPilihanPoli()` (UC03). |
+| `tampilkanPilihanPoli(daftarPoli: List<PoliEntity>): void` | public | Menampilkan poli sebagai pilihan tujuan. Tombol "Buka Kunjungan" tetap nonaktif sampai satu poli dipilih. |
+| `kirimPermintaanKunjungan(): void` | public | Memanggil `KunjunganManager.bukaKunjungan()` dengan pasien dan poli terpilih lalu menampilkan hasilnya (KF03, Algo-C03-01). |
+| `tampilkanTiketAntrean(kunjungan: KunjunganEntity): void` | public | Menampilkan tiket antrean berisi nama poli, nomor antrean, dan tanggal. Layar menyediakan tombol cetak tiket. |
+| `tampilkanKunjunganAktif(kunjungan: KunjunganEntity): void` | public | Menampilkan nomor antrean dan status kunjungan yang sudah berjalan serta keterangan bahwa kunjungan baru tidak dibuat (skenario alternatif 1 UC03). |
+
+Tabel 5.3.2. Atribut Kelas KunjunganForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `pasienTerpilih` | private | `PasienEntity` |
+| `poliTerpilih` | private | `PoliEntity` |
+
+`pasienTerpilih` diisi dari `PasienForm` melalui parameter `buka()`, dan `poliTerpilih` diisi dari pilihan petugas.
+
+### 5.3.1 Algoritma Permintaan Kunjungan
+
+**Nama Kelas:** KunjunganForm  
+**Nama Operasi:** `kirimPermintaanKunjungan(): void`  
+**ID Algoritma:** Algo-C03-01
+
+```text
+PROSEDUR kirimPermintaanKunjungan()
+    JIKA pasienTerpilih = null ATAU poliTerpilih = null MAKA KEMBALI AKHIR JIKA
+    nonaktifkan tombol "Buka Kunjungan"                  // mencegah dua permintaan dari satu klik ganda
+    COBA
+        kunjungan <- kunjunganManager.bukaKunjungan(pasienTerpilih.idPasien, poliTerpilih.idPoli)
+        JIKA kunjungan.status = "menunggu skrining" MAKA
+            tampilkanTiketAntrean(kunjungan)
+        SELAIN ITU
+            tampilkanKunjunganAktif(kunjungan)           // pasien sudah punya kunjungan yang berjalan hari ini
+        AKHIR JIKA
+    AKHIRNYA
+        aktifkan tombol "Buka Kunjungan"
+    AKHIR COBA
+```
+
+Kunjungan yang baru dibuka selalu berstatus "menunggu skrining" (Algo-C19-01), sedangkan kunjungan aktif hasil pencegahan kunjungan ganda hampir selalu sudah melewati status itu. Bila kunjungan aktif itu masih menunggu skrining, tiket yang tampil adalah tiket yang sama dengan sebelumnya, sehingga pasien tidak pernah memegang dua nomor.
+
+## 5.4 Kelas AntreanSkriningForm
+
+**Nama Kelas:** AntreanSkriningForm  
+**ID Kelas:** C04
+
+Tabel 5.4.1. Operasi Kelas AntreanSkriningForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanAntrean(): void` | public | Memuat antrean lewat `SkriningManager.muatAntrean()` dan menampilkannya terurut nomor antrean (KF04, UC04). |
+| `kirimPanggilan(): void` | public | Memanggil `SkriningManager.panggilPasien()` lalu membuka `SkriningForm` untuk pasien yang dipanggil. Terhubung ke tombol "Panggil Berikutnya" dan pintasan F2 (KF04, KF24). |
+| `kirimLewati(): void` | public | Memanggil `SkriningManager.lewatiPasien()` untuk pasien yang sedang dipanggil dan tidak hadir, lalu memperbarui tampilan dengan pasien berikutnya (skenario alternatif 1 UC04). Terhubung ke pintasan F3. |
+| `perbaruiTampilan(daftar: List<KunjunganEntity>): void` | public | Menggambar ulang tabel antrean dan menyoroti pasien yang sedang dilayani. Dipanggil setelah panggilan, setelah pasien dilewati, dan oleh penyegar otomatis. |
+
+Tabel 5.4.2. Atribut Kelas AntreanSkriningForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `daftarTampil` | private | `List<KunjunganEntity>` |
+
+`daftarTampil` adalah salinan antrean yang sedang digambar. Layar memuat ulang antrean tiap 10 detik agar pasien yang baru dibuka kunjungannya di loket muncul tanpa perawat menekan tombol apa pun. Tombol "Panggil Berikutnya" dinonaktifkan bila `daftarTampil` kosong.
+
+## 5.5 Kelas SkriningForm
+
+**Nama Kelas:** SkriningForm  
+**ID Kelas:** C05
+
+Tabel 5.5.1. Operasi Kelas SkriningForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanFormulir(kunjungan: KunjunganEntity): void` | public | Membuka formulir skrining kosong untuk kunjungan yang dipanggil, dengan kursor pada kolom keluhan awal (KF05). |
+| `kirimHasilSkrining(): void` | public | Membaca isian, memanggil `SkriningManager.simpanSkrining()`, lalu meminta penanda risiko dari `RisikoManager.ambilPenanda()` (UC04, Algo-C05-01). Terhubung ke pintasan Ctrl+S. |
+| `tampilkanPeringatanRentang(kolom: List<String>): void` | public | Menandai merah setiap kolom pada `kolom` dan menampilkan rentang wajarnya di samping kolom. Isian lain dipertahankan (KF06, skenario alternatif 2 UC04). |
+| `tampilkanPenandaRisiko(penanda: List<PenandaRisikoEntity>): void` | public | Menampilkan ikon peringatan dan latar merah beserta jenis risiko pada setiap penanda, tanpa langkah tambahan dari perawat (KF07, KNF08, skenario alternatif 3 UC04). |
+
+Tabel 5.5.2. Atribut Kelas SkriningForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `isianKeluhan` | private | `String` |
+| `isianUkuran` | private | `TandaVitalEntity` |
+
+`isianUkuran` menampung nilai tekanan darah, berat badan, tinggi badan, suhu, nadi, dan gula darah dari kolom numerik. Urutan fokus kolom diatur agar seluruh formulir tuntas hanya dengan papan ketik: Tab pindah ke kolom berikutnya, Shift+Tab ke kolom sebelumnya, dan Ctrl+S menyimpan (KF24, KNF12).
+
+### 5.5.1 Algoritma Pengiriman Hasil Skrining
+
+**Nama Kelas:** SkriningForm  
+**Nama Operasi:** `kirimHasilSkrining(): void`  
+**ID Algoritma:** Algo-C05-01
+
+```text
+PROSEDUR kirimHasilSkrining()
+    tv <- TandaVitalEntity kosong
+    kolomTidakTerbaca <- daftar kosong
+    UNTUK SETIAP (kolom, teks) DI kolom numerik pada formulir
+        teks <- teks dengan koma desimal diganti titik
+        JIKA teks kosong DAN kolom ≠ "gulaDarah" MAKA tambahkan kolom ke kolomTidakTerbaca
+        SELAIN ITU JIKA teks tidak kosong DAN BUKAN angka MAKA tambahkan kolom ke kolomTidakTerbaca
+        SELAIN ITU isi tv.kolom dengan angka dari teks     // kosong pada gulaDarah menjadi null
+        AKHIR JIKA
+    AKHIR UNTUK
+    JIKA kolomTidakTerbaca TIDAK KOSONG MAKA
+        tampilkanPeringatanRentang(kolomTidakTerbaca)
+        KEMBALI
+    AKHIR JIKA
+    isianUkuran <- tv
+    galat <- skriningManager.simpanSkrining(kunjungan.idKunjungan, isianKeluhan, tv)
+    JIKA galat TIDAK KOSONG MAKA
+        tampilkanPeringatanRentang(galat)               // tidak ada yang disimpan, isian tetap ada
+        KEMBALI
+    AKHIR JIKA
+    penanda <- risikoManager.ambilPenanda(kunjungan.idKunjungan)
+    tampilkanPenandaRisiko(penanda)                     // daftar kosong berarti tidak ada risiko, tidak ada peringatan
+    tampilkan notifikasi "Skrining tersimpan, pasien diteruskan ke antrean poli"
+```
+
+Pembacaan angka pada `Form` hanya memastikan isian dapat menjadi angka. Rentang fisiologis dan ambang risiko dinilai `SkriningManager` dan `RisikoManager`, sehingga tidak ada jalan pintas yang dapat menonaktifkan validasi dari layar (KNF02).
+
+## 5.6 Kelas RekamMedisForm
+
+**Nama Kelas:** RekamMedisForm  
+**ID Kelas:** C06
+
+Tabel 5.6.1. Operasi Kelas RekamMedisForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanRingkasan(kunjungan: KunjunganEntity): void` | public | Memanggil `PemeriksaanManager.susunRingkasan()` lalu menampilkan data diri, diagnosis lampau, riwayat obat, dan penanda risiko aktif pada satu tampilan (KF09, UC05). Sebelum itu, layar memeriksa apakah peran pengguna boleh membuka `PemeriksaanForm` (skenario alternatif 1 UC05). |
+| `tampilkanGrafikTren(): void` | public | Memanggil `PemeriksaanManager.susunTren()` lalu menggambar grafik garis tekanan darah, berat badan, dan gula darah dengan waktu pada sumbu-x (KF08, Algo-C06-01). |
+| `tampilkanTabelPengukuran(nilai: TandaVitalEntity): void` | public | Menampilkan pengukuran hari ini dalam bentuk tabel, bersama keterangan bahwa grafik tren baru terbentuk setelah dua kunjungan atau lebih (skenario alternatif 4 UC05). |
+| `aturModeBacaSaja(): void` | public | Mengunci seluruh kolom layar dan `PemeriksaanForm` serta menampilkan keterangan "Peran Anda tidak berwenang mengisi diagnosis" (KF10, skenario alternatif 1 UC05). |
+| `tampilkanIndikatorLuring(): void` | public | Menampilkan lencana "Luring" pada bilah aplikasi bila koneksi internet terputus. Seluruh fungsi layar tetap berjalan karena data berasal dari basis data lokal (KF22, KNF09, skenario alternatif 3 UC05). |
+
+Tabel 5.6.2. Atribut Kelas RekamMedisForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idPasienTampil` | private | `int` |
+| `seriTren` | private | `List<TandaVitalEntity>` |
+
+`idPasienTampil` menyimpan pasien yang ringkasannya sedang dibuka, dan `seriTren` menyimpan titik-titik grafik yang diterima dari `susunTren()`. `RekamMedisForm` tidak menyimpan apa pun ke basis data. Layar ini hanya membaca dan menjadi tempat peralihan ke `PemeriksaanForm` dan `ResepForm`.
+
+### 5.6.1 Algoritma Penyajian Grafik Tren
+
+**Nama Kelas:** RekamMedisForm  
+**Nama Operasi:** `tampilkanGrafikTren(): void`  
+**ID Algoritma:** Algo-C06-01
+
+```text
+PROSEDUR tampilkanGrafikTren()
+    seriTren <- pemeriksaanManager.susunTren(idPasienTampil)    // terurut dari yang terlama
+    JIKA ukuran(seriTren) < 2 MAKA
+        JIKA seriTren TIDAK KOSONG MAKA
+            tampilkanTabelPengukuran(seriTren[1])                // satu-satunya titik adalah pengukuran hari ini
+        AKHIR JIKA
+        KEMBALI
+    AKHIR JIKA
+    UNTUK SETIAP seri DI {"sistolik", "diastolik", "beratBadan", "gulaDarah"}
+        garis <- LineChart.Series baru bernama seri
+        UNTUK SETIAP tv DI seriTren
+            JIKA nilai seri pada tv ≠ null MAKA
+                tambahkan titik (urutan kunjungan, nilai seri pada tv) ke garis
+            AKHIR JIKA
+        AKHIR UNTUK
+        tambahkan garis ke grafik
+    AKHIR UNTUK
+```
+
+Sumbu-x memakai urutan kunjungan karena `TandaVitalEntity` tidak membawa tanggal. Pada tampilan, setiap titik diberi label tanggal kunjungan dari `susunTren()`. Gula darah bersifat opsional, sehingga kunjungan tanpa nilai gula darah dilewati pada garis gula darah, bukan digambar sebagai nol.
+
+## 5.7 Kelas PemeriksaanForm
+
+**Nama Kelas:** PemeriksaanForm  
+**ID Kelas:** C07
+
+Tabel 5.7.1. Operasi Kelas PemeriksaanForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `kirimKataKunciDiagnosis(kataKunci: String): void` | public | Meneruskan kata kunci ke `PemeriksaanManager.cariKodeICD10()` setelah pengguna berhenti mengetik 300 milidetik pada kolom diagnosis (KF10). |
+| `tampilkanSaranKode(daftar: List<KodeICD10Entity>): void` | public | Menampilkan daftar saran kode ICD-10 di bawah kolom diagnosis. Saat satu saran dipilih, kode dan deskripsinya disimpan sebagai diagnosis. Bila `daftar` kosong, layar menampilkan "Kode diagnosis ICD-10 tidak ditemukan" (skenario alternatif 2 UC05). |
+| `kirimHasilPemeriksaan(): void` | public | Menyimpan anamnesis, tindakan, dan diagnosis terpilih lewat `PemeriksaanManager.simpanPemeriksaan()`, dan menjadwalkan kontrol bila tanggal kontrol diisi (UC05, KF12, Algo-C07-01). Terhubung ke pintasan Ctrl+S. |
+| `kirimFinal(): void` | public | Meminta konfirmasi dokter lalu memanggil `PemeriksaanManager.kunciRekamMedis()` (UC05). Setelah dikunci, seluruh kolom layar tidak dapat disunting. |
+| `kunciKolomKlinis(): void` | public | Menonaktifkan kolom anamnesis, diagnosis, tindakan, dan kontrol, serta kedua tombol simpan. Dipanggil `RekamMedisForm` bagi peran selain Dokter (skenario alternatif 1 UC05). |
+| `tampilkanPesan(pesan: String): void` | public | Menampilkan pesan pada bilah di dasar layar, misalnya hasil pencarian kosong atau penolakan karena rekam medis sudah dikunci. |
+
+Tabel 5.7.2. Atribut Kelas PemeriksaanForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `isianAnamnesis` | private | `String` |
+| `kataKunciDiagnosis` | private | `String` |
+
+Kolom diagnosis hanya menerima nilai yang dipilih dari daftar saran, bukan teks bebas, sehingga diagnosis selalu tersimpan sebagai kode ICD-10 standar (KF10). Pilihan itu ditahan pada objek `DiagnosisEntity` di layar sampai pemeriksaan dikirim.
+
+### 5.7.1 Algoritma Pengiriman Hasil Pemeriksaan
+
+**Nama Kelas:** PemeriksaanForm  
+**Nama Operasi:** `kirimHasilPemeriksaan(): void`  
+**ID Algoritma:** Algo-C07-01
+
+```text
+PROSEDUR kirimHasilPemeriksaan()
+    JIKA isianAnamnesis kosong MAKA
+        tampilkanPesan("Anamnesis wajib diisi")
+        KEMBALI
+    AKHIR JIKA
+    p <- PemeriksaanEntity baru(kunjungan.idKunjungan, isianAnamnesis, tindakan pada layar)
+    d <- DiagnosisEntity dari saran terpilih            // null bila belum ada diagnosis yang dipilih
+    COBA
+        pemeriksaanManager.simpanPemeriksaan(kunjungan.idKunjungan, p, d)
+        JIKA tanggal kontrol terisi MAKA
+            jadwal <- pemeriksaanManager.jadwalkanKontrol(kunjungan.idPasien, tanggal kontrol)
+            tampilkanPesan("Kontrol dijadwalkan " + jadwal.tanggalRencana)
+        SELAIN ITU
+            tampilkanPesan("Pemeriksaan tersimpan")
+        AKHIR JIKA
+    TANGKAP IllegalStateException atau IllegalArgumentException galat
+        tampilkanPesan(galat.pesan)                     // misalnya rekam medis sudah dikunci
+    AKHIR COBA
+```
+
+Dokter dapat menyimpan berulang kali sebelum menekan tombol final, karena `simpanPemeriksaan()` menimpa draf sebelumnya (Algo-C22-01). Tombol final baru aktif setelah pemeriksaan pernah tersimpan.
+
+## 5.8 Kelas ResepForm
+
+**Nama Kelas:** ResepForm  
+**ID Kelas:** C08
+
+Tabel 5.8.1. Operasi Kelas ResepForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanFormulir(kunjungan: KunjunganEntity): void` | public | Memuat daftar obat lewat `ResepManager.muatDataObat()` dan membuka formulir resep kosong untuk kunjungan terpilih (KF11, UC06). |
+| `kirimItem(idObat: int, jumlah: int, dosis: String, aturanPakai: String): void` | public | Menambahkan satu obat ke daftar item lewat `ResepManager.tambahItem()` lalu menampilkan indikator stoknya (KF11, Algo-C08-01). |
+| `tampilkanIndikatorStok(tersedia: boolean, sisa: int): void` | public | Menampilkan lencana hijau "Tersedia" bila `tersedia`, atau lencana merah "Stok Kurang" beserta `sisa` bila tidak (KF11). |
+| `kirimResep(): void` | public | Memanggil `ResepManager.kirimKeApotek()` dengan seluruh item pada layar, lalu mengosongkan formulir bila resep berhasil masuk antrean apotek (UC06, KF11). |
+| `tampilkanPeringatanStok(sisa: int): void` | public | Menampilkan peringatan "Stok hanya tersisa `sisa`, perbaiki resep" dan menahan tombol "Kirim ke Apotek" sampai tidak ada item yang kurang stoknya (skenario alternatif 1 UC06). |
+
+Tabel 5.8.2. Atribut Kelas ResepForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `isianItem` | private | `List<ItemResepEntity>` |
+| `indikatorStok` | private | `String` |
+
+`isianItem` menampung item yang sedang disusun dokter sampai resep dikirim (Subbab 5.23). `indikatorStok` berisi teks indikator terakhir, yaitu "Tersedia" atau "Stok Kurang", yang dipakai untuk menentukan apakah tombol kirim boleh aktif.
+
+### 5.8.1 Algoritma Penambahan Item pada Formulir Resep
+
+**Nama Kelas:** ResepForm  
+**Nama Operasi:** `kirimItem(idObat: int, jumlah: int, dosis: String, aturanPakai: String): void`  
+**ID Algoritma:** Algo-C08-01
+
+```text
+PROSEDUR kirimItem(idObat, jumlah, dosis, aturanPakai)
+    JIKA jumlah ≤ 0 ATAU dosis kosong ATAU aturanPakai kosong MAKA
+        tandai kolom yang tidak valid
+        KEMBALI
+    AKHIR JIKA
+    item <- resepManager.tambahItem(idObat, jumlah, dosis, aturanPakai)
+    obat <- obat dengan idObat pada daftar obat yang dimuat tampilkanFormulir()
+    tambahkan item ke isianItem
+    tampilkanIndikatorStok(item.cukupStok(obat.stok), obat.stok)
+    JIKA BUKAN item.cukupStok(obat.stok) MAKA
+        tampilkanPeringatanStok(obat.stok)
+    AKHIR JIKA
+    tombol "Kirim ke Apotek" aktif HANYA JIKA setiap item pada isianItem cukup stoknya
+```
+
+Indikator ini bersifat pemberitahuan dini. Kecukupan stok diperiksa ulang oleh `ResepManager.kirimKeApotek()` saat resep dikirim (Algo-C23-02), sehingga stok yang berubah di antara dua langkah tetap tertangkap.
+
+## 5.9 Kelas AntreanResepForm
+
+**Nama Kelas:** AntreanResepForm  
+**ID Kelas:** C09
+
+Tabel 5.9.1. Operasi Kelas AntreanResepForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanAntrean(): void` | public | Memuat antrean lewat `ApotekManager.muatAntreanResep()` dan menampilkannya terurut waktu masuk, lengkap dengan nama pasien, daftar obat, dosis, dan jumlah (KF13, UC07). |
+| `pilihResep(idResep: int): void` | public | Memanggil `ApotekManager.layaniResep()` untuk resep terpilih lalu membuka `PenyerahanObatForm` dengan rincian resep dan bets obatnya (UC07). |
+
+Tabel 5.9.2. Atribut Kelas AntreanResepForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `daftarTampil` | private | `List<ResepEntity>` |
+
+Seperti `AntreanSkriningForm`, layar ini memuat ulang antrean tiap 10 detik agar resep baru dari dokter muncul tanpa tindakan petugas. Resep yang sedang dibuka petugas lain tetap tampil sampai statusnya berubah, dan penolakan ganda ditangani saat penyerahan (Algo-C24-01).
+
+## 5.10 Kelas PenyerahanObatForm
+
+**Nama Kelas:** PenyerahanObatForm  
+**ID Kelas:** C10
+
+Tabel 5.10.1. Operasi Kelas PenyerahanObatForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanRincian(resep: ResepEntity, bets: List<BetsObatEntity>): void` | public | Menampilkan identitas pasien, setiap item resep, dan bets obat yang akan diserahkan terurut tanggal kedaluwarsa terdekat (KF13, UC07). |
+| `kirimKonfirmasi(): void` | public | Memanggil `ApotekManager.serahkanObat()` setelah petugas menekan "Obat Diserahkan" (KF14, Algo-C10-01). Terhubung ke pintasan Ctrl+Enter. |
+| `bukaKolomCatatan(): void` | public | Membuka kolom alasan pengembalian dan tombol "Kembalikan ke Dokter" saat obat yang diresepkan tidak dapat dilayani (skenario alternatif 1 UC07). |
+| `kirimPengembalian(alasan: String): void` | public | Memanggil `ApotekManager.kembalikanKeDokter()` dengan alasan yang tidak boleh kosong, lalu menutup rincian resep. |
+| `tampilkanPesan(pesan: String): void` | public | Menampilkan pesan hasil penyerahan atau penolakan, misalnya "Obat diserahkan" atau "Resep sudah selesai dilayani". |
+
+Tabel 5.10.2. Atribut Kelas PenyerahanObatForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `rincianTampil` | private | `ResepEntity` |
+| `catatanPengembalian` | private | `String` |
+
+### 5.10.1 Algoritma Konfirmasi Penyerahan Obat
+
+**Nama Kelas:** PenyerahanObatForm  
+**Nama Operasi:** `kirimKonfirmasi(): void`  
+**ID Algoritma:** Algo-C10-01
+
+```text
+PROSEDUR kirimKonfirmasi()
+    nonaktifkan tombol "Obat Diserahkan"                 // klik ganda tidak mengirim dua permintaan
+    COBA
+        apotekManager.serahkanObat(rincianTampil.idResep)
+        tampilkanPesan("Obat diserahkan")
+        tutup rincian dan kembali ke AntreanResepForm
+    TANGKAP IllegalStateException galat
+        tampilkanPesan(galat.pesan)                      // resep sudah selesai atau stok tidak cukup
+        muat ulang rincian dan antrean
+    AKHIR COBA
+```
+
+Penolakan dari petugas kedua pada skenario alternatif 2 UC07 sampai ke layar sebagai `IllegalStateException` dari `ApotekManager`, sehingga layar tidak perlu mengetahui kunci baris yang dipakai di basis data. Setelah penolakan, antrean dimuat ulang agar resep yang sudah selesai hilang dari daftar.
+
+## 5.11 Kelas PersediaanForm
+
+**Nama Kelas:** PersediaanForm  
+**ID Kelas:** C11
+
+Tabel 5.11.1. Operasi Kelas PersediaanForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanFormulir(): void` | public | Memuat daftar obat lewat `PersediaanManager.muatDataObat()`, menyusun formulir penerimaan obat, dan memuat peringatan lewat `terbitkanPeringatan()` (KF17, UC08). |
+| `kirimPenerimaan(): void` | public | Membentuk `PenerimaanObatEntity` dari isian lalu memanggil `PersediaanManager.catatPenerimaan()` (KF17, Algo-C11-01). Terhubung ke pintasan Ctrl+S. |
+| `tampilkanSaldo(obat: ObatEntity): void` | public | Menampilkan saldo stok terbaru obat yang baru diterima dan mengosongkan formulir untuk penerimaan berikutnya. |
+| `tampilkanPeringatan(peringatan: List<String>): void` | public | Menampilkan setiap peringatan persediaan pada dasbor apotek dengan ikon dan warna merah, yaitu stok di bawah ambang minimum atau bets yang kedaluwarsa dalam 90 hari atau kurang (KF17, skenario alternatif 1 UC08). |
+| `tampilkanPesanKesalahan(kolom: List<String>): void` | public | Menandai merah setiap kolom formulir pada `kolom` (skenario alternatif 2 UC08). |
+
+Tabel 5.11.2. Atribut Kelas PersediaanForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `isianPenerimaan` | private | `PenerimaanObatEntity` |
+| `daftarPeringatan` | private | `List<String>` |
+
+### 5.11.1 Algoritma Pengiriman Penerimaan Obat
+
+**Nama Kelas:** PersediaanForm  
+**Nama Operasi:** `kirimPenerimaan(): void`  
+**ID Algoritma:** Algo-C11-01
+
+```text
+PROSEDUR kirimPenerimaan()
+    bets <- BetsObatEntity baru(idObat terpilih, nomor bets, jumlah, tanggal kedaluwarsa)
+    isianPenerimaan <- PenerimaanObatEntity baru(nomor faktur, tanggal terima, [bets])
+    COBA
+        persediaanManager.catatPenerimaan(isianPenerimaan)
+        obat <- obat dengan idObat terpilih pada persediaanManager.muatDataObat()
+        tampilkanSaldo(obat)
+        daftarPeringatan <- persediaanManager.terbitkanPeringatan()
+        tampilkanPeringatan(daftarPeringatan)
+    TANGKAP IllegalArgumentException galat
+        tampilkanPesanKesalahan(pisahkan galat.pesan pada koma)    // nama kolom, misalnya "jumlah,tanggalKedaluwarsa"
+    AKHIR COBA
+```
+
+Pesan `IllegalArgumentException` dari `catatPenerimaan()` berisi nama kolom yang dipisahkan koma (Algo-C25-01), dan `DataFarmasiBoundary` menambahkan "nomorBets" untuk nomor bets ganda (Algo-C61-01). Karena itu `Form` cukup memecah pesan menjadi daftar kolom dan tidak perlu mengenali aturan validasinya. Peringatan dimuat ulang setelah penerimaan agar stok yang baru saja kembali di atas ambang langsung hilang dari dasbor.
+
+## 5.12 Kelas DaftarPantauForm
+
+**Nama Kelas:** DaftarPantauForm  
+**ID Kelas:** C12
+
+Tabel 5.12.1. Operasi Kelas DaftarPantauForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanDaftar(): void` | public | Memuat entri aktif lewat `RisikoManager.muatEntriAktif()` dan menampilkannya beserta penyaring jenis risiko, rentang tanggal, dan status tindak lanjut (KF18, UC09). |
+| `kirimPenyaring(jenisRisiko: String, mulai: LocalDate, akhir: LocalDate): void` | public | Memanggil `PantauManager.saringDaftar()` lalu menampilkan hasilnya. Penyaring yang tidak dipilih dikirim sebagai `null` (Algo-C12-01). |
+| `bukaFormulirTindakLanjut(idEntri: int): void` | public | Membuka formulir tindak lanjut berisi jenis kontak, hasil upaya, dan status kedatangan untuk entri terpilih (KF18). |
+| `kirimTindakLanjut(): void` | public | Membentuk `TindakLanjutEntity` dari isian lalu memanggil `PantauManager.catatTindakLanjut()` dan menyegarkan tabel (UC09). |
+| `tampilkanKeterangan(pesan: String): void` | public | Menampilkan keterangan di atas tabel, misalnya "Tidak ada pasien yang cocok dengan kriteria saringan" (skenario alternatif 2 UC09). |
+
+Tabel 5.12.2. Atribut Kelas DaftarPantauForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `penyaring` | private | `String` |
+| `daftarTampil` | private | `List<DaftarPantauEntity>` |
+
+`penyaring` menyimpan ringkasan saringan yang sedang berlaku, misalnya "hipertensi, 1 sampai 31 Oktober 2026", yang ditampilkan sebagai keterangan tabel. Isian jenis risiko dan tanggal tetap berada pada kolom layar sampai penyaring dikirim.
+
+### 5.12.1 Algoritma Penyaringan Daftar Pantau
+
+**Nama Kelas:** DaftarPantauForm  
+**Nama Operasi:** `kirimPenyaring(jenisRisiko: String, mulai: LocalDate, akhir: LocalDate): void`  
+**ID Algoritma:** Algo-C12-01
+
+```text
+PROSEDUR kirimPenyaring(jenisRisiko, mulai, akhir)
+    JIKA mulai ≠ null DAN akhir ≠ null DAN mulai > akhir MAKA
+        tampilkanKeterangan("Tanggal mulai tidak boleh setelah tanggal akhir")
+        KEMBALI
+    AKHIR JIKA
+    jenis <- jenisRisiko JIKA bukan "Semua", SELAIN ITU null
+    daftarTampil <- pantauManager.saringDaftar(jenis, mulai, akhir)
+    JIKA daftarTampil KOSONG MAKA
+        tampilkanKeterangan("Tidak ada pasien yang cocok dengan kriteria saringan")
+    SELAIN ITU
+        tampilkanKeterangan("")
+    AKHIR JIKA
+    gambar ulang tabel dari daftarTampil, entri berisiko lebih dulu
+    penyaring <- ringkasan jenis dan rentang tanggal
+```
+
+## 5.13 Kelas LaporanForm
+
+**Nama Kelas:** LaporanForm  
+**ID Kelas:** C13
+
+Tabel 5.13.1. Operasi Kelas LaporanForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkan(): void` | public | Membuka layar laporan dengan pemilih rentang tanggal terisi bulan berjalan dan pratinjau kosong (KF19, UC10). |
+| `kirimRentang(): void` | public | Memanggil `LaporanManager.hitungRekapitulasi()` dengan rentang terpilih lalu menampilkan pratinjau (UC10). |
+| `tampilkanRekapitulasi(laporan: LaporanEntity): void` | public | Menampilkan jumlah kunjungan per poli, per status, dan diagnosis terbanyak. Bila `laporan.kosong()`, layar menampilkan "Tidak ada data pelayanan pada rentang tanggal terpilih" (skenario alternatif 1 UC10). |
+| `kirimPermintaanEkspor(format: String, direktori: String): void` | public | Memanggil `LaporanManager.ekspor()` dengan format PDF atau CSV dan direktori pilihan pengguna (Algo-C13-01). |
+| `kunciTombolEkspor(): void` | public | Menonaktifkan tombol "Ekspor PDF" dan "Ekspor CSV". Dipanggil bila laporan kosong (skenario alternatif 1 UC10). |
+| `tampilkanPesan(pesan: String): void` | public | Menampilkan hasil atau penolakan, misalnya "Berkas berhasil dibuat" atau "Perbaiki urutan tanggal" (skenario alternatif 2 UC10). |
+
+Tabel 5.13.2. Atribut Kelas LaporanForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `tanggalMulai` | private | `LocalDate` |
+| `tanggalAkhir` | private | `LocalDate` |
+
+`LaporanForm` menyimpan laporan hasil hitung terakhir sebagai nilai yang diterimanya dari `hitungRekapitulasi()`, lalu meneruskannya ke `ekspor()`. Pemilih tanggal membatasi pilihan sampai hari ini sehingga rentang yang melewati hari ini sudah sulit dibuat dari layar, tetapi `LaporanManager` tetap memeriksanya (Algo-C27-01).
+
+### 5.13.1 Algoritma Permintaan Ekspor
+
+**Nama Kelas:** LaporanForm  
+**Nama Operasi:** `kirimPermintaanEkspor(format: String, direktori: String): void`  
+**ID Algoritma:** Algo-C13-01
+
+```text
+PROSEDUR kirimPermintaanEkspor(format, direktori)
+    JIKA direktori kosong MAKA
+        direktori <- tampilkan pemilih folder, KEMBALI bila dibatalkan
+    AKHIR JIKA
+    COBA
+        lokasi <- laporanManager.ekspor(laporan terakhir, format, direktori)
+        tampilkanPesan("Berkas berhasil dibuat di " + lokasi)
+    TANGKAP IllegalArgumentException, IllegalStateException, atau UncheckedIOException galat
+        tampilkanPesan(galat.pesan)
+    AKHIR COBA
+```
+
+## 5.14 Kelas SinkronisasiForm
+
+**Nama Kelas:** SinkronisasiForm  
+**ID Kelas:** C14
+
+Tabel 5.14.1. Operasi Kelas SinkronisasiForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanStatus(): void` | public | Memuat bundel tertunda lewat `SinkronisasiManager.muatStatus()` lalu menampilkan status tiap bundel, lencana jumlah tertunda, dan indikator daring atau luring (KF20, KF22, UC11). |
+| `kirimPermintaanSinkron(): void` | public | Memanggil `SinkronisasiManager.kirimSemua()` di thread latar lalu menampilkan hasilnya (KF20, Algo-C14-01). |
+| `tampilkanHasil(hasil: List<BundelFHIREntity>): void` | public | Menampilkan status setiap bundel, yaitu "Terkirim" atau "Gagal Kirim" beserta alasan penolakan (skenario alternatif 2 UC11). |
+| `tampilkanTombolEkspor(): void` | public | Menampilkan tombol "Ekspor Bundel" saat koneksi internet terputus (skenario alternatif 1 UC11). |
+| `kirimPermintaanEkspor(lokasi: String): void` | public | Memanggil `SinkronisasiManager.eksporBundel()` ke lokasi pilihan pengguna, misalnya media eksternal, lalu menampilkan lokasi berkas hasilnya. |
+| `tampilkanPesan(pesan: String): void` | public | Menampilkan pesan pada bilah di dasar layar, misalnya "Bundel diekspor ke media eksternal". |
+
+Tabel 5.14.2. Atribut Kelas SinkronisasiForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `daftarStatus` | private | `List<BundelFHIREntity>` |
+
+### 5.14.1 Algoritma Permintaan Sinkronisasi
+
+**Nama Kelas:** SinkronisasiForm  
+**Nama Operasi:** `kirimPermintaanSinkron(): void`  
+**ID Algoritma:** Algo-C14-01
+
+```text
+PROSEDUR kirimPermintaanSinkron()
+    nonaktifkan tombol "Sinkronkan Sekarang"; tampilkan penanda sedang berjalan
+    jalankan di thread latar:                            // layar lain tetap dapat dipakai
+        COBA
+            hasil <- sinkronisasiManager.kirimSemua()
+            kembali ke thread JavaFX lalu tampilkanHasil(hasil)
+        TANGKAP IllegalStateException galat              // koneksi internet terputus
+            kembali ke thread JavaFX lalu
+                tampilkanPesan(galat.pesan)
+                tampilkanTombolEkspor()
+        AKHIRNYA
+            kembali ke thread JavaFX lalu aktifkan tombol "Sinkronkan Sekarang"
+        AKHIR COBA
+```
+
+`kirimSemua()` dapat berjalan lama karena mengirim satu per satu lewat internet. Menjalankannya di thread latar menjaga layar lain tetap responsif, sesuai catatan sequence diagram UC11. Karena status setiap bundel disimpan segera setelah diterima (Algo-C28-01), penutupan aplikasi di tengah pengiriman tidak membuat bundel yang sudah diterima dikirim ulang.
+
+## 5.15 Kelas SATUSEHATGateway
+
+**Nama Kelas:** SATUSEHATGateway  
+**ID Kelas:** C15
+
+Berbeda dari empat belas kelas sebelumnya, `SATUSEHATGateway` tidak memiliki layar. Kelas ini berada di *Data Access Layer* dan menjadi satu-satunya komponen yang menghubungi REST API *sandbox* SATUSEHAT. Tipe kembalian `ResponsKirim` adalah objek nilai berisi tiga isian, yaitu `berhasil: boolean`, `kode: String` (kode penerimaan dari SATUSEHAT), dan `alasan: String` (pesan penolakan). `ResponsKirim` tidak memiliki perilaku sehingga tidak diberi ID kelas tersendiri.
+
+Tabel 5.15.1. Operasi Kelas SATUSEHATGateway
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `periksaKoneksi(): boolean` | public | Mengembalikan `true` bila layanan SATUSEHAT dapat dijangkau lewat internet, dan `false` bila tidak. Tidak pernah melempar pengecualian karena dipanggil hanya untuk menentukan jalur daring atau luring (KF20, KF22, Algo-C15-01). |
+| `kirimBundel(bundel: BundelFHIREntity): ResponsKirim` | public | Mengirim satu bundel HL7 FHIR R4 ke SATUSEHAT dengan HTTPS REST dan mengembalikan hasilnya sebagai `ResponsKirim` (KF20, KNF07, Algo-C15-02). Kegagalan jaringan menjadi `ResponsKirim` gagal, bukan pengecualian. |
+
+Tabel 5.15.2. Atribut Kelas SATUSEHATGateway
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `alamatLayanan` | private | `String` |
+| `token` | private | `String` |
+
+`alamatLayanan` adalah alamat dasar API FHIR R4 *sandbox* SATUSEHAT yang dibaca dari berkas konfigurasi SEHATI pada Komputer Loket. `token` adalah token akses OAuth2 yang diperoleh dari identitas klien yang juga tersimpan pada berkas konfigurasi. Nilainya `null` sampai pengiriman pertama dan diperbarui otomatis bila SATUSEHAT menolak token yang kedaluwarsa. Hanya Komputer Loket yang memiliki jalur ke internet (Gambar 3), sehingga kelas ini hanya dibuat di komputer tersebut.
+
+### 5.15.1 Algoritma Pemeriksaan Koneksi
+
+**Nama Kelas:** SATUSEHATGateway  
+**Nama Operasi:** `periksaKoneksi(): boolean`  
+**ID Algoritma:** Algo-C15-01
+
+```text
+FUNGSI periksaKoneksi() -> boolean
+    COBA
+        respons <- HTTP GET alamatLayanan + "/metadata" dengan batas waktu 3 detik
+        KEMBALIKAN respons.kode < 500
+    TANGKAP IOException ATAU waktu habis
+        KEMBALIKAN false
+    AKHIR COBA
+```
+
+Kode tanggapan di bawah 500 sudah menunjukkan layanan dapat dijangkau, walaupun halaman itu menolak permintaan tanpa token. Batas waktu 3 detik menjaga layar tidak menggantung saat internet putus, sehingga tombol "Ekspor Bundel" cepat muncul (KF20).
+
+### 5.15.2 Algoritma Pengiriman Bundel
+
+**Nama Kelas:** SATUSEHATGateway  
+**Nama Operasi:** `kirimBundel(bundel: BundelFHIREntity): ResponsKirim`  
+**ID Algoritma:** Algo-C15-02
+
+```text
+FUNGSI kirimBundel(bundel) -> ResponsKirim
+    JIKA token = null MAKA token <- mintaToken() AKHIR JIKA
+    UNTUK percobaan <- 1 SAMPAI 2
+        COBA
+            respons <- HTTP POST alamatLayanan dengan tubuh bundel.isiBundel,
+                       header Content-Type "application/fhir+json" dan Authorization "Bearer " + token,
+                       batas waktu 30 detik
+        TANGKAP IOException ATAU waktu habis
+            KEMBALIKAN ResponsKirim(berhasil <- false, kode <- "", alasan <- "Koneksi ke SATUSEHAT terputus")
+        AKHIR COBA
+        JIKA respons.kode = 401 DAN percobaan = 1 MAKA
+            token <- mintaToken()                            // token kedaluwarsa, ulangi sekali
+            LANJUT
+        AKHIR JIKA
+        JIKA respons.kode DI [200, 201] MAKA
+            KEMBALIKAN ResponsKirim(berhasil <- true, kode <- id sumber daya pada tubuh respons, alasan <- "")
+        AKHIR JIKA
+        KEMBALIKAN ResponsKirim(berhasil <- false, kode <- "", alasan <- diagnostik pertama pada OperationOutcome respons)
+    AKHIR UNTUK
+```
+
+`mintaToken()` adalah fungsi bantu lokal yang meminta token akses dengan identitas klien dari berkas konfigurasi. Bundel yang ditolak SATUSEHAT dengan kode 400 mengembalikan alasan dari `OperationOutcome`, sehingga `SinkronisasiForm` dapat menampilkan alasan penolakannya kepada petugas (skenario alternatif 2 UC11). Kelas ini tidak mengubah status bundel. `SinkronisasiManager` yang memutuskan apakah bundel ditandai terkirim atau gagal (Algo-C28-01).
+
+## 5.16 Kelas KonfigurasiForm
+
+**Nama Kelas:** KonfigurasiForm  
+**ID Kelas:** C16
+
+Tabel 5.16.1. Operasi Kelas KonfigurasiForm
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanData(): void` | public | Memuat data master lewat `KonfigurasiManager.muatDataMaster()` dan status pencadangan lewat `muatStatusPencadangan()` lalu membuka tab pertama (KF15, KF21, UC12). |
+| `bukaTab(tab: String): void` | public | Berpindah antara tab "Akun Pengguna", "Data Master", dan "Pemeliharaan Basis Data". Tab "Pemeliharaan Basis Data" memuat status pencadangan setiap dibuka (skenario alternatif 1 UC12). |
+| `kirimPerubahan(): void` | public | Menyimpan akun baru atau perubahan akun pada tab "Akun Pengguna", atau perubahan ambang risiko pada tab "Data Master" (Algo-C16-01). Terhubung ke pintasan Ctrl+S. |
+| `kirimNonaktifkan(idPengguna: int): void` | public | Memanggil `KonfigurasiManager.nonaktifkanAkun()` setelah petugas mengonfirmasi (skenario alternatif 3 UC12). |
+| `kirimPencadangan(): void` | public | Memanggil `KonfigurasiManager.jalankanPencadangan()` lalu menampilkan hasilnya lewat `tampilkanStatusPencadangan()` (KF21). Layar menampilkan penanda sedang berjalan karena `pg_dump` dapat memakan waktu. |
+| `tampilkanStatusPencadangan(p: PencadanganEntity): void` | public | Menampilkan waktu, ukuran, status, dan lokasi media pencadangan terakhir. Bila `p.berhasil()` bernilai `false`, layar menampilkan peringatan merah sampai pencadangan berikutnya berhasil (KF21, skenario alternatif 4 UC12). |
+| `tampilkanPesan(pesan: String): void` | public | Menampilkan pesan pada bilah di dasar layar, misalnya "Nama pengguna sudah terdaftar" atau "Akun dinonaktifkan" (skenario alternatif 2 UC12). |
+
+Tabel 5.16.2. Atribut Kelas KonfigurasiForm
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `tabAktif` | private | `String` |
+| `isianData` | private | `String` |
+
+`isianData` menyimpan nilai kolom yang sedang disunting pada tab aktif sebelum dikirim, dan dibersihkan saat pengguna berpindah tab. Hanya peran Petugas Administrasi yang dapat membuka layar ini (Algo-C17-02).
+
+### 5.16.1 Algoritma Pengiriman Perubahan
+
+**Nama Kelas:** KonfigurasiForm  
+**Nama Operasi:** `kirimPerubahan(): void`  
+**ID Algoritma:** Algo-C16-01
+
+```text
+PROSEDUR kirimPerubahan()
+    COBA
+        JIKA tabAktif = "Akun Pengguna" MAKA
+            p <- PenggunaEntity dari isian akun               // idPengguna 0 bila akun baru
+            konfigurasiManager.simpanAkun(p, kolom kata sandi)
+            tampilkanPesan("Akun disimpan")
+        SELAIN ITU JIKA tabAktif = "Data Master" MAKA
+            a <- AmbangRisikoEntity dari isian ambang
+            konfigurasiManager.simpanDataMaster(a)
+            tampilkanPesan("Ambang risiko disimpan")
+        AKHIR JIKA
+        konfigurasiManager.muatDataMaster()                  // tabel akun dan data master disegarkan
+    TANGKAP IllegalArgumentException galat
+        tandai kolom nama pengguna JIKA galat.pesan = "Nama pengguna sudah dipakai"
+        tampilkanPesan(galat.pesan)
+    AKHIR COBA
+```
+
+Kolom kata sandi yang dibiarkan kosong saat menyunting akun lama berarti kata sandi tidak diganti (Algo-C29-01). Isi kolom itu dihapus dari memori layar segera setelah dikirim.
 
 ## 5.17 Kelas AutentikasiManager
 
@@ -2282,9 +3083,977 @@ FUNGSI jalankanPencadangan() -> PencadanganEntity
 
 Hasil gagal tetap disimpan sebagai catatan. `muatStatusPencadangan()` selalu mengembalikan catatan terakhir, sehingga peringatan pada dasbor administrasi baru hilang setelah ada pencadangan berikutnya yang berhasil (KF21).
 
-## 5.30 – 5.55 Kelas Entity (C30 – C55)
+## 5.30 Kelas PenggunaEntity
 
-> *Sedang dikerjakan.* Subbab 5.30 sampai 5.55 merinci 26 kelas `Entity` pada *Business Layer*, mengikuti pola Subbab 5.17.
+**Nama Kelas:** PenggunaEntity  
+**ID Kelas:** C30
+
+Subbab 5.30 sampai 5.55 merinci 26 kelas `Entity` di *Business Layer*. Seluruh *entity* hanya memegang data dan aturan domain miliknya sendiri. *Entity* tidak mengakses basis data dan tidak memanggil kelas lain, karena penyimpanan sudah dipindahkan ke `DataBoundary` (Subbab 4.1). Karena itu algoritma pada subbab ini hanya berisi pemeriksaan dan perhitungan atas atribut objek itu sendiri, dan pengecualian yang dilempar mengikuti kesepakatan 3 pada awal bab ini. Tipe kembalian yang berupa `boolean` dan hasil hitung tidak mengubah keadaan objek. Hubungan komposisi dan asosiasi pada Gambar 58, misalnya antara `ResepEntity` dan `ItemResepEntity`, diwujudkan sebagai referensi objek yang dipegang di memori dan tidak menjadi atribut persisten pada Tabel 4.1. Referensi itu dipetakan `DataBoundary` ke kunci asing pada kueri yang bersangkutan (Subbab 5.56 sampai 5.64).
+
+Tabel 5.30.1. Operasi Kelas PenggunaEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `cocokkanSandi(sandi: String): boolean` | public | Mengembalikan `true` bila `sandi` cocok dengan `kataSandiHash` lewat perbandingan bcrypt. Mengembalikan `false` bila `sandi` atau hash kosong (UC01, KNF04). |
+| `aktif(): boolean` | public | Mengembalikan `true` bila `status` bernilai "aktif" (UC01). |
+| `nonaktifkan(): void` | public | Mengubah `status` menjadi "nonaktif" (UC12). Melempar `IllegalStateException` bila akun sudah nonaktif. |
+
+Tabel 5.30.2. Atribut Kelas PenggunaEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idPengguna` | private | `int` |
+| `namaPengguna` | private | `String` |
+| `kataSandiHash` | private | `String` |
+| `peran` | private | `String` |
+| `status` | private | `String` |
+
+`idPengguna` bernilai 0 sampai akun disimpan dan baru terisi setelah `DataAkunBoundary.simpanPengguna()` (aturan 2 Subbab 5.56). `peran` bernilai salah satu dari "Petugas Administrasi", "Perawat", "Dokter", atau "Petugas Farmasi" (Algo-C29-01), dan `status` bernilai "aktif" atau "nonaktif". `kataSandiHash` menyimpan hasil bcrypt, tidak pernah kata sandi asli (KNF04). Pembentukan akun baru memakai konstruktor `PenggunaEntity baru(nama, hash, peran)` yang mengisi `status` dengan "aktif".
+
+### 5.30.1 Algoritma Pencocokan Kata Sandi
+
+**Nama Kelas:** PenggunaEntity  
+**Nama Operasi:** `cocokkanSandi(sandi: String): boolean`  
+**ID Algoritma:** Algo-C30-01
+
+```text
+FUNGSI cocokkanSandi(sandi) -> boolean
+    JIKA sandi = null ATAU sandi kosong ATAU kataSandiHash kosong MAKA
+        KEMBALIKAN false
+    AKHIR JIKA
+    COBA
+        KEMBALIKAN BCrypt.checkpw(sandi, kataSandiHash)
+    TANGKAP IllegalArgumentException                     // format hash rusak
+        KEMBALIKAN false
+    AKHIR COBA
+
+FUNGSI aktif() -> boolean
+    KEMBALIKAN status = "aktif"
+
+PROSEDUR nonaktifkan()
+    JIKA status = "nonaktif" MAKA
+        LEMPAR IllegalStateException("Akun sudah nonaktif")
+    AKHIR JIKA
+    status <- "nonaktif"
+```
+
+`BCrypt.checkpw()` membaca faktor biaya dan garam dari dalam hash, sehingga akun lama tetap dapat masuk walaupun faktor biaya untuk akun baru dinaikkan di kemudian hari. Hash yang rusak dianggap tidak cocok dan tidak melempar pengecualian ke `AutentikasiManager`, agar akun yang datanya rusak diperlakukan sama dengan kata sandi yang salah.
+
+## 5.31 Kelas SesiEntity
+
+**Nama Kelas:** SesiEntity  
+**ID Kelas:** C31
+
+Tabel 5.31.1. Operasi Kelas SesiEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `habisWaktu(menit: int): boolean` | public | Mengembalikan `true` bila waktu sejak `waktuMulai` sudah sama dengan atau lebih dari `menit` menit (KNF04). Pewaktu diam memanggilnya dengan 15. |
+| `tutup(): void` | public | Mengubah `statusAktif` menjadi `false` saat pengguna keluar atau sesi habis (UC01). |
+
+Tabel 5.31.2. Atribut Kelas SesiEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idSesi` | private | `UUID` |
+| `idPengguna` | private | `int` |
+| `waktuMulai` | private | `LocalDateTime` |
+| `statusAktif` | private | `boolean` |
+
+`idSesi` dibangkitkan dengan `UUID.randomUUID()` di Java saat sesi dibuat (Q-C56-06). `SesiEntity` hanya menyimpan `waktuMulai`, sehingga batas diam 15 menit dihitung dengan menggeser `waktuMulai` pada objek di memori ke saat aktivitas terakhir pengguna, misalnya ketukan tombol atau klik. Waktu masuk yang tersimpan di basis data tidak berubah karena kueri Q-C56-06 hanya memutakhirkan `status_aktif`.
+
+### 5.31.1 Algoritma Pemeriksaan Batas Diam
+
+**Nama Kelas:** SesiEntity  
+**Nama Operasi:** `habisWaktu(menit: int): boolean` dan `tutup(): void`  
+**ID Algoritma:** Algo-C31-01
+
+```text
+FUNGSI habisWaktu(menit) -> boolean
+    JIKA menit ≤ 0 MAKA
+        LEMPAR IllegalArgumentException("Batas waktu harus lebih dari nol")
+    AKHIR JIKA
+    KEMBALIKAN selisih menit antara waktuMulai dan waktu sekarang ≥ menit
+
+PROSEDUR tutup()
+    statusAktif <- false
+```
+
+Pewaktu pada bilah aplikasi memanggil `habisWaktu(15)` tiap menit. Bila hasilnya `true`, aplikasi menutup sesi lewat `tutup()`, menyimpannya lewat `DataAkunBoundary.simpanSesi()`, lalu menampilkan `LoginForm` (KNF04). Pemanggilan `tutup()` pada sesi yang sudah tertutup tidak mengubah apa pun.
+
+## 5.32 Kelas AuditEntity
+
+**Nama Kelas:** AuditEntity  
+**ID Kelas:** C32
+
+Tabel 5.32.1. Operasi Kelas AuditEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `buat(idPengguna: int, deskripsi: String)$: AuditEntity` | public | Operasi *static*. Membuat catatan audit dengan waktu saat ini tanpa menyimpannya. Penyimpanan dilakukan `DataAkunBoundary.simpanAudit()` (KF16). Melempar `IllegalArgumentException` bila `deskripsi` kosong. |
+
+Tabel 5.32.2. Atribut Kelas AuditEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idAudit` | private | `long` |
+| `idPengguna` | private | `int` |
+| `waktu` | private | `LocalDateTime` |
+| `deskripsi` | private | `String` |
+
+`idAudit` bernilai 0 sampai catatan disimpan dan diisi basis data. `idPengguna` bernilai 0 untuk percobaan masuk dengan nama yang tidak dikenal (Algo-C17-01). `AuditEntity` tidak memiliki operasi pengubah, sehingga setelah dibuat isinya tidak dapat diubah dari kode aplikasi. Hal ini sejalan dengan `DataAkunBoundary` yang sengaja tidak menyediakan operasi untuk mengubah atau menghapus audit (KNF05).
+
+### 5.32.1 Algoritma Pembuatan Catatan Audit
+
+**Nama Kelas:** AuditEntity  
+**Nama Operasi:** `buat(idPengguna: int, deskripsi: String)$: AuditEntity`  
+**ID Algoritma:** Algo-C32-01
+
+```text
+FUNGSI STATIS buat(idPengguna, deskripsi) -> AuditEntity
+    JIKA deskripsi = null ATAU deskripsi kosong MAKA
+        LEMPAR IllegalArgumentException("Deskripsi audit wajib diisi")
+    AKHIR JIKA
+    a <- AuditEntity baru
+    a.idAudit     <- 0
+    a.idPengguna  <- idPengguna
+    a.waktu       <- waktu sekarang
+    a.deskripsi   <- deskripsi
+    KEMBALIKAN a
+```
+
+Waktu diambil dari jam komputer client saat catatan dibuat, bukan saat disimpan, sehingga catatan yang dibuat di dalam satu transaksi memiliki urutan waktu yang sama dengan urutan kejadiannya.
+
+## 5.33 Kelas PasienEntity
+
+**Nama Kelas:** PasienEntity  
+**ID Kelas:** C33
+
+Tabel 5.33.1. Operasi Kelas PasienEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `perbarui(data: PasienEntity): void` | public | Menyalin NIK, nama, tanggal lahir, jenis kelamin, alamat, dan nomor telepon dari `data` ke objek ini. `idPasien` dan `nomorRekamMedis` tidak ikut berubah (KF02, UC02). |
+
+Tabel 5.33.2. Atribut Kelas PasienEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idPasien` | private | `int` |
+| `nik` | private | `String` |
+| `nomorRekamMedis` | private | `String` |
+| `nama` | private | `String` |
+| `tanggalLahir` | private | `LocalDate` |
+| `jenisKelamin` | private | `String` |
+| `alamat` | private | `String` |
+| `nomorTelepon` | private | `String` |
+
+`nik` terdiri atas 16 digit dan `nomorRekamMedis` berbentuk `RM-` diikuti enam digit, misalnya `RM-000123` (Q-C57-04). `jenisKelamin` bernilai "Laki-laki" atau "Perempuan". `nomorTelepon` boleh kosong. Validasi NIK dijalankan `PasienManager.validasiNIK()` sebelum objek ini diubah, sehingga entity tidak mengulang aturan itu.
+
+### 5.33.1 Algoritma Pembaruan Data Pasien
+
+**Nama Kelas:** PasienEntity  
+**Nama Operasi:** `perbarui(data: PasienEntity): void`  
+**ID Algoritma:** Algo-C33-01
+
+```text
+PROSEDUR perbarui(data)
+    JIKA data = null MAKA
+        LEMPAR IllegalArgumentException("Data pasien kosong")
+    AKHIR JIKA
+    nik           <- data.nik
+    nama          <- data.nama
+    tanggalLahir  <- data.tanggalLahir
+    jenisKelamin  <- data.jenisKelamin
+    alamat        <- data.alamat
+    nomorTelepon  <- data.nomorTelepon                  // idPasien dan nomorRekamMedis sengaja tidak disalin
+```
+
+Dengan tidak menyalin `nomorRekamMedis`, nomor itu tidak dapat berubah sepanjang hidup pasien walaupun formulir penyuntingan dikirim dengan nilai yang berbeda. Hal ini menjaga kunci pencarian dan referensi pasien di seluruh dokumen klinis (KF02).
+
+## 5.34 Kelas RekamMedisEntity
+
+**Nama Kelas:** RekamMedisEntity  
+**ID Kelas:** C34
+
+Tabel 5.34.1. Operasi Kelas RekamMedisEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tambahEntri(catatan: String): void` | public | Menambahkan satu catatan ke akhir daftar entri baru milik objek ini, misalnya hasil tindak lanjut pada UC09. Catatan yang sudah tersimpan tidak pernah diubah. Melempar `IllegalArgumentException` bila `catatan` kosong. |
+
+Tabel 5.34.2. Atribut Kelas RekamMedisEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idRekamMedis` | private | `int` |
+| `daftarDiagnosis` | private | `List<DiagnosisEntity>` |
+| `riwayatObat` | private | `List<String>` |
+
+`daftarDiagnosis` berisi diagnosis dari pemeriksaan yang sudah dikunci dan `riwayatObat` berisi teks satu baris per obat yang sudah diserahkan, keduanya hasil Q-C57-09 dan Q-C57-10 yang hanya dibaca. Entri dari `tambahEntri()` ditampung pada penampung sementara di dalam objek, bukan pada kedua atribut itu, sampai `DataPasienBoundary.simpanRekamMedis()` menyisipkannya (Q-C57-11). Penanda risiko aktif pada ringkasan (KF09) tidak disimpan di entity ini. Penanda itu dipasangkan pada tampilan oleh `PemeriksaanManager.susunRingkasan()` dari `DataKlinisBoundary.penandaKunjungan()`.
+
+### 5.34.1 Algoritma Penambahan Entri
+
+**Nama Kelas:** RekamMedisEntity  
+**Nama Operasi:** `tambahEntri(catatan: String): void`  
+**ID Algoritma:** Algo-C34-01
+
+```text
+PROSEDUR tambahEntri(catatan)
+    JIKA catatan = null ATAU catatan kosong MAKA
+        LEMPAR IllegalArgumentException("Catatan rekam medis wajib diisi")
+    AKHIR JIKA
+    tambahkan catatan ke akhir daftar entri baru
+```
+
+Daftar entri baru hanya dapat bertambah dan dikosongkan oleh `DataPasienBoundary` setelah tersimpan. Tidak ada operasi untuk mengubah atau menghapus entri, sehingga catatan klinis yang sudah masuk tidak dapat ditimpa (KNF05).
+
+## 5.35 Kelas KunjunganEntity
+
+**Nama Kelas:** KunjunganEntity  
+**ID Kelas:** C35
+
+Tabel 5.35.1. Operasi Kelas KunjunganEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `perbaruiStatus(status: String): void` | public | Mengubah `status` bila nilainya salah satu status sah dan kunjungan belum "selesai". Melempar `IllegalArgumentException` untuk status yang tidak dikenal dan `IllegalStateException` untuk kunjungan yang sudah selesai (KF03, KF04, KF14). |
+| `aktifHariIni(): boolean` | public | Mengembalikan `true` bila `tanggal` adalah hari ini dan `status` belum "selesai". Aturan yang sama dipakai Q-C58-05 untuk mencegah kunjungan ganda (skenario alternatif 1 UC03). |
+
+Tabel 5.35.2. Atribut Kelas KunjunganEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idKunjungan` | private | `int` |
+| `idPasien` | private | `int` |
+| `tanggal` | private | `LocalDate` |
+| `nomorAntrean` | private | `int` |
+| `status` | private | `String` |
+
+Status sah berjalan menurut alur pelayanan, yaitu "menunggu skrining", "sedang diskrining", "siap diperiksa dokter", "selesai diperiksa", dan "selesai", ditambah "tidak hadir" untuk pasien yang dilewati (Algo-C20-03). Poli tujuan tidak menjadi atribut karena hanya dipakai saat nomor antrean diterbitkan dan untuk rekapitulasi, sehingga `DataKunjunganBoundary` menyimpannya sebagai kolom `id_poli` (Q-C58-07).
+
+### 5.35.1 Algoritma Perubahan Status Kunjungan
+
+**Nama Kelas:** KunjunganEntity  
+**Nama Operasi:** `perbaruiStatus(status: String): void`  
+**ID Algoritma:** Algo-C35-01
+
+```text
+KONSTANTA STATUS_SAH <- {"menunggu skrining", "sedang diskrining", "tidak hadir",
+                         "siap diperiksa dokter", "selesai diperiksa", "selesai"}
+
+PROSEDUR perbaruiStatus(status)
+    JIKA status TIDAK ADA DI STATUS_SAH MAKA
+        LEMPAR IllegalArgumentException("Status kunjungan tidak dikenal: " + status)
+    AKHIR JIKA
+    JIKA objek.status = "selesai" MAKA
+        LEMPAR IllegalStateException("Kunjungan sudah selesai dan tidak dapat diubah")
+    AKHIR JIKA
+    objek.status <- status
+
+FUNGSI aktifHariIni() -> boolean
+    KEMBALIKAN tanggal = hari ini DAN status ≠ "selesai"
+```
+
+Kunjungan yang sudah "selesai" sudah memotong stok dan menyusun bundel FHIR (Algo-C24-01), sehingga statusnya dikunci agar kunjungan tidak dapat dibuka kembali tanpa menghasilkan bundel kedua.
+
+## 5.36 Kelas PoliEntity
+
+**Nama Kelas:** PoliEntity  
+**ID Kelas:** C36
+
+Tabel 5.36.1. Operasi Kelas PoliEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `ambilNomorBerikutnya(hariIni: LocalDate): int` | public | Menaikkan `urutanTerakhir` satu angka dan mengembalikannya sebagai nomor antrean. Bila `tanggalUrutan` bukan `hariIni`, urutan dimulai lagi dari 1 (KF03, skenario alternatif 3 UC03). |
+
+Tabel 5.36.2. Atribut Kelas PoliEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idPoli` | private | `int` |
+| `namaPoli` | private | `String` |
+| `urutanTerakhir` | private | `int` |
+| `tanggalUrutan` | private | `LocalDate` |
+
+`urutanTerakhir` adalah nomor antrean terakhir yang diterbitkan pada `tanggalUrutan`. Operasi ini hanya mengubah objek di memori dan dipanggil di dalam transaksi `bukaKunjungan()` setelah baris poli dikunci (Algo-C19-02).
+
+### 5.36.1 Algoritma Pengambilan Nomor Berikutnya
+
+**Nama Kelas:** PoliEntity  
+**Nama Operasi:** `ambilNomorBerikutnya(hariIni: LocalDate): int`  
+**ID Algoritma:** Algo-C36-01
+
+```text
+FUNGSI ambilNomorBerikutnya(hariIni) -> int
+    JIKA tanggalUrutan ≠ hariIni MAKA
+        tanggalUrutan  <- hariIni
+        urutanTerakhir <- 0                               // hari pelayanan berganti, urutan dimulai dari awal
+    AKHIR JIKA
+    urutanTerakhir <- urutanTerakhir + 1
+    KEMBALIKAN urutanTerakhir
+```
+
+Pergantian hari tidak membutuhkan penjadwal yang mengatur ulang urutan tengah malam. Setiap poli menyetel ulang urutannya sendiri pada kunjungan pertama hari itu, sehingga komputer yang mati atau jam yang terlewat tidak merusak penomoran (KF03).
+
+## 5.37 Kelas AntreanEntity
+
+**Nama Kelas:** AntreanEntity  
+**ID Kelas:** C37
+
+Tabel 5.37.1. Operasi Kelas AntreanEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tambahkan(idEntri: int): void` | public | Menambahkan `idEntri` ke akhir `daftarEntri`. Entri yang sudah ada tidak ditambahkan lagi (UC03, UC06). |
+| `ambilTerdepan(): KunjunganEntity` | public | Mengembalikan rujukan ke kunjungan pada urutan terdepan, atau `null` bila antrean kosong. Operasi ini tidak mengeluarkan entri (UC04). |
+| `pindahkanKeBelakang(idEntri: int): void` | public | Memindahkan `idEntri` ke akhir `daftarEntri`. Melempar `IllegalArgumentException` bila entri tidak ada (skenario alternatif 1 UC04). |
+| `keluarkan(idEntri: int): void` | public | Menghapus `idEntri` dari `daftarEntri`. Melempar `IllegalArgumentException` bila entri tidak ada (UC04, UC07). |
+
+Tabel 5.37.2. Atribut Kelas AntreanEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idAntrean` | private | `int` |
+| `jenis` | private | `String` |
+| `daftarEntri` | private | `List<Integer>` |
+
+`jenis` bernilai "skrining" atau "apotek". `daftarEntri` berisi `idKunjungan` untuk antrean "skrining" dan `idResep` untuk antrean "apotek", dalam urutan layanan. Rujukan dari `ambilTerdepan()` adalah `KunjunganEntity` yang hanya `idKunjungan`-nya terisi, karena entity ini tidak membaca basis data. Layar menampilkan data lengkap kunjungan itu dari hasil `SkriningManager.muatAntrean()`. Untuk antrean "apotek", `ApotekManager` membaca urutan resep dari `DataFarmasiBoundary` dan tidak memakai `ambilTerdepan()`.
+
+### 5.37.1 Algoritma Pengelolaan Isi Antrean
+
+**Nama Kelas:** AntreanEntity  
+**Nama Operasi:** `tambahkan()`, `ambilTerdepan()`, `pindahkanKeBelakang()`, dan `keluarkan()`  
+**ID Algoritma:** Algo-C37-01
+
+```text
+PROSEDUR tambahkan(idEntri)
+    JIKA idEntri BUKAN anggota daftarEntri MAKA
+        tambahkan idEntri ke akhir daftarEntri
+    AKHIR JIKA
+
+FUNGSI ambilTerdepan() -> KunjunganEntity
+    JIKA daftarEntri KOSONG MAKA KEMBALIKAN null AKHIR JIKA
+    k <- KunjunganEntity kosong
+    k.idKunjungan <- daftarEntri[1]
+    KEMBALIKAN k
+
+PROSEDUR pindahkanKeBelakang(idEntri)
+    keluarkan(idEntri)
+    tambahkan idEntri ke akhir daftarEntri
+
+PROSEDUR keluarkan(idEntri)
+    JIKA idEntri BUKAN anggota daftarEntri MAKA
+        LEMPAR IllegalArgumentException("Entri tidak ada pada antrean " + jenis)
+    AKHIR JIKA
+    hapus idEntri dari daftarEntri
+```
+
+`tambahkan()` mengabaikan entri yang sudah ada sehingga satu kunjungan tidak pernah tampil dua kali bila permintaan yang sama terkirim ulang. Semua perubahan terjadi di memori. Antrean baru berubah di basis data setelah `DataKunjunganBoundary.simpanAntrean()` menulis ulang isinya di dalam transaksi `Manager` (Algo-C58-01).
+
+## 5.38 Kelas SkriningEntity
+
+**Nama Kelas:** SkriningEntity  
+**ID Kelas:** C38
+
+Tabel 5.38.1. Operasi Kelas SkriningEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `lampirkanTandaVital(tv: TandaVitalEntity): void` | public | Menautkan hasil pengukuran `tv` pada skrining ini sebelum disimpan. Melempar `IllegalArgumentException` bila `tv` kosong (KF05). |
+
+Tabel 5.38.2. Atribut Kelas SkriningEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idSkrining` | private | `int` |
+| `idKunjungan` | private | `int` |
+| `keluhanAwal` | private | `String` |
+| `waktu` | private | `LocalDateTime` |
+
+`TandaVitalEntity` yang dilampirkan dipegang sebagai referensi objek, yaitu komposisi pada Gambar 58, dan `DataKlinisBoundary.simpanSkrining()` menyimpannya ke tabel `tanda_vital` dalam transaksi yang sama (Q-C59-02). Satu kunjungan memiliki satu skrining. Pengukuran kedua pada kunjungan yang sama ditolak UNIQUE pada `skrining.id_kunjungan` (Q-C59-01). `keluhanAwal` adalah teks bebas dan boleh kosong.
+
+## 5.39 Kelas TandaVitalEntity
+
+**Nama Kelas:** TandaVitalEntity  
+**ID Kelas:** C39
+
+Tabel 5.39.1. Operasi Kelas TandaVitalEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `hitungIMT(): double` | public | Menghitung indeks massa tubuh dari `beratBadan` dan `tinggiBadan`. Melempar `IllegalStateException` bila tinggi badan belum terisi atau tidak positif (KF07, risiko obesitas). |
+
+Tabel 5.39.2. Atribut Kelas TandaVitalEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `sistolik` | private | `int` |
+| `diastolik` | private | `int` |
+| `beratBadan` | private | `double` |
+| `tinggiBadan` | private | `double` |
+| `suhu` | private | `double` |
+| `nadi` | private | `int` |
+| `gulaDarah` | private | `Integer` |
+
+Satuan atribut adalah mmHg untuk `sistolik` dan `diastolik`, kg untuk `beratBadan`, cm untuk `tinggiBadan`, °C untuk `suhu`, kali per menit untuk `nadi`, dan mg/dL untuk `gulaDarah`. Hanya `gulaDarah` yang bertipe `Integer` karena boleh `null` bila pemeriksaan gula darah sewaktu tidak dilakukan (KF05). Rentang wajar tiap nilai ditetapkan `SkriningManager` (Algo-C20-02), bukan entity ini.
+
+### 5.39.1 Algoritma Perhitungan IMT
+
+**Nama Kelas:** TandaVitalEntity  
+**Nama Operasi:** `hitungIMT(): double`  
+**ID Algoritma:** Algo-C39-01
+
+```text
+FUNGSI hitungIMT() -> double
+    JIKA tinggiBadan ≤ 0 MAKA
+        LEMPAR IllegalStateException("Tinggi badan belum terisi")
+    AKHIR JIKA
+    meter <- tinggiBadan / 100
+    KEMBALIKAN beratBadan / (meter × meter)
+```
+
+Hasilnya tidak dibulatkan agar perbandingan dengan ambang pada `AmbangRisikoEntity.dilampaui()` tidak bergeser oleh pembulatan. Layar membulatkannya satu desimal hanya untuk tampilan.
+
+## 5.40 Kelas AmbangRisikoEntity
+
+**Nama Kelas:** AmbangRisikoEntity  
+**ID Kelas:** C40
+
+Tabel 5.40.1. Operasi Kelas AmbangRisikoEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `dilampaui(nilai: double): boolean` | public | Mengembalikan `true` bila `nilai` mencapai atau melebihi `nilaiBatas` (KF07, UC04). |
+
+Tabel 5.40.2. Atribut Kelas AmbangRisikoEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idAmbang` | private | `int` |
+| `jenisRisiko` | private | `String` |
+| `nilaiBatas` | private | `double` |
+
+Terdapat tiga ambang tetap, yaitu "hipertensi" untuk tekanan darah sistolik dalam mmHg, "obesitas" untuk IMT dalam kg/m², dan "indikasi diabetes" untuk gula darah sewaktu dalam mg/dL (KF07). Nilai awal pada data master adalah 140, 30, dan 200, yang masing-masing merupakan batas bawah kategori klinisnya. Petugas Administrasi dapat mengubah `nilaiBatas`, tetapi tidak dapat menambah atau menghapus jenis risiko (Q-C59-07).
+
+### 5.40.1 Algoritma Pemeriksaan Ambang
+
+**Nama Kelas:** AmbangRisikoEntity  
+**Nama Operasi:** `dilampaui(nilai: double): boolean`  
+**ID Algoritma:** Algo-C40-01
+
+```text
+FUNGSI dilampaui(nilai) -> boolean
+    KEMBALIKAN nilai ≥ nilaiBatas
+```
+
+`RisikoManager` memanggil operasi ini dengan nilai yang tidak `null` (Algo-C21-01), sehingga gula darah yang tidak diukur tidak pernah dianggap melampaui ambang. Perbandingan memakai "sama dengan atau lebih" karena setiap ambang awal adalah nilai batas bawah kategori, misalnya sistolik tepat 140 mmHg sudah tergolong hipertensi.
+
+## 5.41 Kelas PenandaRisikoEntity
+
+**Nama Kelas:** PenandaRisikoEntity  
+**ID Kelas:** C41
+
+Tabel 5.41.1. Operasi Kelas PenandaRisikoEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `cabut(): void` | public | Mengubah `status` dari "aktif" menjadi "dicabut" sehingga penanda tidak muncul lagi pada ringkasan rekam medis (KF07, KF09). Melempar `IllegalStateException` bila penanda sudah dicabut. |
+
+Tabel 5.41.2. Atribut Kelas PenandaRisikoEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idPenanda` | private | `int` |
+| `idKunjungan` | private | `int` |
+| `jenisRisiko` | private | `String` |
+| `tanggal` | private | `LocalDate` |
+| `status` | private | `String` |
+
+Penanda baru diterbitkan `RisikoManager.terbitkanPenanda()` dengan `tanggal` hari ini dan `status` "aktif". Penanda yang dicabut tetap tersimpan sebagai riwayat dan hanya tidak dikembalikan lagi oleh `penandaKunjungan()` (Q-C59-10). Penyimpanannya memakai kueri Q-C59-09.
+
+## 5.42 Kelas PemeriksaanEntity
+
+**Nama Kelas:** PemeriksaanEntity  
+**ID Kelas:** C42
+
+Tabel 5.42.1. Operasi Kelas PemeriksaanEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `kunci(): void` | public | Mengubah `terkunci` menjadi `true` sehingga hasil pemeriksaan tidak dapat diubah lagi. Melempar `IllegalStateException` bila sudah terkunci (UC05). |
+
+Tabel 5.42.2. Atribut Kelas PemeriksaanEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idPemeriksaan` | private | `int` |
+| `idKunjungan` | private | `int` |
+| `anamnesis` | private | `String` |
+| `tindakan` | private | `String` |
+| `terkunci` | private | `boolean` |
+
+Satu kunjungan memiliki satu pemeriksaan (Q-C59-12). Selama `terkunci` bernilai `false`, hasil pemeriksaan adalah draf yang dapat ditimpa dokter berulang kali. Setelah dikunci, perubahan ditolak dua kali: oleh `PemeriksaanManager` (Algo-C22-01) dan oleh klausa `WHERE pemeriksaan.terkunci = FALSE` pada Q-C59-12. Diagnosis tidak menjadi atribut karena hanya `DiagnosisEntity` yang membawa kode ICD-10, dan `simpanPemeriksaan()` menerimanya sebagai parameter terpisah.
+
+## 5.43 Kelas DiagnosisEntity
+
+**Nama Kelas:** DiagnosisEntity  
+**ID Kelas:** C43
+
+Tabel 5.43.1. Operasi Kelas DiagnosisEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `ringkas(): String` | public | Mengembalikan satu baris teks berbentuk `kodeICD10 + " - " + deskripsi`, misalnya "I10 - Hipertensi esensial (primer)". Dipakai untuk riwayat pada ringkasan rekam medis dan ringkasan pemeriksaan (KF09, KF10). |
+
+Tabel 5.43.2. Atribut Kelas DiagnosisEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idDiagnosis` | private | `int` |
+| `kodeICD10` | private | `String` |
+| `deskripsi` | private | `String` |
+
+`kodeICD10` adalah *foreign key* ke tabel `kode_icd10` sehingga diagnosis selalu berupa kode standar yang terdaftar (Q-C59-13, KF10). Satu pemeriksaan memiliki satu diagnosis utama, sesuai kolom UNIQUE pada `diagnosis.id_pemeriksaan`. `deskripsi` disalin dari `KodeICD10Entity` saat dokter memilih kode, sehingga ringkasan tetap terbaca walaupun deskripsi pada data master di kemudian hari diperbarui.
+
+## 5.44 Kelas KodeICD10Entity
+
+**Nama Kelas:** KodeICD10Entity  
+**ID Kelas:** C44
+
+Tabel 5.44.1. Operasi Kelas KodeICD10Entity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `cocok(kataKunci: String): boolean` | public | Mengembalikan `true` bila kode berawalan `kataKunci` atau `deskripsi` memuat `kataKunci`, tanpa membedakan huruf besar dan kecil (KF10, UC05). |
+
+Tabel 5.44.2. Atribut Kelas KodeICD10Entity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `kode` | private | `String` |
+| `deskripsi` | private | `String` |
+| `bab` | private | `String` |
+
+`kode` berbentuk huruf diikuti angka, misalnya `I10`, dan `bab` adalah nama bab ICD-10 tempat kode itu berada. Data master ini hanya dibaca, dan tidak ada operasi untuk mengubahnya dari aplikasi.
+
+### 5.44.1 Algoritma Pencocokan Kata Kunci
+
+**Nama Kelas:** KodeICD10Entity  
+**Nama Operasi:** `cocok(kataKunci: String): boolean`  
+**ID Algoritma:** Algo-C44-01
+
+```text
+FUNGSI cocok(kataKunci) -> boolean
+    teks <- kataKunci tanpa spasi di awal dan akhir, dalam huruf kecil
+    JIKA teks kosong MAKA KEMBALIKAN false AKHIR JIKA
+    KEMBALIKAN kode dalam huruf kecil berawalan teks ATAU deskripsi dalam huruf kecil memuat teks
+```
+
+Aturan ini sama dengan klausa WHERE pada Q-C59-11. Pencarian sesungguhnya dijalankan basis data agar memanfaatkan indeks trigram, dan operasi ini dipakai untuk menyaring ulang saran yang sudah ada di layar saat dokter menambah huruf pada kata kunci tanpa kueri baru.
+
+## 5.45 Kelas JadwalKontrolEntity
+
+**Nama Kelas:** JadwalKontrolEntity  
+**ID Kelas:** C45
+
+Tabel 5.45.1. Operasi Kelas JadwalKontrolEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tandaiSelesai(): void` | public | Mengubah `status` dari "terjadwal" menjadi "selesai" saat pasien datang untuk kontrol. Melempar `IllegalStateException` bila `status` bukan "terjadwal" (KF12). |
+
+Tabel 5.45.2. Atribut Kelas JadwalKontrolEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idJadwal` | private | `int` |
+| `idPasien` | private | `int` |
+| `tanggalRencana` | private | `LocalDate` |
+| `status` | private | `String` |
+
+Jadwal dibuat dokter oleh `PemeriksaanManager.jadwalkanKontrol()` dengan `status` "terjadwal" dan `tanggalRencana` setelah hari ini. Selama berstatus "terjadwal", jadwal otomatis menjadi entri "kunjungan ulang" pada daftar pantau (Algo-C21-02, KF12). Penyimpanan status "selesai" memakai Q-C59-16.
+
+## 5.46 Kelas ResepEntity
+
+**Nama Kelas:** ResepEntity  
+**ID Kelas:** C46
+
+Tabel 5.46.1. Operasi Kelas ResepEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `perbaruiStatus(status: String): void` | public | Mengubah `status` resep dari "menunggu" menjadi "selesai dilayani" atau "dikembalikan". Melempar `IllegalArgumentException` untuk status yang tidak dikenal dan `IllegalStateException` bila resep tidak lagi "menunggu" (KF13, KF14). |
+
+Tabel 5.46.2. Atribut Kelas ResepEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idResep` | private | `int` |
+| `idKunjungan` | private | `int` |
+| `waktuMasuk` | private | `LocalDateTime` |
+| `status` | private | `String` |
+| `catatan` | private | `String` |
+
+`ResepEntity` memegang daftar `ItemResepEntity` sebagai komposisi. Daftar itu tidak menjadi atribut kolom, dan `DataFarmasiBoundary` menyimpannya ke tabel `item_resep` (Q-C61-10). Resep baru dibuat dengan `status` "menunggu" dan `waktuMasuk` saat ini. `catatan` berisi alasan bila resep dikembalikan ke dokter (skenario alternatif 1 UC07) dan kosong pada kondisi lain.
+
+### 5.46.1 Algoritma Perubahan Status Resep
+
+**Nama Kelas:** ResepEntity  
+**Nama Operasi:** `perbaruiStatus(status: String): void`  
+**ID Algoritma:** Algo-C46-01
+
+```text
+KONSTANTA STATUS_AKHIR <- {"selesai dilayani", "dikembalikan"}
+
+PROSEDUR perbaruiStatus(status)
+    JIKA status TIDAK ADA DI STATUS_AKHIR MAKA
+        LEMPAR IllegalArgumentException("Status resep tidak dikenal: " + status)
+    AKHIR JIKA
+    JIKA objek.status ≠ "menunggu" MAKA
+        LEMPAR IllegalStateException("Resep berstatus " + objek.status + " dan tidak dapat diubah")
+    AKHIR JIKA
+    objek.status <- status
+```
+
+Status "menunggu" hanya ditetapkan saat resep dibuat, sehingga operasi ini hanya menerima status akhir. Resep yang sudah "selesai dilayani" atau "dikembalikan" tidak dapat diubah lagi. Bila dokter perlu memperbaiki resep yang dikembalikan, dokter membuat resep baru, sehingga resep lama tetap menjadi catatan yang utuh.
+
+## 5.47 Kelas ItemResepEntity
+
+**Nama Kelas:** ItemResepEntity  
+**ID Kelas:** C47
+
+Tabel 5.47.1. Operasi Kelas ItemResepEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `cukupStok(stok: int): boolean` | public | Mengembalikan `true` bila `stok` sedikitnya sebanyak `jumlah` yang diresepkan (KF11, KF14). |
+
+Tabel 5.47.2. Atribut Kelas ItemResepEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idItem` | private | `int` |
+| `idObat` | private | `int` |
+| `dosis` | private | `String` |
+| `jumlah` | private | `int` |
+| `aturanPakai` | private | `String` |
+
+`dosis` dan `aturanPakai` adalah teks bebas, misalnya "5 mg" dan "1 × 1 sesudah makan", sedangkan `jumlah` harus lebih dari nol dan dihitung dalam satuan sediaan obat (misalnya tablet). Operasi `cukupStok()` hanya membandingkan dua angka, yaitu `stok >= jumlah`. Pemuatan saldo stok terkini dilakukan `ResepManager.validasiStok()` dan `ApotekManager.potongStok()`, sehingga item tidak perlu mengetahui sumber angka stok.
+
+## 5.48 Kelas ObatEntity
+
+**Nama Kelas:** ObatEntity  
+**ID Kelas:** C48
+
+Tabel 5.48.1. Operasi Kelas ObatEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `kurangiStok(jumlah: int): void` | public | Mengurangi `stok` sebanyak `jumlah`. Melempar `IllegalStateException` bila `stok` tidak cukup, dan `IllegalArgumentException` bila `jumlah` tidak positif (KF14). |
+| `tambahStok(jumlah: int): void` | public | Menambah `stok` sebanyak `jumlah`. Melempar `IllegalArgumentException` bila `jumlah` tidak positif (KF17). |
+| `diBawahAmbang(): boolean` | public | Mengembalikan `true` bila `stok` kurang dari `ambangMinimum` (KF17). |
+
+Tabel 5.48.2. Atribut Kelas ObatEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idObat` | private | `int` |
+| `namaObat` | private | `String` |
+| `sediaan` | private | `String` |
+| `stok` | private | `int` |
+| `ambangMinimum` | private | `int` |
+
+`sediaan` memuat bentuk dan kekuatan obat, misalnya "tablet 5 mg". `stok` adalah saldo seluruh bets obat itu dan selalu sama dengan jumlah seluruh `BetsObatEntity` miliknya. Kedua operasi pengubah hanya mengubah objek di memori. Penulisan ke basis data, dengan kunci baris dari Q-C61-02, dilakukan `DataFarmasiBoundary.simpanStok()` di dalam transaksi `Manager`.
+
+### 5.48.1 Algoritma Perubahan Stok
+
+**Nama Kelas:** ObatEntity  
+**Nama Operasi:** `kurangiStok()`, `tambahStok()`, dan `diBawahAmbang()`  
+**ID Algoritma:** Algo-C48-01
+
+```text
+PROSEDUR kurangiStok(jumlah)
+    JIKA jumlah ≤ 0 MAKA
+        LEMPAR IllegalArgumentException("Jumlah pengurangan harus lebih dari nol")
+    AKHIR JIKA
+    JIKA jumlah > stok MAKA
+        LEMPAR IllegalStateException("Stok " + namaObat + " tidak cukup")
+    AKHIR JIKA
+    stok <- stok - jumlah
+
+PROSEDUR tambahStok(jumlah)
+    JIKA jumlah ≤ 0 MAKA
+        LEMPAR IllegalArgumentException("Jumlah penambahan harus lebih dari nol")
+    AKHIR JIKA
+    stok <- stok + jumlah
+
+FUNGSI diBawahAmbang() -> boolean
+    KEMBALIKAN stok < ambangMinimum
+```
+
+Pemeriksaan `jumlah > stok` pada `kurangiStok()` adalah lapis kedua setelah `ItemResepEntity.cukupStok()` (Algo-C24-02), dan lapis terakhirnya adalah CHECK `stok >= 0` pada Q-C61-04. Perbandingan `stok < ambangMinimum` sama dengan klausa pada Q-C61-08, sehingga obat yang tampil pada dasbor peringatan dan obat yang dinilai `diBawahAmbang()` selalu sama (KF17).
+
+## 5.49 Kelas BetsObatEntity
+
+**Nama Kelas:** BetsObatEntity  
+**ID Kelas:** C49
+
+Tabel 5.49.1. Operasi Kelas BetsObatEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `kurangi(jumlah: int): void` | public | Mengurangi `jumlah` bets sebanyak yang diambil. Melempar `IllegalStateException` bila melebihi sisa bets, dan `IllegalArgumentException` bila tidak positif (KF14). |
+| `mendekatiKedaluwarsa(hari: int): boolean` | public | Mengembalikan `true` bila `tanggalKedaluwarsa` tidak lebih dari `hari` hari dari sekarang, termasuk bets yang sudah lewat tanggalnya (KF17). |
+
+Tabel 5.49.2. Atribut Kelas BetsObatEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `nomorBets` | private | `String` |
+| `idObat` | private | `int` |
+| `jumlah` | private | `int` |
+| `tanggalKedaluwarsa` | private | `LocalDate` |
+
+Identitas bets adalah pasangan `(idObat, nomorBets)` yang sama dengan kunci primer tabel `bets_obat` (Q-C61-07). `jumlah` menyimpan sisa bets, dan bets yang sudah habis tetap tersimpan dengan `jumlah` nol sebagai catatan, tetapi tidak dikembalikan lagi oleh `ambilBets()` (Q-C61-03).
+
+### 5.49.1 Algoritma Pengurangan dan Pemeriksaan Kedaluwarsa
+
+**Nama Kelas:** BetsObatEntity  
+**Nama Operasi:** `kurangi(jumlah: int): void` dan `mendekatiKedaluwarsa(hari: int): boolean`  
+**ID Algoritma:** Algo-C49-01
+
+```text
+PROSEDUR kurangi(jumlah)
+    JIKA jumlah ≤ 0 MAKA
+        LEMPAR IllegalArgumentException("Jumlah pengambilan harus lebih dari nol")
+    AKHIR JIKA
+    JIKA jumlah > objek.jumlah MAKA
+        LEMPAR IllegalStateException("Sisa bets " + nomorBets + " hanya " + objek.jumlah)
+    AKHIR JIKA
+    objek.jumlah <- objek.jumlah - jumlah
+
+FUNGSI mendekatiKedaluwarsa(hari) -> boolean
+    KEMBALIKAN tanggalKedaluwarsa ≤ hari ini + hari
+```
+
+`mendekatiKedaluwarsa(90)` memenuhi syarat KF17, yaitu bets berjarak 90 hari atau kurang dari tanggal kedaluwarsanya, dan perbandingannya sama dengan `bets_obat.tanggal_kedaluwarsa <= CURRENT_DATE + ?` pada Q-C61-08. Bets yang sudah lewat tanggalnya ikut terhitung dan tetap muncul sebagai peringatan sampai petugas menanganinya.
+
+## 5.50 Kelas PenerimaanObatEntity
+
+**Nama Kelas:** PenerimaanObatEntity  
+**ID Kelas:** C50
+
+Tabel 5.50.1. Operasi Kelas PenerimaanObatEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `totalJumlah(): int` | public | Menjumlahkan `jumlah` seluruh bets pada `daftarBets` untuk menentukan penambahan stok (KF17). |
+
+Tabel 5.50.2. Atribut Kelas PenerimaanObatEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idPenerimaan` | private | `int` |
+| `nomorFaktur` | private | `String` |
+| `tanggalTerima` | private | `LocalDate` |
+| `daftarBets` | private | `List<BetsObatEntity>` |
+
+`nomorFaktur` adalah nomor faktur dari gudang farmasi atau distributor. `daftarBets` adalah agregasi `PenerimaanObatEntity`–`BetsObatEntity` pada Gambar 58. Satu penerimaan memuat satu obat dengan satu atau lebih bets (Subbab 5.25). `idPenerimaan` bernilai 0 sampai `DataFarmasiBoundary.simpanPenerimaan()` mengisinya (Q-C61-06).
+
+### 5.50.1 Algoritma Penjumlahan Penerimaan
+
+**Nama Kelas:** PenerimaanObatEntity  
+**Nama Operasi:** `totalJumlah(): int`  
+**ID Algoritma:** Algo-C50-01
+
+```text
+FUNGSI totalJumlah() -> int
+    total <- 0
+    UNTUK SETIAP b DI daftarBets
+        total <- total + b.jumlah
+    AKHIR UNTUK
+    KEMBALIKAN total
+```
+
+Hasilnya dipakai `PersediaanManager.catatPenerimaan()` sebagai jumlah yang ditambahkan ke `ObatEntity.stok` (Algo-C25-01). Penerimaan yang jumlahnya tidak positif sudah ditolak `validasiPenerimaan()` sebelum operasi ini dipanggil.
+
+## 5.51 Kelas DaftarPantauEntity
+
+**Nama Kelas:** DaftarPantauEntity  
+**ID Kelas:** C51
+
+Tabel 5.51.1. Operasi Kelas DaftarPantauEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `perbaruiStatus(status: String): void` | public | Mengubah `statusTindakLanjut` ke status yang sah. Melempar `IllegalArgumentException` untuk status yang tidak dikenal dan `IllegalStateException` bila entri sudah "selesai ditindaklanjuti" (KF18). |
+
+Tabel 5.51.2. Atribut Kelas DaftarPantauEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idEntri` | private | `int` |
+| `idPasien` | private | `int` |
+| `jenisRisiko` | private | `String` |
+| `statusTindakLanjut` | private | `String` |
+
+`jenisRisiko` bernilai "hipertensi", "obesitas", "indikasi diabetes", atau "kunjungan ulang" untuk entri yang dipicu jadwal kontrol (Algo-C21-02). `statusTindakLanjut` bernilai "belum ditindaklanjuti", "perlu dihubungi ulang", atau "selesai ditindaklanjuti". Penanda atau jadwal pemicu entri dan riwayat `TindakLanjutEntity` dipegang sebagai referensi objek. Keduanya dipetakan ke kunci asing `id_penanda`, `id_jadwal`, dan `id_entri` pada kueri Q-C60-02 dan Q-C60-06.
+
+### 5.51.1 Algoritma Perubahan Status Tindak Lanjut
+
+**Nama Kelas:** DaftarPantauEntity  
+**Nama Operasi:** `perbaruiStatus(status: String): void`  
+**ID Algoritma:** Algo-C51-01
+
+```text
+KONSTANTA STATUS_SAH <- {"belum ditindaklanjuti", "perlu dihubungi ulang", "selesai ditindaklanjuti"}
+
+PROSEDUR perbaruiStatus(status)
+    JIKA status TIDAK ADA DI STATUS_SAH MAKA
+        LEMPAR IllegalArgumentException("Status tindak lanjut tidak dikenal: " + status)
+    AKHIR JIKA
+    JIKA statusTindakLanjut = "selesai ditindaklanjuti" MAKA
+        LEMPAR IllegalStateException("Entri sudah selesai ditindaklanjuti")
+    AKHIR JIKA
+    statusTindakLanjut <- status
+```
+
+Entri yang sudah selesai tidak ditampilkan lagi pada daftar aktif (Q-C60-01), sehingga mengubahnya kembali berarti salah panggil. Entri "perlu dihubungi ulang" tetap tampil dan dapat menerima tindak lanjut berikutnya, sehingga satu entri dapat memiliki beberapa upaya sampai pasien berhasil dihubungi (skenario alternatif 1 UC09).
+
+## 5.52 Kelas TindakLanjutEntity
+
+**Nama Kelas:** TindakLanjutEntity  
+**ID Kelas:** C52
+
+Tabel 5.52.1. Operasi Kelas TindakLanjutEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `terhubung(): boolean` | public | Mengembalikan `true` bila `hasilUpaya` bernilai "terhubung", yaitu pasien berhasil dihubungi dan memberi keterangan (KF18, skenario alternatif 1 UC09). |
+
+Tabel 5.52.2. Atribut Kelas TindakLanjutEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idTindakLanjut` | private | `int` |
+| `jenisKontak` | private | `String` |
+| `hasilUpaya` | private | `String` |
+| `statusKedatangan` | private | `String` |
+
+Isian pada `DaftarPantauForm` dibatasi daftar pilihan agar laporan tindak lanjut seragam. `jenisKontak` dipilih dari "telepon", "pesan singkat", atau "kunjungan rumah", `hasilUpaya` dari "terhubung" atau "tidak terhubung", dan `statusKedatangan` dari "akan datang", "sudah datang", "tidak dapat datang", atau "belum diketahui". Waktu upaya dicatat pada kolom `waktu` oleh `DataPantauBoundary` saat tindak lanjut disimpan (Q-C60-06), bukan sebagai atribut, karena waktu itu dipakai hanya untuk mengurutkan riwayat.
+
+## 5.53 Kelas LaporanEntity
+
+**Nama Kelas:** LaporanEntity  
+**ID Kelas:** C53
+
+Tabel 5.53.1. Operasi Kelas LaporanEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `kosong(): boolean` | public | Mengembalikan `true` bila total kunjungan pada rentang laporan adalah nol, sehingga tidak ada yang layak diekspor (KF19, skenario alternatif 1 UC10). |
+
+Tabel 5.53.2. Atribut Kelas LaporanEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idLaporan` | private | `int` |
+| `tanggalMulai` | private | `LocalDate` |
+| `tanggalAkhir` | private | `LocalDate` |
+| `format` | private | `String` |
+| `ringkasan` | private | `String` |
+
+`ringkasan` berisi satu baris per angka dengan bentuk `bagian;label;jumlah`, dan baris pertamanya adalah `total;semua kunjungan;n` (Algo-C62-01). `format` kosong sampai laporan diekspor, kemudian berisi "PDF" atau "CSV" (Algo-C27-02). `idLaporan` bernilai 0 selama laporan masih berupa pratinjau.
+
+### 5.53.1 Algoritma Pemeriksaan Laporan Kosong
+
+**Nama Kelas:** LaporanEntity  
+**Nama Operasi:** `kosong(): boolean`  
+**ID Algoritma:** Algo-C53-01
+
+```text
+FUNGSI kosong() -> boolean
+    JIKA ringkasan = null ATAU ringkasan kosong MAKA KEMBALIKAN true AKHIR JIKA
+    barisTotal <- baris pertama ringkasan yang berawalan "total;"
+    JIKA barisTotal tidak ditemukan MAKA KEMBALIKAN true AKHIR JIKA
+    KEMBALIKAN bagian ketiga barisTotal (dipisah ";") sebagai angka = 0
+```
+
+Pemeriksaan cukup membaca baris `total` karena baris itu selalu ditulis lebih dulu oleh agregasi. `LaporanForm` memakai hasilnya untuk mengunci tombol ekspor, dan `LaporanManager.ekspor()` memakainya lagi sebagai pengaman bila tombol ditekan lewat jalan lain.
+
+## 5.54 Kelas BundelFHIREntity
+
+**Nama Kelas:** BundelFHIREntity  
+**ID Kelas:** C54
+
+Tabel 5.54.1. Operasi Kelas BundelFHIREntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tandaiTerkirim(kode: String): void` | public | Mengubah `status` menjadi "terkirim" dan mengosongkan `alasanGagal` karena SATUSEHAT menerima bundel (KF20). |
+| `tandaiGagal(alasan: String): void` | public | Mengubah `status` menjadi "gagal kirim" dan mengisi `alasanGagal` dengan `alasan` dari SATUSEHAT (skenario alternatif 2 UC11). |
+
+Tabel 5.54.2. Atribut Kelas BundelFHIREntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idBundel` | private | `int` |
+| `idKunjungan` | private | `int` |
+| `isiBundel` | private | `String` |
+| `status` | private | `String` |
+| `alasanGagal` | private | `String` |
+
+`isiBundel` adalah dokumen JSON bundel HL7 FHIR R4 satu kunjungan (KNF07) yang disimpan pada kolom JSONB. `status` bernilai "tertunda" saat bundel dibuat, lalu "terkirim" atau "gagal kirim" setelah pengiriman. Bundel "gagal kirim" dikirim ulang pada sinkronisasi berikutnya (Q-C63-02).
+
+### 5.54.1 Algoritma Penandaan Status Pengiriman
+
+**Nama Kelas:** BundelFHIREntity  
+**Nama Operasi:** `tandaiTerkirim(kode: String): void` dan `tandaiGagal(alasan: String): void`  
+**ID Algoritma:** Algo-C54-01
+
+```text
+PROSEDUR tandaiTerkirim(kode)
+    JIKA status = "terkirim" MAKA
+        LEMPAR IllegalStateException("Bundel sudah terkirim")
+    AKHIR JIKA
+    status      <- "terkirim"
+    alasanGagal <- null
+    catat ke log aplikasi: "Bundel " + idBundel + " diterima SATUSEHAT, kode " + kode
+
+PROSEDUR tandaiGagal(alasan)
+    JIKA status = "terkirim" MAKA
+        LEMPAR IllegalStateException("Bundel yang sudah terkirim tidak dapat ditandai gagal")
+    AKHIR JIKA
+    status      <- "gagal kirim"
+    alasanGagal <- alasan JIKA tidak kosong, SELAIN ITU "Ditolak tanpa alasan"
+```
+
+Kode penerimaan dari SATUSEHAT hanya ditulis ke log aplikasi untuk penelusuran, dan tidak disimpan di basis data karena tabel `bundel_fhir` tidak memiliki kolom untuk itu (Q-C63-03). Bundel yang sudah "terkirim" tidak pernah diambil lagi oleh `ambilTertunda()`, sehingga kedua operasi ini tidak boleh membatalkan status terkirim.
+
+## 5.55 Kelas PencadanganEntity
+
+**Nama Kelas:** PencadanganEntity  
+**ID Kelas:** C55
+
+Tabel 5.55.1. Operasi Kelas PencadanganEntity
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `berhasil(): boolean` | public | Mengembalikan `true` bila `status` bernilai "berhasil" (KF21). |
+
+Tabel 5.55.2. Atribut Kelas PencadanganEntity
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idPencadangan` | private | `int` |
+| `waktu` | private | `LocalDateTime` |
+| `status` | private | `String` |
+| `lokasiMedia` | private | `String` |
+| `ukuranBerkas` | private | `long` |
+
+`status` bernilai "berhasil", "gagal", atau "gagal verifikasi" (Algo-C29-03). `lokasiMedia` berisi lokasi lengkap berkas arsip pada media cadangan (Q-C64-02), dan `ukuranBerkas` dalam bita bernilai 0 untuk pencadangan yang gagal (Algo-C64-01). `KonfigurasiForm` menampilkan peringatan selama catatan terakhir tidak berstatus "berhasil" (KF21). Operasi `berhasil()` hanya membandingkan `status = "berhasil"` sehingga "gagal verifikasi" dianggap gagal dan peringatan tidak hilang untuk arsip yang rusak.
 
 ## 5.56 Kelas DataAkunBoundary
 
@@ -2920,7 +4689,508 @@ Langkah pertama hanya membaca daftar isi arsip dan memastikan data tabel `pasien
 
 # BAB 6: Perancangan Antarmuka
 
-> *Sedang dikerjakan.* Bab ini memuat rancangan antarmuka lima belas layar SEHATI, satu layar untuk setiap `Form` pada Tabel 2.3, dengan ID I-01 sampai I-15 sesuai urutan ID kelasnya (I-01 LoginForm sampai I-15 KonfigurasiForm, tanpa SATUSEHATGateway karena kelas itu tidak memiliki layar).
+Bab ini memuat rancangan antarmuka lima belas layar SEHATI, satu layar untuk setiap `Form` pada Tabel 2.3, dengan ID I-01 sampai I-15 sesuai urutan ID kelasnya (I-01 LoginForm sampai I-15 KonfigurasiForm). SATUSEHATGateway tidak memiliki layar karena kelas itu tidak berhubungan dengan pengguna. Setiap layar dirancang sebagai versi awal prototipe dengan gambar rancangan dan tabel spesifikasi objek. Penanda bernomor pada gambar sama dengan nomor terakhir pada Id_Objek, misalnya penanda 3 pada I-02 adalah objek I-02-03. Kolom Keterangan memuat reaksi sistem terhadap interaksi pengguna, operasi `Form` yang dipanggil, serta ID algoritma pada BAB 5 bila ada. Sumber gambar dan tabel dihasilkan dari satu berkas `assets/diagram/src/gen_ui.py` agar nomor objek pada keduanya selalu sama.
+
+Seluruh layar memakai kesepakatan tampilan yang sama.
+
+1. **Bilah aplikasi.** Setiap layar selain I-01 memiliki bilah hijau di bagian atas, yaitu objek pertama pada setiap tabel spesifikasi, yang memuat nama layar, nama dan peran pengguna, indikator koneksi, dan tombol Keluar. Bilah ini menampilkan status koneksi pada setiap layar (KF22).
+2. **Peringatan.** Peringatan risiko, stok, dan pencadangan selalu memakai warna merah dan ikon segitiga tanda seru, tidak hanya warna, sehingga tetap terbaca oleh pengguna yang sulit membedakan warna (KNF08).
+3. **Kolom bermasalah.** Kolom yang isiannya ditolak diberi bingkai merah dan pesan singkat di dekatnya, sedangkan isian lain tidak dihapus agar pengguna hanya memperbaiki yang salah.
+4. **Papan ketik.** Seluruh layar dapat dioperasikan tanpa tetikus. Tab dan Shift+Tab memindahkan fokus kolom, dan pintasan pada Tabel 6.1 berlaku pada layar yang disebutkan (KF24, KNF12). Pintasan F1 membuka layar bantuan berisi tabel yang sama.
+5. **Hak akses.** Layar hanya dapat dibuka oleh peran yang diizinkan pada Algo-C17-02, dan kartu menu untuk layar lain tidak digambar pada dasbor.
+
+Tabel 6.1. Pintasan Papan Ketik
+
+| Pintasan | Tindakan | Layar |
+| :--- | :--- | :--- |
+| Tab / Shift+Tab | Pindah ke kolom berikutnya atau sebelumnya | Seluruh layar |
+| Ctrl+S | Menyimpan atau mengirim formulir aktif | I-02, I-05, I-07, I-11, I-12, I-15 |
+| Ctrl+F | Memfokuskan kolom pencarian | I-02 |
+| Ctrl+N | Membuka formulir baru | I-02, I-15 |
+| F2 | Panggil Berikutnya | I-04 |
+| F3 | Lewati pasien yang tidak hadir | I-04 |
+| Ctrl+Enter | Konfirmasi Obat Diserahkan | I-10 |
+| Esc | Batal atau kembali ke layar sebelumnya | Seluruh layar |
+| Ctrl+D | Kembali ke dasbor | Seluruh layar setelah masuk |
+| F1 | Membuka layar bantuan berisi daftar pintasan | Seluruh layar |
+
+## 6.1 Rancangan Antarmuka I-01
+
+**Antarmuka:** I-01  
+**Nama Layar:** Masuk dan Dasbor  
+**Kelas:** LoginForm  
+**Use Case:** UC01  
+**Pengguna:** Seluruh pengguna
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-01 Masuk dan Dasbor" src="./assets/diagram/ui-i01-login.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 59. Rancangan Antarmuka I-01 - Masuk dan Dasbor</i>
+</p>
+
+Tabel 6.2. Spesifikasi Objek Antarmuka I-01
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-01-01 | Image | SEHATI | Logo dan nama aplikasi (logo-sehati.svg) di atas kartu masuk. |
+| I-01-02 | Label | Masuk ke Aplikasi | Judul kartu autentikasi. Layar ini tampil saat aplikasi dibuka dan setiap sesi berakhir, termasuk setelah diam 15 menit (LoginForm.tampilkan, KNF04). |
+| I-01-03 | TextField | Nama pengguna | Isian atribut namaPengguna. Kursor aktif di sini saat layar dibuka. Spasi di awal dan akhir dipangkas sebelum dikirim. |
+| I-01-04 | PasswordField | Kata sandi | Isian atribut kataSandi. Isinya ditimpa kosong segera setelah autentikasi selesai, berhasil maupun gagal (Subbab 5.1). |
+| I-01-05 | Label | Nama pengguna atau kata sandi salah | Pesan merah dari LoginForm.tampilkanPesanGagal(). Pesan sama untuk nama tak dikenal dan kata sandi salah; akun nonaktif menampilkan "Akun nonaktif, hubungi Petugas Administrasi" (UC01 alternatif 1 dan 2). |
+| I-01-06 | Button | Masuk | Menjalankan LoginForm.kirimKredensial() (Algo-C01-01); dapat juga dengan tombol Enter. Bila sesi dibuka, dasbor di sisi kanan tampil sesuai peran. |
+| I-01-07 | Panel | Kartu menu | Satu kartu untuk setiap layar yang diizinkan bagi peran sesi (LoginForm.tampilkanDasbor, Algo-C01-01). Layar di luar wewenang tidak digambar. Mengklik kartu menjalankan LoginForm.bukaLayar() (Algo-C01-02), yang memeriksa hak akses sekali lagi. |
+| I-01-08 | Panel | Peringatan pencadangan | Hanya tampil pada dasbor Petugas Administrasi bila pencadangan terakhir tidak berstatus berhasil, sampai pencadangan berikutnya berhasil (KF21, I-15). |
+| I-01-09 | Label | Pesan akses ditolak | Muncul dari LoginForm.tampilkanPesanGagal() bila layar dibuka lewat jalan lain dan periksaHakAkses() mengembalikan false (UC01 alternatif 3). |
+
+## 6.2 Rancangan Antarmuka I-02
+
+**Antarmuka:** I-02  
+**Nama Layar:** Pendaftaran Pasien  
+**Kelas:** PasienForm  
+**Use Case:** UC02  
+**Pengguna:** Petugas Administrasi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-02 Pendaftaran Pasien" src="./assets/diagram/ui-i02-pasien.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 60. Rancangan Antarmuka I-02 - Pendaftaran Pasien</i>
+</p>
+
+Tabel 6.3. Spesifikasi Objek Antarmuka I-02
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-02-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-02-02 | TextField | Pencarian pasien | Memanggil PasienForm.kirimPencarian() setiap isi berubah dan panjangnya sedikitnya 3 karakter, dengan jeda 250 ms (KF01, KNF01, Algo-C02-01). Pintasan Ctrl+F. |
+| I-02-03 | Button | Pasien Baru | Menjalankan bukaFormulir(null): formulir dikosongkan untuk pendaftaran pasien baru. Pintasan Ctrl+N. |
+| I-02-04 | Table | Hasil pencarian | Hasil pencarian dari tampilkanHasilCari(). Mengklik baris menjalankan bukaFormulir(pasien) sehingga formulir terisi untuk disunting. Bila kosong tampil "Data pasien tidak ditemukan" dan tombol Pasien Baru disorot (UC02 alternatif 2). |
+| I-02-05 | TextField | NIK (16 digit) | Isian dataFormulir.nik. Kolom diberi tanda merah bila NIK bukan 16 digit atau sudah terdaftar (KF02). |
+| I-02-06 | Label | NIK sudah terdaftar | Pesan dari tampilkanPesanValidasi() di bawah kolom NIK. Isian lain tidak dihapus (Algo-C02-02). |
+| I-02-07 | TextField | Nama lengkap | Isian dataFormulir.nama. Wajib diisi. |
+| I-02-08 | DatePicker | Tanggal lahir | Isian dataFormulir.tanggalLahir. Wajib diisi. |
+| I-02-09 | ComboBox | Jenis kelamin | Pilihan Laki-laki atau Perempuan (dataFormulir.jenisKelamin). |
+| I-02-10 | TextArea | Alamat | Isian dataFormulir.alamat. Wajib diisi. |
+| I-02-11 | TextField | Nomor telepon (opsional) | Isian dataFormulir.nomorTelepon. Boleh kosong. |
+| I-02-12 | TextField | Nomor rekam medis | Hanya baca. Diterbitkan sistem saat pasien baru tersimpan dan tidak dapat diubah pada penyuntingan (KF02, Algo-C18-01). |
+| I-02-13 | Button | Simpan | Menjalankan kirimDataPasien(): daftarkanPasien() bila idPasien = 0, perbaruiPasien() bila sudah terisi (Algo-C02-02). Pintasan Ctrl+S. |
+| I-02-14 | Button | Buka Kunjungan | Membuka KunjunganForm (I-03) dengan pasien pada formulir sebagai pasienTerpilih. Aktif hanya bila pasien sudah tersimpan (UC03). |
+| I-02-15 | Label | Notifikasi | Notifikasi hijau sementara dari tampilkanNotifikasi(), misalnya "Pendaftaran berhasil" atau "Data pasien diperbarui". |
+
+## 6.3 Rancangan Antarmuka I-03
+
+**Antarmuka:** I-03  
+**Nama Layar:** Kunjungan Pasien  
+**Kelas:** KunjunganForm  
+**Use Case:** UC03  
+**Pengguna:** Petugas Administrasi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-03 Kunjungan Pasien" src="./assets/diagram/ui-i03-kunjungan.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 61. Rancangan Antarmuka I-03 - Kunjungan Pasien</i>
+</p>
+
+Tabel 6.4. Spesifikasi Objek Antarmuka I-03
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-03-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-03-02 | Panel | Pasien terpilih | Identitas pasienTerpilih (nama, NIK, nomor rekam medis), dikirim dari I-02 lewat KunjunganForm.buka(). Hanya baca. |
+| I-03-03 | ComboBox | Poli tujuan | Daftar poli dari tampilkanPilihanPoli() (KunjunganManager.daftarPoli()). Pilihan disimpan sebagai poliTerpilih. |
+| I-03-04 | Button | Buka Kunjungan | Menjalankan kirimPermintaanKunjungan() (Algo-C03-01). Nonaktif sampai poli dipilih dan selama permintaan berjalan, sehingga klik ganda tidak membuat dua kunjungan. |
+| I-03-05 | Button | Kembali | Kembali ke I-02. Pintasan Esc. |
+| I-03-06 | Panel | Tiket Antrean | Tiket dari tampilkanTiketAntrean(): nama poli, nomor antrean, dan tanggal. Nomor berurutan per poli per hari dan mulai dari 1 saat hari berganti (KF03). |
+| I-03-07 | Button | Cetak Tiket | Mencetak tiket antrean ke pencetak bawaan sistem operasi. |
+| I-03-08 | Panel | Kunjungan Sudah Berjalan | Panel kuning dari tampilkanKunjunganAktif() bila pasien sudah punya kunjungan aktif hari ini: nomor antrean dan status ditampilkan, kunjungan baru tidak dibuat (UC03 alternatif 1). |
+
+## 6.4 Rancangan Antarmuka I-04
+
+**Antarmuka:** I-04  
+**Nama Layar:** Antrean Skrining  
+**Kelas:** AntreanSkriningForm  
+**Use Case:** UC04  
+**Pengguna:** Perawat
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-04 Antrean Skrining" src="./assets/diagram/ui-i04-antrean-skrining.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 62. Rancangan Antarmuka I-04 - Antrean Skrining</i>
+</p>
+
+Tabel 6.5. Spesifikasi Objek Antarmuka I-04
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-04-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-04-02 | Label | Menunggu skrining: 4 pasien | Ringkasan jumlah kunjungan pada daftarTampil yang berstatus menunggu skrining. |
+| I-04-03 | Table | Antrean skrining | Antrean dari perbaruiTampilan(): terurut nomor antrean, pasien yang sedang dilayani disorot kuning (KF04). |
+| I-04-04 | Button | Panggil Berikutnya  (F2) | Menjalankan kirimPanggilan(): status pasien terdepan menjadi "sedang diskrining" lalu SkriningForm (I-05) terbuka. Nonaktif bila daftarTampil kosong (KF04, KF24). |
+| I-04-05 | Button | Lewati: Tidak Hadir  (F3) | Menjalankan kirimLewati(): pasien dipindahkan ke urutan paling belakang dan berstatus tidak hadir, tampilan beralih ke pasien berikutnya (UC04 alternatif 1). |
+| I-04-06 | Label | Diperbarui otomatis tiap 10 detik, terakhir 3 detik lalu | Penyegar yang memuat ulang antrean lewat muatAntrean() agar pasien baru dari loket tampil tanpa tindakan perawat. |
+
+## 6.5 Rancangan Antarmuka I-05
+
+**Antarmuka:** I-05  
+**Nama Layar:** Formulir Skrining  
+**Kelas:** SkriningForm  
+**Use Case:** UC04  
+**Pengguna:** Perawat
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-05 Formulir Skrining" src="./assets/diagram/ui-i05-skrining.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 63. Rancangan Antarmuka I-05 - Formulir Skrining</i>
+</p>
+
+Tabel 6.6. Spesifikasi Objek Antarmuka I-05
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-05-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-05-02 | Panel | Pasien: Budi Santoso  /  RM-000121  /  Poli Umum  /  Antrean 1 | Identitas kunjungan yang dipanggil, dari tampilkanFormulir(kunjungan). Hanya baca. |
+| I-05-03 | TextArea | Keluhan awal | Isian isianKeluhan, teks bebas (KF05). Kolom pertama yang difokuskan. |
+| I-05-04 | NumberField | Sistolik (mmHg) | Tekanan darah sistolik, kolom isianUkuran.sistolik. |
+| I-05-05 | NumberField | Diastolik (mmHg) | Tekanan darah diastolik, isianUkuran.diastolik. Harus lebih rendah dari sistolik. |
+| I-05-06 | NumberField | Berat badan (kg) | Isian isianUkuran.beratBadan. Koma desimal diterima. |
+| I-05-07 | NumberField | Tinggi badan (cm) | Isian isianUkuran.tinggiBadan. Dipakai untuk menghitung IMT. |
+| I-05-08 | NumberField | Suhu (°C) | Isian isianUkuran.suhu. Kolom ditandai merah beserta rentang wajar (30 sampai 45 °C) oleh tampilkanPeringatanRentang() bila di luar rentang, dan tidak ada yang disimpan (KF06, UC04 alternatif 2). |
+| I-05-09 | NumberField | Nadi (bpm) | Isian isianUkuran.nadi. |
+| I-05-10 | NumberField | Gula darah (mg/dL), opsional | Isian opsional isianUkuran.gulaDarah. Boleh kosong (KF05). |
+| I-05-11 | Panel | Penanda risiko | Ikon peringatan dan latar merah per penanda dari tampilkanPenandaRisiko(), tanpa langkah tambahan (KF07, KNF08, UC04 alternatif 3). Tidak tampil bila tidak ada risiko. |
+| I-05-12 | Button | Simpan  (Ctrl+S) | Menjalankan kirimHasilSkrining() (Algo-C05-01). Hanya bila seluruh nilai berada dalam rentang, skrining tersimpan dan pasien diteruskan ke antrean poli (KF05, KF06, KF24). |
+| I-05-13 | Button | Batal  (Esc) | Menutup formulir tanpa menyimpan dan kembali ke I-04. |
+
+## 6.6 Rancangan Antarmuka I-06
+
+**Antarmuka:** I-06  
+**Nama Layar:** Rekam Medis Pasien  
+**Kelas:** RekamMedisForm  
+**Use Case:** UC05  
+**Pengguna:** Dokter, Perawat
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-06 Rekam Medis Pasien" src="./assets/diagram/ui-i06-rekam-medis.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 64. Rancangan Antarmuka I-06 - Rekam Medis Pasien</i>
+</p>
+
+Tabel 6.7. Spesifikasi Objek Antarmuka I-06
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-06-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-06-02 | Panel | Data diri | Data diri pasien dari susunRingkasan() pada satu tampilan bersama diagnosis, riwayat obat, dan penanda risiko (KF09). |
+| I-06-03 | Panel | Penanda risiko aktif | Penanda risiko yang masih aktif, tampil dengan ikon dan warna merah (KF07, KF09). |
+| I-06-04 | Panel | Diagnosis lampau | Daftar diagnosis lampau dari pemeriksaan yang sudah dikunci, memuat kode ICD-10 dan deskripsi (KF09). |
+| I-06-05 | Panel | Riwayat obat | Obat yang sudah diserahkan pada kunjungan lampau, satu baris per obat (KF09). |
+| I-06-06 | Tab | Ringkasan / Lihat Tren Tanda Vital | Tab yang berpindah antara ringkasan dan grafik tren. Tab Lihat Tren Tanda Vital menjalankan tampilkanGrafikTren() (Algo-C06-01, KF08). |
+| I-06-07 | Chart | Grafik tren tanda vital | Grafik garis tekanan darah, berat badan, dan gula darah antar-kunjungan dengan waktu di sumbu-x (JavaFX LineChart, KF08). Bila hanya ada satu titik, diganti tabel pengukuran hari ini beserta keterangan bahwa grafik butuh minimal dua kunjungan (tampilkanTabelPengukuran, UC05 alternatif 4). |
+| I-06-08 | Label | Mode baca saja | Lencana dari aturModeBacaSaja() untuk peran selain Dokter. Tombol Periksa Pasien dinonaktifkan dan tampil keterangan "Peran Anda tidak berwenang mengisi diagnosis" (UC05 alternatif 1). |
+| I-06-09 | Button | Periksa Pasien | Membuka PemeriksaanForm (I-07) bila AutentikasiManager.periksaHakAkses() mengizinkan peran. Bagi Perawat tombol nonaktif dan PemeriksaanForm.kunciKolomKlinis() dipanggil. |
+| I-06-10 | Button | Buat Resep | Membuka ResepForm (I-08) bagi Dokter bila pasien memerlukan terapi obat (UC06). |
+
+## 6.7 Rancangan Antarmuka I-07
+
+**Antarmuka:** I-07  
+**Nama Layar:** Formulir Pemeriksaan  
+**Kelas:** PemeriksaanForm  
+**Use Case:** UC05  
+**Pengguna:** Dokter
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-07 Formulir Pemeriksaan" src="./assets/diagram/ui-i07-pemeriksaan.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 65. Rancangan Antarmuka I-07 - Formulir Pemeriksaan</i>
+</p>
+
+Tabel 6.8. Spesifikasi Objek Antarmuka I-07
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-07-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-07-02 | Panel | Pasien: Budi Santoso  /  RM-000121  /  Kunjungan 27-10-2026 | Identitas kunjungan yang diperiksa. Hanya baca. |
+| I-07-03 | TextArea | Anamnesis | Isian isianAnamnesis, teks bebas. Wajib diisi sebelum menyimpan (Algo-C07-01). Dinonaktifkan oleh kunciKolomKlinis() bagi peran selain Dokter. |
+| I-07-04 | TextField | Diagnosis (cari kode atau istilah ICD-10) | Isian kataKunciDiagnosis. Pencarian dikirim lewat kirimKataKunciDiagnosis() setelah berhenti mengetik 300 ms (KF10). |
+| I-07-05 | List | Saran kode ICD-10 | Daftar saran dari tampilkanSaranKode(). Memilih satu saran menyimpan kode dan deskripsinya sebagai diagnosis. Bila kosong tampil "Kode diagnosis ICD-10 tidak ditemukan" (UC05 alternatif 2). |
+| I-07-06 | Label | Diagnosis terpilih: I10 - Hipertensi esensial (primer) | Ringkasan DiagnosisEntity.ringkas() dari saran yang dipilih. Diagnosis hanya dapat berupa kode ICD-10 standar (KF10). |
+| I-07-07 | TextArea | Tindakan | Isian tindakan pada PemeriksaanEntity. |
+| I-07-08 | DatePicker | Jadwal kontrol (opsional) | Tanggal kunjungan ulang. Bila terisi, jadwalkanKontrol() dipanggil dan jadwal masuk ke daftar pantau (KF12). Tanggal harus setelah hari ini. |
+| I-07-09 | Button | Simpan  (Ctrl+S) | Menjalankan kirimHasilPemeriksaan() (Algo-C07-01). Draf dapat disimpan berulang kali sebelum dikunci. |
+| I-07-10 | Button | Simpan Final (Kunci) | Menjalankan kirimFinal() setelah konfirmasi: rekam medis kunjungan dikunci dan seluruh kolom tidak dapat diubah lagi (UC05). Aktif setelah pemeriksaan pernah tersimpan. |
+| I-07-11 | Button | Buat Resep | Membuka ResepForm (I-08) untuk kunjungan ini (UC06). |
+| I-07-12 | Label | Bilah pesan | Pesan dari tampilkanPesan(): hasil penyimpanan atau penolakan, misalnya "Rekam medis kunjungan ini sudah dikunci". |
+
+## 6.8 Rancangan Antarmuka I-08
+
+**Antarmuka:** I-08  
+**Nama Layar:** Resep Elektronik  
+**Kelas:** ResepForm  
+**Use Case:** UC06  
+**Pengguna:** Dokter
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-08 Resep Elektronik" src="./assets/diagram/ui-i08-resep.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 66. Rancangan Antarmuka I-08 - Resep Elektronik</i>
+</p>
+
+Tabel 6.9. Spesifikasi Objek Antarmuka I-08
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-08-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-08-02 | Panel | Pasien: Budi Santoso  /  RM-000121  /  Kunjungan 27-10-2026 | Identitas kunjungan yang diresepkan, dari tampilkanFormulir(kunjungan). Hanya baca. |
+| I-08-03 | ComboBox | Obat (cari dari data master) | Pencarian obat dari ResepManager.muatDataObat() (KF11). |
+| I-08-04 | NumberField | Jumlah | Jumlah item resep dalam satuan sediaan. Harus lebih dari nol. |
+| I-08-05 | TextField | Dosis | Isian dosis. Wajib diisi. |
+| I-08-06 | TextField | Aturan pakai | Isian aturanPakai. Wajib diisi. |
+| I-08-07 | Button | Tambah | Menjalankan kirimItem() (Algo-C08-01): item masuk ke isianItem dan indikator stok diperbarui. |
+| I-08-08 | Table | Item resep | Item resep yang sedang disusun (isianItem). Kolom Stok memuat indikator dari tampilkanIndikatorStok(): hijau Tersedia, merah Stok Kurang beserta sisa (KF11). |
+| I-08-09 | Label | Tersedia | Lencana hijau indikator stok untuk item yang cukup (tersedia = true). |
+| I-08-10 | Label | Stok Kurang | Lencana merah indikator stok untuk item yang kurang (tersedia = false) beserta sisa stok. |
+| I-08-11 | Label | Peringatan stok | Peringatan dari tampilkanPeringatanStok(). Tombol Kirim ke Apotek ditahan sampai tidak ada item yang kurang stoknya (UC06 alternatif 1). |
+| I-08-12 | Button | Kirim ke Apotek | Menjalankan kirimResep(): ResepManager.kirimKeApotek() memeriksa ulang stok lalu resep masuk antrean apotek (Algo-C23-02). Nonaktif selama ada item berstatus Stok Kurang. |
+| I-08-13 | Button | Batal  (Esc) | Menutup formulir dan kembali ke I-06. |
+
+## 6.9 Rancangan Antarmuka I-09
+
+**Antarmuka:** I-09  
+**Nama Layar:** Antrean Resep Apotek  
+**Kelas:** AntreanResepForm  
+**Use Case:** UC07  
+**Pengguna:** Petugas Farmasi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-09 Antrean Resep Apotek" src="./assets/diagram/ui-i09-antrean-resep.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 67. Rancangan Antarmuka I-09 - Antrean Resep Apotek</i>
+</p>
+
+Tabel 6.10. Spesifikasi Objek Antarmuka I-09
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-09-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-09-02 | Label | Resep menunggu: 3 | Ringkasan jumlah resep pada daftarTampil yang berstatus menunggu. |
+| I-09-03 | Table | Antrean resep | Antrean resep dari tampilkanAntrean(), terurut waktu masuk, memuat nama pasien, obat, dosis, dan jumlah (KF13). Mengklik baris atau Layani menjalankan pilihResep() dan membuka I-10. |
+| I-09-04 | Label | Diperbarui otomatis tiap 10 detik, terakhir 4 detik lalu | Penyegar yang memuat ulang antrean lewat muatAntreanResep() agar resep baru dari dokter muncul tanpa tindakan petugas. |
+
+## 6.10 Rancangan Antarmuka I-10
+
+**Antarmuka:** I-10  
+**Nama Layar:** Penyerahan Obat  
+**Kelas:** PenyerahanObatForm  
+**Use Case:** UC07  
+**Pengguna:** Petugas Farmasi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-10 Penyerahan Obat" src="./assets/diagram/ui-i10-penyerahan-obat.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 68. Rancangan Antarmuka I-10 - Penyerahan Obat</i>
+</p>
+
+Tabel 6.11. Spesifikasi Objek Antarmuka I-10
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-10-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-10-02 | Panel | Pasien: Budi Santoso  /  RM-000121  /  Resep masuk 08:42 | Identitas pasien dan waktu resep masuk, dari tampilkanRincian(resep, bets). Hanya baca. |
+| I-10-03 | Table | Item resep | Item resep yang akan diserahkan (rincianTampil). |
+| I-10-04 | Table | Bets obat | Bets yang diambil lebih dulu, terurut tanggal kedaluwarsa terdekat (FEFO, Algo-C24-02). |
+| I-10-05 | Button | Obat Diserahkan  (Ctrl+Enter) | Menjalankan kirimKonfirmasi() (Algo-C10-01): stok dipotong, resep selesai dilayani, kunjungan ditutup, dan bundel FHIR disusun dalam satu transaksi (KF14). Nonaktif selama permintaan berjalan. |
+| I-10-06 | Button | Kembalikan ke Dokter | Menjalankan bukaKolomCatatan(): kolom alasan di bawah dibuka (UC07 alternatif 1). |
+| I-10-07 | TextArea | Alasan pengembalian (wajib) | Isian catatanPengembalian. Tidak boleh kosong. |
+| I-10-08 | Button | Kirim Pengembalian | Menjalankan kirimPengembalian(alasan): resep dikembalikan ke dokter dan kunjungan tetap terbuka. |
+| I-10-09 | Label | Bilah pesan | Pesan dari tampilkanPesan(): "Obat diserahkan" atau penolakan, misalnya "Resep sudah selesai dilayani" saat petugas lain lebih dulu (UC07 alternatif 2). |
+
+## 6.11 Rancangan Antarmuka I-11
+
+**Antarmuka:** I-11  
+**Nama Layar:** Persediaan Obat  
+**Kelas:** PersediaanForm  
+**Use Case:** UC08  
+**Pengguna:** Petugas Farmasi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-11 Persediaan Obat" src="./assets/diagram/ui-i11-persediaan.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 69. Rancangan Antarmuka I-11 - Persediaan Obat</i>
+</p>
+
+Tabel 6.12. Spesifikasi Objek Antarmuka I-11
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-11-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-11-02 | Panel | Peringatan persediaan | Dasbor peringatan dari tampilkanPeringatan(): stok di bawah ambang minimum dan bets yang kedaluwarsa dalam 90 hari atau kurang, dengan ikon dan warna merah (KF17, UC08 alternatif 1). |
+| I-11-03 | ComboBox | Obat | Pilihan obat dari muatDataObat(). Bets pada penerimaan ini milik obat yang dipilih. |
+| I-11-04 | TextField | Nomor faktur | Isian nomorFaktur pada isianPenerimaan. |
+| I-11-05 | DatePicker | Tanggal terima | Isian tanggalTerima. Tidak boleh setelah hari ini. |
+| I-11-06 | TextField | Nomor bets | Isian nomorBets. Nomor bets yang sudah tercatat untuk obat yang sama ditolak (Algo-C61-01). |
+| I-11-07 | NumberField | Jumlah | Isian jumlah bets, harus lebih dari nol. Ditandai merah bila tidak valid. |
+| I-11-08 | DatePicker | Tanggal kedaluwarsa | Isian tanggalKedaluwarsa, harus setelah tanggal terima. Ditandai merah bila tidak valid (UC08 alternatif 2). |
+| I-11-09 | Label | Pesan kolom | Penanda merah dari tampilkanPesanKesalahan(kolom) pada setiap kolom yang tidak valid. Pesan dari catatPenerimaan() berisi nama kolom dipisah koma (Algo-C11-01). |
+| I-11-10 | Button | Simpan  (Ctrl+S) | Menjalankan kirimPenerimaan() (Algo-C11-01): stok bertambah, penerimaan dan bets tersimpan, audit dicatat dalam satu transaksi (KF17). |
+| I-11-11 | Panel | Saldo stok terbaru | Saldo hasil tampilkanSaldo(obat) setelah penerimaan tersimpan. Formulir lalu dikosongkan untuk penerimaan berikutnya. |
+
+## 6.12 Rancangan Antarmuka I-12
+
+**Antarmuka:** I-12  
+**Nama Layar:** Daftar Pantau Pasien  
+**Kelas:** DaftarPantauForm  
+**Use Case:** UC09  
+**Pengguna:** Perawat, Dokter
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-12 Daftar Pantau Pasien" src="./assets/diagram/ui-i12-daftar-pantau.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 70. Rancangan Antarmuka I-12 - Daftar Pantau Pasien</i>
+</p>
+
+Tabel 6.13. Spesifikasi Objek Antarmuka I-12
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-12-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-12-02 | ComboBox | Jenis risiko | Pilihan Semua, hipertensi, obesitas, indikasi diabetes, atau kunjungan ulang. "Semua" dikirim sebagai null. |
+| I-12-03 | DatePicker | Mulai | Batas awal tanggal pemicu entri. Boleh kosong. |
+| I-12-04 | DatePicker | Akhir | Batas akhir tanggal pemicu entri. Tidak boleh sebelum tanggal mulai. |
+| I-12-05 | Button | Terapkan | Menjalankan kirimPenyaring() (Algo-C12-01) lalu menggambar ulang tabel dari hasil PantauManager.saringDaftar(). |
+| I-12-06 | Label | Menampilkan 3 entri aktif | Keterangan dari tampilkanKeterangan(). Bila hasil penyaringan kosong teksnya menjadi "Tidak ada pasien yang cocok dengan kriteria saringan" dan tabel kosong (UC09 alternatif 2). |
+| I-12-07 | Table | Daftar pantau | Daftar pantau dari tampilkanDaftar() dan penyaringan (KF18). Jenis risiko tampil merah dengan ikon. Tombol Tindak Lanjut menjalankan bukaFormulirTindakLanjut(idEntri). |
+| I-12-08 | Panel | Formulir tindak lanjut | Panel yang dibuka bukaFormulirTindakLanjut() untuk entri terpilih (KF18). |
+| I-12-09 | ComboBox | Jenis kontak | Pilihan telepon, pesan singkat, atau kunjungan rumah (TindakLanjutEntity.jenisKontak). |
+| I-12-10 | ComboBox | Hasil upaya | Pilihan terhubung atau tidak terhubung. Bila terhubung, hasil dicatat ke rekam medis dan entri ditutup; bila tidak, entri ditandai perlu dihubungi ulang (Algo-C26-01). |
+| I-12-11 | ComboBox | Status kedatangan | Pilihan akan datang, sudah datang, tidak dapat datang, atau belum diketahui. |
+| I-12-12 | Button | Simpan  (Ctrl+S) | Menjalankan kirimTindakLanjut(): membentuk TindakLanjutEntity, memanggil PantauManager.catatTindakLanjut(), lalu menyegarkan tabel (UC09). |
+| I-12-13 | Button | Batal  (Esc) | Menutup formulir tindak lanjut. |
+
+## 6.13 Rancangan Antarmuka I-13
+
+**Antarmuka:** I-13  
+**Nama Layar:** Laporan Periodik  
+**Kelas:** LaporanForm  
+**Use Case:** UC10  
+**Pengguna:** Petugas Administrasi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-13 Laporan Periodik" src="./assets/diagram/ui-i13-laporan.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 71. Rancangan Antarmuka I-13 - Laporan Periodik</i>
+</p>
+
+Tabel 6.14. Spesifikasi Objek Antarmuka I-13
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-13-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-13-02 | DatePicker | Tanggal mulai | Isian tanggalMulai, terisi awal dengan tanggal 1 bulan berjalan. Pilihan dibatasi sampai hari ini. |
+| I-13-03 | DatePicker | Tanggal akhir | Isian tanggalAkhir. Bila lebih awal dari tanggal mulai, tampil "Perbaiki urutan tanggal" (UC10 alternatif 2). |
+| I-13-04 | Button | Hitung Rekapitulasi | Menjalankan kirimRentang(): LaporanManager.hitungRekapitulasi() lalu tampilkanRekapitulasi() (Algo-C27-01, KF19). |
+| I-13-05 | Label | Total kunjungan: 128 | Jumlah seluruh kunjungan pada rentang (baris total pada ringkasan LaporanEntity). Bila nol tampil "Tidak ada data pelayanan pada rentang tanggal terpilih" dan tombol ekspor dikunci (UC10 alternatif 1). |
+| I-13-06 | Table | Kunjungan per poli | Pratinjau kunjungan per poli. |
+| I-13-07 | Table | Kunjungan per status | Pratinjau kunjungan per status. |
+| I-13-08 | Table | Diagnosis terbanyak | Sepuluh diagnosis terbanyak dari pemeriksaan yang sudah dikunci (KF19). Contoh menampilkan tiga baris. |
+| I-13-09 | Button | Ekspor PDF | Menjalankan kirimPermintaanEkspor("PDF", direktori) (Algo-C13-01) setelah pengguna memilih folder tujuan (KF19). |
+| I-13-10 | Button | Ekspor CSV | Menjalankan kirimPermintaanEkspor("CSV", direktori). Berkas memakai pemisah titik koma. Kedua tombol ekspor dikunci oleh kunciTombolEkspor() bila laporan kosong. |
+| I-13-11 | Label | Bilah pesan | Pesan dari tampilkanPesan(): lokasi berkas hasil ekspor atau penolakan. |
+
+## 6.14 Rancangan Antarmuka I-14
+
+**Antarmuka:** I-14  
+**Nama Layar:** Sinkronisasi SATUSEHAT  
+**Kelas:** SinkronisasiForm  
+**Use Case:** UC11  
+**Pengguna:** Petugas Administrasi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-14 Sinkronisasi SATUSEHAT" src="./assets/diagram/ui-i14-sinkronisasi.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 72. Rancangan Antarmuka I-14 - Sinkronisasi SATUSEHAT</i>
+</p>
+
+Tabel 6.15. Spesifikasi Objek Antarmuka I-14
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-14-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-14-02 | Label | Daring | Indikator koneksi internet dari SATUSEHATGateway.periksaKoneksi(). Berubah menjadi kuning "Luring" bila internet putus (KF22). |
+| I-14-03 | Label | Tertunda: 3 | Lencana jumlah bundel yang belum diterima SATUSEHAT (SinkronisasiManager.jumlahTertunda). |
+| I-14-04 | Table | Status bundel | Status setiap bundel (daftarStatus) dari tampilkanStatus() dan tampilkanHasil(): tertunda, terkirim, atau gagal kirim beserta alasan penolakan SATUSEHAT (KF20, UC11 alternatif 2). |
+| I-14-05 | Button | Sinkronkan Sekarang | Menjalankan kirimPermintaanSinkron() (Algo-C14-01) di thread latar; layar lain tetap dapat dipakai. Nonaktif selama berjalan (KF20). |
+| I-14-06 | ProgressBar | Penanda sedang berjalan | Penanda proses pengiriman yang tampil selama kirimSemua() berjalan. |
+| I-14-07 | Button | Ekspor Bundel | Muncul dari tampilkanTombolEkspor() saat internet putus. Menjalankan kirimPermintaanEkspor(lokasi) yang menulis arsip terenkripsi ke lokasi pilihan, misalnya media eksternal (UC11 alternatif 1). |
+| I-14-08 | Label | Bilah pesan | Pesan dari tampilkanPesan(): hasil sinkronisasi, penolakan karena luring, atau lokasi berkas ekspor. |
+
+## 6.15 Rancangan Antarmuka I-15
+
+**Antarmuka:** I-15  
+**Nama Layar:** Konfigurasi dan Basis Data  
+**Kelas:** KonfigurasiForm  
+**Use Case:** UC12  
+**Pengguna:** Petugas Administrasi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-15 Konfigurasi dan Basis Data" src="./assets/diagram/ui-i15-konfigurasi.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 73. Rancangan Antarmuka I-15 - Konfigurasi dan Basis Data</i>
+</p>
+
+Tabel 6.16. Spesifikasi Objek Antarmuka I-15
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-15-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
+| I-15-02 | Tab | Akun Pengguna / Data Master / Pemeliharaan Basis Data | Tiga tab yang dipilih dengan bukaTab(). Tab Pemeliharaan Basis Data memuat status pencadangan setiap dibuka (KF15, KF21). |
+| I-15-03 | Table | Daftar akun | Daftar akun dari tampilkanData(). Mengklik baris memuat akun ke formulir di sisi kanan. Tombol Nonaktifkan menjalankan kirimNonaktifkan(idPengguna) setelah konfirmasi, menutup sesi akun itu (UC12 alternatif 3). Akun sendiri tidak dapat dinonaktifkan. |
+| I-15-04 | TextField | Nama pengguna | Isian nama akun. Nama yang sudah dipakai ditandai merah dengan pesan "Nama pengguna sudah terdaftar" (UC12 alternatif 2). |
+| I-15-05 | ComboBox | Peran | Pilihan Petugas Administrasi, Perawat, Dokter, atau Petugas Farmasi. |
+| I-15-06 | PasswordField | Kata sandi (kosong = tidak diganti) | Isian kata sandi, minimal 8 karakter untuk akun baru. Disimpan sebagai hash bcrypt (KNF04). Dikosongkan dari layar setelah dikirim. |
+| I-15-07 | Button | Simpan  (Ctrl+S) | Menjalankan kirimPerubahan() (Algo-C16-01) sesuai tab aktif. |
+| I-15-08 | Button | Akun Baru  (Ctrl+N) | Mengosongkan formulir untuk akun baru (idPengguna = 0). |
+| I-15-09 | Panel | Ambang risiko | Isi tab Data Master untuk ambang risiko (nilai awal 140 mmHg, IMT 30, 200 mg/dL). Hanya nilai yang dapat diubah, lebih dari nol; daftar obat dan poli ditampilkan pada tab yang sama (KF15, simpanDataMaster()). |
+| I-15-10 | Panel | Pemeliharaan Basis Data: Status Pencadangan | Status pencadangan terakhir dari tampilkanStatusPencadangan(): waktu, ukuran, status, dan lokasi media (KF21). |
+| I-15-11 | Label | Peringatan pencadangan | Peringatan merah selama catatan terakhir tidak berstatus berhasil, tampil juga pada dasbor administrasi (UC12 alternatif 4). |
+| I-15-12 | Button | Jalankan Pencadangan | Menjalankan kirimPencadangan(): KonfigurasiManager.jalankanPencadangan() memakai pg_dump ke media cadangan (Algo-C29-03). Penanda sedang berjalan tampil karena prosesnya dapat lama. |
+
+## 6.16 Rancangan Antarmuka Keseluruhan
+
+Tabel berikut mendaftar seluruh layar dengan ID yang sama seperti subbab sebelumnya. SATUSEHATGateway (C15) tidak memiliki layar.
+
+Tabel 6.17. Rancangan Antarmuka Keseluruhan
+
+| No | Tampilan Antarmuka |
+| :--- | :--- |
+| I-01 Masuk dan Dasbor | <img src="./assets/diagram/ui-i01-login.svg" alt="I-01 Masuk dan Dasbor" width="400"> |
+| I-02 Pendaftaran Pasien | <img src="./assets/diagram/ui-i02-pasien.svg" alt="I-02 Pendaftaran Pasien" width="400"> |
+| I-03 Kunjungan Pasien | <img src="./assets/diagram/ui-i03-kunjungan.svg" alt="I-03 Kunjungan Pasien" width="400"> |
+| I-04 Antrean Skrining | <img src="./assets/diagram/ui-i04-antrean-skrining.svg" alt="I-04 Antrean Skrining" width="400"> |
+| I-05 Formulir Skrining | <img src="./assets/diagram/ui-i05-skrining.svg" alt="I-05 Formulir Skrining" width="400"> |
+| I-06 Rekam Medis Pasien | <img src="./assets/diagram/ui-i06-rekam-medis.svg" alt="I-06 Rekam Medis Pasien" width="400"> |
+| I-07 Formulir Pemeriksaan | <img src="./assets/diagram/ui-i07-pemeriksaan.svg" alt="I-07 Formulir Pemeriksaan" width="400"> |
+| I-08 Resep Elektronik | <img src="./assets/diagram/ui-i08-resep.svg" alt="I-08 Resep Elektronik" width="400"> |
+| I-09 Antrean Resep Apotek | <img src="./assets/diagram/ui-i09-antrean-resep.svg" alt="I-09 Antrean Resep Apotek" width="400"> |
+| I-10 Penyerahan Obat | <img src="./assets/diagram/ui-i10-penyerahan-obat.svg" alt="I-10 Penyerahan Obat" width="400"> |
+| I-11 Persediaan Obat | <img src="./assets/diagram/ui-i11-persediaan.svg" alt="I-11 Persediaan Obat" width="400"> |
+| I-12 Daftar Pantau Pasien | <img src="./assets/diagram/ui-i12-daftar-pantau.svg" alt="I-12 Daftar Pantau Pasien" width="400"> |
+| I-13 Laporan Periodik | <img src="./assets/diagram/ui-i13-laporan.svg" alt="I-13 Laporan Periodik" width="400"> |
+| I-14 Sinkronisasi SATUSEHAT | <img src="./assets/diagram/ui-i14-sinkronisasi.svg" alt="I-14 Sinkronisasi SATUSEHAT" width="400"> |
+| I-15 Konfigurasi dan Basis Data | <img src="./assets/diagram/ui-i15-konfigurasi.svg" alt="I-15 Konfigurasi dan Basis Data" width="400"> |
 
 <br>
 
