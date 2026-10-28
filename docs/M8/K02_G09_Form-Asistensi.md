@@ -4,8 +4,8 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Hari\]* |
-| **Tanggal** | *\[DD/MM/YYYY\]* |
+| **Hari** | Selasa |
+| **Tanggal** | 27/10/2026 |
 | **Kelas** | K02 |
 | **Nomor Kelompok** | G09 |
 | **Nama Kelompok** | Cumlaude |
@@ -17,6 +17,7 @@
 | NIM | Nama |
 | --- | --- |
 | 13525008 | Malik Arsyafiandra Madani |
+| 13525032 | Ahmad Humam Isma |
 | 13525044 | Steven Vanako |
 | 13525071 | Muhammad Adnan Kurniawan |
 | 13525074 | Axeleon Justin Algianto |
@@ -26,13 +27,11 @@
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
-
-**Notes for this section:**  
-*Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
+| 1. Pengerjaan milestone ini secara umum sudah sesuai. Cakupan dokumen sudah memadai karena SKPL kelompok cukup ramping, tetapi tetap boleh dirampingkan lagi sesuai kebutuhan. |
+| 2. Tahap perancangan sudah semakin dekat dengan kode, sehingga detail rencana pengerjaan dan penyusunan setiap dokumen perlu lebih diperhatikan. |
+| 3. Asisten menilai dokumen sudah aman dan mengapresiasi banyaknya fitur antarmuka yang rancangan implementasinya sudah terlihat pada tampilan, mulai dari letak, konfigurasi, hingga tampilan tombol. |
+| 4. Saran: nama pada *pseudocode* harus sesuai dengan nama kelas, dan nama atribut serta metodenya diseragamkan dengan kelas yang bersangkutan. |
+| 5. Bila kelompok menambah fitur baru yang ikut mengubah dokumen pada milestone sebelumnya, perubahan tersebut boleh diberi catatan (*notes*) pada dokumen terkait. |
 
 ## Dokumentasi
 

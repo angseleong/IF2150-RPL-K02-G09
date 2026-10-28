@@ -35,7 +35,9 @@ class Screen:
 
     def label(self, jenis, x, y, t, ket, size=13, color=DARK, bold=False, anchor="start", konten=None):
         self.text(x, y, t, size, color, bold, anchor)
-        self.obj(jenis, konten or t, ket, x - 12 if anchor == "start" else x - 40, y - 14)
+        lebar = len(t) * size * (0.62 if bold else 0.55)  # perkiraan lebar teks agar penanda tidak menimpa huruf
+        bx = x - 12 if anchor == "start" else x - lebar / 2 - 12
+        self.obj(jenis, konten or t, ket, bx, y - 14 if anchor == "start" else y - size * 0.35)
 
     def box(self, x, y, w, h, fill="#fff", stroke=LINE, r=6, sw=1):
         self.raw(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="{fill}" stroke="{stroke}" stroke-width="{sw}"/>')
@@ -46,7 +48,7 @@ class Screen:
         self.text(x + 8, y + h / 2 + 4, hint, 12, "#94A3B8" if not ro else DARK)
         if combo:
             self.raw(f'<polygon points="{x + w - 20},{y + h / 2 - 3} {x + w - 10},{y + h / 2 - 3} {x + w - 15},{y + h / 2 + 4}" fill="{GRAY}"/>')
-        self.obj(jenis, konten or caption, ket, x + 2, y - 4)
+        self.obj(jenis, konten or caption, ket, x - 12, y - 10)  # di kiri keterangan kolom, bukan di atas hurufnya
 
     def button(self, x, y, w, t, ket, style="primary", h=32, konten=None):
         fill, tc, st = {"primary": (TEAL, "#fff", TEAL), "secondary": ("#fff", TEAL, TEAL),
@@ -102,13 +104,13 @@ class Screen:
         self.raw(f'<rect x="0" y="0" width="{self.w}" height="48" fill="{TEAL}"/>')
         self.text(16, 30, "SEHATI", 18, "#fff", True)
         self.text(130, 30, nama or self.nama, 14, "#fff")
-        self.text(self.w - 300, 30, f"Dewi Lestari ({peran})", 12, "#fff", anchor="start")
+        self.text(self.w - 132, 30, f"Dewi Lestari ({peran})", 12, "#fff", anchor="end")
         c = "#FACC15" if luring else "#4ADE80"
         self.raw(f'<circle cx="{self.w - 118}" cy="24" r="6" fill="{c}"/>')
         self.text(self.w - 106, 28, "Luring" if luring else "Daring", 11, "#fff")
         self.raw(f'<rect x="{self.w - 64}" y="12" width="52" height="24" rx="5" fill="none" stroke="#fff"/>')
         self.text(self.w - 38, 28, "Keluar", 11, "#fff", anchor="middle")
-        self.obj("Panel", "Bilah aplikasi", ket, self.w - 330, 12)
+        self.obj("Panel", "Bilah aplikasi", ket, 108, 24)
 
     def svg(self):
         head = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {self.w} {self.h}" width="{self.w}" height="{self.h}" '
@@ -191,11 +193,11 @@ def build():
     s.panel("Panel", 490, 75, 440, 200, "Tiket Antrean", "Tiket dari tampilkanTiketAntrean(): nama poli, nomor antrean, dan tanggal. Nomor berurutan per poli per hari dan mulai dari 1 saat hari berganti (KF03).", "#F0FDFA", TEAL)
     s.text(710, 160, "7", 64, TEAL, True, "middle")
     s.text(710, 190, "Nomor antrean", 12, GRAY, anchor="middle")
-    s.text(710, 225, "Poli Umum  |  27-10-2026", 12, DARK, anchor="middle")
-    s.button(620, 235, 180, "Cetak Tiket", "Mencetak tiket antrean ke pencetak bawaan sistem operasi.", "secondary")
+    s.text(710, 214, "Poli Umum  |  27-10-2026", 12, DARK, anchor="middle")
+    s.button(620, 236, 180, "Cetak Tiket", "Mencetak tiket antrean ke pencetak bawaan sistem operasi.", "secondary")
     s.panel("Panel", 490, 305, 440, 120, "Kunjungan Sudah Berjalan", "Panel kuning dari tampilkanKunjunganAktif() bila pasien sudah punya kunjungan aktif hari ini: nomor antrean dan status ditampilkan, kunjungan baru tidak dibuat (UC03 alternatif 1).", "#FEF9C3", AMBER, AMBER)
     s.text(506, 352, "Pasien sudah memiliki kunjungan hari ini.", 12, DARK)
-    s.text(506, 374, "Poli Gigi, antrean 3, status: menunggu skrining", 12, DARK, True)
+    s.text(506, 374, "Poli Gigi, antrean 3, status: siap diperiksa dokter", 12, DARK, True)
     S.append(s)
 
     # I-04 AntreanSkriningForm
@@ -262,7 +264,7 @@ def build():
     s.text(500, 160, "Berat badan", 10, TEAL, True)
     s.text(580, 160, "Gula darah", 10, AMBER, True)
     s.obj("Chart", "Grafik tren tanda vital", "Grafik garis tekanan darah, berat badan, dan gula darah antar-kunjungan dengan waktu di sumbu-x (JavaFX LineChart, KF08). Bila hanya ada satu titik, diganti tabel pengukuran hari ini beserta keterangan bahwa grafik butuh minimal dua kunjungan (tampilkanTabelPengukuran, UC05 alternatif 4).", 392, 108)
-    s.badge(700, 74, 130, "Mode baca saja", "Lencana dari aturModeBacaSaja() untuk peran selain Dokter. Tombol Periksa Pasien dinonaktifkan dan tampil keterangan \"Peran Anda tidak berwenang mengisi diagnosis\" (UC05 alternatif 1).", AMBER)
+    s.badge(780, 75, 130, "Mode baca saja", "Lencana dari aturModeBacaSaja() untuk peran selain Dokter. Tombol Periksa Pasien dinonaktifkan dan tampil keterangan \"Peran Anda tidak berwenang mengisi diagnosis\" (UC05 alternatif 1).", AMBER)
     s.button(390, 430, 190, "Periksa Pasien", "Membuka PemeriksaanForm (I-07) bila AutentikasiManager.periksaHakAkses() mengizinkan peran. Bagi Perawat tombol nonaktif dan PemeriksaanForm.kunciKolomKlinis() dipanggil.")
     s.button(600, 430, 190, "Buat Resep", "Membuka ResepForm (I-08) bagi Dokter bila pasien memerlukan terapi obat (UC06).", "secondary")
     s.text(30, 600, "Saat internet putus, lencana Luring tampil pada bilah aplikasi dan seluruh data tetap dibaca dari basis data lokal (tampilkanIndikatorLuring, UC05 alternatif 3).", 11, GRAY)
@@ -329,8 +331,8 @@ def build():
     s.table(30, 150, [("Obat", 280), ("Dosis", 120), ("Jumlah", 90), ("Aturan pakai", 260)],
             [["Amlodipin 5 mg tablet", "5 mg", "30", "1 x 1 sesudah makan"], ["Captopril 25 mg tablet", "25 mg", "60", "2 x 1 sesudah makan"]],
             "Item resep yang akan diserahkan (rincianTampil).", "Item resep")
-    s.table(30, 250, [("Nomor bets", 160), ("Kedaluwarsa", 160), ("Sisa", 100)],
-            [["B-2026-014", "12-03-2027", "120"], ["B-2026-031", "20-08-2027", "300"]],
+    s.table(30, 250, [("Obat", 200), ("Nomor bets", 140), ("Kedaluwarsa", 140), ("Sisa", 100)],
+            [["Amlodipin 5 mg tablet", "B-2026-014", "12-03-2027", "240"], ["Captopril 25 mg tablet", "B-2026-009", "14-01-2027", "!20"]],
             "Bets yang diambil lebih dulu, terurut tanggal kedaluwarsa terdekat (FEFO, Algo-C24-02).", "Bets obat")
     s.button(30, 350, 250, "Obat Diserahkan  (Ctrl+Enter)", "Menjalankan kirimKonfirmasi() (Algo-C10-01): stok dipotong, resep selesai dilayani, kunjungan ditutup, dan bundel FHIR disusun dalam satu transaksi (KF14). Nonaktif selama permintaan berjalan.")
     s.button(300, 350, 230, "Kembalikan ke Dokter", "Menjalankan bukaKolomCatatan(): kolom alasan di bawah dibuka (UC07 alternatif 1).", "danger")
@@ -403,16 +405,15 @@ def build():
 
     # I-14 SinkronisasiForm
     s = Screen(14, "Sinkronisasi SATUSEHAT", "SinkronisasiForm", "UC11", "Petugas Administrasi", 560)
-    s.appbar(BAR, peran="Petugas Administrasi")
-    s.badge(30, 82, 110, "Daring", "Indikator koneksi internet dari SATUSEHATGateway.periksaKoneksi(). Berubah menjadi kuning \"Luring\" bila internet putus (KF22).", GREEN)
-    s.badge(160, 82, 150, "Tertunda: 3", "Lencana jumlah bundel yang belum diterima SATUSEHAT (SinkronisasiManager.jumlahTertunda).", AMBER)
+    s.appbar(BAR, peran="Petugas Administrasi", luring=True)  # contoh keadaan luring: tombol Ekspor Bundel tampil
+    s.badge(30, 82, 110, "Luring", "Indikator koneksi internet dari SATUSEHATGateway.periksaKoneksi(). Hijau \"Daring\" bila internet tersedia dan kuning \"Luring\" bila internet putus (KF22).", AMBER)
+    s.badge(160, 82, 150, "Tertunda: 2", "Lencana jumlah bundel yang belum diterima SATUSEHAT (SinkronisasiManager.jumlahTertunda).", AMBER)
     s.table(30, 125, [("ID", 70), ("Kunjungan", 110), ("Pasien", 190), ("Status", 150), ("Alasan penolakan", 380)],
             [["41", "2026-10-26 #5", "Budi Santoso", "tertunda", ""], ["42", "2026-10-26 #6", "Rina Kusuma", "terkirim", ""], ["43", "2026-10-27 #1", "Siti Rahma", "!gagal kirim", "Resource.subject tidak ditemukan"]],
             "Status setiap bundel (daftarStatus) dari tampilkanStatus() dan tampilkanHasil(): tertunda, terkirim, atau gagal kirim beserta alasan penolakan SATUSEHAT (KF20, UC11 alternatif 2).", "Status bundel", sel=2)
     s.button(30, 260, 230, "Sinkronkan Sekarang", "Menjalankan kirimPermintaanSinkron() (Algo-C14-01) di thread latar; layar lain tetap dapat dipakai. Nonaktif selama berjalan (KF20).")
     s.box(280, 266, 300, 20, "#E2E8F0", LINE, r=10)
-    s.box(280, 266, 170, 20, TEAL, TEAL, r=10)
-    s.obj("ProgressBar", "Penanda sedang berjalan", "Penanda proses pengiriman yang tampil selama kirimSemua() berjalan.", 282, 264)
+    s.obj("ProgressBar", "Penanda sedang berjalan", "Penanda proses pengiriman yang terisi selama kirimSemua() berjalan dan kosong saat tidak ada pengiriman, seperti pada keadaan luring ini.", 282, 264)
     s.button(30, 320, 230, "Ekspor Bundel", "Muncul dari tampilkanTombolEkspor() saat internet putus. Menjalankan kirimPermintaanEkspor(lokasi) yang menulis arsip terenkripsi ke lokasi pilihan, misalnya media eksternal (UC11 alternatif 1).", "secondary")
     s.box(30, 400, 900, 36, "#FEF9C3", AMBER)
     s.text(44, 423, "Koneksi internet terputus, bundel ditahan", 12, DARK, True)

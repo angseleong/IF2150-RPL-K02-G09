@@ -14,6 +14,7 @@
 | NIM | Nama |
 |---|---|
 | 13525008 | Malik Arsyafiandra Madani |
+| 13525032 | Ahmad Humam Isma |
 | 13525044 | Steven Vanako |
 | 13525071 | Muhammad Adnan Kurniawan |
 | 13525074 | Axeleon Justin Algianto |
@@ -29,6 +30,7 @@
 * [Milestone 5](#milestone-5)
 * [Milestone 6](#milestone-6)
 * [Milestone 7](#milestone-7)
+* [Milestone 8](#milestone-8)
 
 
 ---
@@ -211,6 +213,24 @@
 * *Kelas perancangan berbeda dari kelas analisis pada empat hal: sembilan DataBoundary ditambahkan, penyimpanan dipindah dari entity ke DataBoundary, setiap atribut dan metode diberi tipe, dan metode ditambah atau dihapus sesuai kebutuhan sequence diagram. Keempatnya dicatat pada BAB 4 DPPL.*
 * *Seluruh diagram ditulis dalam Mermaid dan sumbernya disimpan di docs/M7/assets/diagram/src agar dapat disunting anggota lain.*
 * *Hasil asistensi: sequence diagram wajib memakai notasi aktor, boundary, control, entity, lifeline, dan activation bar; satu diagram boleh memuat beberapa fragmen, dan fragmen critical dipakai untuk proses yang tidak boleh disela proses lain seperti pengurangan stok; diagram kelas per use case memuat atribut dan metode yang dipakai use case itu saja, sedangkan diagram keseluruhan cukup berupa kotak kelas.*
+
+---
+
+### Milestone 8
+**Periode:** 21-10-2026 - 28-10-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *25-10-2026* | *Muhammad Adnan Kurniawan* | *Menyinkronkan repository dengan rilis Milestone 8, menyusun K02_G09_DPPL2.md dari DPPL Tugas 7 (BAB 1 sampai BAB 4 dan matriks kerunutan sebagai BAB 7), menambah aturan penomoran Algo-CXX-YY, Q-CXX-YY, I-XX, dan I-XX-YY, menyusun Tabel 5.1 serta kesepakatan pseudocode BAB 5, dan merinci 13 kelas Manager (C17 s.d. C29) beserta algoritmanya* | *5* | *Done* | *Kelas Manager tidak menyimpan DataBoundary sebagai atribut, sehingga cara akses data perlu disepakati dulu pada pengantar BAB 5* |
+| *27-10-2026* | *Malik Arsyafiandra Madani* | *Merinci sembilan kelas DataBoundary (C56 s.d. C64) beserta 78 kueri SQL PostgreSQL dan aturan bersama transaksi, sisip atau mutakhirkan, penolakan constraint, penguncian baris, dan hak akses basis data* | *5* | *Done* | *-* |
+| *27-10-2026* | *Axeleon Justin Algianto* | *Merinci 16 kelas boundary (C01 s.d. C16) dan 26 kelas Entity (C30 s.d. C55), lalu menyusun BAB 6: generator gen_ui.py, rancangan 15 layar I-01 s.d. I-15, tabel spesifikasi 154 objek, dan tabel pintasan papan ketik* | *6* | *Done* | *-* |
+| *27-10-2026* | *Muhammad Adnan Kurniawan, Malik Arsyafiandra Madani, Steven Vanako, Ahmad Humam Isma* | *Asistensi Milestone 8 bersama asisten: dokumen dinilai aman, rancangan antarmuka diapresiasi, dan diberi saran agar nama pada pseudocode seragam dengan nama kelas, atribut, dan metode* | *1* | *Done* | *-* |
+| *28-10-2026* | *Muhammad Adnan Kurniawan* | *Menindaklanjuti asistensi: mengisi form asistensi, menambahkan anggota baru, memeriksa kesesuaian nama pseudocode dengan Tabel 4.1, menguji 78 kueri pada PostgreSQL dan memperbaiki Q-C61-08, menambah atribut idPoli pada KunjunganEntity, serta merapikan penanda objek dan data contoh pada rancangan antarmuka* | *3* | *Done* | *Q-C61-08 gagal di-PREPARE karena operator date + parameter tanpa tipe* |
+
+**Catatan/Evaluasi Milestone 8:**
+* *Seluruh 64 kelas punya tabel operasi dan atribut yang sama persis dengan Tabel 4.1, dengan 74 algoritma dan 78 kueri yang ID-nya tidak ada yang ganda.*
+* *Seluruh kueri diuji dengan PREPARE pada PostgreSQL 18 memakai skema yang diturunkan dari kueri itu sendiri; pencarian pasien parsial pada 50.000 baris selesai di bawah 0,1 detik (KNF01).*
+* *Hasil asistensi: nama pada pseudocode harus seragam dengan nama kelas, atribut, dan metode; penambahan fitur yang mengubah dokumen sebelumnya boleh diberi catatan pada dokumen terkait.*
 
 ---
 

@@ -14,6 +14,7 @@
 | NIM | Nama |
 |---|---|
 | 13525008 | Malik Arsyafiandra Madani |
+| 13525032 | Ahmad Humam Isma |
 | 13525044 | Steven Vanako |
 | 13525071 | Muhammad Adnan Kurniawan |
 | 13525074 | Axeleon Justin Algianto |
@@ -29,6 +30,7 @@
 * [Milestone 5](#milestone-5)
 * [Milestone 6](#milestone-6)
 * [Milestone 7](#milestone-7)
+* [Milestone 8](#milestone-8)
 
 ---
 
@@ -92,6 +94,16 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | *Gemini* | *Memeriksa ulang konsistensi nama metode antara sequence diagram dan diagram kelas* | *"Ini daftar pesan pada sequence diagram dan daftar metode tiap kelas. Apakah ada pesan yang metodenya tidak ada di kelas tujuan?"* | *Temuan AI dicocokkan ulang secara manual pada dokumen. Kelompok sendiri yang memutuskan perbaikannya, yaitu menambah metode yang kurang atau mengganti nama pesan.* |
 
 ---
+### Milestone 8
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| *Claude (Claude Code)* | *Menyusun draf kerangka DPPL2 dari DPPL Tugas 7 dan draf rincian 13 kelas Manager beserta pseudocode-nya* | *"Kerjakan sebagian draf Tugas 8: bawa BAB 1 sampai BAB 4 dari DPPL Tugas 7 lalu rinci kelas Manager pada BAB 5, sisanya dikerjakan anggota lain."* | *Pembagian bagian ditentukan kelompok. Operasi dan atribut dicocokkan otomatis dengan Tabel 4.1 dan pseudocode dicocokkan dengan sequence diagram BAB 3 sebelum dipakai.* |
+| *Claude (Claude Code)* | *Memeriksa keseragaman nama kelas, atribut, dan metode pada seluruh pseudocode sesuai saran asistensi* | *"Cek semuanya, termasuk tampilan visual dan SQL-nya, lalu perbaiki yang masih kurang."* | *Temuan dibaca ulang satu per satu; nama kolom SQL dan metode yang sengaja dihapus pada BAB 4 tidak diubah.* |
+| *Claude (Claude Code)* | *Menguji 78 kueri SQL pada PostgreSQL sementara dan mengukur waktu pencarian pasien* | *"Cek SQL-nya juga."* | *Satu kueri (Q-C61-08) diperbaiki setelah gagal di-PREPARE. Skema uji hanya alat bantu dan tidak dimasukkan ke dokumen.* |
+| *Claude (Claude Code)* | *Merender 15 rancangan antarmuka untuk memeriksa tampilan visualnya* | *"Cek tampilan visualnya."* | *Penanda nomor objek yang menutupi teks, bilah aplikasi yang bertumpuk, dan data contoh yang tidak konsisten antarlayar diperbaiki pada gen_ui.py lalu seluruh layar dibuat ulang dan diperiksa kembali.* |
+
+---
+
 ### Pernyataan Integritas dan Persetujuan
 
 Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan AI di atas adalah benar. Kami telah memvalidasi seluruh hasil AI dan bertanggung jawab penuh atas orisinalitas, keamanan, dan kebenaran hasil akhir dari tugas ini.

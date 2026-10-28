@@ -26,6 +26,7 @@ Dipersiapkan oleh:
 | NIM | Nama |
 | --- | --- |
 | 13525008 | Malik Arsyafiandra Madani |
+| 13525032 | Ahmad Humam Isma |
 | 13525044 | Steven Vanako |
 | 13525071 | Muhammad Adnan Kurniawan |
 | 13525074 | Axeleon Justin Algianto |
@@ -38,6 +39,7 @@ Dipersiapkan oleh:
 | Revisi | Deskripsi |
 | :--- | :--- |
 | A | Melanjutkan DPPL Tugas 7. BAB 1 sampai BAB 4 dibawa dari DPPL Tugas 7 dengan tambahan aturan penomoran algoritma, kueri, dan antarmuka pada Subbab 1.4. BAB 5 Perancangan Rinci Kelas dan BAB 6 Perancangan Antarmuka ditambahkan, sedangkan matriks kerunutan berpindah dari BAB 5 menjadi BAB 7. |
+| B | Perbaikan hasil asistensi: menyeragamkan nama pada *pseudocode* dengan kelas, atribut, dan metodenya, menambah atribut `idPoli` pada `KunjunganEntity` (Tabel 4.1, Gambar 17, dan Subbab 5.35), memperbaiki tipe parameter Q-C61-08, merapikan penanda objek dan data contoh pada rancangan antarmuka I-03, I-06, I-10, dan I-14, serta menambahkan anggota kelompok baru. |
 
 ---
 
@@ -1148,7 +1150,7 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C32 | AuditEntity «entity» | `-idAudit: long`<br>`-idPengguna: int`<br>`-waktu: LocalDateTime`<br>`-deskripsi: String` | `+buat(idPengguna: int, deskripsi: String)$: AuditEntity` |
 | C33 | PasienEntity «entity» | `-idPasien: int`<br>`-nik: String`<br>`-nomorRekamMedis: String`<br>`-nama: String`<br>`-tanggalLahir: LocalDate`<br>`-jenisKelamin: String`<br>`-alamat: String`<br>`-nomorTelepon: String` | `+perbarui(data: PasienEntity): void` |
 | C34 | RekamMedisEntity «entity» | `-idRekamMedis: int`<br>`-daftarDiagnosis: List<DiagnosisEntity>`<br>`-riwayatObat: List<String>` | `+tambahEntri(catatan: String): void` |
-| C35 | KunjunganEntity «entity» | `-idKunjungan: int`<br>`-idPasien: int`<br>`-tanggal: LocalDate`<br>`-nomorAntrean: int`<br>`-status: String` | `+perbaruiStatus(status: String): void`<br>`+aktifHariIni(): boolean` |
+| C35 | KunjunganEntity «entity» | `-idKunjungan: int`<br>`-idPasien: int`<br>`-idPoli: int`<br>`-tanggal: LocalDate`<br>`-nomorAntrean: int`<br>`-status: String` | `+perbaruiStatus(status: String): void`<br>`+aktifHariIni(): boolean` |
 | C36 | PoliEntity «entity» | `-idPoli: int`<br>`-namaPoli: String`<br>`-urutanTerakhir: int`<br>`-tanggalUrutan: LocalDate` | `+ambilNomorBerikutnya(hariIni: LocalDate): int` |
 | C37 | AntreanEntity «entity» | `-idAntrean: int`<br>`-jenis: String`<br>`-daftarEntri: List<Integer>` | `+tambahkan(idEntri: int): void`<br>`+ambilTerdepan(): KunjunganEntity`<br>`+pindahkanKeBelakang(idEntri: int): void`<br>`+keluarkan(idEntri: int): void` |
 | C38 | SkriningEntity «entity» | `-idSkrining: int`<br>`-idKunjungan: int`<br>`-keluhanAwal: String`<br>`-waktu: LocalDateTime` | `+lampirkanTandaVital(tv: TandaVitalEntity): void` |
@@ -1311,7 +1313,7 @@ PROSEDUR kirimKredensial()
         sesi <- autentikasiManager.autentikasi(nama, kataSandi)
     TANGKAP IllegalStateException galat                  // akun nonaktif
         kataSandi <- ""
-        tampilkanPesanGagal(galat.pesan)
+        tampilkanPesanGagal(galat.getMessage())
         KEMBALI
     AKHIR COBA
     kataSandi <- ""
@@ -1414,7 +1416,7 @@ PROSEDUR kirimDataPasien()
             tampilkanNotifikasi("Data pasien diperbarui")
         AKHIR JIKA
     TANGKAP IllegalArgumentException galat
-        tampilkanPesanValidasi(galat.pesan)
+        tampilkanPesanValidasi(galat.getMessage())
     AKHIR COBA
 ```
 
@@ -1527,7 +1529,7 @@ PROSEDUR kirimHasilSkrining()
         teks <- teks dengan koma desimal diganti titik
         JIKA teks kosong DAN kolom ≠ "gulaDarah" MAKA tambahkan kolom ke kolomTidakTerbaca
         SELAIN ITU JIKA teks tidak kosong DAN BUKAN angka MAKA tambahkan kolom ke kolomTidakTerbaca
-        SELAIN ITU isi tv.kolom dengan angka dari teks     // kosong pada gulaDarah menjadi null
+        SELAIN ITU isi atribut tv yang bernama kolom dengan angka dari teks   // kolom: sistolik, diastolik, beratBadan, tinggiBadan, suhu, nadi, gulaDarah; gulaDarah kosong menjadi null
         AKHIR JIKA
     AKHIR UNTUK
     JIKA kolomTidakTerbaca TIDAK KOSONG MAKA
@@ -1647,7 +1649,7 @@ PROSEDUR kirimHasilPemeriksaan()
             tampilkanPesan("Pemeriksaan tersimpan")
         AKHIR JIKA
     TANGKAP IllegalStateException atau IllegalArgumentException galat
-        tampilkanPesan(galat.pesan)                     // misalnya rekam medis sudah dikunci
+        tampilkanPesan(galat.getMessage())                     // misalnya rekam medis sudah dikunci
     AKHIR COBA
 ```
 
@@ -1689,7 +1691,7 @@ PROSEDUR kirimItem(idObat, jumlah, dosis, aturanPakai)
         tandai kolom yang tidak valid
         KEMBALI
     AKHIR JIKA
-    item <- resepManager.tambahItem(idObat, jumlah, dosis, aturanPakai)
+    item <- resepManager.tambahItem(idObat, jumlah, dosis, aturanPakai)   // tidak menolak: jumlah sudah diperiksa, obat dipilih dari daftar
     obat <- obat dengan idObat pada daftar obat yang dimuat tampilkanFormulir()
     tambahkan item ke isianItem
     tampilkanIndikatorStok(item.cukupStok(obat.stok), obat.stok)
@@ -1757,7 +1759,7 @@ PROSEDUR kirimKonfirmasi()
         tampilkanPesan("Obat diserahkan")
         tutup rincian dan kembali ke AntreanResepForm
     TANGKAP IllegalStateException galat
-        tampilkanPesan(galat.pesan)                      // resep sudah selesai atau stok tidak cukup
+        tampilkanPesan(galat.getMessage())                      // resep sudah selesai atau stok tidak cukup
         muat ulang rincian dan antrean
     AKHIR COBA
 ```
@@ -1803,7 +1805,7 @@ PROSEDUR kirimPenerimaan()
         daftarPeringatan <- persediaanManager.terbitkanPeringatan()
         tampilkanPeringatan(daftarPeringatan)
     TANGKAP IllegalArgumentException galat
-        tampilkanPesanKesalahan(pisahkan galat.pesan pada koma)    // nama kolom, misalnya "jumlah,tanggalKedaluwarsa"
+        tampilkanPesanKesalahan(pisahkan galat.getMessage() pada koma)    // nama kolom, misalnya "jumlah,tanggalKedaluwarsa"
     AKHIR COBA
 ```
 
@@ -1896,7 +1898,7 @@ PROSEDUR kirimPermintaanEkspor(format, direktori)
         lokasi <- laporanManager.ekspor(laporan terakhir, format, direktori)
         tampilkanPesan("Berkas berhasil dibuat di " + lokasi)
     TANGKAP IllegalArgumentException, IllegalStateException, atau UncheckedIOException galat
-        tampilkanPesan(galat.pesan)
+        tampilkanPesan(galat.getMessage())
     AKHIR COBA
 ```
 
@@ -1937,7 +1939,7 @@ PROSEDUR kirimPermintaanSinkron()
             kembali ke thread JavaFX lalu tampilkanHasil(hasil)
         TANGKAP IllegalStateException galat              // koneksi internet terputus
             kembali ke thread JavaFX lalu
-                tampilkanPesan(galat.pesan)
+                tampilkanPesan(galat.getMessage())
                 tampilkanTombolEkspor()
         AKHIRNYA
             kembali ke thread JavaFX lalu aktifkan tombol "Sinkronkan Sekarang"
@@ -2063,8 +2065,8 @@ PROSEDUR kirimPerubahan()
         AKHIR JIKA
         konfigurasiManager.muatDataMaster()                  // tabel akun dan data master disegarkan
     TANGKAP IllegalArgumentException galat
-        tandai kolom nama pengguna JIKA galat.pesan = "Nama pengguna sudah dipakai"
-        tampilkanPesan(galat.pesan)
+        tandai kolom nama pengguna JIKA galat.getMessage() = "Nama pengguna sudah dipakai"
+        tampilkanPesan(galat.getMessage())
     AKHIR COBA
 ```
 
@@ -3326,11 +3328,12 @@ Tabel 5.35.2. Atribut Kelas KunjunganEntity
 | :--- | :--- | :--- |
 | `idKunjungan` | private | `int` |
 | `idPasien` | private | `int` |
+| `idPoli` | private | `int` |
 | `tanggal` | private | `LocalDate` |
 | `nomorAntrean` | private | `int` |
 | `status` | private | `String` |
 
-Status sah berjalan menurut alur pelayanan, yaitu "menunggu skrining", "sedang diskrining", "siap diperiksa dokter", "selesai diperiksa", dan "selesai", ditambah "tidak hadir" untuk pasien yang dilewati (Algo-C20-03). Poli tujuan tidak menjadi atribut karena hanya dipakai saat nomor antrean diterbitkan dan untuk rekapitulasi, sehingga `DataKunjunganBoundary` menyimpannya sebagai kolom `id_poli` (Q-C58-07).
+Status sah berjalan menurut alur pelayanan, yaitu "menunggu skrining", "sedang diskrining", "siap diperiksa dokter", "selesai diperiksa", dan "selesai", ditambah "tidak hadir" untuk pasien yang dilewati (Algo-C20-03). `idPoli` menyimpan poli tujuan yang diberikan `KunjunganManager` saat kunjungan dibuat (Algo-C19-01). Nilainya ditulis ke kolom `id_poli` oleh `DataKunjunganBoundary` (Q-C58-07), dibaca kembali oleh Q-C58-05 dan Q-C58-06, dan dipakai untuk rekapitulasi per poli (Q-C62-01).
 
 ### 5.35.1 Algoritma Perubahan Status Kunjungan
 
@@ -3424,7 +3427,7 @@ Tabel 5.37.2. Atribut Kelas AntreanEntity
 ### 5.37.1 Algoritma Pengelolaan Isi Antrean
 
 **Nama Kelas:** AntreanEntity  
-**Nama Operasi:** `tambahkan()`, `ambilTerdepan()`, `pindahkanKeBelakang()`, dan `keluarkan()`  
+**Nama Operasi:** `tambahkan(idEntri: int): void`, `ambilTerdepan(): KunjunganEntity`, `pindahkanKeBelakang(idEntri: int): void`, dan `keluarkan(idEntri: int): void`  
 **ID Algoritma:** Algo-C37-01
 
 ```text
@@ -3770,7 +3773,7 @@ Tabel 5.48.2. Atribut Kelas ObatEntity
 ### 5.48.1 Algoritma Perubahan Stok
 
 **Nama Kelas:** ObatEntity  
-**Nama Operasi:** `kurangiStok()`, `tambahStok()`, dan `diBawahAmbang()`  
+**Nama Operasi:** `kurangiStok(jumlah: int): void`, `tambahStok(jumlah: int): void`, dan `diBawahAmbang(): boolean`  
 **ID Algoritma:** Algo-C48-01
 
 ```text
@@ -4086,7 +4089,7 @@ Tabel 5.56.2. Atribut Kelas DataAkunBoundary
 4. **Penguncian baris.** Kueri ber-`FOR UPDATE` (Q-C58-02, Q-C58-09, Q-C61-02, Q-C61-03, dan Q-C61-15) menahan kunci baris sampai transaksi `Manager` selesai. Bila dipanggil di luar transaksi, kunci langsung dilepas begitu kueri selesai, sehingga operasi baca biasa tidak tertahan lama.
 5. **Hak akses basis data.** Aplikasi masuk ke PostgreSQL dengan satu peran, `sehati_app`. Peran ini hanya diberi hak `SELECT` dan `INSERT` pada tabel `audit`, tanpa `UPDATE`, `DELETE`, maupun `TRUNCATE`, sehingga jejak audit tidak dapat diubah atau dihapus dari aplikasi (KNF05).
 
-Nama tabel dan kolom pada kueri mengikuti kesepakatan 4. Beberapa tabel memiliki kolom yang tidak muncul sebagai atribut *entity*. Kolom tersebut berupa kunci asing penghubung relasi pada Gambar 58, misalnya `kunjungan.id_poli` dan `item_resep.id_resep`, dan masing-masing dijelaskan pada keterangan kueri yang memakainya.
+Nama tabel dan kolom pada kueri mengikuti kesepakatan 4. Beberapa tabel memiliki kolom yang tidak muncul sebagai atribut *entity*. Kolom tersebut berupa kunci asing penghubung relasi pada Gambar 58, misalnya `item_resep.id_resep` dan `daftar_pantau.id_penanda`, dan masing-masing dijelaskan pada keterangan kueri yang memakainya.
 
 Tabel 5.56.3. Kueri Kelas DataAkunBoundary
 
@@ -4130,7 +4133,7 @@ Tabel 5.57.3. Kueri Kelas DataPasienBoundary
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-C57-01 | `SELECT id_pasien, nik, nomor_rekam_medis, nama, tanggal_lahir,`<br>`jenis_kelamin, alamat, nomor_telepon`<br>`FROM pasien`<br>`WHERE nik LIKE ? OR nomor_rekam_medis ILIKE ? OR nama ILIKE ?`<br>`ORDER BY nama LIMIT 50` | `cariParsial()`. Ketiga parameter berisi pola yang sama, yaitu kata kunci yang diapit `%` (Algo-C57-01). |
+| Q-C57-01 | `SELECT id_pasien, nik, nomor_rekam_medis, nama, tanggal_lahir,`<br>`jenis_kelamin, alamat, nomor_telepon`<br>`FROM pasien`<br>`WHERE nik LIKE ? OR nomor_rekam_medis ILIKE ? OR nama ILIKE ?`<br>`ORDER BY nama LIMIT 50` | `cariParsial()`. Ketiga parameter berisi pola yang sama, yaitu kata kunci yang diapit `%` (Algo-C57-01). Pola `%...%` tidak dapat memakai indeks B-tree, tetapi uji pada PostgreSQL dengan 50.000 baris pasien tetap selesai dalam kurang dari 0,1 detik, jauh di bawah batas 2 detik KNF01. |
 | Q-C57-02 | `SELECT id_pasien, nik, nomor_rekam_medis, nama, tanggal_lahir,`<br>`jenis_kelamin, alamat, nomor_telepon`<br>`FROM pasien WHERE id_pasien = ?` | `ambilPasien()`. |
 | Q-C57-03 | `SELECT EXISTS (SELECT 1 FROM pasien WHERE nik = ?)` | `nikTerdaftar()`. |
 | Q-C57-04 | `SELECT concat('RM-', lpad(nextval('seq_nomor_rm')::text, 6, '0'))` | `nomorRMBerikutnya()`. Menghasilkan nomor seperti `RM-000123`. `nextval()` tidak pernah memberikan nilai yang sama kepada dua transaksi, juga saat dua loket mendaftar bersamaan. Nomor milik transaksi yang di-ROLLBACK dilewati, bukan dipakai ulang, sehingga nomor tetap unik (KF02). |
@@ -4432,7 +4435,7 @@ Tabel 5.61.3. Kueri Kelas DataFarmasiBoundary
 | Q-C61-05 | `UPDATE bets_obat SET jumlah = ? WHERE id_obat = ? AND nomor_bets = ?` | `simpanStok()`, dijalankan sebagai *batch* untuk setiap bets. CHECK `jumlah >= 0` berlaku seperti Q-C61-04. |
 | Q-C61-06 | `INSERT INTO penerimaan_obat (nomor_faktur, tanggal_terima) VALUES (?, ?)`<br>`RETURNING id_penerimaan` | `simpanPenerimaan()`. |
 | Q-C61-07 | `INSERT INTO bets_obat (id_obat, nomor_bets, jumlah, tanggal_kedaluwarsa,`<br>`id_penerimaan) VALUES (?, ?, ?, ?, ?)` | `simpanPenerimaan()`, dijalankan sebagai *batch* untuk setiap bets. Kunci primer `bets_obat` adalah `(id_obat, nomor_bets)`, sama dengan identitas `BetsObatEntity`. Kolom `id_penerimaan` menautkan bets ke faktur asalnya (agregasi `PenerimaanObatEntity`–`BetsObatEntity`). |
-| Q-C61-08 | `SELECT o.id_obat, o.nama_obat, o.sediaan, o.stok, o.ambang_minimum`<br>`FROM obat o`<br>`WHERE o.stok < o.ambang_minimum`<br>`OR EXISTS (SELECT 1 FROM bets_obat b WHERE b.id_obat = o.id_obat`<br>`AND b.jumlah > 0 AND b.tanggal_kedaluwarsa <= CURRENT_DATE + ?)`<br>`ORDER BY o.nama_obat` | `obatPerluPeringatan()`. Perbandingan `stok < ambang_minimum` sama dengan `ObatEntity.diBawahAmbang()`, sehingga setiap obat yang dikembalikan memang memicu sedikitnya satu peringatan pada Algo-C25-03. |
+| Q-C61-08 | `SELECT o.id_obat, o.nama_obat, o.sediaan, o.stok, o.ambang_minimum`<br>`FROM obat o`<br>`WHERE o.stok < o.ambang_minimum`<br>`OR EXISTS (SELECT 1 FROM bets_obat b WHERE b.id_obat = o.id_obat`<br>`AND b.jumlah > 0 AND b.tanggal_kedaluwarsa <= CURRENT_DATE + ?::int)`<br>`ORDER BY o.nama_obat` | `obatPerluPeringatan()`. Perbandingan `stok < ambang_minimum` sama dengan `ObatEntity.diBawahAmbang()`, sehingga setiap obat yang dikembalikan memang memicu sedikitnya satu peringatan pada Algo-C25-03. Parameter `hari` di-*cast* ke `int` karena PostgreSQL tidak dapat memilih operator `date + ?` tanpa tipe (`date + integer` menghasilkan tanggal). |
 | Q-C61-09 | `INSERT INTO resep (id_kunjungan, waktu_masuk, status, catatan)`<br>`VALUES (?, ?, ?, ?) RETURNING id_resep` | `simpanResep()` untuk resep baru. |
 | Q-C61-10 | `INSERT INTO item_resep (id_resep, id_obat, dosis, jumlah, aturan_pakai)`<br>`VALUES (?, ?, ?, ?, ?) RETURNING id_item` | `simpanResep()` untuk resep baru, dijalankan untuk setiap item. Kolom `id_resep` mewujudkan komposisi `ResepEntity`–`ItemResepEntity`. |
 | Q-C61-11 | `UPDATE resep SET status = ?, catatan = ? WHERE id_resep = ?` | `simpanResep()` untuk resep lama, misalnya "selesai dilayani" (Algo-C24-01) atau "dikembalikan" beserta alasannya (skenario alternatif 1 UC07). Item resep tidak berubah setelah resep dikirim. |
@@ -5128,11 +5131,11 @@ Tabel 6.15. Spesifikasi Objek Antarmuka I-14
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
 | I-14-01 | Panel | Bilah aplikasi | Menampilkan nama layar, nama dan peran pengguna sesi, indikator status koneksi, dan tombol Keluar. Indikator hijau "Daring" berarti internet tersedia, sedangkan kuning "Luring" berarti hanya LAN yang aktif dan seluruh fungsi layar tetap berjalan (KF22, KNF09). Tombol Keluar menutup sesi (SesiEntity.tutup) dan kembali ke I-01. F1 membuka layar bantuan berisi seluruh pintasan papan ketik (Tabel 6.1, KNF12). |
-| I-14-02 | Label | Daring | Indikator koneksi internet dari SATUSEHATGateway.periksaKoneksi(). Berubah menjadi kuning "Luring" bila internet putus (KF22). |
-| I-14-03 | Label | Tertunda: 3 | Lencana jumlah bundel yang belum diterima SATUSEHAT (SinkronisasiManager.jumlahTertunda). |
+| I-14-02 | Label | Luring | Indikator koneksi internet dari SATUSEHATGateway.periksaKoneksi(). Hijau "Daring" bila internet tersedia dan kuning "Luring" bila internet putus (KF22). |
+| I-14-03 | Label | Tertunda: 2 | Lencana jumlah bundel yang belum diterima SATUSEHAT (SinkronisasiManager.jumlahTertunda). |
 | I-14-04 | Table | Status bundel | Status setiap bundel (daftarStatus) dari tampilkanStatus() dan tampilkanHasil(): tertunda, terkirim, atau gagal kirim beserta alasan penolakan SATUSEHAT (KF20, UC11 alternatif 2). |
 | I-14-05 | Button | Sinkronkan Sekarang | Menjalankan kirimPermintaanSinkron() (Algo-C14-01) di thread latar; layar lain tetap dapat dipakai. Nonaktif selama berjalan (KF20). |
-| I-14-06 | ProgressBar | Penanda sedang berjalan | Penanda proses pengiriman yang tampil selama kirimSemua() berjalan. |
+| I-14-06 | ProgressBar | Penanda sedang berjalan | Penanda proses pengiriman yang terisi selama kirimSemua() berjalan dan kosong saat tidak ada pengiriman, seperti pada keadaan luring ini. |
 | I-14-07 | Button | Ekspor Bundel | Muncul dari tampilkanTombolEkspor() saat internet putus. Menjalankan kirimPermintaanEkspor(lokasi) yang menulis arsip terenkripsi ke lokasi pilihan, misalnya media eksternal (UC11 alternatif 1). |
 | I-14-08 | Label | Bilah pesan | Pesan dari tampilkanPesan(): hasil sinkronisasi, penolakan karena luring, atau lokasi berkas ekspor. |
 
