@@ -7,24 +7,29 @@ IMPLEMENTASI PERANGKAT LUNAK
 </h1>
 <br>
 
-## *Nama Perangkat Lunak*
-### *[Logo Perangkat Lunak]*
+## SEHATI - Sistem Elektronik Pelayanan Kesehatan Terintegrasi
 
-### Untuk: *[Nama Asisten]*
+<p align="center">
+<img alt="Logo SEHATI" src="../M8/assets/logo-sehati.svg" width="60%">
+</p>
+
+### Untuk: Made Branenda Jordhy
 
 Dipersiapkan oleh:
 | Informasi | Keterangan |
 | --- | --- |
-| Kelas | *\[Kelas\]* |
-| Kelompok | *\[Nomor Kelompok\]*  |
+| Kelas | K02 |
+| Kelompok | G09 |
+| Nama Kelompok | Cumlaude |
 
 | NIM | Nama |
 |---|---|
-| *[NIM 1]* | *[Nama Anggota 1]* |
-| *[NIM 2]* | *[Nama Anggota 2]* |
-| *[NIM 3]* | *[Nama Anggota 3]* |
-| *[NIM 4]* | *[Nama Anggota 4]* |
-| *[NIM 5]* | *[Nama Anggota 5]* |
+| 13525008 | Malik Arsyafiandra Madani |
+| 13525032 | Ahmad Humam Isma |
+| 13525044 | Steven Vanako |
+| 13525071 | Muhammad Adnan Kurniawan |
+| 13525074 | Axeleon Justin Algianto |
+| 13525110 | Fachry Azriel Fajdwani |
 ---
 
 > **Petunjuk pengerjaan:** *[Silahkan hapus bagian ini setelah selesai mengerjakan]*
@@ -229,8 +234,12 @@ Tabel B.4. Kontribusi Anggota
 
 | NIM | Nama | Modul / Fitur yang Dikerjakan | Persentase Kontribusi |
 | :--- | :--- | :--- | :--- |
-| *[NIM 1]* | *[Nama]* | *[Modul/fitur]* | *[%]* |
-| *...* | *...* | *...* | *...* |
+| 13525008 | Malik Arsyafiandra Madani | Farmasi (UC07, UC08) | *[%]* |
+| 13525032 | Ahmad Humam Isma | Skrining dan pemantauan (UC04, UC09) | *[%]* |
+| 13525044 | Steven Vanako | Loket (UC02, UC03) | *[%]* |
+| 13525071 | Muhammad Adnan Kurniawan | Pemeriksaan dan resep (UC05, UC06) | *[%]* |
+| 13525074 | Axeleon Justin Algianto | Akses dan administrasi (UC01, UC12) | *[%]* |
+| 13525110 | Fachry Azriel Fajdwani | Pelaporan dan integrasi (UC10, UC11) | *[%]* |
 
 ## B.5 Traceability Kelas Perancangan ke Implementasi
 
@@ -240,10 +249,70 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 
 | ID Kelas | Nama Kelas Perancangan | Bentuk Implementasi | Lokasi (File dan Nama) | Keterangan |
 | :--- | :--- | :--- | :--- | :--- |
-| *[C01]* | *[Nama kelas pada DPPL]* | *[mis. Kelas / Fungsi / Komponen / Route / Tabel]* | *[mis. `src/models/user.py` - `User`]* | *[Cara atribut dan operasi kelas diwujudkan; "-" jika tidak ada penjelasan tambahan]* |
-| *[C02]* | *[Nama kelas pada DPPL]* | *[Bentuk implementasi]* | *[mis. `src/components/LoginForm.tsx` - `LoginForm`]* | *[mis. atribut menjadi *state*, operasi menjadi *handler*]* |
-| *[C03]* | *[Nama kelas pada DPPL]* | *[Bentuk implementasi]* | *[mis. `src/routes/auth.js` - `POST /login`]* | *[Keterangan]* |
-| *...* | *...* | *...* | *...* | *...* |
+| C01 | LoginForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C02 | PasienForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C03 | KunjunganForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C04 | AntreanSkriningForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C05 | SkriningForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C06 | RekamMedisForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C07 | PemeriksaanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C08 | ResepForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C09 | AntreanResepForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C10 | PenyerahanObatForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C11 | PersediaanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C12 | DaftarPantauForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C13 | LaporanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C14 | SinkronisasiForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C15 | SATUSEHATGateway | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C16 | KonfigurasiForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C17 | AutentikasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C18 | PasienManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C19 | KunjunganManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C20 | SkriningManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C21 | RisikoManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C22 | PemeriksaanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C23 | ResepManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C24 | ApotekManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C25 | PersediaanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C26 | PantauManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C27 | LaporanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C28 | SinkronisasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C29 | KonfigurasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C30 | PenggunaEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C31 | SesiEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C32 | AuditEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C33 | PasienEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C34 | RekamMedisEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C35 | KunjunganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C36 | PoliEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C37 | AntreanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C38 | SkriningEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C39 | TandaVitalEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C40 | AmbangRisikoEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C41 | PenandaRisikoEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C42 | PemeriksaanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C43 | DiagnosisEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C44 | KodeICD10Entity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C45 | JadwalKontrolEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C46 | ResepEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C47 | ItemResepEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C48 | ObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C49 | BetsObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C50 | PenerimaanObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C51 | DaftarPantauEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C52 | TindakLanjutEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C53 | LaporanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C54 | BundelFHIREntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C55 | PencadanganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C56 | DataAkunBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C57 | DataPasienBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C58 | DataKunjunganBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C59 | DataKlinisBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C60 | DataPantauBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C61 | DataFarmasiBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C62 | DataLaporanBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C63 | DataSinkronisasiBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C64 | DataPencadanganBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 
 Catatan:
 - Satu kelas perancangan boleh diwujudkan oleh beberapa file/unit, dan satu file/unit boleh mewujudkan beberapa kelas perancangan. Tuliskan semuanya.

@@ -31,6 +31,7 @@
 * [Milestone 6](#milestone-6)
 * [Milestone 7](#milestone-7)
 * [Milestone 8](#milestone-8)
+* [Milestone 9](#milestone-9)
 
 
 ---
@@ -231,6 +232,16 @@
 * *Seluruh 64 kelas punya tabel operasi dan atribut yang sama persis dengan Tabel 4.1, dengan 74 algoritma dan 78 kueri yang ID-nya tidak ada yang ganda.*
 * *Seluruh kueri diuji dengan PREPARE pada PostgreSQL 18 memakai skema yang diturunkan dari kueri itu sendiri; pencarian pasien parsial pada 50.000 baris selesai di bawah 0,1 detik (KNF01).*
 * *Hasil asistensi: nama pada pseudocode harus seragam dengan nama kelas, atribut, dan metode; penambahan fitur yang mengubah dokumen sebelumnya boleh diberi catatan pada dokumen terkait.*
+
+---
+
+### Milestone 9
+**Periode:** 03-11-2026 - 11-11-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+
+**Catatan/Evaluasi Milestone 9:**
 
 ---
 

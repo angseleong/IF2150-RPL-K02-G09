@@ -31,6 +31,7 @@
 * [Milestone 6](#milestone-6)
 * [Milestone 7](#milestone-7)
 * [Milestone 8](#milestone-8)
+* [Milestone 9](#milestone-9)
 
 ---
 
@@ -101,6 +102,11 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | *Claude (Claude Code)* | *Memeriksa keseragaman nama kelas, atribut, dan metode pada seluruh pseudocode sesuai saran asistensi* | *"Cek semuanya, termasuk tampilan visual dan SQL-nya, lalu perbaiki yang masih kurang."* | *Temuan dibaca ulang satu per satu; nama kolom SQL dan metode yang sengaja dihapus pada BAB 4 tidak diubah.* |
 | *Claude (Claude Code)* | *Menguji 78 kueri SQL pada PostgreSQL sementara dan mengukur waktu pencarian pasien* | *"Cek SQL-nya juga."* | *Satu kueri (Q-C61-08) diperbaiki setelah gagal di-PREPARE. Skema uji hanya alat bantu dan tidak dimasukkan ke dokumen.* |
 | *Claude (Claude Code)* | *Merender 15 rancangan antarmuka untuk memeriksa tampilan visualnya* | *"Cek tampilan visualnya."* | *Penanda nomor objek yang menutupi teks, bilah aplikasi yang bertumpuk, dan data contoh yang tidak konsisten antarlayar diperbaiki pada gen_ui.py lalu seluruh layar dibuat ulang dan diperiksa kembali.* |
+
+---
+### Milestone 9
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
 
 ---
 

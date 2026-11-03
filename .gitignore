@@ -1,1 +1,17 @@
 .DS_Store
+
+# Java dan Maven
+target/
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Rahasia dan keluaran lokal
+.env
+*.pem
+*.key
+backup/
+*.dump
