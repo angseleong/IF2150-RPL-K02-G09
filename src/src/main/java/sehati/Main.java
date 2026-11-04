@@ -1,10 +1,10 @@
 package sehati;
 
+import java.util.List;
+
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import sehati.presentation.Navigasi;
 
 /**
  * Titik masuk aplikasi SEHATI.
@@ -13,10 +13,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        // TODO(#3): ganti dengan cangkang aplikasi dan LoginForm.
-        stage.setTitle("SEHATI");
-        stage.setScene(new Scene(new StackPane(new Label("SEHATI")), 1280, 800));
-        stage.show();
+        Navigasi.mulai(stage);
+        // TODO(#10): hapus pratinjau tanpa masuk ini begitu layar masuk selesai, karena melewati autentikasi.
+        // Pemilik layar: mvn javafx:run -Djavafx.args=PasienForm
+        List<String> argumen = getParameters().getRaw();
+        if (!argumen.isEmpty()) {
+            Navigasi.mulaiSesi("Pratinjau", "Pemilik Layar");
+            Navigasi.buka(argumen.get(0));
+        }
     }
 
     public static void main(String[] args) {
