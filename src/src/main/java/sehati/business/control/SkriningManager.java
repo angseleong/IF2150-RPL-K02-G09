@@ -15,7 +15,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -132,20 +134,23 @@ public class SkriningManager {
     }
 
     /**
-     * Teks identitas untuk layar, misalnya "Budi Santoso  /  RM-000121  /  Poli Umum  /  Antrean 1" (I-05-02).
-     * Operasi tambahan di luar Tabel 4.1 karena Form tidak boleh membaca DataBoundary.
+     * Teks identitas untuk layar, misalnya "Budi Santoso  /  RM-000121  /  Poli Umum  /  Antrean 1" (I-05-02),
+     * per ID kunjungan. Operasi tambahan di luar Tabel 4.1 karena Form tidak boleh membaca DataBoundary.
      */
-    public String labelPasien(KunjunganEntity kunjungan) {
+    public Map<Integer, String> labelPasien(List<KunjunganEntity> daftar) {
         try (Connection koneksi = KoneksiBasisData.buka()) {
-            PasienEntity pasien = new DataPasienBoundary(koneksi).ambilPasien(kunjungan.getIdPasien());
-            String poli = "-";
+            DataPasienBoundary dataPasien = new DataPasienBoundary(koneksi);
+            Map<Integer, String> namaPoli = new HashMap<>();
             for (PoliEntity p : new DataKunjunganBoundary(koneksi).ambilSemuaPoli()) {
-                if (p.getIdPoli() == kunjungan.getIdPoli()) {
-                    poli = p.getNamaPoli();
-                }
+                namaPoli.put(p.getIdPoli(), p.getNamaPoli());
             }
-            return pasien.getNama() + "  /  " + pasien.getNomorRekamMedis() + "  /  " + poli + "  /  Antrean "
-                    + kunjungan.getNomorAntrean();
+            Map<Integer, String> hasil = new HashMap<>();
+            for (KunjunganEntity k : daftar) {
+                PasienEntity pasien = dataPasien.ambilPasien(k.getIdPasien());
+                hasil.put(k.getIdKunjungan(), pasien.getNama() + "  /  " + pasien.getNomorRekamMedis() + "  /  "
+                        + namaPoli.getOrDefault(k.getIdPoli(), "-") + "  /  Antrean " + k.getNomorAntrean());
+            }
+            return hasil;
         } catch (SQLException e) {
             throw galatTeknis("Identitas pasien gagal dimuat", e);
         }
