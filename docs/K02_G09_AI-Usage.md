@@ -107,6 +107,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 ### Milestone 9
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
+| *Claude (Claude Code)* | *Menurunkan schema.sql, seed.sql, dan docker-compose.yml dari kueri DPPL Subbab 5.56 sampai 5.64 untuk issue #2* | *"Kerjakan tugas Malik hari Rabu 4 Nov dan cek aturan workflow-nya."* | *Nama tabel, kolom, dan nilai CHECK dicocokkan dengan atribut entity DPPL. Seluruh kueri dan seed diperiksa dengan parser PostgreSQL terhadap katalog skema, lalu diuji PREPARE pada postgres:15 lewat db/uji-kueri.sql.* |
 
 ---
 
