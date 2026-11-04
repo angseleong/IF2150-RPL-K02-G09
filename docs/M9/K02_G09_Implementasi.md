@@ -195,7 +195,14 @@ Tabel B.1. Perubahan dari DPPL
 
 | No | Bagian DPPL | Rancangan Awal | Implementasi Akhir | Alasan |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | *[mis. Kelas C05, layar I-03, tabel `orders`]* | *[Yang direncanakan]* | *[Yang dibuat]* | *[Alasan perubahan]* |
+| 1 | C38 SkriningEntity | Atribut idSkrining, idKunjungan, keluhanAwal, waktu | Ditambah atribut `tandaVital` dan `getTandaVital()` | Subbab 5.38 menyebut tanda vital dipegang sebagai referensi, tetapi atributnya tidak ada di Tabel 4.1, sedangkan `simpanSkrining()` membutuhkannya |
+| 2 | C20 SkriningManager | `validasiRentang` private | Package-private | Agar dapat diuji unit tanpa refleksi |
+| 3 | C20 SkriningManager | Tidak ada operasi identitas pasien | Tambahan `labelPasien(List<KunjunganEntity>)` | Form tidak boleh membaca DataBoundary, sedangkan I-04 dan I-05 menampilkan nama, RM, dan poli |
+| 4 | C20 SkriningManager | `panggilPasien` memakai `AntreanEntity.ambilTerdepan()` | Pasien terdepan dicari dari antrean dan status kunjungan di manager | `ambilTerdepan()` mengembalikan KunjunganEntity dari daftar ID, padahal entity tidak dapat memuat dari basis data |
+| 5 | C21 RisikoManager | `evaluasiRisiko(kunjungan, tv)` | Ditambah overload package-private yang menerima `Connection` | Penanda dan entri daftar pantau harus satu transaksi dengan penyimpanan skrining |
+| 6 | C51 DaftarPantauEntity | Empat atribut pada Tabel 4.1 | Ditambah atribut tampilan `tanggalPemicu`, `namaPasien`, `nomorTelepon` | `saringDaftar()` perlu tanggal pemicu (Q-C60-01) dan identitas pasien, sedangkan entity tidak memuatnya |
+| 7 | C12 DaftarPantauForm | `tampilkanDaftar()` memanggil `RisikoManager.muatEntriAktif()` | Memanggil `PantauManager.saringDaftar(null, null, null)` | Tabel membutuhkan nama dan telepon pasien yang dimuat `saringDaftar()` |
+| 8 | C59 DataKlinisBoundary | Q-C59-05 mengembalikan `s.waktu` | `waktu` dibaca tetapi tidak disimpan | `TandaVitalEntity` tidak punya atribut waktu. Perlu keputusan bersama bila grafik tren (UC05) membutuhkannya |
 | *...* | *...* | *...* | *...* | *...* |
 
 ## B.2 Bukti Penerapan Best Practices
@@ -228,6 +235,10 @@ Jika tidak ada perbaikan yang perlu dilakukan, jelaskan hasil profiling dan alas
 
 Tuliskan kendala yang ditemui, fitur yang belum sempurna (*known issues*), serta hal yang perlu diketahui asisten saat menjalankan atau menilai aplikasi (misalnya akun uji khusus, urutan menjalankan, atau batasan).
 
+**Modul skrining dan pemantauan (Humam):**
+- Kueri C59 (Q-C59-01 s.d. 10) dan C60 (Q-C60-01 s.d. 06) ditulis menurut DPPL dan dijalankan ke PostgreSQL setelah skema dari issue #2 tersedia. Hasil pengujiannya dicatat di sini.
+- JDK yang tersedia di perangkat Humam adalah 17, sehingga pengujian lokal memakai `-Dmaven.compiler.release=17`. Pada JDK 21 tidak ada perbedaan perilaku.
+
 ## B.4 Kontribusi Anggota
 
 Tabel B.4. Kontribusi Anggota
@@ -252,15 +263,15 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C01 | LoginForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C02 | PasienForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C03 | KunjunganForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C04 | AntreanSkriningForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C05 | SkriningForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C04 | AntreanSkriningForm | Kelas JavaFX controller dengan FXML | `src/src/main/java/sehati/presentation/AntreanSkriningForm.java`, `src/src/main/resources/sehati/fxml/AntreanSkriningForm.fxml` | Antrean menyegar tiap 10 detik, F2 memanggil, F3 melewati. Akses data lewat `SkriningManager`. |
+| C05 | SkriningForm | Kelas JavaFX controller dengan FXML | `src/src/main/java/sehati/presentation/SkriningForm.java`, `src/src/main/resources/sehati/fxml/SkriningForm.fxml` | Ctrl+S menyimpan, kolom bermasalah ditandai merah, penanda risiko memakai `PanelPeringatan`. |
 | C06 | RekamMedisForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C07 | PemeriksaanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C08 | ResepForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C09 | AntreanResepForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C10 | PenyerahanObatForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C11 | PersediaanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C12 | DaftarPantauForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C12 | DaftarPantauForm | Kelas JavaFX controller dengan FXML | `src/src/main/java/sehati/presentation/DaftarPantauForm.java`, `src/src/main/resources/sehati/fxml/DaftarPantauForm.fxml` | Penyaring, tabel, dan panel tindak lanjut pada satu layar. Esc menutup panel lebih dulu. |
 | C13 | LaporanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C14 | SinkronisasiForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C15 | SATUSEHATGateway | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -268,13 +279,13 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C17 | AutentikasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C18 | PasienManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C19 | KunjunganManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C20 | SkriningManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C21 | RisikoManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C20 | SkriningManager | Kelas | `src/src/main/java/sehati/business/control/SkriningManager.java` | Validasi rentang Algo-C20-02 berupa konstanta kelas. Tambahan `labelPasien()`. |
+| C21 | RisikoManager | Kelas | `src/src/main/java/sehati/business/control/RisikoManager.java` | Inti penilaian risiko dipisah menjadi `jenisRisikoTerpenuhi()` agar dapat diuji tanpa basis data. |
 | C22 | PemeriksaanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C23 | ResepManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C24 | ApotekManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C25 | PersediaanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C26 | PantauManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C26 | PantauManager | Kelas | `src/src/main/java/sehati/business/control/PantauManager.java` | Penyaringan murni dipisah menjadi `saring()`; `catat()` dapat diuji dengan pengganti DataBoundary. |
 | C27 | LaporanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C28 | SinkronisasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C29 | KonfigurasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -286,10 +297,10 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C35 | KunjunganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C36 | PoliEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C37 | AntreanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C38 | SkriningEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C39 | TandaVitalEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C40 | AmbangRisikoEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C41 | PenandaRisikoEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C38 | SkriningEntity | Kelas | `src/src/main/java/sehati/business/entity/SkriningEntity.java` | Ditambah atribut `tandaVital` dan getter-nya (Tabel B.1). |
+| C39 | TandaVitalEntity | Kelas | `src/src/main/java/sehati/business/entity/TandaVitalEntity.java` | Algo-C39-01. |
+| C40 | AmbangRisikoEntity | Kelas | `src/src/main/java/sehati/business/entity/AmbangRisikoEntity.java` | Algo-C40-01. |
+| C41 | PenandaRisikoEntity | Kelas | `src/src/main/java/sehati/business/entity/PenandaRisikoEntity.java` | Konstanta `STATUS_AKTIF` dan `STATUS_DICABUT` ditambahkan. |
 | C42 | PemeriksaanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C43 | DiagnosisEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C44 | KodeICD10Entity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -299,16 +310,16 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C48 | ObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C49 | BetsObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C50 | PenerimaanObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C51 | DaftarPantauEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C52 | TindakLanjutEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C51 | DaftarPantauEntity | Kelas | `src/src/main/java/sehati/business/entity/DaftarPantauEntity.java` | Algo-C51-01. Ditambah atribut tampilan `tanggalPemicu`, `namaPasien`, `nomorTelepon` (Tabel B.1). |
+| C52 | TindakLanjutEntity | Kelas | `src/src/main/java/sehati/business/entity/TindakLanjutEntity.java` | `terhubung()`. |
 | C53 | LaporanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C54 | BundelFHIREntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C55 | PencadanganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C56 | DataAkunBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C57 | DataPasienBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C58 | DataKunjunganBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C59 | DataKlinisBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C60 | DataPantauBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C59 | DataKlinisBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataKlinisBoundary.java` | Q-C59-01 s.d. 10 oleh Humam, Q-C59-11 s.d. 17 oleh Adnan (Subbab 5.1 Pembagian Tugas). |
+| C60 | DataPantauBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataPantauBoundary.java` | Q-C60-01 s.d. Q-C60-06 sebagai konstanta `Q_C60_xx`, Algo-C60-01. |
 | C61 | DataFarmasiBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C62 | DataLaporanBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C63 | DataSinkronisasiBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
