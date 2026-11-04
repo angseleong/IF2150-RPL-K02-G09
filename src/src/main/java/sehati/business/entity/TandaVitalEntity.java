@@ -30,8 +30,15 @@ public class TandaVitalEntity {
         this.gulaDarah = gulaDarah;
     }
 
+    /**
+     * Menghitung IMT tanpa pembulatan agar perbandingan ambang tidak bergeser (Algo-C39-01).
+     */
     public double hitungIMT() {
-        throw new UnsupportedOperationException("TODO");
+        if (tinggiBadan <= 0) {
+            throw new IllegalStateException("Tinggi badan belum terisi");
+        }
+        double meter = tinggiBadan / 100;
+        return beratBadan / (meter * meter);
     }
 
     public int getSistolik() {

@@ -20,8 +20,12 @@ public class AmbangRisikoEntity {
         this.nilaiBatas = nilaiBatas;
     }
 
+    /**
+     * Ambang awal adalah batas bawah kategori klinis, sehingga nilai yang sama dengan batas sudah dilampaui
+     * (Algo-C40-01).
+     */
     public boolean dilampaui(double nilai) {
-        throw new UnsupportedOperationException("TODO");
+        return nilai >= nilaiBatas;
     }
 
     public int getIdAmbang() {
