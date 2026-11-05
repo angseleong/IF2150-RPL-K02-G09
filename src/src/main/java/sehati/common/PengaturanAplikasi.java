@@ -25,19 +25,35 @@ public final class PengaturanAplikasi {
     }
 
     /**
-     * Memuat {@code .env} pada direktori kerja, lalu variabel lingkungan menimpa nilai yang sama.
+     * Memuat {@code .env} (lihat {@link #cariEnv}), lalu variabel lingkungan menimpa nilai yang sama.
      */
     public static PengaturanAplikasi muat() {
         List<String> baris = List.of();
-        Path berkas = Path.of(".env");
-        if (Files.exists(berkas)) {
+        Path dirKerja = Path.of("").toAbsolutePath();
+        Path berkas = cariEnv(dirKerja);
+        if (berkas == null) {
+            LOG.warning(() -> "Berkas .env tidak ditemukan di " + dirKerja + " maupun " + dirKerja.resolve("src"));
+        } else {
             try {
                 baris = Files.readAllLines(berkas, StandardCharsets.UTF_8);
             } catch (IOException e) {
-                LOG.log(Level.WARNING, "Berkas .env tidak dapat dibaca", e);
+                LOG.log(Level.WARNING, "Berkas " + berkas + " tidak dapat dibaca", e);
             }
         }
         return gabung(baris, System.getenv());
+    }
+
+    /**
+     * Mencari {@code .env} di direktori kerja, lalu di {@code src/}. Yang kedua terjadi bila aplikasi dijalankan
+     * dari root repo, misalnya lewat IntelliJ. Mengembalikan {@code null} bila keduanya tidak ada.
+     */
+    static Path cariEnv(Path dirKerja) {
+        for (Path p : List.of(dirKerja.resolve(".env"), dirKerja.resolve("src").resolve(".env"))) {
+            if (Files.isRegularFile(p)) {
+                return p;
+            }
+        }
+        return null;
     }
 
     static PengaturanAplikasi gabung(List<String> barisEnv, Map<String, String> lingkungan) {
@@ -88,7 +104,8 @@ public final class PengaturanAplikasi {
     public String ambil(String kunci) {
         String v = nilai.get(kunci);
         if (v == null || v.isEmpty()) {
-            throw new IllegalStateException("Konfigurasi " + kunci + " belum diisi pada .env");
+            throw new IllegalStateException("Konfigurasi " + kunci
+                    + " belum diisi. Salin src/.env.example menjadi src/.env lalu isi nilainya.");
         }
         return v;
     }

@@ -1,12 +1,17 @@
 package sehati.common;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class PengaturanAplikasiTest {
 
@@ -35,6 +40,18 @@ class PengaturanAplikasiTest {
 
         assertEquals("sehati", p.ambil("DB_NAME"));
         assertEquals("db.lokal", p.ambil("DB_HOST"));
+    }
+
+    @Test
+    void cariEnv_mencariDiSrcBilaDijalankanDariRootRepo(@TempDir Path root) throws IOException {
+        assertNull(PengaturanAplikasi.cariEnv(root));
+
+        Path diSrc = Files.createDirectories(root.resolve("src")).resolve(".env");
+        Files.writeString(diSrc, "DB_NAME=sehati");
+        assertEquals(diSrc, PengaturanAplikasi.cariEnv(root));
+
+        Path diRoot = Files.writeString(root.resolve(".env"), "DB_NAME=lain");
+        assertEquals(diRoot, PengaturanAplikasi.cariEnv(root));
     }
 
     @Test
