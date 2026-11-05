@@ -55,6 +55,12 @@
         <!-- Test berada di src/tests sesuai struktur folder Tugas 9 (A.4). -->
         <testSourceDirectory>tests</testSourceDirectory>
         <plugins>
+            <!-- Versi bawaan Maven lama (3.6.x) mengabaikan maven.compiler.release sehingga record gagal dikompilasi. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
