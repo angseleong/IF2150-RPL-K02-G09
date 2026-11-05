@@ -10,7 +10,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
 
 /**
- * Bilah hijau di atas setiap layar selain I-01, yaitu objek pertama pada setiap tabel spesifikasi BAB 6 DPPL (KF22).
+ * Bilah aplikasi yang tampil di atas layar selama sesi aktif, yaitu objek pertama pada tabel spesifikasi BAB 6 DPPL
+ * (KF22).
  */
 final class BilahAplikasi extends HBox {
 
