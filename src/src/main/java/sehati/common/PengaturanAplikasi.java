@@ -28,33 +28,58 @@ public final class PengaturanAplikasi {
      * Memuat {@code .env} pada direktori kerja, lalu variabel lingkungan menimpa nilai yang sama.
      */
     public static PengaturanAplikasi muat() {
-        Map<String, String> hasil = new HashMap<>();
+        List<String> baris = List.of();
         Path berkas = Path.of(".env");
         if (Files.exists(berkas)) {
             try {
-                hasil.putAll(bacaEnv(Files.readAllLines(berkas, StandardCharsets.UTF_8)));
+                baris = Files.readAllLines(berkas, StandardCharsets.UTF_8);
             } catch (IOException e) {
                 LOG.log(Level.WARNING, "Berkas .env tidak dapat dibaca", e);
             }
         }
-        hasil.putAll(System.getenv());
+        return gabung(baris, System.getenv());
+    }
+
+    static PengaturanAplikasi gabung(List<String> barisEnv, Map<String, String> lingkungan) {
+        Map<String, String> hasil = bacaEnv(barisEnv);
+        // Variabel kosong dari IDE atau CI tidak boleh menghapus nilai yang sudah diisi di .env.
+        lingkungan.forEach((k, v) -> {
+            if (!v.isEmpty()) {
+                hasil.put(k, v);
+            }
+        });
         return new PengaturanAplikasi(hasil);
     }
 
     /**
-     * Mengurai baris {@code KUNCI=nilai}. Baris kosong dan baris berawalan {@code #} dilewati.
+     * Mengurai baris {@code KUNCI=nilai} dengan aturan yang sama dengan docker-compose: awalan {@code export},
+     * nilai berkutip, dan komentar di akhir baris didukung. Baris kosong dan baris berawalan {@code #} dilewati.
      */
     static Map<String, String> bacaEnv(List<String> baris) {
         Map<String, String> hasil = new HashMap<>();
         for (String b : baris) {
-            String isi = b.strip();
+            // BOM UTF-8 dari Notepad Windows ikut terbaca sebagai bagian kunci pertama.
+            String isi = b.replace("﻿", "").strip();
+            if (isi.startsWith("export ")) {
+                isi = isi.substring("export ".length()).strip();
+            }
             int sama = isi.indexOf('=');
             if (isi.isEmpty() || isi.startsWith("#") || sama < 1) {
                 continue;
             }
-            hasil.put(isi.substring(0, sama).strip(), isi.substring(sama + 1).strip());
+            hasil.put(isi.substring(0, sama).strip(), nilaiEnv(isi.substring(sama + 1).strip()));
         }
         return hasil;
+    }
+
+    private static String nilaiEnv(String v) {
+        if (v.length() >= 2 && (v.charAt(0) == '"' || v.charAt(0) == '\'')) {
+            int tutup = v.indexOf(v.charAt(0), 1);
+            if (tutup > 0) {
+                return v.substring(1, tutup);
+            }
+        }
+        return v.split("\\s+#", 2)[0].strip();
     }
 
     /**
