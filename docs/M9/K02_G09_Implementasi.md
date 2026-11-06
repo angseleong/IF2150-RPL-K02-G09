@@ -278,9 +278,9 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C27 | LaporanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C28 | SinkronisasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C29 | KonfigurasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C30 | PenggunaEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C31 | SesiEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C32 | AuditEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C30 | PenggunaEntity | Kelas Java | `src/src/main/java/sehati/business/entity/PenggunaEntity.java` - `PenggunaEntity` | Algo-C30-01 lewat jBCrypt, ditambah konstruktor akun baru berstatus "aktif" |
+| C31 | SesiEntity | Kelas Java | `src/src/main/java/sehati/business/entity/SesiEntity.java` - `SesiEntity` | Algo-C31-01. Sesi yang sedang aktif dipegang `sehati.common.SesiAktif` |
+| C32 | AuditEntity | Kelas Java | `src/src/main/java/sehati/business/entity/AuditEntity.java` - `AuditEntity` | Algo-C32-01. Tanpa setter agar catatan tidak dapat diubah (KNF05) |
 | C33 | PasienEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C34 | RekamMedisEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C35 | KunjunganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -304,7 +304,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C53 | LaporanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C54 | BundelFHIREntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C55 | PencadanganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C56 | DataAkunBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C56 | DataAkunBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataAkunBoundary.java` - `DataAkunBoundary` | Q-C56-01 sampai Q-C56-08 sebagai konstanta `Q_C56_xx` |
 | C57 | DataPasienBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C58 | DataKunjunganBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C59 | DataKlinisBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
