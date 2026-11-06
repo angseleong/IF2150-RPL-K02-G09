@@ -307,7 +307,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C56 | DataAkunBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C57 | DataPasienBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C58 | DataKunjunganBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C59 | DataKlinisBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C59 | DataKlinisBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataKlinisBoundary.java` - `DataKlinisBoundary` | Atribut `koneksi` diterima lewat konstruktor dari `Manager`. Bagian pemeriksaan: `cariKodeICD10`, `simpanPemeriksaan`, `ambilPemeriksaan`, `simpanJadwalKontrol`, dan `ambilJadwalKontrol` menjalankan konstanta `Q_C59_11` sampai `Q_C59_17` lewat `PreparedStatement`. `simpanPemeriksaan` mewujudkan Algo-C59-02 dan melempar `IllegalStateException` bila baris lama sudah terkunci. |
 | C60 | DataPantauBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C61 | DataFarmasiBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C62 | DataLaporanBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
