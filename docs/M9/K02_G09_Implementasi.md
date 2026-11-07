@@ -255,8 +255,8 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C03 | KunjunganForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C04 | AntreanSkriningForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C05 | SkriningForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C06 | RekamMedisForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C07 | PemeriksaanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C06 | RekamMedisForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/RekamMedisForm.java`, `src/src/main/resources/sehati/fxml/RekamMedisForm.fxml` - `RekamMedisForm` | Atribut `idPasienTampil` dan `seriTren` dipakai `tampilkanGrafikTren()`. Kelima operasi DPPL diwujudkan apa adanya: `tampilkanGrafikTren()` memakai `LineChart` dengan tanggal kunjungan pada sumbu-x (Algo-C06-01), dan `aturModeBacaSaja()` menonaktifkan Periksa Pasien bagi peran selain Dokter. Tambahan: daftar pasien siap diperiksa di sisi kiri (B.1). |
+| C07 | PemeriksaanForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/PemeriksaanForm.java`, `src/src/main/resources/sehati/fxml/PemeriksaanForm.fxml` - `PemeriksaanForm` | Atribut `isianAnamnesis` dan `kataKunciDiagnosis`. `kirimKataKunciDiagnosis()` dijalankan `PauseTransition` 300 ms, `kirimHasilPemeriksaan()` mewujudkan Algo-C07-01 dan terhubung ke Ctrl+S, `kirimFinal()` meminta konfirmasi lalu memanggil `kunciRekamMedis()`. Tambahan: `buka(kunjungan, pasien)` untuk menerima kunjungan dari I-06 (B.1). |
 | C08 | ResepForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C09 | AntreanResepForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C10 | PenyerahanObatForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -271,7 +271,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C19 | KunjunganManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C20 | SkriningManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C21 | RisikoManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C22 | PemeriksaanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C22 | PemeriksaanManager | Kelas Java | `src/src/main/java/sehati/business/control/PemeriksaanManager.java` - `PemeriksaanManager` | Tanpa atribut, sesuai DPPL. Setiap operasi membuka koneksi lewat `KoneksiBasisData.buka()`. `simpanPemeriksaan()` mewujudkan Algo-C22-01, dan `kunciRekamMedis()` mewujudkan Algo-C22-02 dalam satu transaksi dengan pelaku audit dari `SesiAktif.idPenggunaSesi()`. Tambahan: `muatKunjunganSiapPeriksa()` (B.1). |
 | C23 | ResepManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C24 | ApotekManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C25 | PersediaanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -291,10 +291,10 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C39 | TandaVitalEntity | Kelas | `src/src/main/java/sehati/business/entity/TandaVitalEntity.java` | Algo-C39-01. Ditambah atribut `waktu` (Tabel B.1). |
 | C40 | AmbangRisikoEntity | Kelas | `src/src/main/java/sehati/business/entity/AmbangRisikoEntity.java` | Algo-C40-01. |
 | C41 | PenandaRisikoEntity | Kelas | `src/src/main/java/sehati/business/entity/PenandaRisikoEntity.java` | Konstanta `STATUS_AKTIF` dan `STATUS_DICABUT` ditambahkan. |
-| C42 | PemeriksaanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C43 | DiagnosisEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C44 | KodeICD10Entity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C45 | JadwalKontrolEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C42 | PemeriksaanEntity | Kelas Java | `src/src/main/java/sehati/business/entity/PemeriksaanEntity.java` - `PemeriksaanEntity` | Atribut sesuai Tabel 4.1 dengan getter dan setter. `kunci()` menolak penguncian kedua dengan `IllegalStateException`. |
+| C43 | DiagnosisEntity | Kelas Java | `src/src/main/java/sehati/business/entity/DiagnosisEntity.java` - `DiagnosisEntity` | Atribut sesuai Tabel 4.1. `ringkas()` mengembalikan "kode - deskripsi". |
+| C44 | KodeICD10Entity | Kelas Java | `src/src/main/java/sehati/business/entity/KodeICD10Entity.java` - `KodeICD10Entity` | Atribut sesuai Tabel 4.1. `cocok()` mewujudkan Algo-C44-01 tanpa membedakan huruf besar dan kecil. |
+| C45 | JadwalKontrolEntity | Kelas Java | `src/src/main/java/sehati/business/entity/JadwalKontrolEntity.java` - `JadwalKontrolEntity` | Atribut sesuai Tabel 4.1, ditambah konstanta `STATUS_TERJADWAL` dan `STATUS_SELESAI`. `tandaiSelesai()` menolak jadwal yang tidak berstatus terjadwal. |
 | C46 | ResepEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C47 | ItemResepEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C48 | ObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
