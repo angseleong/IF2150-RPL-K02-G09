@@ -23,6 +23,15 @@ class EntitySkriningTest {
     }
 
     @Test
+    void waktu_kosongPadaPengukuranBaruDanTerisiBilaDibaca() {
+        assertEquals(null, tandaVital(70, 170).getWaktu());
+        LocalDateTime waktu = LocalDateTime.of(2026, 11, 4, 9, 30);
+        TandaVitalEntity tv = new TandaVitalEntity(120, 80, 70, 170, 36.5, 72, null, waktu);
+        assertEquals(waktu, tv.getWaktu());
+        assertEquals(120, tv.getSistolik());
+    }
+
+    @Test
     void hitungIMT_menolakTinggiNol() {
         assertThrows(IllegalStateException.class, () -> tandaVital(70, 0).hitungIMT());
     }
