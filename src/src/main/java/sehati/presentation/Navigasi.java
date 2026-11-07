@@ -114,6 +114,7 @@ public final class Navigasi {
     public static void mulaiSesi(String namaPengguna, String peran) {
         sesiAktif = true;
         bilah.setPengguna(namaPengguna, peran);
+        bingkai.setTop(bilah);
     }
 
     /**
@@ -135,7 +136,8 @@ public final class Navigasi {
 
     private static void tampilkan(Layar layar) {
         bilah.setJudul(JUDUL.get(layar.nama()));
-        bingkai.setTop(layar.nama().equals(LAYAR_MASUK) ? null : bilah);
+        // Dasbor berbagi I-01 dengan layar masuk, jadi bilah mengikuti sesi agar Keluar tetap terlihat di dasbor.
+        bingkai.setTop(sesiAktif ? bilah : null);
         bingkai.setCenter(layar.isi());
         // Fokus awal tidak boleh jatuh ke tombol Keluar, karena tombol Spasi akan langsung mengakhiri sesi.
         layar.isi().requestFocus();

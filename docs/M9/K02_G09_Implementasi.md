@@ -196,13 +196,13 @@ Tabel B.1. Perubahan dari DPPL
 | No | Bagian DPPL | Rancangan Awal | Implementasi Akhir | Alasan |
 | :--- | :--- | :--- | :--- | :--- |
 | 1 | C38 SkriningEntity | Atribut idSkrining, idKunjungan, keluhanAwal, waktu | Ditambah atribut `tandaVital` dan `getTandaVital()` | Subbab 5.38 menyebut tanda vital dipegang sebagai referensi, tetapi atributnya tidak ada di Tabel 4.1, sedangkan `simpanSkrining()` membutuhkannya |
-| 2 | C20 SkriningManager | `validasiRentang` private | Package-private | Agar dapat diuji unit tanpa refleksi |
-| 3 | C20 SkriningManager | Tidak ada operasi identitas pasien | Tambahan `labelPasien(List<KunjunganEntity>)` | Form tidak boleh membaca DataBoundary, sedangkan I-04 dan I-05 menampilkan nama, RM, dan poli |
-| 4 | C20 SkriningManager | `panggilPasien` memakai `AntreanEntity.ambilTerdepan()` | Pasien terdepan dicari dari antrean dan status kunjungan di manager | `ambilTerdepan()` mengembalikan KunjunganEntity dari daftar ID, padahal entity tidak dapat memuat dari basis data |
-| 5 | C21 RisikoManager | `evaluasiRisiko(kunjungan, tv)` | Ditambah overload package-private yang menerima `Connection` | Penanda dan entri daftar pantau harus satu transaksi dengan penyimpanan skrining |
-| 6 | C51 DaftarPantauEntity | Empat atribut pada Tabel 4.1 | Ditambah atribut tampilan `tanggalPemicu`, `namaPasien`, `nomorTelepon` | `saringDaftar()` perlu tanggal pemicu (Q-C60-01) dan identitas pasien, sedangkan entity tidak memuatnya |
-| 7 | C12 DaftarPantauForm | `tampilkanDaftar()` memanggil `RisikoManager.muatEntriAktif()` | Memanggil `PantauManager.saringDaftar(null, null, null)` | Tabel membutuhkan nama dan telepon pasien yang dimuat `saringDaftar()` |
-| 8 | C59 DataKlinisBoundary | Q-C59-05 mengembalikan `s.waktu` | `waktu` dibaca tetapi tidak disimpan | `TandaVitalEntity` tidak punya atribut waktu. Perlu keputusan bersama bila grafik tren (UC05) membutuhkannya |
+| 2 | C39 TandaVitalEntity, C59 Q-C59-03 dan Q-C59-05 | Tidak ada atribut waktu, `s.waktu` dipilih tetapi tidak disimpan | Ditambah atribut `waktu: LocalDateTime` dengan getter dan setter, diisi dari `s.waktu` pada Q-C59-03 dan Q-C59-05 | Grafik tren UC05 (KF08) memakai waktu pengukuran sebagai sumbu-x dan `RekamMedisForm.seriTren` hanya memegang `List<TandaVitalEntity>`. Atas usul Adnan pada review #29 |
+| 3 | C20 SkriningManager | `validasiRentang` private | Package-private | Agar dapat diuji unit tanpa refleksi |
+| 4 | C20 SkriningManager | Tidak ada operasi identitas pasien | Tambahan `labelPasien(List<KunjunganEntity>)` | Form tidak boleh membaca DataBoundary, sedangkan I-04 dan I-05 menampilkan nama, RM, dan poli |
+| 5 | C20 SkriningManager | `panggilPasien` memakai `AntreanEntity.ambilTerdepan()` | Pasien terdepan dicari dari antrean dan status kunjungan di manager | `ambilTerdepan()` mengembalikan KunjunganEntity dari daftar ID, padahal entity tidak dapat memuat dari basis data |
+| 6 | C21 RisikoManager | `evaluasiRisiko(kunjungan, tv)` | Ditambah overload package-private yang menerima `Connection` | Penanda dan entri daftar pantau harus satu transaksi dengan penyimpanan skrining |
+| 7 | C51 DaftarPantauEntity | Empat atribut pada Tabel 4.1 | Ditambah atribut tampilan `tanggalPemicu`, `namaPasien`, `nomorTelepon` | `saringDaftar()` perlu tanggal pemicu (Q-C60-01) dan identitas pasien, sedangkan entity tidak memuatnya |
+| 8 | C12 DaftarPantauForm | `tampilkanDaftar()` memanggil `RisikoManager.muatEntriAktif()` | Memanggil `PantauManager.saringDaftar(null, null, null)` | Tabel membutuhkan nama dan telepon pasien yang dimuat `saringDaftar()` |
 | *...* | *...* | *...* | *...* | *...* |
 
 ## B.2 Bukti Penerapan Best Practices
@@ -297,8 +297,8 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C35 | KunjunganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C36 | PoliEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C37 | AntreanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C38 | SkriningEntity | Kelas | `src/src/main/java/sehati/business/entity/SkriningEntity.java` | Ditambah atribut `tandaVital` dan getter-nya (Tabel B.1). |
-| C39 | TandaVitalEntity | Kelas | `src/src/main/java/sehati/business/entity/TandaVitalEntity.java` | Algo-C39-01. |
+| C38 | SkriningEntity | Kelas | `src/src/main/java/sehati/business/entity/SkriningEntity.java` | Ditambah atribut `tandaVital` dan `getTandaVital()` (Tabel B.1). |
+| C39 | TandaVitalEntity | Kelas | `src/src/main/java/sehati/business/entity/TandaVitalEntity.java` | Algo-C39-01. Ditambah atribut `waktu` (Tabel B.1). |
 | C40 | AmbangRisikoEntity | Kelas | `src/src/main/java/sehati/business/entity/AmbangRisikoEntity.java` | Algo-C40-01. |
 | C41 | PenandaRisikoEntity | Kelas | `src/src/main/java/sehati/business/entity/PenandaRisikoEntity.java` | Konstanta `STATUS_AKTIF` dan `STATUS_DICABUT` ditambahkan. |
 | C42 | PemeriksaanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |

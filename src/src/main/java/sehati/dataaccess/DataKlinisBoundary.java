@@ -117,7 +117,7 @@ public class DataKlinisBoundary {
                 }
                 SkriningEntity s = new SkriningEntity(rs.getInt("id_skrining"), rs.getInt("id_kunjungan"),
                         rs.getString("keluhan_awal"), rs.getTimestamp("waktu").toLocalDateTime());
-                s.lampirkanTandaVital(bacaTandaVital(rs));
+                s.lampirkanTandaVital(bacaTandaVital(rs, true));
                 return s;
             }
         } catch (SQLException e) {
@@ -141,7 +141,7 @@ public class DataKlinisBoundary {
             List<TandaVitalEntity> hasil = new ArrayList<>();
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    hasil.add(bacaTandaVital(rs));
+                    hasil.add(bacaTandaVital(rs, batas == 0));
                 }
             }
             return hasil;
@@ -187,6 +187,9 @@ public class DataKlinisBoundary {
     public void simpanPenanda(PenandaRisikoEntity p) {
         try {
             if (p.getIdPenanda() == 0) {
+                if (p.getTanggal() == null) {
+                    throw new IllegalArgumentException("Tanggal penanda risiko wajib diisi");
+                }
                 try (PreparedStatement ps = koneksi.prepareStatement(Q_C59_08)) {
                     ps.setInt(1, p.getIdKunjungan());
                     ps.setString(2, p.getJenisRisiko());
@@ -201,10 +204,12 @@ public class DataKlinisBoundary {
                 try (PreparedStatement ps = koneksi.prepareStatement(Q_C59_09)) {
                     ps.setString(1, p.getStatus());
                     ps.setInt(2, p.getIdPenanda());
-                    ps.executeUpdate();
+                    if (ps.executeUpdate() == 0) {
+                        throw new IllegalArgumentException("Penanda risiko tidak ditemukan: " + p.getIdPenanda());
+                    }
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | RuntimeException e) {
             throw galat("Gagal menyimpan penanda risiko", e);
         }
     }
@@ -249,11 +254,17 @@ public class DataKlinisBoundary {
         throw new UnsupportedOperationException("TODO");
     }
 
-    private static TandaVitalEntity bacaTandaVital(ResultSet rs) throws SQLException {
+    // Q-C59-03 dan Q-C59-05 memilih s.waktu untuk grafik tren (KF08); Q-C59-04 tidak.
+    private static TandaVitalEntity bacaTandaVital(ResultSet rs, boolean denganWaktu) throws SQLException {
         int gula = rs.getInt("gula_darah");
         Integer gulaDarah = rs.wasNull() ? null : gula;
-        return new TandaVitalEntity(rs.getInt("sistolik"), rs.getInt("diastolik"), rs.getDouble("berat_badan"),
-                rs.getDouble("tinggi_badan"), rs.getDouble("suhu"), rs.getInt("nadi"), gulaDarah);
+        TandaVitalEntity tv = new TandaVitalEntity(rs.getInt("sistolik"), rs.getInt("diastolik"),
+                rs.getDouble("berat_badan"), rs.getDouble("tinggi_badan"), rs.getDouble("suhu"), rs.getInt("nadi"),
+                gulaDarah);
+        if (denganWaktu) {
+            tv.setWaktu(rs.getTimestamp("waktu").toLocalDateTime());
+        }
+        return tv;
     }
 
     // Transaksi sendiri hanya bila dipanggil di luar transaksi Manager (aturan 1 Subbab 5.56, Algo-C59-02).
@@ -295,12 +306,27 @@ public class DataKlinisBoundary {
         }
     }
 
-    // Galat masukan diteruskan apa adanya agar pesannya sampai ke Form; galat SQL dicatat lalu dibungkus.
+    // Aturan 3 Subbab 5.56: pelanggaran constraint menjadi IllegalArgumentException berpesan jelas, galat lain
+    // menjadi IllegalStateException tanpa rincian teknis; rinciannya hanya masuk log.
     private static RuntimeException galat(String pesan, Exception e) {
         if (e instanceof IllegalArgumentException || e instanceof IllegalStateException) {
             return (RuntimeException) e;
         }
+        if (e instanceof SQLException sql) {
+            String state = sql.getSQLState();
+            String rincian = sql.getMessage() == null ? "" : sql.getMessage();
+            if ("23505".equals(state)) {
+                return new IllegalArgumentException("Data sudah tersimpan sebelumnya", e);
+            }
+            if ("23514".equals(state)) {
+                return new IllegalArgumentException(rincian.contains("tanda_vital")
+                        ? "Nilai tanda vital di luar rentang yang diizinkan" : "Nilai tidak memenuhi aturan data", e);
+            }
+            if ("23503".equals(state)) {
+                return new IllegalArgumentException("Kunjungan atau data terkait tidak ditemukan", e);
+            }
+        }
         LOG.log(Level.SEVERE, pesan, e);
-        return new IllegalStateException(pesan + ": " + e.getMessage(), e);
+        return new IllegalStateException("Basis data tidak dapat dihubungi", e);
     }
 }
