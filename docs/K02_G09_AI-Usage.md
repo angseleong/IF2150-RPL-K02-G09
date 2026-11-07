@@ -108,6 +108,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
 | *Claude (Claude Code)* | *Menyusun draf cangkang aplikasi JavaFX (#3): navigasi, bilah aplikasi, tema, pintasan global, dan komponen peringatan* | *"Gw mau kerjain Cangkang aplikasi JavaFX."* | *Lima belas layar, pintasan, dan komponen diuji lewat `mvn test` dan uji asap JavaFX. Axeleon menjalankan aplikasi lewat `mvn javafx:run`, lalu memeriksa bilah aplikasi dan perpindahan ke layar masuk.* |
+| *Claude (Claude Code)* | *Menyusun DataFarmasiBoundary dan uji JUnit-nya dari DPPL Subbab 5.61 untuk issue #8* | *"Kerjain yang punya gw (Malik) yang hari Jumat."* | *Kueri disalin dari Tabel 5.61.3 dan dicocokkan dengan schema.sql. `mvn test` lulus untuk uji tanpa basis data; uji dengan basis data (DB_UJI_URL) menyusul.* |
 
 ---
 

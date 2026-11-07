@@ -240,6 +240,7 @@
 
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| *07-11-2026* | *Malik Arsyafiandra Madani* | *Mengisi DataFarmasiBoundary (#8): 15 kueri C61, penguncian FOR UPDATE untuk resep, obat, dan bets, Algo-C61-01 untuk bets ganda, serta pola transaksiSendiri; menambah daftarItem pada ResepEntity dan uji JUnit dengan basis data opsional* | *4* | *Review* | *Uji basis data belum dijalankan karena PostgreSQL belum dapat diakses di laptop pengerjaan* |
 
 **Catatan/Evaluasi Milestone 9:**
 
