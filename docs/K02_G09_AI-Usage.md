@@ -107,6 +107,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 ### Milestone 9
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
+| *Claude (Claude Code)* | *Menyusun draf cangkang aplikasi JavaFX (#3): navigasi, bilah aplikasi, tema, pintasan global, dan komponen peringatan* | *"Gw mau kerjain Cangkang aplikasi JavaFX."* | *Lima belas layar, pintasan, dan komponen diuji lewat `mvn test` dan uji asap JavaFX. Axeleon menjalankan aplikasi lewat `mvn javafx:run`, lalu memeriksa bilah aplikasi dan perpindahan ke layar masuk.* |
 
 ---
 
