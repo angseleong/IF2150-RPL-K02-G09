@@ -13,6 +13,8 @@ public class RekamMedisEntity {
     private int idRekamMedis;
     private List<DiagnosisEntity> daftarDiagnosis = new ArrayList<>();
     private List<String> riwayatObat = new ArrayList<>();
+    // Penampung entri dari tambahEntri() sampai DataPasienBoundary.simpanRekamMedis() menyimpannya (Q-C57-11).
+    private final List<String> entriBaru = new ArrayList<>();
 
     public RekamMedisEntity() {
     }
@@ -23,8 +25,24 @@ public class RekamMedisEntity {
         this.riwayatObat = riwayatObat;
     }
 
+    /**
+     * Algo-C34-01: menambah satu catatan ke akhir daftar entri baru. Catatan yang sudah tersimpan tidak diubah.
+     */
     public void tambahEntri(String catatan) {
-        throw new UnsupportedOperationException("TODO");
+        if (catatan == null || catatan.isBlank()) {
+            throw new IllegalArgumentException("Catatan rekam medis wajib diisi");
+        }
+        entriBaru.add(catatan);
+    }
+
+    /** Entri yang ditambahkan sejak rekam medis dimuat dan belum disimpan. */
+    public List<String> getEntriBaru() {
+        return List.copyOf(entriBaru);
+    }
+
+    /** Dipanggil DataPasienBoundary setelah entri baru tersimpan. */
+    public void kosongkanEntriBaru() {
+        entriBaru.clear();
     }
 
     public int getIdRekamMedis() {

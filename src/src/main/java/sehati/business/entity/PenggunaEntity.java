@@ -1,5 +1,7 @@
 package sehati.business.entity;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 /**
  * C30 - PenggunaEntity.
  *
@@ -16,6 +18,13 @@ public class PenggunaEntity {
     public PenggunaEntity() {
     }
 
+    /**
+     * Akun baru berstatus "aktif" dengan idPengguna 0 sampai disimpan (Subbab 5.30).
+     */
+    public PenggunaEntity(String namaPengguna, String kataSandiHash, String peran) {
+        this(0, namaPengguna, kataSandiHash, peran, "aktif");
+    }
+
     public PenggunaEntity(int idPengguna, String namaPengguna, String kataSandiHash, String peran, String status) {
         this.idPengguna = idPengguna;
         this.namaPengguna = namaPengguna;
@@ -24,16 +33,33 @@ public class PenggunaEntity {
         this.status = status;
     }
 
+    /**
+     * Mencocokkan sandi dengan kataSandiHash lewat bcrypt (Algo-C30-01, KNF04).
+     */
     public boolean cocokkanSandi(String sandi) {
-        throw new UnsupportedOperationException("TODO");
+        if (sandi == null || sandi.isEmpty() || kataSandiHash == null || kataSandiHash.isEmpty()) {
+            return false;
+        }
+        try {
+            return BCrypt.checkpw(sandi, kataSandiHash);
+        } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
+            // Hash rusak diperlakukan sama dengan sandi salah; jbcrypt melempar IndexOutOfBounds untuk hash pendek.
+            return false;
+        }
     }
 
     public boolean aktif() {
-        throw new UnsupportedOperationException("TODO");
+        return "aktif".equals(status);
     }
 
+    /**
+     * Menonaktifkan akun (Algo-C30-01, UC12).
+     */
     public void nonaktifkan() {
-        throw new UnsupportedOperationException("TODO");
+        if ("nonaktif".equals(status)) {
+            throw new IllegalStateException("Akun sudah nonaktif");
+        }
+        status = "nonaktif";
     }
 
     public int getIdPengguna() {

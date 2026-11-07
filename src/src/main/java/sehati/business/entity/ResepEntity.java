@@ -1,6 +1,8 @@
 package sehati.business.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * C46 - ResepEntity.
@@ -14,6 +16,8 @@ public class ResepEntity {
     private LocalDateTime waktuMasuk;
     private String status;
     private String catatan;
+    // Komposisi ResepEntity-ItemResepEntity, bukan kolom. Disimpan DataFarmasiBoundary ke item_resep (Q-C61-10).
+    private List<ItemResepEntity> daftarItem = new ArrayList<>();
 
     public ResepEntity() {
     }
@@ -68,5 +72,13 @@ public class ResepEntity {
 
     public void setCatatan(String catatan) {
         this.catatan = catatan;
+    }
+
+    public List<ItemResepEntity> getDaftarItem() {
+        return daftarItem;
+    }
+
+    public void setDaftarItem(List<ItemResepEntity> daftarItem) {
+        this.daftarItem = new ArrayList<>(daftarItem);
     }
 }

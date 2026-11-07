@@ -1,5 +1,7 @@
 package sehati.business.entity;
 
+import java.time.LocalDateTime;
+
 /**
  * C39 - TandaVitalEntity.
  *
@@ -14,6 +16,8 @@ public class TandaVitalEntity {
     private double suhu;
     private int nadi;
     private Integer gulaDarah;
+    // Waktu pengukuran, diisi dari skrining.waktu saat dibaca (Q-C59-03, Q-C59-05); null pada pengukuran baru.
+    private LocalDateTime waktu;
 
     public TandaVitalEntity() {
     }
@@ -28,6 +32,13 @@ public class TandaVitalEntity {
         this.suhu = suhu;
         this.nadi = nadi;
         this.gulaDarah = gulaDarah;
+    }
+
+    public TandaVitalEntity(
+            int sistolik, int diastolik, double beratBadan, double tinggiBadan, double suhu, int nadi,
+            Integer gulaDarah, LocalDateTime waktu) {
+        this(sistolik, diastolik, beratBadan, tinggiBadan, suhu, nadi, gulaDarah);
+        this.waktu = waktu;
     }
 
     /**
@@ -95,5 +106,13 @@ public class TandaVitalEntity {
 
     public void setGulaDarah(Integer gulaDarah) {
         this.gulaDarah = gulaDarah;
+    }
+
+    public LocalDateTime getWaktu() {
+        return waktu;
+    }
+
+    public void setWaktu(LocalDateTime waktu) {
+        this.waktu = waktu;
     }
 }
