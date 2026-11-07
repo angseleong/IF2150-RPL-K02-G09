@@ -50,4 +50,17 @@ class EntityPemeriksaanTest {
         assertEquals("selesai", j.getStatus());
         assertThrows(IllegalStateException.class, j::tandaiSelesai);
     }
+
+    @Test
+    void perbaruiStatus_menolakStatusAsingDanKunjunganSelesai() {
+        KunjunganEntity k = new KunjunganEntity(1, 1, 1, LocalDate.now(), 1, KunjunganEntity.STATUS_SIAP_DIPERIKSA);
+        k.perbaruiStatus(KunjunganEntity.STATUS_SELESAI_DIPERIKSA);
+        assertEquals("selesai diperiksa", k.getStatus());
+        assertTrue(k.aktifHariIni());
+        assertThrows(IllegalArgumentException.class, () -> k.perbaruiStatus("dibatalkan"));
+
+        k.perbaruiStatus(KunjunganEntity.STATUS_SELESAI);
+        assertFalse(k.aktifHariIni());
+        assertThrows(IllegalStateException.class, () -> k.perbaruiStatus(KunjunganEntity.STATUS_SIAP_DIPERIKSA));
+    }
 }
