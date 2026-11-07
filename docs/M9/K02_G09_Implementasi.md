@@ -282,7 +282,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C31 | SesiEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C32 | AuditEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C33 | PasienEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C34 | RekamMedisEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C34 | RekamMedisEntity | Kelas | `src/src/main/java/sehati/business/entity/RekamMedisEntity.java` | Algo-C34-01 diisi. Ditambah `getEntriBaru()` dan `kosongkanEntriBaru()` agar `simpanRekamMedis()` dapat membaca dan mengosongkan penampung entri baru. |
 | C35 | KunjunganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C36 | PoliEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C37 | AntreanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -305,8 +305,8 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C54 | BundelFHIREntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C55 | PencadanganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C56 | DataAkunBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C57 | DataPasienBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C58 | DataKunjunganBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C57 | DataPasienBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataPasienBoundary.java` | Q-C57-01 s.d. Q-C57-11 sebagai konstanta `Q_C57_xx`, Algo-C57-01 pada `polaPencarian()`. Pengerjaan Humam menggantikan Steven (#5). |
+| C58 | DataKunjunganBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataKunjunganBoundary.java` | Q-C58-01 s.d. Q-C58-12 sebagai konstanta `Q_C58_xx`, Algo-C58-01 pada `ambilAntrean()` dan `simpanAntrean()`. Pengerjaan Humam menggantikan Steven (#5). |
 | C59 | DataKlinisBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C60 | DataPantauBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C61 | DataFarmasiBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |

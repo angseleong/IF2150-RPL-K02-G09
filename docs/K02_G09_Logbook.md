@@ -240,6 +240,7 @@
 
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| *07-11-2026* | *Ahmad Humam Isma* | *Mengimplementasikan DataPasienBoundary dan DataKunjunganBoundary (#5) menggantikan Steven, beserta penampung entri baru pada RekamMedisEntity dan unit test dengan pengganti JDBC* | *3,5* | *Done* | *Kueri belum teruji ke PostgreSQL karena skema (#2) belum merge dan basis data belum tersedia di perangkat* |
 
 **Catatan/Evaluasi Milestone 9:**
 
