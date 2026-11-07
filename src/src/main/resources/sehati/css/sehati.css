@@ -1,0 +1,188 @@
+/* Warna mengikuti rancangan antarmuka BAB 6 DPPL (docs/M8/assets/diagram/src/gen_ui.py). */
+.root {
+    -teal: #0F766E;
+    -gelap: #0F172A;
+    -abu: #64748B;
+    -garis: #94A3B8;
+    -merah: #DC2626;
+    -merah-muda: #FEE2E2;
+    -hijau: #16A34A;
+    -hijau-muda: #DCFCE7;
+    -hijau-tua: #166534;
+    -kuning: #D97706;
+    -kuning-muda: #FEF3C7;
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-background-color: #F8FAFC;
+}
+
+.halaman {
+    -fx-padding: 20 30 20 30;
+    -fx-spacing: 12;
+}
+
+/* Bilah aplikasi */
+.bilah {
+    -fx-background-color: -teal;
+    -fx-padding: 10 16 10 16;
+    -fx-spacing: 16;
+    -fx-min-height: 48px;
+}
+
+.bilah-logo {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.bilah-judul {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+.bilah-teks {
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+}
+
+.lampu-koneksi {
+    -fx-fill: #FACC15;
+}
+
+.lampu-koneksi:daring {
+    -fx-fill: #4ADE80;
+}
+
+.tombol-bilah {
+    -fx-background-color: transparent;
+    -fx-border-color: white;
+    -fx-border-radius: 5;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+}
+
+.tombol-bilah:focused {
+    -fx-border-width: 2;
+}
+
+/* Kartu dan judul */
+.kartu {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: -garis;
+    -fx-border-radius: 8;
+    -fx-padding: 14;
+}
+
+.judul-panel {
+    -fx-text-fill: -teal;
+    -fx-font-weight: bold;
+}
+
+.label-kolom {
+    -fx-text-fill: -abu;
+    -fx-font-size: 11px;
+}
+
+/* Tombol */
+.button {
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.tombol-utama {
+    -fx-background-color: -teal;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.tombol-kedua {
+    -fx-background-color: white;
+    -fx-border-color: -teal;
+    -fx-border-radius: 6;
+    -fx-text-fill: -teal;
+    -fx-font-weight: bold;
+}
+
+/* Isian */
+.text-field, .text-area, .combo-box, .date-picker {
+    -fx-background-radius: 6;
+}
+
+.kolom-bermasalah {
+    -fx-border-color: -merah;
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+}
+
+.pesan-kolom {
+    -fx-text-fill: -merah;
+    -fx-font-size: 12px;
+}
+
+/* Peringatan dan notifikasi */
+.panel-peringatan {
+    -fx-background-color: -merah-muda;
+    -fx-background-radius: 8;
+    -fx-border-color: -merah;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-padding: 12;
+}
+
+.ikon-peringatan {
+    -fx-fill: -merah;
+}
+
+.teks-peringatan {
+    -fx-text-fill: -merah;
+    -fx-font-weight: bold;
+}
+
+.notifikasi-hijau {
+    -fx-background-color: -hijau-muda;
+    -fx-background-radius: 6;
+    -fx-border-color: -hijau;
+    -fx-border-radius: 6;
+    -fx-text-fill: -hijau-tua;
+    -fx-font-weight: bold;
+    -fx-padding: 8 12 8 12;
+}
+
+/* Lencana status */
+.lencana-hijau, .lencana-merah, .lencana-kuning {
+    -fx-background-radius: 10;
+    -fx-padding: 2 10 2 10;
+    -fx-font-weight: bold;
+}
+
+.lencana-hijau {
+    -fx-background-color: -hijau-muda;
+    -fx-text-fill: -hijau-tua;
+}
+
+.lencana-merah {
+    -fx-background-color: -merah-muda;
+    -fx-text-fill: -merah;
+}
+
+.lencana-kuning {
+    -fx-background-color: -kuning-muda;
+    -fx-text-fill: -kuning;
+}
+
+/* Tabel */
+.table-view .column-header {
+    -fx-background-color: #E2F3F1;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: -teal;
+    -fx-font-weight: bold;
+}
+
+/* Layar bantuan F1 */
+.tabel-pintasan {
+    -fx-hgap: 24;
+    -fx-vgap: 8;
+}
