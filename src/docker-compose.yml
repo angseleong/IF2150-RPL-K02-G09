@@ -1,0 +1,35 @@
+# Basis data PostgreSQL SEHATI untuk pengembangan. Jalankan dari folder src/:
+#   docker compose up -d
+# schema.sql, seed.sql, dan sandi-aplikasi.sh hanya dijalankan saat volume masih kosong.
+# Untuk mengulang dari awal, misalnya setelah schema.sql atau seed.sql berubah:
+#   docker compose down -v && docker compose up -d
+services:
+  db:
+    image: postgres:15
+    container_name: sehati-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-sehati}
+      # Akun pemilik basis data untuk pemasangan dan migrasi. Aplikasi masuk sebagai sehati_app (DPPL aturan 5).
+      POSTGRES_USER: ${DB_ADMIN_USER:-sehati_admin}
+      POSTGRES_PASSWORD: ${DB_ADMIN_PASSWORD:?Isi DB_ADMIN_PASSWORD pada src/.env}
+      SEHATI_APP_PASSWORD: ${DB_PASSWORD:?Isi DB_PASSWORD pada src/.env}
+      # CURRENT_DATE pada seed dan kueri mengikuti waktu puskesmas.
+      TZ: Asia/Jakarta
+      PGTZ: Asia/Jakarta
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - sehati-data:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/20-seed.sql:ro
+      - ./db/sandi-aplikasi.sh:/docker-entrypoint-initdb.d/30-sandi-aplikasi.sh:ro
+      - ./db/uji-kueri.sql:/opt/sehati/uji-kueri.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  sehati-data:
