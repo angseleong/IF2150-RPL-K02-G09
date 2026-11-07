@@ -109,6 +109,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | :--- | :--- | :--- | :--- |
 | *Claude (Claude Code)* | *Menyusun draf cangkang aplikasi JavaFX (#3): navigasi, bilah aplikasi, tema, pintasan global, dan komponen peringatan* | *"Gw mau kerjain Cangkang aplikasi JavaFX."* | *Lima belas layar, pintasan, dan komponen diuji lewat `mvn test` dan uji asap JavaFX. Axeleon menjalankan aplikasi lewat `mvn javafx:run`, lalu memeriksa bilah aplikasi dan perpindahan ke layar masuk.* |
 | *Claude (Claude Code)* | *Menyusun draf DataPasienBoundary dan DataKunjunganBoundary (#5) beserta unit test dengan pengganti JDBC, menggantikan pekerjaan Steven* | *"kerjakan tugas steven dulu secara lengkap, jangan lupa buat template prnya sekalian"* | *Kueri dan algoritma dicocokkan dengan Subbab 5.57 dan 5.58 DPPL serta uji-kueri.sql milik Malik. Ikatan parameter, transaksi, dan pemetaan galat diuji lewat `mvn test`. Pengujian ke PostgreSQL menunggu skema (#2).* |
+| *Claude (Claude Code)* | *Menurunkan schema.sql, seed.sql, dan docker-compose.yml dari kueri DPPL Subbab 5.56 sampai 5.64 untuk issue #2* | *"Kerjakan tugas Malik hari Rabu 4 Nov dan cek aturan workflow-nya."* | *Nama tabel, kolom, dan nilai CHECK dicocokkan dengan atribut entity DPPL. Seluruh kueri dan seed diperiksa dengan parser PostgreSQL terhadap katalog skema; uji PREPARE pada postgres:15 lewat db/uji-kueri.sql menyusul.* |
 
 ---
 
