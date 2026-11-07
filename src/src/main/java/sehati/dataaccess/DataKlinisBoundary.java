@@ -55,6 +55,24 @@ public class DataKlinisBoundary {
     private static final String Q_C59_09 = "UPDATE penanda_risiko SET status = ? WHERE id_penanda = ?";
     private static final String Q_C59_10 = "SELECT id_penanda, id_kunjungan, jenis_risiko, tanggal, status "
             + "FROM penanda_risiko WHERE id_kunjungan = ? AND status = 'aktif' ORDER BY jenis_risiko";
+    private static final String Q_C59_11 = "SELECT kode, deskripsi, bab FROM kode_icd10 "
+            + "WHERE kode ILIKE ? OR deskripsi ILIKE ? ORDER BY (kode ILIKE ?) DESC, kode LIMIT 20";
+    private static final String Q_C59_12 = "INSERT INTO pemeriksaan (id_kunjungan, anamnesis, tindakan, terkunci) "
+            + "VALUES (?, ?, ?, ?) ON CONFLICT (id_kunjungan) DO UPDATE "
+            + "SET anamnesis = EXCLUDED.anamnesis, tindakan = EXCLUDED.tindakan, terkunci = EXCLUDED.terkunci "
+            + "WHERE pemeriksaan.terkunci = FALSE RETURNING id_pemeriksaan";
+    private static final String Q_C59_13 = "INSERT INTO diagnosis (id_pemeriksaan, kode_icd10, deskripsi) "
+            + "VALUES (?, ?, ?) ON CONFLICT (id_pemeriksaan) DO UPDATE "
+            + "SET kode_icd10 = EXCLUDED.kode_icd10, deskripsi = EXCLUDED.deskripsi";
+    private static final String Q_C59_14 = "SELECT id_pemeriksaan, id_kunjungan, anamnesis, tindakan, terkunci "
+            + "FROM pemeriksaan WHERE id_kunjungan = ?";
+    private static final String Q_C59_15 = "INSERT INTO jadwal_kontrol (id_pasien, tanggal_rencana, status) "
+            + "VALUES (?, ?, ?) RETURNING id_jadwal";
+    private static final String Q_C59_16 = "UPDATE jadwal_kontrol SET status = ? WHERE id_jadwal = ?";
+    private static final String Q_C59_17 = "SELECT jk.id_jadwal, jk.id_pasien, jk.tanggal_rencana, jk.status "
+            + "FROM jadwal_kontrol jk WHERE jk.status = 'terjadwal' "
+            + "AND NOT EXISTS (SELECT 1 FROM daftar_pantau dp WHERE dp.id_jadwal = jk.id_jadwal) "
+            + "ORDER BY jk.tanggal_rencana, jk.id_jadwal";
 
     private Connection koneksi;
 
@@ -234,24 +252,135 @@ public class DataKlinisBoundary {
         }
     }
 
+    /**
+     * Mencari kode ICD-10 berawalan kata kunci atau berdeskripsi memuat kata kunci, paling banyak 20 baris
+     * (Q-C59-11, KF10).
+     */
     public List<KodeICD10Entity> cariKodeICD10(String kataKunci) {
-        throw new UnsupportedOperationException("TODO");
+        if (kataKunci == null) {
+            throw new IllegalArgumentException("Kata kunci diagnosis wajib diisi");
+        }
+        String teks = loloskanPola(kataKunci.strip());
+        try (PreparedStatement ps = koneksi.prepareStatement(Q_C59_11)) {
+            ps.setString(1, teks + "%");
+            ps.setString(2, "%" + teks + "%");
+            ps.setString(3, teks + "%");
+            List<KodeICD10Entity> hasil = new ArrayList<>();
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    hasil.add(new KodeICD10Entity(rs.getString("kode"), rs.getString("deskripsi"),
+                            rs.getString("bab")));
+                }
+            }
+            return hasil;
+        } catch (SQLException e) {
+            throw galat("Gagal mencari kode ICD-10", e);
+        }
     }
 
+    /**
+     * Menyisipkan atau menimpa pemeriksaan satu kunjungan beserta diagnosisnya. Menolak pemeriksaan yang sudah
+     * dikunci (Q-C59-12, Q-C59-13, Algo-C59-02).
+     */
     public void simpanPemeriksaan(PemeriksaanEntity p, DiagnosisEntity d) {
-        throw new UnsupportedOperationException("TODO");
+        boolean transaksiSendiri = mulaiTransaksi();
+        try {
+            try (PreparedStatement ps = koneksi.prepareStatement(Q_C59_12)) {
+                ps.setInt(1, p.getIdKunjungan());
+                ps.setString(2, p.getAnamnesis());
+                ps.setString(3, p.getTindakan());
+                ps.setBoolean(4, p.isTerkunci());
+                try (ResultSet rs = ps.executeQuery()) {
+                    // Tanpa baris berarti klausa WHERE membatalkan UPDATE karena baris lama sudah terkunci.
+                    if (!rs.next()) {
+                        throw new IllegalStateException("Rekam medis kunjungan ini sudah dikunci");
+                    }
+                    p.setIdPemeriksaan(rs.getInt(1));
+                }
+            }
+            if (d != null) {
+                try (PreparedStatement ps = koneksi.prepareStatement(Q_C59_13)) {
+                    ps.setInt(1, p.getIdPemeriksaan());
+                    ps.setString(2, d.getKodeICD10());
+                    ps.setString(3, d.getDeskripsi());
+                    ps.executeUpdate();
+                }
+            }
+            selesaiTransaksi(transaksiSendiri, true);
+        } catch (SQLException | RuntimeException e) {
+            selesaiTransaksi(transaksiSendiri, false);
+            throw galat("Gagal menyimpan pemeriksaan", e);
+        } finally {
+            akhiriTransaksi(transaksiSendiri);
+        }
     }
 
+    /**
+     * Mengambil pemeriksaan satu kunjungan, atau null bila belum ada (Q-C59-14).
+     */
     public PemeriksaanEntity ambilPemeriksaan(int idKunjungan) {
-        throw new UnsupportedOperationException("TODO");
+        try (PreparedStatement ps = koneksi.prepareStatement(Q_C59_14)) {
+            ps.setInt(1, idKunjungan);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+                return new PemeriksaanEntity(rs.getInt("id_pemeriksaan"), rs.getInt("id_kunjungan"),
+                        rs.getString("anamnesis"), rs.getString("tindakan"), rs.getBoolean("terkunci"));
+            }
+        } catch (SQLException e) {
+            throw galat("Gagal mengambil pemeriksaan", e);
+        }
     }
 
+    /**
+     * Menyisipkan jadwal kontrol baru (Q-C59-15, KF12) atau memutakhirkan statusnya (Q-C59-16).
+     */
     public void simpanJadwalKontrol(JadwalKontrolEntity j) {
-        throw new UnsupportedOperationException("TODO");
+        try {
+            if (j.getIdJadwal() == 0) {
+                try (PreparedStatement ps = koneksi.prepareStatement(Q_C59_15)) {
+                    ps.setInt(1, j.getIdPasien());
+                    ps.setDate(2, Date.valueOf(j.getTanggalRencana()));
+                    ps.setString(3, j.getStatus());
+                    try (ResultSet rs = ps.executeQuery()) {
+                        rs.next();
+                        j.setIdJadwal(rs.getInt(1));
+                    }
+                }
+            } else {
+                try (PreparedStatement ps = koneksi.prepareStatement(Q_C59_16)) {
+                    ps.setString(1, j.getStatus());
+                    ps.setInt(2, j.getIdJadwal());
+                    if (ps.executeUpdate() == 0) {
+                        throw new IllegalArgumentException("Jadwal kontrol tidak ditemukan: " + j.getIdJadwal());
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw galat("Gagal menyimpan jadwal kontrol", e);
+        }
     }
 
+    /**
+     * Mengambil jadwal "terjadwal" yang belum memicu entri daftar pantau, untuk Algo-C21-02 (Q-C59-17).
+     */
     public List<JadwalKontrolEntity> ambilJadwalKontrol() {
-        throw new UnsupportedOperationException("TODO");
+        try (PreparedStatement ps = koneksi.prepareStatement(Q_C59_17); ResultSet rs = ps.executeQuery()) {
+            List<JadwalKontrolEntity> hasil = new ArrayList<>();
+            while (rs.next()) {
+                hasil.add(new JadwalKontrolEntity(rs.getInt("id_jadwal"), rs.getInt("id_pasien"),
+                        rs.getDate("tanggal_rencana").toLocalDate(), rs.getString("status")));
+            }
+            return hasil;
+        } catch (SQLException e) {
+            throw galat("Gagal mengambil jadwal kontrol", e);
+        }
+    }
+
+    // \, %, dan _ yang diketik dokter dibaca sebagai huruf biasa, bukan wildcard LIKE (Algo-C57-01).
+    static String loloskanPola(String teks) {
+        return teks.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
     }
 
     // Q-C59-03 dan Q-C59-05 memilih s.waktu untuk grafik tren (KF08); Q-C59-04 tidak.
