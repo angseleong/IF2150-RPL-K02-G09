@@ -240,6 +240,7 @@
 
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| *07-11-2026* | *Malik Arsyafiandra Madani* | *Mengisi DataFarmasiBoundary (#8): 15 kueri C61, penguncian FOR UPDATE untuk resep, obat, dan bets, Algo-C61-01 untuk bets ganda, serta pola transaksiSendiri; menambah daftarItem pada ResepEntity dan uji JUnit dengan basis data opsional* | *4* | *Review* | *Uji basis data belum dijalankan karena PostgreSQL belum dapat diakses di laptop pengerjaan* |
 | *05-11-2026* | *Malik Arsyafiandra Madani* | *Menyusun skema PostgreSQL 15 dari 78 kueri DPPL (28 tabel beserta foreign key, UNIQUE, CHECK, indeks GIN pg_trgm, dan peran sehati_app), seed fiktif untuk tiap tahap pelayanan, docker-compose, serta skrip uji PREPARE 78 kueri (#2)* | *4* | *Review* | *Docker belum terpasang di laptop pengerjaan, sehingga skema diperiksa dulu dengan parser PostgreSQL sebelum diuji pada kontainer postgres:15* |
 
 **Catatan/Evaluasi Milestone 9:**
