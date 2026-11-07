@@ -95,7 +95,7 @@ class DataKlinisBoundaryPemeriksaanTest {
         void simpanPemeriksaan_menolakKodeDiLuarICD10() {
             PemeriksaanEntity p = new PemeriksaanEntity(0, idKunjunganTanpaPemeriksaan(), "Batuk", "Obat", false);
 
-            assertThrows(IllegalStateException.class,
+            assertThrows(IllegalArgumentException.class,
                     () -> dataKlinis.simpanPemeriksaan(p, new DiagnosisEntity(0, "XYZ", "Bukan kode")));
         }
 
