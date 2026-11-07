@@ -1,6 +1,7 @@
 package sehati.business.control;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -9,6 +10,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +23,10 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import sehati.business.entity.DiagnosisEntity;
 import sehati.business.entity.JadwalKontrolEntity;
 import sehati.business.entity.PemeriksaanEntity;
+import sehati.business.entity.RekamMedisEntity;
+import sehati.business.entity.SesiEntity;
+import sehati.business.entity.TandaVitalEntity;
+import sehati.common.SesiAktif;
 
 class PemeriksaanManagerTest {
 
@@ -39,6 +47,12 @@ class PemeriksaanManagerTest {
     }
 
     @Test
+    void kunciRekamMedis_menolakTanpaSesi() {
+        SesiAktif.lepas();
+        assertThrows(IllegalStateException.class, () -> manager.kunciRekamMedis(1));
+    }
+
+    @Test
     void cariKodeICD10_kataKunciKosongMengembalikanDaftarKosong() {
         assertTrue(manager.cariKodeICD10("  ").isEmpty());
     }
@@ -53,6 +67,7 @@ class PemeriksaanManagerTest {
 
         private Connection koneksi;
         private int idKunjungan;
+        private String statusAwal;
 
         @BeforeEach
         void buka() throws SQLException {
@@ -63,6 +78,12 @@ class PemeriksaanManagerTest {
                 rs.next();
                 idKunjungan = rs.getInt(1);
             }
+            try (Statement st = koneksi.createStatement();
+                 var rs = st.executeQuery("SELECT status FROM kunjungan WHERE id_kunjungan = " + idKunjungan)) {
+                rs.next();
+                statusAwal = rs.getString(1);
+            }
+            SesiAktif.pasang(new SesiEntity(UUID.randomUUID(), 1, LocalDateTime.now(), true));
         }
 
         @AfterEach
@@ -72,7 +93,12 @@ class PemeriksaanManagerTest {
                         + "(SELECT id_pemeriksaan FROM pemeriksaan WHERE id_kunjungan = " + idKunjungan + ")");
                 st.executeUpdate("DELETE FROM pemeriksaan WHERE id_kunjungan = " + idKunjungan);
                 st.executeUpdate("DELETE FROM jadwal_kontrol WHERE tanggal_rencana = DATE '2099-01-01'");
+                st.executeUpdate("DELETE FROM audit WHERE deskripsi = 'Pemeriksaan kunjungan " + idKunjungan
+                        + " dikunci'");
+                st.executeUpdate("UPDATE kunjungan SET status = '" + statusAwal + "' WHERE id_kunjungan = "
+                        + idKunjungan);
             }
+            SesiAktif.lepas();
             koneksi.close();
         }
 
@@ -89,6 +115,58 @@ class PemeriksaanManagerTest {
                 st.executeUpdate("UPDATE pemeriksaan SET terkunci = TRUE WHERE id_kunjungan = " + idKunjungan);
             }
             assertThrows(IllegalStateException.class, () -> manager.simpanPemeriksaan(idKunjungan, p, null));
+        }
+
+        @Test
+        void kunciRekamMedis_mengunciDanMencatatAudit() throws SQLException {
+            assertThrows(IllegalStateException.class, () -> manager.kunciRekamMedis(idKunjungan));
+
+            manager.simpanPemeriksaan(idKunjungan, new PemeriksaanEntity(0, 0, "Batuk", "Obat", false),
+                    new DiagnosisEntity(0, "J00", "Nasofaringitis akut (common cold)"));
+            manager.kunciRekamMedis(idKunjungan);
+
+            assertEquals(1, hitung("SELECT count(*) FROM pemeriksaan WHERE terkunci AND id_kunjungan = "
+                    + idKunjungan));
+            assertEquals(1, hitung("SELECT count(*) FROM kunjungan WHERE status = 'selesai diperiksa' "
+                    + "AND id_kunjungan = " + idKunjungan));
+            assertEquals(1, hitung("SELECT count(*) FROM audit WHERE id_pengguna = 1 AND deskripsi = "
+                    + "'Pemeriksaan kunjungan " + idKunjungan + " dikunci'"));
+            assertEquals(1, hitung("SELECT count(*) FROM diagnosis d JOIN pemeriksaan p USING (id_pemeriksaan) "
+                    + "WHERE d.kode_icd10 = 'J00' AND p.id_kunjungan = " + idKunjungan));
+            // Penguncian kedua ditolak dan tidak menambah audit.
+            assertThrows(IllegalStateException.class, () -> manager.kunciRekamMedis(idKunjungan));
+            assertEquals(1, hitung("SELECT count(*) FROM audit WHERE deskripsi = 'Pemeriksaan kunjungan "
+                    + idKunjungan + " dikunci'"));
+        }
+
+        @Test
+        void susunRingkasan_memuatPasienSkriningDanPenanda() throws SQLException {
+            int idKunjunganSkrining = hitung("SELECT min(s.id_kunjungan) FROM skrining s");
+            RekamMedisEntity rm = manager.susunRingkasan(idKunjunganSkrining);
+
+            assertNotNull(rm.getPasien());
+            assertNotNull(rm.getSkriningHariIni());
+            assertNotNull(rm.getPenandaAktif());
+            assertThrows(IllegalArgumentException.class, () -> manager.susunRingkasan(-1));
+        }
+
+        @Test
+        void susunTren_terlamaLebihDuluDenganWaktu() {
+            List<TandaVitalEntity> tren = manager.susunTren(1);
+
+            assertTrue(tren.size() >= 2);
+            for (int i = 1; i < tren.size(); i++) {
+                assertTrue(!tren.get(i).getWaktu().isBefore(tren.get(i - 1).getWaktu()));
+            }
+        }
+
+        @Test
+        void muatKunjunganSiapPeriksa_hanyaStatusSiapHariIni() {
+            for (var e : manager.muatKunjunganSiapPeriksa().entrySet()) {
+                assertEquals("siap diperiksa dokter", e.getKey().getStatus());
+                assertEquals(LocalDate.now(), e.getKey().getTanggal());
+                assertEquals(e.getKey().getIdPasien(), e.getValue().getIdPasien());
+            }
         }
 
         @Test

@@ -1,18 +1,27 @@
 package sehati.business.control;
 
+import sehati.business.entity.AuditEntity;
 import sehati.business.entity.DiagnosisEntity;
 import sehati.business.entity.JadwalKontrolEntity;
 import sehati.business.entity.KodeICD10Entity;
+import sehati.business.entity.KunjunganEntity;
+import sehati.business.entity.PasienEntity;
 import sehati.business.entity.PemeriksaanEntity;
 import sehati.business.entity.RekamMedisEntity;
 import sehati.business.entity.TandaVitalEntity;
 import sehati.common.KoneksiBasisData;
+import sehati.common.SesiAktif;
+import sehati.dataaccess.DataAkunBoundary;
 import sehati.dataaccess.DataKlinisBoundary;
+import sehati.dataaccess.DataKunjunganBoundary;
+import sehati.dataaccess.DataPasienBoundary;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,14 +35,59 @@ public class PemeriksaanManager {
 
     private static final Logger LOG = Logger.getLogger(PemeriksaanManager.class.getName());
 
-    public RekamMedisEntity susunRingkasan(int idKunjungan) {
-        // TODO(#14): isi setelah DataPasienBoundary dan DataKunjunganBoundary (#5) masuk.
-        throw new UnsupportedOperationException("TODO");
+    /**
+     * Kunjungan hari ini yang sudah diskrining dan menunggu dokter beserta pasiennya, urut nomor antrean, sebagai
+     * daftar pilihan pada I-06 (tambahan implementasi, B.1).
+     */
+    public Map<KunjunganEntity, PasienEntity> muatKunjunganSiapPeriksa() {
+        try (Connection koneksi = KoneksiBasisData.buka()) {
+            DataPasienBoundary dataPasien = new DataPasienBoundary(koneksi);
+            Map<KunjunganEntity, PasienEntity> hasil = new LinkedHashMap<>();
+            for (KunjunganEntity k : new DataKunjunganBoundary(koneksi).kunjunganSiapPeriksa(LocalDate.now())) {
+                hasil.put(k, dataPasien.ambilPasien(k.getIdPasien()));
+            }
+            return hasil;
+        } catch (SQLException e) {
+            throw galatTeknis("Daftar pasien gagal dimuat", e);
+        }
     }
 
+    /**
+     * Menyatukan data diri, diagnosis lampau, riwayat obat, skrining hari ini, dan penanda risiko aktif satu
+     * kunjungan untuk I-06 (KF09).
+     */
+    public RekamMedisEntity susunRingkasan(int idKunjungan) {
+        try (Connection koneksi = KoneksiBasisData.buka()) {
+            KunjunganEntity kunjungan = new DataKunjunganBoundary(koneksi).ambilKunjungan(idKunjungan);
+            if (kunjungan == null) {
+                throw new IllegalArgumentException("Kunjungan tidak ditemukan: " + idKunjungan);
+            }
+            DataPasienBoundary dataPasien = new DataPasienBoundary(koneksi);
+            DataKlinisBoundary dataKlinis = new DataKlinisBoundary(koneksi);
+            RekamMedisEntity rm = dataPasien.ambilRekamMedis(kunjungan.getIdPasien());
+            // Pasien yang belum punya rekam medis tetap ditampilkan dengan riwayat kosong.
+            if (rm == null) {
+                rm = new RekamMedisEntity();
+            }
+            rm.setPasien(dataPasien.ambilPasien(kunjungan.getIdPasien()));
+            rm.setSkriningHariIni(dataKlinis.ambilSkrining(idKunjungan));
+            rm.setPenandaAktif(dataKlinis.penandaKunjungan(idKunjungan));
+            return rm;
+        } catch (SQLException e) {
+            throw galatTeknis("Ringkasan rekam medis gagal dimuat", e);
+        }
+    }
+
+    /**
+     * Seluruh pengukuran pasien, terlama lebih dulu, sebagai seri grafik garis. Satu titik tetap dikembalikan
+     * (KF08, skenario alternatif 4 UC05).
+     */
     public List<TandaVitalEntity> susunTren(int idPasien) {
-        // TODO(#14): isi setelah TandaVitalEntity memiliki waktu pengukuran (#29).
-        throw new UnsupportedOperationException("TODO");
+        try (Connection koneksi = KoneksiBasisData.buka()) {
+            return new DataKlinisBoundary(koneksi).riwayatTandaVital(idPasien, 0);
+        } catch (SQLException e) {
+            throw galatTeknis("Tren tanda vital gagal dimuat", e);
+        }
     }
 
     /**
@@ -90,9 +144,36 @@ public class PemeriksaanManager {
         }
     }
 
+    /**
+     * Mengunci pemeriksaan, menandai kunjungan "selesai diperiksa", dan mencatat audit dalam satu transaksi
+     * (Algo-C22-02, KNF05).
+     */
     public void kunciRekamMedis(int idKunjungan) {
-        // TODO(#14): isi setelah DataKunjunganBoundary (#5), simpanAudit (#4), dan idPengguna sesi (#10) tersedia.
-        throw new UnsupportedOperationException("TODO");
+        int idPengguna = SesiAktif.idPenggunaSesi();
+        try (Connection koneksi = KoneksiBasisData.buka()) {
+            DataKlinisBoundary dataKlinis = new DataKlinisBoundary(koneksi);
+            DataKunjunganBoundary dataKunjungan = new DataKunjunganBoundary(koneksi);
+            koneksi.setAutoCommit(false);
+            try {
+                PemeriksaanEntity p = dataKlinis.ambilPemeriksaan(idKunjungan);
+                if (p == null) {
+                    throw new IllegalStateException("Pemeriksaan belum disimpan");
+                }
+                p.kunci();
+                dataKlinis.simpanPemeriksaan(p, null);
+                KunjunganEntity kunjungan = dataKunjungan.ambilKunjungan(idKunjungan);
+                kunjungan.perbaruiStatus(KunjunganEntity.STATUS_SELESAI_DIPERIKSA);
+                dataKunjungan.simpanKunjungan(kunjungan);
+                new DataAkunBoundary(koneksi).simpanAudit(
+                        AuditEntity.buat(idPengguna, "Pemeriksaan kunjungan " + idKunjungan + " dikunci"));
+                koneksi.commit();
+            } catch (RuntimeException e) {
+                koneksi.rollback();
+                throw e;
+            }
+        } catch (SQLException e) {
+            throw galatTeknis("Rekam medis gagal dikunci", e);
+        }
     }
 
     private static IllegalStateException galatTeknis(String pesan, SQLException e) {
