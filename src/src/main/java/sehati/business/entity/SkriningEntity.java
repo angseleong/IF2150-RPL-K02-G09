@@ -13,6 +13,7 @@ public class SkriningEntity {
     private int idKunjungan;
     private String keluhanAwal;
     private LocalDateTime waktu;
+    private TandaVitalEntity tandaVital;
 
     public SkriningEntity() {
     }
@@ -24,8 +25,18 @@ public class SkriningEntity {
         this.waktu = waktu;
     }
 
+    /**
+     * Menautkan hasil pengukuran sebelum skrining disimpan (Subbab 5.38, KF05).
+     */
     public void lampirkanTandaVital(TandaVitalEntity tv) {
-        throw new UnsupportedOperationException("TODO");
+        if (tv == null) {
+            throw new IllegalArgumentException("Tanda vital tidak boleh kosong");
+        }
+        this.tandaVital = tv;
+    }
+
+    public TandaVitalEntity getTandaVital() {
+        return tandaVital;
     }
 
     public int getIdSkrining() {

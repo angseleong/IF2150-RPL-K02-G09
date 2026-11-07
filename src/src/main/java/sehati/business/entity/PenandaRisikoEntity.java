@@ -9,6 +9,9 @@ import java.time.LocalDate;
  */
 public class PenandaRisikoEntity {
 
+    public static final String STATUS_AKTIF = "aktif";
+    public static final String STATUS_DICABUT = "dicabut";
+
     private int idPenanda;
     private int idKunjungan;
     private String jenisRisiko;
@@ -26,8 +29,14 @@ public class PenandaRisikoEntity {
         this.status = status;
     }
 
+    /**
+     * Mencabut penanda aktif. Penanda tetap tersimpan sebagai riwayat (Subbab 5.41).
+     */
     public void cabut() {
-        throw new UnsupportedOperationException("TODO");
+        if (STATUS_DICABUT.equals(status)) {
+            throw new IllegalStateException("Penanda risiko sudah dicabut");
+        }
+        this.status = STATUS_DICABUT;
     }
 
     public int getIdPenanda() {

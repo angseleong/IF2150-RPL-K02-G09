@@ -195,7 +195,8 @@ Tabel B.1. Perubahan dari DPPL
 
 | No | Bagian DPPL | Rancangan Awal | Implementasi Akhir | Alasan |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | *[mis. Kelas C05, layar I-03, tabel `orders`]* | *[Yang direncanakan]* | *[Yang dibuat]* | *[Alasan perubahan]* |
+| 1 | C38 SkriningEntity | Atribut idSkrining, idKunjungan, keluhanAwal, waktu | Ditambah atribut `tandaVital` dan `getTandaVital()` | Subbab 5.38 menyebut tanda vital dipegang sebagai referensi, tetapi atributnya tidak ada di Tabel 4.1, sedangkan `simpanSkrining()` membutuhkannya |
+| 2 | C39 TandaVitalEntity, C59 Q-C59-03 dan Q-C59-05 | Tidak ada atribut waktu, `s.waktu` dipilih tetapi tidak disimpan | Ditambah atribut `waktu: LocalDateTime` dengan getter dan setter, diisi dari `s.waktu` pada Q-C59-03 dan Q-C59-05 | Grafik tren UC05 (KF08) memakai waktu pengukuran sebagai sumbu-x dan `RekamMedisForm.seriTren` hanya memegang `List<TandaVitalEntity>`. Atas usul Adnan pada review #29 |
 | *...* | *...* | *...* | *...* | *...* |
 
 ## B.2 Bukti Penerapan Best Practices
@@ -286,10 +287,10 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C35 | KunjunganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C36 | PoliEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C37 | AntreanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C38 | SkriningEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C39 | TandaVitalEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C40 | AmbangRisikoEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C41 | PenandaRisikoEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C38 | SkriningEntity | Kelas | `src/src/main/java/sehati/business/entity/SkriningEntity.java` | Ditambah atribut `tandaVital` dan `getTandaVital()` (Tabel B.1). |
+| C39 | TandaVitalEntity | Kelas | `src/src/main/java/sehati/business/entity/TandaVitalEntity.java` | Algo-C39-01. Ditambah atribut `waktu` (Tabel B.1). |
+| C40 | AmbangRisikoEntity | Kelas | `src/src/main/java/sehati/business/entity/AmbangRisikoEntity.java` | Algo-C40-01. |
+| C41 | PenandaRisikoEntity | Kelas | `src/src/main/java/sehati/business/entity/PenandaRisikoEntity.java` | Konstanta `STATUS_AKTIF` dan `STATUS_DICABUT` ditambahkan. |
 | C42 | PemeriksaanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C43 | DiagnosisEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C44 | KodeICD10Entity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
