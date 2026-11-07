@@ -108,6 +108,9 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
 | *Claude (Claude Code)* | *Menyusun draf cangkang aplikasi JavaFX (#3): navigasi, bilah aplikasi, tema, pintasan global, dan komponen peringatan* | *"Gw mau kerjain Cangkang aplikasi JavaFX."* | *Lima belas layar, pintasan, dan komponen diuji lewat `mvn test` dan uji asap JavaFX. Axeleon menjalankan aplikasi lewat `mvn javafx:run`, lalu memeriksa bilah aplikasi dan perpindahan ke layar masuk.* |
+| *Claude (Claude Code)* | *Menyusun draf DataKlinisBoundary bagian skrining dan risiko (#6) serta entity C38 s.d. C41* | *"Coba cek githubnya juga kemudian tolong selesaikan milestone sesuai punyaku."* | *Kueri dan algoritma dicocokkan dengan Subbab 5.38 s.d. 5.41 dan 5.59 DPPL. Entity diuji lewat `mvn test`; kueri belum dijalankan ke PostgreSQL karena skema (#2) belum tersedia.* |
+| *Claude (Claude Code)* | *Menyusun draf UC04 (#13): SkriningManager, RisikoManager, AntreanSkriningForm, SkriningForm, dan unit test* | *"Lanjut kerjakan #13 UC04 skrining."* | *Algo-C20-01 s.d. C20-03, Algo-C21-01, dan Algo-C05-01 dicocokkan dengan DPPL. Validasi rentang dan evaluasi risiko diuji lewat `mvn test`; kedua layar dimuat lewat `mvn javafx:run`. Alur dengan basis data menunggu #5 dan #2.* |
+| *Claude (Claude Code)* | *Menyusun draf UC09 (#18): DataPantauBoundary, PantauManager, DaftarPantauForm, entity C51 dan C52, serta unit test; mengisi baris Tabel B.1 dan B.5 milik Humam pada laporan* | *"Selesaikan semua."* | *Kueri dan algoritma dicocokkan dengan Subbab 5.12, 5.26, 5.51, 5.52, dan 5.60 DPPL. Unit test memakai pengganti DataBoundary di memori dan lulus lewat `mvn test`; layar dimuat lewat `mvn javafx:run`. Pengujian ke PostgreSQL menunggu skema (#2).* |
 
 ---
 
@@ -118,6 +121,7 @@ Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan A
 | Tanda Tangan | Nama Anggota |
 | :---: | :--- |
 | <img src="./assets/ttd-anggota1.png" width="100"> | **13525008 - Malik Arsyafiandra Madani** |
+| <img src="./assets/ttd-anggota6.png" width="100"> | **13525032 - Ahmad Humam Isma** |
 | <img src="./assets/ttd-anggota2.png" width="100"> | **13525044 - Steven Vanako** |
 | <img src="./assets/ttd-anggota3.png" width="100"> | **13525071 - Muhammad Adnan Kurniawan** |
 | <img src="./assets/ttd-anggota4.png" width="100"> | **13525074 - Axeleon Justin Algianto** |

@@ -240,6 +240,10 @@
 
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| *04-11-2026* | *Ahmad Humam Isma* | *Mengisi entity C38 s.d. C41 dan tujuh metode DataKlinisBoundary bagian skrining dan risiko (#6)* | *2* | *Done* | *Kueri belum teruji ke PostgreSQL karena skema (#2) belum tersedia* |
+| *04-11-2026* | *Ahmad Humam Isma* | *Mengimplementasikan UC04 (#13): SkriningManager, RisikoManager, layar antrean skrining dan formulir skrining, serta unit test validasi rentang dan evaluasi risiko* | *4* | *In Progress* | *Alur penuh menunggu DataKunjunganBoundary (#5) dan skema (#2)* |
+| *04-11-2026* | *Ahmad Humam Isma* | *Mengimplementasikan UC09 (#18): DataPantauBoundary, PantauManager, entity C51 dan C52, layar daftar pantau, serta unit test penyaringan dan pencatatan tindak lanjut* | *3* | *In Progress* | *Alur penuh menunggu DataPasienBoundary (#5) dan skema (#2)* |
+| *04-11-2026* | *Ahmad Humam Isma* | *Mengisi baris Tabel B.5 untuk 14 kelas milik sendiri dan Tabel B.1 untuk perubahan dari DPPL pada modul skrining dan pemantauan* | *1,5* | *Done* | *-* |
 
 **Catatan/Evaluasi Milestone 9:**
 
