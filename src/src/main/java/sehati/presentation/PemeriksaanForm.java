@@ -46,6 +46,7 @@ public class PemeriksaanForm {
     private String isianAnamnesis;
     private String kataKunciDiagnosis;
     private KunjunganEntity kunjungan;
+    private PasienEntity pasien;
     private DiagnosisEntity diagnosisTerpilih;
 
     @FXML private Parent akar;
@@ -96,8 +97,6 @@ public class PemeriksaanForm {
         });
         tampilkan(daftarSaran, false);
         tombolFinal.setDisable(true);
-        // TODO(#15): aktifkan setelah ResepForm tersedia.
-        tombolResep.setDisable(true);
         bilahPesan.setText("");
         // Bilah pesan hanya tampil bila ada pesan, agar tidak tersisa kotak kosong.
         bilahPesan.visibleProperty().bind(bilahPesan.textProperty().isNotEmpty());
@@ -121,6 +120,7 @@ public class PemeriksaanForm {
      */
     public void buka(KunjunganEntity kunjungan, PasienEntity pasien) {
         this.kunjungan = kunjungan;
+        this.pasien = pasien;
         String identitas = pasien == null ? "Pasien " + kunjungan.getIdPasien()
                 : pasien.getNama() + "  /  " + pasien.getNomorRekamMedis();
         labelPasien.setText("Pasien: " + identitas + "  /  Kunjungan " + kunjungan.getTanggal().format(TANGGAL));
@@ -236,7 +236,11 @@ public class PemeriksaanForm {
 
     @FXML
     private void buatResep() {
-        // TODO(#15): buka ResepForm untuk kunjungan ini.
+        if (kunjungan == null) {
+            return;
+        }
+        ResepForm form = Navigasi.buka("ResepForm");
+        form.tampilkanFormulir(kunjungan, pasien);
     }
 
     private void pilihSaran() {
