@@ -41,8 +41,13 @@ public class AntreanEntity {
         throw new UnsupportedOperationException("TODO");
     }
 
+    /**
+     * Menghapus entri dari antrean, misalnya resep yang dikembalikan ke dokter (Algo-C37-01, UC07).
+     */
     public void keluarkan(int idEntri) {
-        throw new UnsupportedOperationException("TODO");
+        if (!daftarEntri.remove(Integer.valueOf(idEntri))) {
+            throw new IllegalArgumentException("Entri tidak ada pada antrean " + jenis);
+        }
     }
 
     public int getIdAntrean() {
