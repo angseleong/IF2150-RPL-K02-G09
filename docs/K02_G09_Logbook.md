@@ -245,6 +245,7 @@
 | *05-11-2026* | *Malik Arsyafiandra Madani* | *Menyusun skema PostgreSQL 15 dari 78 kueri DPPL (28 tabel beserta foreign key, UNIQUE, CHECK, indeks GIN pg_trgm, dan peran sehati_app), seed fiktif untuk tiap tahap pelayanan, docker-compose, serta skrip uji PREPARE 78 kueri (#2)* | *4* | *Review* | *Docker belum terpasang di laptop pengerjaan, sehingga skema diperiksa dulu dengan parser PostgreSQL sebelum diuji pada kontainer postgres:15* |
 | *08-11-2026* | *Steven Vanako* | *Mengimplementasikan UC02 (#11): Algo-C33-01 pada PasienEntity, PasienManager (validasi NIK, pencarian parsial, pendaftaran, pembaruan, audit), layar I-02 dengan pintasan papan ketik Ctrl+S/F/N, beserta unit test* | *4* | *Review* | *`mvn test` belum dapat dijalankan di perangkat pengerjaan; uji basis data di-gate `DB_UJI_URL`; CI menjalankan `mvn -B test` pada PR* |
 
+| *08-11-2026* | *Steven Vanako* | *Mengimplementasikan UC03 (#12): Algo-C35-01, Algo-C36-01, dan Algo-C37-01 pada entity, KunjunganManager (daftar poli, buka kunjungan dengan pencegahan kunjungan ganda, penerbitan nomor antrean dalam transaksi dengan penguncian baris poli Algo-C19-01/02), layar I-03 KunjunganForm beserta tiket dan cetak, aktivasi tombol Buka Kunjungan di I-02, serta unit test entity dan manager* | *5* | *Review* | *`mvn test` dijalankan lokal dengan Temurin 21 dan Apache Maven 3.9.11 yang diunduh sementara (perangkat pengerjaan tidak memiliki JDK 21/Maven); uji basis data di-gate `DB_UJI_URL`; CI menjalankan `mvn -B test` pada PR* |
 **Catatan/Evaluasi Milestone 9:**
 
 ---
