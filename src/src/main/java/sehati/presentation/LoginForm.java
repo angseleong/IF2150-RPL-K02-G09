@@ -12,6 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import sehati.business.control.AutentikasiManager;
+import sehati.business.control.KonfigurasiManager;
+import sehati.business.entity.PencadanganEntity;
 import sehati.business.entity.SesiEntity;
 import sehati.common.SesiAktif;
 
@@ -109,6 +111,7 @@ public class LoginForm {
             kartu.setOnAction(e -> bukaLayar(layar));
             kartuMenu.getChildren().add(kartu);
         }
+        tampilkanPeringatanPencadangan();
         panelDasbor.setVisible(true);
         if (!kartuMenu.getChildren().isEmpty()) {
             Platform.runLater(kartuMenu.getChildren().get(0)::requestFocus);
@@ -130,6 +133,21 @@ public class LoginForm {
         Label sasaran = panelDasbor.isVisible() ? labelAksesDitolak : labelPesanGagal;
         sasaran.setText(panelDasbor.isVisible() ? "Akses ditolak: " + pesan : pesan);
         sasaran.setVisible(true);
+    }
+
+    // I-01-08: hanya untuk Petugas Administrasi, hilang setelah pencadangan berikutnya berhasil
+    private void tampilkanPeringatanPencadangan() {
+        boolean tampil = false;
+        if ("Petugas Administrasi".equals(Navigasi.peranSesi())) {
+            try {
+                PencadanganEntity p = new KonfigurasiManager().muatStatusPencadangan();
+                tampil = p == null || !p.berhasil();
+            } catch (IllegalStateException e) {
+                // status tidak terbaca bukan berarti gagal, jadi peringatan tidak dipaksa muncul
+                tampil = false;
+            }
+        }
+        panelPencadangan.setVisible(tampil);
     }
 
     // Subbab 5.1: sandi dikosongkan setelah autentikasi, berhasil maupun gagal
