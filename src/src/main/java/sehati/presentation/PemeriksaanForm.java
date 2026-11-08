@@ -2,6 +2,7 @@ package sehati.presentation;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import javafx.animation.PauseTransition;
@@ -36,6 +37,9 @@ import sehati.business.entity.PemeriksaanEntity;
  */
 public class PemeriksaanForm {
 
+    private record Draf(PemeriksaanEntity pemeriksaan, DiagnosisEntity diagnosis) {
+    }
+
     private static final KeyCodeCombination CTRL_S = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
     private static final DateTimeFormatter TANGGAL = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
@@ -48,6 +52,7 @@ public class PemeriksaanForm {
     private KunjunganEntity kunjungan;
     private PasienEntity pasien;
     private DiagnosisEntity diagnosisTerpilih;
+    private DiagnosisEntity diagnosisTersimpan;
 
     @FXML private Parent akar;
     @FXML private Label labelPasien;
@@ -65,7 +70,15 @@ public class PemeriksaanForm {
     @FXML
     private void initialize() {
         jedaKetik.setOnFinished(e -> kirimKataKunciDiagnosis(kolomDiagnosis.getText()));
-        kolomDiagnosis.textProperty().addListener((o, lama, baru) -> jedaKetik.playFromStart());
+        kolomDiagnosis.textProperty().addListener((o, lama, baru) -> {
+            // Teks yang berubah setelah saran dipilih membatalkan pilihan, agar kode lama tidak ikut tersimpan.
+            if (diagnosisTerpilih != null && baru.equals(diagnosisTerpilih.ringkas())) {
+                return;
+            }
+            diagnosisTerpilih = null;
+            tampilkanDiagnosis();
+            jedaKetik.playFromStart();
+        });
         daftarSaran.setCellFactory(v -> new ListCell<>() {
             @Override
             protected void updateItem(KodeICD10Entity k, boolean kosong) {
@@ -109,14 +122,18 @@ public class PemeriksaanForm {
 
             @Override
             public LocalDate fromString(String teks) {
-                return teks == null || teks.isBlank() ? null : LocalDate.parse(teks.strip(), TANGGAL);
+                try {
+                    return teks == null || teks.isBlank() ? null : LocalDate.parse(teks.strip(), TANGGAL);
+                } catch (DateTimeParseException e) {
+                    return null;
+                }
             }
         });
     }
 
     /**
-     * Mengisi identitas kunjungan yang diperiksa (I-07-02). Dipanggil RekamMedisForm saat Periksa Pasien ditekan
-     * (tambahan implementasi, B.1).
+     * Mengisi identitas kunjungan yang diperiksa (I-07-02) dan memuat draf tersimpan, agar isi lama tidak tertimpa
+     * formulir kosong. Dipanggil RekamMedisForm saat Periksa Pasien ditekan (tambahan implementasi, B.1).
      */
     public void buka(KunjunganEntity kunjungan, PasienEntity pasien) {
         this.kunjungan = kunjungan;
@@ -124,7 +141,10 @@ public class PemeriksaanForm {
         String identitas = pasien == null ? "Pasien " + kunjungan.getIdPasien()
                 : pasien.getNama() + "  /  " + pasien.getNomorRekamMedis();
         labelPasien.setText("Pasien: " + identitas + "  /  Kunjungan " + kunjungan.getTanggal().format(TANGGAL));
-        kolomAnamnesis.requestFocus();
+        aturKolomKlinis(true);
+        int idKunjungan = kunjungan.getIdKunjungan();
+        LatarBelakang.jalankan(() -> new Draf(pemeriksaanManager.muatPemeriksaan(idKunjungan),
+                pemeriksaanManager.muatDiagnosis(idKunjungan)), this::isiDraf, this::tampilkanGalat);
     }
 
     public void kirimKataKunciDiagnosis(String kataKunci) {
@@ -163,19 +183,32 @@ public class PemeriksaanForm {
             kolomAnamnesis.requestFocus();
             return;
         }
+        LocalDate kontrol;
+        try {
+            kontrol = bacaTanggalKontrol();
+        } catch (IllegalArgumentException e) {
+            tampilkanPesan(e.getMessage());
+            kolomKontrol.requestFocus();
+            return;
+        }
         String tindakan = kolomTindakan.getText() == null ? "" : kolomTindakan.getText().strip();
         PemeriksaanEntity p = new PemeriksaanEntity(0, kunjungan.getIdKunjungan(), isianAnamnesis, tindakan, false);
         DiagnosisEntity d = diagnosisTerpilih;
-        LocalDate kontrol = kolomKontrol.getValue();
         tombolSimpan.setDisable(true);
         LatarBelakang.jalankan(() -> {
             pemeriksaanManager.simpanPemeriksaan(kunjungan.getIdKunjungan(), p, d);
-            return kontrol == null ? null : pemeriksaanManager.jadwalkanKontrol(kunjungan.getIdPasien(), kontrol);
-        }, (JadwalKontrolEntity jadwal) -> {
-            tombolSimpan.setDisable(false);
+            return p;
+        }, tersimpan -> {
             tombolFinal.setDisable(false);
-            tampilkanPesan(jadwal == null ? "Pemeriksaan tersimpan"
-                    : "Kontrol dijadwalkan " + jadwal.getTanggalRencana().format(TANGGAL));
+            if (d != null) {
+                diagnosisTersimpan = d;
+            }
+            if (kontrol == null) {
+                tombolSimpan.setDisable(false);
+                tampilkanPesan("Pemeriksaan tersimpan");
+            } else {
+                kirimJadwalKontrol(kontrol);
+            }
         }, e -> {
             tombolSimpan.setDisable(false);
             tampilkanPenolakan(e);
@@ -214,10 +247,7 @@ public class PemeriksaanForm {
      * Menonaktifkan kolom klinis dan kedua tombol simpan (skenario alternatif 1 UC05 dan setelah dikunci).
      */
     public void kunciKolomKlinis() {
-        for (var kolom : List.of(kolomAnamnesis, kolomDiagnosis, daftarSaran, kolomTindakan, kolomKontrol,
-                tombolSimpan, tombolFinal)) {
-            kolom.setDisable(true);
-        }
+        aturKolomKlinis(true);
     }
 
     public void tampilkanPesan(String pesan) {
@@ -243,6 +273,72 @@ public class PemeriksaanForm {
         form.tampilkanFormulir(kunjungan, pasien);
     }
 
+    private void isiDraf(Draf draf) {
+        PemeriksaanEntity p = draf.pemeriksaan();
+        diagnosisTersimpan = draf.diagnosis();
+        tampilkanDiagnosis();
+        if (p != null) {
+            kolomAnamnesis.setText(p.getAnamnesis());
+            kolomTindakan.setText(p.getTindakan());
+        }
+        if (p != null && p.isTerkunci()) {
+            tampilkanPesan("Rekam medis kunjungan ini sudah dikunci");
+            return;
+        }
+        aturKolomKlinis(false);
+        // Tombol final baru aktif setelah pemeriksaan pernah tersimpan (Subbab 5.7.1).
+        tombolFinal.setDisable(p == null);
+        kolomAnamnesis.requestFocus();
+    }
+
+    private void kirimJadwalKontrol(LocalDate tanggal) {
+        LatarBelakang.jalankan(() -> pemeriksaanManager.jadwalkanKontrol(kunjungan.getIdPasien(), tanggal),
+                (JadwalKontrolEntity jadwal) -> {
+                    tombolSimpan.setDisable(false);
+                    // Tanggal dikosongkan agar simpan berikutnya tidak menjadwalkan kontrol lagi.
+                    kolomKontrol.setValue(null);
+                    kolomKontrol.getEditor().clear();
+                    tampilkanPesan("Kontrol dijadwalkan " + jadwal.getTanggalRencana().format(TANGGAL));
+                }, e -> {
+                    tombolSimpan.setDisable(false);
+                    tampilkanPesan("Pemeriksaan tersimpan, tetapi jadwal kontrol gagal: " + e.getMessage());
+                });
+    }
+
+    // Membaca teks kolom, bukan nilainya, karena tanggal yang baru diketik belum masuk ke nilai saat Ctrl+S.
+    private LocalDate bacaTanggalKontrol() {
+        String teks = kolomKontrol.getEditor().getText();
+        if (teks == null || teks.isBlank()) {
+            return null;
+        }
+        LocalDate tanggal;
+        try {
+            tanggal = LocalDate.parse(teks.strip(), TANGGAL);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Tanggal kontrol harus berformat dd-mm-yyyy");
+        }
+        pemeriksaanManager.validasiTanggalKontrol(tanggal);
+        return tanggal;
+    }
+
+    private void aturKolomKlinis(boolean nonaktif) {
+        for (Node kolom : List.of(kolomAnamnesis, kolomDiagnosis, daftarSaran, kolomTindakan, kolomKontrol,
+                tombolSimpan, tombolFinal)) {
+            kolom.setDisable(nonaktif);
+        }
+    }
+
+    // Tanpa pilihan baru, diagnosis tersimpan tetap dipakai karena simpanPemeriksaan(p, null) tidak mengubahnya.
+    private void tampilkanDiagnosis() {
+        if (diagnosisTerpilih != null) {
+            labelDiagnosis.setText("Diagnosis terpilih: " + diagnosisTerpilih.ringkas());
+        } else if (diagnosisTersimpan != null) {
+            labelDiagnosis.setText("Diagnosis tersimpan: " + diagnosisTersimpan.ringkas());
+        } else {
+            labelDiagnosis.setText("Diagnosis terpilih: belum ada");
+        }
+    }
+
     private void pilihSaran() {
         KodeICD10Entity k = daftarSaran.getSelectionModel().getSelectedItem();
         if (k == null) {
@@ -250,7 +346,11 @@ public class PemeriksaanForm {
         }
         // Deskripsi disalin dari data master agar ringkasan tetap terbaca bila master berubah (Subbab 5.43).
         diagnosisTerpilih = new DiagnosisEntity(0, k.getKode(), k.getDeskripsi());
-        labelDiagnosis.setText("Diagnosis terpilih: " + diagnosisTerpilih.ringkas());
+        kolomDiagnosis.setText(diagnosisTerpilih.ringkas());
+        jedaKetik.stop();
+        // Hasil pencarian yang masih berjalan tidak boleh memunculkan daftar saran lagi.
+        kataKunciDiagnosis = "";
+        tampilkanDiagnosis();
         tampilkan(daftarSaran, false);
         kolomTindakan.requestFocus();
     }
