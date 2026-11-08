@@ -24,19 +24,30 @@ public class AntreanEntity {
     }
 
     public void tambahkan(int idEntri) {
-        throw new UnsupportedOperationException("TODO");
+        if (!daftarEntri.contains(idEntri)) {
+            daftarEntri.add(idEntri);
+        }
     }
 
     public KunjunganEntity ambilTerdepan() {
-        throw new UnsupportedOperationException("TODO");
+        if (daftarEntri.isEmpty()) {
+            return null;
+        }
+        KunjunganEntity k = new KunjunganEntity();
+        k.setIdKunjungan(daftarEntri.get(0));
+        return k;
     }
 
     public void pindahkanKeBelakang(int idEntri) {
-        throw new UnsupportedOperationException("TODO");
+        keluarkan(idEntri);
+        daftarEntri.add(idEntri);
     }
 
     public void keluarkan(int idEntri) {
-        throw new UnsupportedOperationException("TODO");
+        if (!daftarEntri.contains(idEntri)) {
+            throw new IllegalArgumentException("Entri tidak ada pada antrean " + jenis);
+        }
+        daftarEntri.remove(Integer.valueOf(idEntri));
     }
 
     public int getIdAntrean() {

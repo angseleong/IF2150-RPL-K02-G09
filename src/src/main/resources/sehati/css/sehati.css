@@ -181,6 +181,39 @@
     -fx-font-weight: bold;
 }
 
+/* Tiket antrean dan kunjungan aktif */
+.panel-kuning {
+    -fx-background-color: -kuning-muda;
+    -fx-background-radius: 8;
+    -fx-border-color: -kuning;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-padding: 12;
+    -fx-spacing: 6;
+}
+
+.tiket-antrean {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: -teal;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-padding: 16 24 16 24;
+    -fx-spacing: 4;
+    -fx-alignment: CENTER;
+}
+
+.nomor-antrean {
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -teal;
+}
+
+.teks-tiket {
+    -fx-text-fill: -gelap;
+    -fx-font-size: 15px;
+}
+
 /* Layar bantuan F1 */
 .tabel-pintasan {
     -fx-hgap: 24;

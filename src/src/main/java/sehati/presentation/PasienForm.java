@@ -170,8 +170,7 @@ public class PasienForm {
         kolomTelepon.setText(dataFormulir.getNomorTelepon() == null ? "" : dataFormulir.getNomorTelepon());
         hapusMasalahNik();
         tampilkanNotifikasi("");
-        tombolBukaKunjungan.setDisable(true);
-        // TODO(#12): aktifkan tombol Buka Kunjungan setelah pasien tersimpan.
+        tombolBukaKunjungan.setDisable(pasien == null || pasien.getIdPasien() == 0);
         if (pasien == null) {
             kolomNik.requestFocus();
         } else {
@@ -199,11 +198,11 @@ public class PasienForm {
         PasienEntity data = isianKeData();
         tombolSimpan.setDisable(true);
         if (data.getIdPasien() == 0) {
-            // TODO(#12): aktifkan tombol Buka Kunjungan setelah pasien terdaftar.
             jalankan(() -> pasienManager.daftarkanPasien(data), pasien -> {
                 dataFormulir = pasien;
                 kolomRm.setText(pasien.getNomorRekamMedis());
                 tampilkanNotifikasi("Pendaftaran berhasil, nomor rekam medis " + pasien.getNomorRekamMedis());
+                tombolBukaKunjungan.setDisable(false);
                 tombolSimpan.setDisable(false);
                 kirimPencarian(kolomPencarian.getText());
             }, "Pendaftaran pasien", true);
@@ -214,6 +213,7 @@ public class PasienForm {
             }, abaikan -> {
                 dataFormulir = data;
                 tampilkanNotifikasi("Data pasien diperbarui");
+                tombolBukaKunjungan.setDisable(false);
                 tombolSimpan.setDisable(false);
                 kirimPencarian(kolomPencarian.getText());
             }, "Perbarui pasien", true);
@@ -243,7 +243,12 @@ public class PasienForm {
 
     @FXML
     private void bukaKunjungan() {
-        // TODO(#12): buka KunjunganForm untuk pasien tersimpan dan aktifkan tombol ini.
+        if (dataFormulir == null || dataFormulir.getIdPasien() == 0) {
+            // Tombol nonaktif sampai pasien tersimpan, jadi cabang ini hanya pengaman.
+            return;
+        }
+        KunjunganForm kunjungan = Navigasi.buka("KunjunganForm");
+        kunjungan.buka(dataFormulir);
     }
 
     private boolean tampilkanJikaIsianKosong() {

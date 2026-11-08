@@ -1,6 +1,7 @@
 package sehati.business.entity;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * C35 - KunjunganEntity.
@@ -8,6 +9,10 @@ import java.time.LocalDate;
  * Merepresentasikan satu kedatangan pasien ke poli beserta nomor antrean dan statusnya.
  */
 public class KunjunganEntity {
+
+    private static final Set<String> STATUS_SAH = Set.of(
+            "menunggu skrining", "sedang diskrining", "tidak hadir",
+            "siap diperiksa dokter", "selesai diperiksa", "selesai");
 
     private int idKunjungan;
     private int idPasien;
@@ -30,11 +35,17 @@ public class KunjunganEntity {
     }
 
     public void perbaruiStatus(String status) {
-        throw new UnsupportedOperationException("TODO");
+        if (status == null || !STATUS_SAH.contains(status)) {
+            throw new IllegalArgumentException("Status kunjungan tidak dikenal: " + status);
+        }
+        if ("selesai".equals(this.status)) {
+            throw new IllegalStateException("Kunjungan sudah selesai dan tidak dapat diubah");
+        }
+        this.status = status;
     }
 
     public boolean aktifHariIni() {
-        throw new UnsupportedOperationException("TODO");
+        return tanggal != null && tanggal.equals(LocalDate.now()) && !"selesai".equals(status);
     }
 
     public int getIdKunjungan() {
