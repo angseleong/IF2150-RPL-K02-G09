@@ -12,7 +12,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,7 +39,8 @@ public class ResepManager {
     }
 
     /**
-     * Membuat satu item resep untuk obat yang terdaftar dan memeriksa kecukupan stoknya (Algo-C23-01).
+     * Membuat satu item resep untuk obat yang terdaftar (Algo-C23-01). Kecukupan stok dinilai ResepForm dari total
+     * seluruh item dan diperiksa ulang oleh kirimKeApotek().
      */
     public ItemResepEntity tambahItem(int idObat, int jumlah, String dosis, String aturanPakai) {
         if (jumlah <= 0) {
@@ -48,9 +51,7 @@ public class ResepManager {
             if (dataFarmasi.ambilObat(idObat) == null) {
                 throw new IllegalArgumentException("Obat tidak ada pada data master");
             }
-            ItemResepEntity item = new ItemResepEntity(0, idObat, dosis, jumlah, aturanPakai);
-            validasiStok(item, dataFarmasi);
-            return item;
+            return new ItemResepEntity(0, idObat, dosis, jumlah, aturanPakai);
         } catch (SQLException e) {
             throw galatTeknis("Item resep gagal ditambahkan", e);
         }
@@ -74,10 +75,14 @@ public class ResepManager {
             DataFarmasiBoundary dataFarmasi = new DataFarmasiBoundary(koneksi);
             DataKunjunganBoundary dataKunjungan = new DataKunjunganBoundary(koneksi);
             List<String> kurang = new ArrayList<>();
-            for (ItemResepEntity item : items) {
-                if (!validasiStok(item, dataFarmasi)) {
-                    ObatEntity obat = dataFarmasi.ambilObat(item.getIdObat());
-                    kurang.add(obat == null ? "obat " + item.getIdObat() : obat.getNamaObat());
+            // Obat yang sama pada beberapa baris dijumlahkan, agar totalnya tidak lolos dari pemeriksaan per baris.
+            Map<Integer, Integer> totalPerObat = new LinkedHashMap<>();
+            items.forEach(item -> totalPerObat.merge(item.getIdObat(), item.getJumlah(), Integer::sum));
+            for (Map.Entry<Integer, Integer> total : totalPerObat.entrySet()) {
+                ItemResepEntity gabungan = new ItemResepEntity(0, total.getKey(), "", total.getValue(), "");
+                if (!validasiStok(gabungan, dataFarmasi)) {
+                    ObatEntity obat = dataFarmasi.ambilObat(total.getKey());
+                    kurang.add(obat == null ? "obat " + total.getKey() : obat.getNamaObat());
                 }
             }
             if (!kurang.isEmpty()) {

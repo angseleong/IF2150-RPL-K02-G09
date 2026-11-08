@@ -102,6 +102,21 @@ class ResepManagerTest {
             assertEquals(resepTerakhir, hitung("SELECT coalesce(max(id_resep), 0) FROM resep"));
         }
 
+        @Test
+        void kirimKeApotek_barisObatSamaDihitungTotalnya() throws SQLException {
+            // Obat 5 (Glibenklamid) stok 30: tiap baris lolos sendiri, tetapi totalnya 32.
+            IllegalStateException e = assertThrows(IllegalStateException.class, () -> manager.kirimKeApotek(
+                    idKunjungan, List.of(new ItemResepEntity(0, 5, "5 mg", 16, "1 x 1"),
+                            new ItemResepEntity(0, 5, "5 mg", 16, "1 x 1 malam"))));
+
+            assertTrue(e.getMessage().contains("Glibenklamid"));
+            assertEquals(resepTerakhir, hitung("SELECT coalesce(max(id_resep), 0) FROM resep"));
+
+            ResepEntity pas = manager.kirimKeApotek(idKunjungan, List.of(new ItemResepEntity(0, 5, "5 mg", 15, "1 x 1"),
+                    new ItemResepEntity(0, 5, "5 mg", 15, "1 x 1 malam")));
+            assertEquals(2, hitung("SELECT count(*) FROM item_resep WHERE id_resep = " + pas.getIdResep()));
+        }
+
         private int hitung(String sql) throws SQLException {
             try (Statement st = koneksi.createStatement(); var rs = st.executeQuery(sql)) {
                 rs.next();
