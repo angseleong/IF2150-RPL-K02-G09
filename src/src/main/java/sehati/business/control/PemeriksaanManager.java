@@ -129,15 +129,54 @@ public class PemeriksaanManager {
     }
 
     /**
-     * Menyimpan jadwal kunjungan ulang berstatus "terjadwal" pada tanggal setelah hari ini (KF12).
+     * Pemeriksaan tersimpan satu kunjungan, atau null bila belum ada, untuk memuat draf pada I-07 (tambahan
+     * implementasi, B.1).
      */
-    public JadwalKontrolEntity jadwalkanKontrol(int idPasien, LocalDate tanggal) {
+    public PemeriksaanEntity muatPemeriksaan(int idKunjungan) {
+        try (Connection koneksi = KoneksiBasisData.buka()) {
+            return new DataKlinisBoundary(koneksi).ambilPemeriksaan(idKunjungan);
+        } catch (SQLException e) {
+            throw galatTeknis("Pemeriksaan gagal dimuat", e);
+        }
+    }
+
+    /**
+     * Diagnosis tersimpan satu kunjungan, atau null bila belum ada (tambahan implementasi, B.1).
+     */
+    public DiagnosisEntity muatDiagnosis(int idKunjungan) {
+        try (Connection koneksi = KoneksiBasisData.buka()) {
+            return new DataKlinisBoundary(koneksi).ambilDiagnosis(idKunjungan);
+        } catch (SQLException e) {
+            throw galatTeknis("Diagnosis gagal dimuat", e);
+        }
+    }
+
+    /**
+     * Tanggal kontrol harus setelah hari ini (KF12). Dipanggil I-07 sebelum menyimpan apa pun, agar penolakan tanggal
+     * tidak terjadi setelah pemeriksaan tersimpan.
+     */
+    public void validasiTanggalKontrol(LocalDate tanggal) {
         if (tanggal == null || !tanggal.isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("Tanggal kontrol harus setelah hari ini");
         }
-        JadwalKontrolEntity j = new JadwalKontrolEntity(0, idPasien, tanggal, JadwalKontrolEntity.STATUS_TERJADWAL);
+    }
+
+    /**
+     * Menyimpan jadwal kunjungan ulang berstatus "terjadwal". Jadwal pasien yang sama pada tanggal yang sama tidak
+     * dibuat dua kali, agar daftar pantau tidak berisi entri ganda (KF12).
+     */
+    public JadwalKontrolEntity jadwalkanKontrol(int idPasien, LocalDate tanggal) {
+        validasiTanggalKontrol(tanggal);
         try (Connection koneksi = KoneksiBasisData.buka()) {
-            new DataKlinisBoundary(koneksi).simpanJadwalKontrol(j);
+            DataKlinisBoundary dataKlinis = new DataKlinisBoundary(koneksi);
+            for (JadwalKontrolEntity ada : dataKlinis.ambilJadwalKontrol()) {
+                if (ada.getIdPasien() == idPasien && tanggal.equals(ada.getTanggalRencana())) {
+                    return ada;
+                }
+            }
+            JadwalKontrolEntity j = new JadwalKontrolEntity(0, idPasien, tanggal,
+                    JadwalKontrolEntity.STATUS_TERJADWAL);
+            dataKlinis.simpanJadwalKontrol(j);
             return j;
         } catch (SQLException e) {
             throw galatTeknis("Jadwal kontrol gagal disimpan", e);

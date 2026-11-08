@@ -2,6 +2,7 @@ package sehati.business.control;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,6 +39,12 @@ class PemeriksaanManagerTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> manager.simpanPemeriksaan(1, p, new DiagnosisEntity(0, " ", "Tanpa kode")));
+    }
+
+    @Test
+    void validasiTanggalKontrol_hanyaMenerimaSetelahHariIni() {
+        assertThrows(IllegalArgumentException.class, () -> manager.validasiTanggalKontrol(LocalDate.now()));
+        manager.validasiTanggalKontrol(LocalDate.now().plusDays(1));
     }
 
     @Test
@@ -176,6 +183,29 @@ class PemeriksaanManagerTest {
             assertTrue(j.getIdJadwal() > 0);
             assertEquals(1, hitung("SELECT count(*) FROM jadwal_kontrol WHERE id_jadwal = " + j.getIdJadwal()
                     + " AND status = 'terjadwal'"));
+        }
+
+        @Test
+        void jadwalkanKontrol_tanggalSamaTidakMembuatJadwalGanda() throws SQLException {
+            JadwalKontrolEntity pertama = manager.jadwalkanKontrol(1, LocalDate.of(2099, 1, 1));
+            JadwalKontrolEntity kedua = manager.jadwalkanKontrol(1, LocalDate.of(2099, 1, 1));
+
+            assertEquals(pertama.getIdJadwal(), kedua.getIdJadwal());
+            assertEquals(1, hitung("SELECT count(*) FROM jadwal_kontrol WHERE tanggal_rencana = DATE '2099-01-01'"));
+        }
+
+        @Test
+        void muatDraf_mengembalikanPemeriksaanDanDiagnosisTersimpan() {
+            assertNull(manager.muatPemeriksaan(idKunjungan));
+            assertNull(manager.muatDiagnosis(idKunjungan));
+
+            manager.simpanPemeriksaan(idKunjungan, new PemeriksaanEntity(0, 0, "Batuk", "Obat", false),
+                    new DiagnosisEntity(0, "J00", "Nasofaringitis akut (common cold)"));
+            manager.simpanPemeriksaan(idKunjungan, new PemeriksaanEntity(0, 0, "Batuk pilek", "Obat", false), null);
+
+            assertEquals("Batuk pilek", manager.muatPemeriksaan(idKunjungan).getAnamnesis());
+            // Simpan tanpa diagnosis baru tidak menghapus diagnosis tersimpan.
+            assertEquals("J00", manager.muatDiagnosis(idKunjungan).getKodeICD10());
         }
 
         @Test
