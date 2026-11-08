@@ -48,7 +48,8 @@
                    styleClass="label-kolom"/>
         </placeholder>
     </TableView>
-    <Label fx:id="labelKosong" text="Data pasien tidak ditemukan. Isian di bawah boleh diisi untuk mendaftarkan pasien baru."
+    <Label fx:id="labelKosong"
+           text="Data pasien tidak ditemukan. Isian di bawah boleh diisi untuk mendaftarkan pasien baru."
            wrapText="true" styleClass="label-kolom" visible="false" managed="false"/>
 
     <VBox styleClass="kartu" spacing="10">
@@ -62,8 +63,8 @@
 
             <Label text="NIK (16 digit)" styleClass="label-kolom" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
             <TextField fx:id="kolomNik" promptText="9999010101010001" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-            <Label fx:id="pesanNik" styleClass="pesan-kolom" wrapText="true" GridPane.rowIndex="0" GridPane.columnIndex="2"
-                   visible="false" managed="false"/>
+            <Label fx:id="pesanNik" styleClass="pesan-kolom" wrapText="true" GridPane.rowIndex="0"
+                   GridPane.columnIndex="2" visible="false" managed="false"/>
 
             <Label text="Nomor rekam medis" styleClass="label-kolom" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
             <TextField fx:id="kolomRm" editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
@@ -78,19 +79,19 @@
 
             <Label text="Alamat" styleClass="label-kolom" GridPane.rowIndex="5" GridPane.columnIndex="0"
                    GridPane.valignment="CENTER"/>
-            <TextArea fx:id="kolomAlamat" prefRowCount="2" wrapText="true" GridPane.rowIndex="5" GridPane.columnIndex="1"
-                      GridPane.columnSpan="2"/>
+            <TextArea fx:id="kolomAlamat" prefRowCount="2" wrapText="true" GridPane.rowIndex="5"
+                      GridPane.columnIndex="1" GridPane.columnSpan="2"/>
 
             <Label text="Nomor telepon" styleClass="label-kolom" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
-            <TextField fx:id="kolomTelepon" promptText="Opsional; boleh kosong" GridPane.rowIndex="6" GridPane.columnIndex="1"
-                       GridPane.columnSpan="2"/>
+            <TextField fx:id="kolomTelepon" promptText="Opsional; boleh kosong" GridPane.rowIndex="6"
+                       GridPane.columnIndex="1" GridPane.columnSpan="2"/>
         </GridPane>
 
         <HBox spacing="10" alignment="CENTER_RIGHT">
             <Button fx:id="tombolBukaKunjungan" text="Buka Kunjungan" styleClass="tombol-kedua"
                     disable="true" onAction="#bukaKunjungan"/>
             <Button fx:id="tombolSimpan" text="Simpan (Ctrl+S)" styleClass="tombol-utama"
-                    defaultButton="true" onAction="#kirimDataPasien"/>
+                    onAction="#kirimDataPasien"/>
         </HBox>
     </VBox>
 

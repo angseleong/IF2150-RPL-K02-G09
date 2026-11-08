@@ -92,6 +92,7 @@ public class PasienForm {
         jedaKetik.setOnFinished(e -> kirimPencarian(kolomPencarian.getText()));
         kolomPencarian.textProperty().addListener((obs, lama, baru) -> {
             if (baru == null || baru.isBlank()) {
+                this.kataKunci = "";
                 tabelHasil.getItems().clear();
                 labelKosong.setVisible(false);
                 labelKosong.setManaged(false);
@@ -131,7 +132,8 @@ public class PasienForm {
     }
 
     /**
-     * Meneruskan kata kunci ke PasienManager.cariPasien() di thread latar, sehingga layar tetap responsif (Algo-C02-01).
+     * Meneruskan kata kunci ke PasienManager.cariPasien() di thread latar, sehingga layar tetap responsif
+     * (Algo-C02-01).
      */
     public void kirimPencarian(String kataKunci) {
         this.kataKunci = kataKunci == null ? "" : kataKunci.strip();
@@ -184,6 +186,10 @@ public class PasienForm {
 
     @FXML
     private void kirimDataPasien() {
+        if (tombolSimpan.isDisable()) {
+            // Permintaan sebelumnya masih berjalan; jangan kirim ulang.
+            return;
+        }
         if (dataFormulir == null) {
             dataFormulir = new PasienEntity();
         }
@@ -199,6 +205,7 @@ public class PasienForm {
                 kolomRm.setText(pasien.getNomorRekamMedis());
                 tampilkanNotifikasi("Pendaftaran berhasil, nomor rekam medis " + pasien.getNomorRekamMedis());
                 tombolSimpan.setDisable(false);
+                kirimPencarian(kolomPencarian.getText());
             }, "Pendaftaran pasien", true);
         } else {
             jalankan(() -> {
@@ -306,9 +313,11 @@ public class PasienForm {
     }
 
     /**
-     * Menjalankan pekerjaan yang bisa memanggil basis data di thread latar, lalu melanjutkan di JavaFX Application Thread.
+     * Menjalankan pekerjaan yang bisa memanggil basis data di thread latar, lalu melanjutkan di JavaFX Application
+     * Thread.
      */
-    private <T> void jalankan(Supplier<T> pekerjaan, Consumer<T> berhasil, String keterangan, boolean nyalakanTombolSimpan) {
+    private <T> void jalankan(Supplier<T> pekerjaan, Consumer<T> berhasil, String keterangan,
+            boolean nyalakanTombolSimpan) {
         Task<T> task = new Task<>() {
             @Override
             protected T call() {
@@ -318,8 +327,13 @@ public class PasienForm {
         task.setOnSucceeded(e -> {
             try {
                 berhasil.accept(task.getValue());
-            } catch (IllegalArgumentException galat) {
-                tampilkanPesanValidasi(galat.getMessage());
+            } catch (RuntimeException galat) {
+                LOG.log(Level.SEVERE, keterangan, galat);
+                if (galat instanceof IllegalArgumentException salah) {
+                    tampilkanPesanValidasi(salah.getMessage());
+                } else {
+                    tampilkanNotifikasiGagal(galat.getMessage());
+                }
                 tombolSimpan.setDisable(false);
             }
         });

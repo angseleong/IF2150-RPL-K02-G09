@@ -93,7 +93,8 @@ class PasienManagerTest {
     class DenganBasisData {
 
         private Connection koneksi;
-        private long auditTerakhir;
+        private long auditTerakhir = -1;
+        private boolean pasangBerhasil;
         private final List<String> nikUji = new ArrayList<>();
 
         @BeforeEach
@@ -106,6 +107,7 @@ class PasienManagerTest {
                 rs.next();
                 auditTerakhir = rs.getLong(1);
             }
+            pasangBerhasil = true;
         }
 
         @AfterEach
@@ -125,9 +127,14 @@ class PasienManagerTest {
                     ps.executeUpdate();
                 }
             }
-            try (PreparedStatement ps = koneksi.prepareStatement("DELETE FROM audit WHERE id_audit > ?")) {
-                ps.setLong(1, auditTerakhir);
-                ps.executeUpdate();
+            if (pasangBerhasil) {
+                // Hanya baris audit yang dibuat pengujian ini, bukan seluruh isi tabel atau baris bersamaan.
+                try (PreparedStatement ps = koneksi.prepareStatement(
+                        "DELETE FROM audit WHERE id_audit > ? AND (deskripsi LIKE 'Pendaftaran pasien %' "
+                                + "OR deskripsi LIKE 'Pembaruan data pasien %')")) {
+                    ps.setLong(1, auditTerakhir);
+                    ps.executeUpdate();
+                }
             }
             koneksi.close();
         }
@@ -144,7 +151,8 @@ class PasienManagerTest {
             assertTrue(tersimpan.getNomorRekamMedis().matches("^RM-[0-9]{6,}$"));
             assertEquals(1, posisiEfektifSeqNomorRM() - posisiSebelum,
                     "nomor rekam medis harus maju tepat satu");
-            assertTrue(deskripsiAuditBaru().stream().anyMatch(d -> d.equals("Pendaftaran pasien " + tersimpan.getNomorRekamMedis())));
+            assertTrue(deskripsiAuditBaru().stream()
+                    .anyMatch(d -> d.equals("Pendaftaran pasien " + tersimpan.getNomorRekamMedis())));
         }
 
         @Test
@@ -203,7 +211,8 @@ class PasienManagerTest {
             PasienEntity usulan = new PasienEntity(a.getIdPasien(), nikB, null, "Nama A",
                     LocalDate.of(1990, 1, 1), "Perempuan", "Alamat A", null);
 
-            IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> manager.perbaruiPasien(usulan));
+            IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+                    () -> manager.perbaruiPasien(usulan));
 
             assertEquals("NIK sudah terdaftar", e.getMessage());
             assertEquals(nikA, kolom("SELECT nik FROM pasien WHERE id_pasien = ?", a.getIdPasien()));

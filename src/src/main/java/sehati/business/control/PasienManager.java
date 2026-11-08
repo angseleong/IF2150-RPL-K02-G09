@@ -58,8 +58,8 @@ public class PasienManager {
                 dataAkun.simpanAudit(AuditEntity.buat(idPengguna, "Pendaftaran pasien " + nomorRM));
                 koneksi.commit();
                 return pasien;
-            } catch (RuntimeException e) {
-                koneksi.rollback();
+            } catch (RuntimeException | SQLException e) {
+                batalkanDiamDiam(koneksi);
                 throw e;
             }
         } catch (SQLException e) {
@@ -92,8 +92,8 @@ public class PasienManager {
                 dataAkun.simpanAudit(AuditEntity.buat(idPengguna,
                         "Pembaruan data pasien " + pasien.getNomorRekamMedis()));
                 koneksi.commit();
-            } catch (RuntimeException e) {
-                koneksi.rollback();
+            } catch (RuntimeException | SQLException e) {
+                batalkanDiamDiam(koneksi);
                 throw e;
             }
         } catch (SQLException e) {
@@ -111,6 +111,14 @@ public class PasienManager {
             }
         }
         return true;
+    }
+
+    private void batalkanDiamDiam(Connection koneksi) {
+        try {
+            koneksi.rollback();
+        } catch (SQLException e) {
+            LOG.log(Level.WARNING, "Rollback gagal", e);
+        }
     }
 
     private String terbitkanNomorRM(DataPasienBoundary dataPasien) {
