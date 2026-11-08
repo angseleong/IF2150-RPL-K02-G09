@@ -26,6 +26,8 @@ final class JdbcPalsu {
     private final Map<String, SQLException> galat = new LinkedHashMap<>();
     private final Map<String, Integer> barisTerubah = new LinkedHashMap<>();
     private boolean autoCommit = true;
+    private int isolasi = Connection.TRANSACTION_READ_COMMITTED;
+    private boolean bacaSaja = false;
 
     /** Baris yang dikembalikan kueri yang memuat potongan teks ini. */
     JdbcPalsu hasil(String potonganSql, List<Map<String, Object>> isi) {
@@ -52,6 +54,14 @@ final class JdbcPalsu {
 
     boolean autoCommit() {
         return autoCommit;
+    }
+
+    int isolasi() {
+        return isolasi;
+    }
+
+    boolean bacaSaja() {
+        return bacaSaja;
     }
 
     List<Jalan> dijalankanMemuat(String potongan) {
@@ -81,6 +91,18 @@ final class JdbcPalsu {
                     }
                     case "rollback" -> {
                         peristiwa.add("rollback");
+                        yield null;
+                    }
+                    case "getTransactionIsolation" -> isolasi;
+                    case "setTransactionIsolation" -> {
+                        isolasi = (Integer) args[0];
+                        peristiwa.add("isolasi=" + isolasi);
+                        yield null;
+                    }
+                    case "isReadOnly" -> bacaSaja;
+                    case "setReadOnly" -> {
+                        bacaSaja = (Boolean) args[0];
+                        peristiwa.add("bacaSaja=" + bacaSaja);
                         yield null;
                     }
                     case "prepareStatement" -> pernyataan((String) args[0]);
