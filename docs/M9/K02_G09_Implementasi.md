@@ -260,7 +260,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C08 | ResepForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C09 | AntreanResepForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C10 | PenyerahanObatForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C11 | PersediaanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C11 | PersediaanForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/PersediaanForm.java`, `src/src/main/resources/sehati/fxml/PersediaanForm.fxml` - `PersediaanForm` | Atribut `isianPenerimaan` dan `daftarPeringatan`. `kirimPenerimaan()` mewujudkan Algo-C11-01 dan terhubung ke tombol Simpan serta Ctrl+S. `tampilkanPesanKesalahan()` memetakan nama kolom dari pesan `catatPenerimaan()` ke `PenandaKolom`, dan `tampilkanPeringatan()` memakai `PanelPeringatan` berikon (KNF08). Pekerjaan basis data berjalan di `Task`. |
 | C12 | DaftarPantauForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C13 | LaporanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C14 | SinkronisasiForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -274,7 +274,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C22 | PemeriksaanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C23 | ResepManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C24 | ApotekManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C25 | PersediaanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C25 | PersediaanManager | Kelas Java | `src/src/main/java/sehati/business/control/PersediaanManager.java` - `PersediaanManager` | Tanpa atribut. `catatPenerimaan()` mewujudkan Algo-C25-01 dalam satu transaksi dengan pelaku audit dari `SesiAktif.idPenggunaSesi()`, `validasiPenerimaan()` mewujudkan Algo-C25-02, dan `terbitkanPeringatan()` mewujudkan Algo-C25-03. `tambahStok()` menerima `DataFarmasiBoundary` agar memakai koneksi transaksi (B.1). |
 | C26 | PantauManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C27 | LaporanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C28 | SinkronisasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -297,9 +297,9 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C45 | JadwalKontrolEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C46 | ResepEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C47 | ItemResepEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C48 | ObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C49 | BetsObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C50 | PenerimaanObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C48 | ObatEntity | Kelas Java | `src/src/main/java/sehati/business/entity/ObatEntity.java` - `ObatEntity` | Atribut sesuai Tabel 4.1. `kurangiStok()`, `tambahStok()`, dan `diBawahAmbang()` mewujudkan Algo-C48-01 dan hanya mengubah objek di memori; penulisan ke basis data lewat `DataFarmasiBoundary.simpanStok()`. |
+| C49 | BetsObatEntity | Kelas Java | `src/src/main/java/sehati/business/entity/BetsObatEntity.java` - `BetsObatEntity` | Atribut sesuai Tabel 4.1. `kurangi()` dan `mendekatiKedaluwarsa()` mewujudkan Algo-C49-01; bets yang sudah lewat tanggalnya ikut terhitung menjelang kedaluwarsa. |
+| C50 | PenerimaanObatEntity | Kelas Java | `src/src/main/java/sehati/business/entity/PenerimaanObatEntity.java` - `PenerimaanObatEntity` | Atribut sesuai Tabel 4.1, dengan agregasi `daftarBets`. `totalJumlah()` mewujudkan Algo-C50-01. |
 | C51 | DaftarPantauEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C52 | TindakLanjutEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C53 | LaporanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
