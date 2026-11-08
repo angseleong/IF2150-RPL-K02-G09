@@ -250,7 +250,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 
 | ID Kelas | Nama Kelas Perancangan | Bentuk Implementasi | Lokasi (File dan Nama) | Keterangan |
 | :--- | :--- | :--- | :--- | :--- |
-| C01 | LoginForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C01 | LoginForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/LoginForm.java` - `LoginForm`, `LoginForm.fxml` | Algo-C01-01. Cek hak akses Algo-C01-02 dijalankan di `Navigasi.buka()` agar berlaku untuk semua layar |
 | C02 | PasienForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C03 | KunjunganForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C04 | AntreanSkriningForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -266,7 +266,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C14 | SinkronisasiForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C15 | SATUSEHATGateway | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C16 | KonfigurasiForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C17 | AutentikasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C17 | AutentikasiManager | Kelas Java | `src/src/main/java/sehati/business/control/AutentikasiManager.java` - `AutentikasiManager` | Algo-C17-01 dan Algo-C17-02, ditambah `tutupSesi()` untuk Keluar dan batas diam 15 menit |
 | C18 | PasienManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C19 | KunjunganManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C20 | SkriningManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
