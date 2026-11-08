@@ -24,16 +24,36 @@ public class ObatEntity {
         this.ambangMinimum = ambangMinimum;
     }
 
+    /**
+     * Mengurangi stok di memori. Penulisan ke basis data dilakukan DataFarmasiBoundary.simpanStok() (Algo-C48-01,
+     * KF14).
+     */
     public void kurangiStok(int jumlah) {
-        throw new UnsupportedOperationException("TODO");
+        if (jumlah <= 0) {
+            throw new IllegalArgumentException("Jumlah pengurangan harus lebih dari nol");
+        }
+        // Lapis kedua setelah ItemResepEntity.cukupStok(); lapis terakhirnya CHECK stok >= 0 pada Q-C61-04.
+        if (jumlah > stok) {
+            throw new IllegalStateException("Stok " + namaObat + " tidak cukup");
+        }
+        stok -= jumlah;
     }
 
+    /**
+     * Menambah stok di memori sebanyak obat yang diterima (Algo-C48-01, KF17).
+     */
     public void tambahStok(int jumlah) {
-        throw new UnsupportedOperationException("TODO");
+        if (jumlah <= 0) {
+            throw new IllegalArgumentException("Jumlah penambahan harus lebih dari nol");
+        }
+        stok += jumlah;
     }
 
+    /**
+     * Perbandingannya sama dengan klausa pada Q-C61-08, sehingga dasbor dan entity selalu sepakat (KF17).
+     */
     public boolean diBawahAmbang() {
-        throw new UnsupportedOperationException("TODO");
+        return stok < ambangMinimum;
     }
 
     public int getIdObat() {
