@@ -54,7 +54,6 @@ public class PasienForm {
     @FXML private VBox akar;
     @FXML private TextField kolomPencarian;
     @FXML private Button tombolPasienBaru;
-    @FXML private Button tombolGambarUlang;
     @FXML private TableView<PasienEntity> tabelHasil;
     @FXML private TableColumn<PasienEntity, String> kolomNikTabel;
     @FXML private TableColumn<PasienEntity, String> kolomRmTabel;
@@ -148,11 +147,6 @@ public class PasienForm {
                     }
                 },
                 "Pencarian pasien", false);
-    }
-
-    @FXML
-    private void kirimUlangPencarian() {
-        kirimPencarian(kolomPencarian.getText());
     }
 
     public void tampilkanHasilCari(List<PasienEntity> hasil) {
