@@ -1,6 +1,8 @@
 package sehati.business.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * C46 - ResepEntity.
@@ -9,11 +11,17 @@ import java.time.LocalDateTime;
  */
 public class ResepEntity {
 
+    public static final String STATUS_MENUNGGU = "menunggu";
+    public static final String STATUS_SELESAI_DILAYANI = "selesai dilayani";
+    public static final String STATUS_DIKEMBALIKAN = "dikembalikan";
+
     private int idResep;
     private int idKunjungan;
     private LocalDateTime waktuMasuk;
     private String status;
     private String catatan;
+    // Komposisi ResepEntity-ItemResepEntity, bukan kolom. Disimpan DataFarmasiBoundary ke item_resep (Q-C61-10).
+    private List<ItemResepEntity> daftarItem = new ArrayList<>();
 
     public ResepEntity() {
     }
@@ -26,8 +34,18 @@ public class ResepEntity {
         this.catatan = catatan;
     }
 
+    /**
+     * Mengubah resep "menunggu" ke status akhir. Resep yang sudah selesai atau dikembalikan tetap utuh sebagai
+     * catatan (Algo-C46-01).
+     */
     public void perbaruiStatus(String status) {
-        throw new UnsupportedOperationException("TODO");
+        if (!STATUS_SELESAI_DILAYANI.equals(status) && !STATUS_DIKEMBALIKAN.equals(status)) {
+            throw new IllegalArgumentException("Status resep tidak dikenal: " + status);
+        }
+        if (!STATUS_MENUNGGU.equals(this.status)) {
+            throw new IllegalStateException("Resep berstatus " + this.status + " dan tidak dapat diubah");
+        }
+        this.status = status;
     }
 
     public int getIdResep() {
@@ -68,5 +86,13 @@ public class ResepEntity {
 
     public void setCatatan(String catatan) {
         this.catatan = catatan;
+    }
+
+    public List<ItemResepEntity> getDaftarItem() {
+        return daftarItem;
+    }
+
+    public void setDaftarItem(List<ItemResepEntity> daftarItem) {
+        this.daftarItem = new ArrayList<>(daftarItem);
     }
 }

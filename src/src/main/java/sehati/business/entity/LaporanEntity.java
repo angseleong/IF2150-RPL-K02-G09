@@ -28,7 +28,24 @@ public class LaporanEntity {
     }
 
     public boolean kosong() {
-        throw new UnsupportedOperationException("TODO");
+        if (ringkasan == null || ringkasan.isEmpty()) {
+            return true;
+        }
+        for (String baris : ringkasan.split("\\R")) {
+            if (!baris.startsWith("total;")) {
+                continue;
+            }
+            String[] kolom = baris.split(";", -1);
+            if (kolom.length < 3) {
+                return true;
+            }
+            try {
+                return Long.parseLong(kolom[2].trim()) == 0L;
+            } catch (NumberFormatException e) {
+                return true;
+            }
+        }
+        return true;
     }
 
     public int getIdLaporan() {

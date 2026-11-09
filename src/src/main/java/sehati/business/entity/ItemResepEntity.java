@@ -24,8 +24,11 @@ public class ItemResepEntity {
         this.aturanPakai = aturanPakai;
     }
 
+    /**
+     * Stok cukup bila sedikitnya sebanyak jumlah yang diresepkan (KF11, KF14).
+     */
     public boolean cukupStok(int stok) {
-        throw new UnsupportedOperationException("TODO");
+        return stok >= jumlah;
     }
 
     public int getIdItem() {

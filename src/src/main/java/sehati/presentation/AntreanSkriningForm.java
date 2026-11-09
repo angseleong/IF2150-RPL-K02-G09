@@ -176,8 +176,9 @@ public class AntreanSkriningForm {
     }
 
     private KunjunganEntity pasienDilayani() {
+        // Lewati hanya berlaku untuk pasien yang sedang diskrining; baris menunggu yang terpilih diabaikan (I-04-05).
         KunjunganEntity dipilih = tabelAntrean.getSelectionModel().getSelectedItem();
-        if (dipilih != null) {
+        if (dipilih != null && SkriningManager.STATUS_DISKRINING.equals(dipilih.getStatus())) {
             return dipilih;
         }
         return daftarTampil.stream().filter(k -> SkriningManager.STATUS_DISKRINING.equals(k.getStatus()))

@@ -87,11 +87,15 @@ public class SkriningManager {
             DataKunjunganBoundary data = new DataKunjunganBoundary(koneksi);
             return dalamTransaksi(koneksi, () -> {
                 AntreanEntity antrean = data.ambilAntrean("skrining");
-                antrean.pindahkanKeBelakang(idKunjungan);
                 KunjunganEntity kunjungan = data.ambilKunjungan(idKunjungan);
                 if (kunjungan == null) {
                     throw new IllegalArgumentException("Kunjungan tidak ditemukan: " + idKunjungan);
                 }
+                // Lewati hanya untuk pasien yang sedang dipanggil (I-04-05).
+                if (!STATUS_DISKRINING.equals(kunjungan.getStatus())) {
+                    throw new IllegalArgumentException("Hanya pasien yang sedang diskrining yang dapat dilewati");
+                }
+                antrean.pindahkanKeBelakang(idKunjungan);
                 kunjungan.perbaruiStatus(STATUS_TIDAK_HADIR);
                 data.simpanKunjungan(kunjungan);
                 data.simpanAntrean(antrean);
@@ -125,6 +129,12 @@ public class SkriningManager {
                 risikoManager.evaluasiRisiko(koneksi, kunjungan, tv);
                 kunjungan.perbaruiStatus(STATUS_SIAP_DIPERIKSA);
                 dataKunjungan.simpanKunjungan(kunjungan);
+                // Pasien yang selesai diskrining keluar dari antrean agar daftar tidak terus membesar.
+                AntreanEntity antrean = dataKunjungan.ambilAntrean("skrining");
+                if (antrean.getDaftarEntri().contains(idKunjungan)) {
+                    antrean.keluarkan(idKunjungan);
+                    dataKunjungan.simpanAntrean(antrean);
+                }
                 return null;
             });
         } catch (SQLException e) {
@@ -186,11 +196,12 @@ public class SkriningManager {
         List<KunjunganEntity> hasil = new ArrayList<>();
         for (int id : data.ambilAntrean("skrining").getDaftarEntri()) {
             KunjunganEntity k = data.ambilKunjungan(id);
-            if (k != null && statusAktif(k)) {
+            if (k != null && k.aktifHariIni() && statusAktif(k)) {
                 hasil.add(k);
             }
         }
-        hasil.sort((a, b) -> Integer.compare(a.getNomorAntrean(), b.getNomorAntrean()));
+        // Urutan daftarEntri dipertahankan: baris teratas sama dengan yang dipanggil, dan pasien yang dilewati
+        // tampil di belakang. Nomor antrean itu per poli sehingga tidak dipakai untuk mengurutkan.
         return hasil;
     }
 
@@ -199,7 +210,7 @@ public class SkriningManager {
         KunjunganEntity tidakHadir = null;
         for (int id : antrean.getDaftarEntri()) {
             KunjunganEntity k = data.ambilKunjungan(id);
-            if (k == null) {
+            if (k == null || !k.aktifHariIni()) {
                 continue;
             }
             if (STATUS_MENUNGGU.equals(k.getStatus())) {
