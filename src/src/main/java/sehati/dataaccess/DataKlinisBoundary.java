@@ -69,6 +69,9 @@ public class DataKlinisBoundary {
     private static final String Q_C59_15 = "INSERT INTO jadwal_kontrol (id_pasien, tanggal_rencana, status) "
             + "VALUES (?, ?, ?) RETURNING id_jadwal";
     private static final String Q_C59_16 = "UPDATE jadwal_kontrol SET status = ? WHERE id_jadwal = ?";
+    // Tambahan implementasi (B.1): diagnosis tersimpan satu kunjungan, untuk memuat draf pada I-07.
+    private static final String Q_C59_18 = "SELECT d.id_diagnosis, d.kode_icd10, d.deskripsi FROM diagnosis d "
+            + "JOIN pemeriksaan p ON p.id_pemeriksaan = d.id_pemeriksaan WHERE p.id_kunjungan = ?";
     private static final String Q_C59_17 = "SELECT jk.id_jadwal, jk.id_pasien, jk.tanggal_rencana, jk.status "
             + "FROM jadwal_kontrol jk WHERE jk.status = 'terjadwal' "
             + "AND NOT EXISTS (SELECT 1 FROM daftar_pantau dp WHERE dp.id_jadwal = jk.id_jadwal) "
@@ -330,6 +333,21 @@ public class DataKlinisBoundary {
             }
         } catch (SQLException e) {
             throw galat("Gagal mengambil pemeriksaan", e);
+        }
+    }
+
+    /**
+     * Mengambil diagnosis tersimpan satu kunjungan, atau null bila belum ada (Q-C59-18).
+     */
+    public DiagnosisEntity ambilDiagnosis(int idKunjungan) {
+        try (PreparedStatement ps = koneksi.prepareStatement(Q_C59_18)) {
+            ps.setInt(1, idKunjungan);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? new DiagnosisEntity(rs.getInt("id_diagnosis"), rs.getString("kode_icd10"),
+                        rs.getString("deskripsi")) : null;
+            }
+        } catch (SQLException e) {
+            throw galat("Gagal mengambil diagnosis", e);
         }
     }
 

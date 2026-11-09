@@ -100,7 +100,7 @@ public class ResepForm {
             @Override
             protected void updateItem(ItemResepEntity item, boolean kosong) {
                 super.updateItem(item, kosong);
-                setGraphic(kosong || item == null ? null : lencana(item.cukupStok(stok(item)), stok(item)));
+                setGraphic(kosong || item == null ? null : lencana(cukup(item), stok(item)));
             }
         });
         tabelItem.setPlaceholder(new Label("Belum ada obat pada resep"));
@@ -154,8 +154,10 @@ public class ResepForm {
             ObatEntity obat = obatPerId.get(idObat);
             isianItem.add(item);
             tabelItem.getItems().add(item);
-            tampilkanIndikatorStok(item.cukupStok(obat.getStok()), obat.getStok());
-            if (!item.cukupStok(obat.getStok())) {
+            // Baris lain dengan obat yang sama ikut berubah indikatornya.
+            tabelItem.refresh();
+            tampilkanIndikatorStok(cukup(item), obat.getStok());
+            if (!cukup(item)) {
                 tampilkanPeringatanStok(obat.getStok());
             }
             kolomJumlah.clear();
@@ -233,8 +235,9 @@ public class ResepForm {
         }
         isianItem.remove(item);
         tabelItem.getItems().remove(item);
+        tabelItem.refresh();
         tampilkan(lencanaStok, false);
-        peringatanStok.setVisible(isianItem.stream().anyMatch(i -> !i.cukupStok(stok(i))));
+        peringatanStok.setVisible(isianItem.stream().anyMatch(i -> !cukup(i)));
         perbaruiTombolKirim();
     }
 
@@ -249,8 +252,15 @@ public class ResepForm {
     }
 
     private void perbaruiTombolKirim() {
-        boolean semuaCukup = isianItem.stream().allMatch(i -> i.cukupStok(stok(i)));
+        boolean semuaCukup = isianItem.stream().allMatch(this::cukup);
         tombolKirim.setDisable(isianItem.isEmpty() || !semuaCukup);
+    }
+
+    // Stok dibandingkan dengan total seluruh baris obat yang sama, bukan per baris.
+    private boolean cukup(ItemResepEntity item) {
+        int total = isianItem.stream().filter(i -> i.getIdObat() == item.getIdObat())
+                .mapToInt(ItemResepEntity::getJumlah).sum();
+        return stok(item) >= total;
     }
 
     private int stok(ItemResepEntity item) {

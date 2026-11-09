@@ -97,7 +97,14 @@ public class RekamMedisForm {
         this.seriTren = null;
         tabRingkasan.getSelectionModel().selectFirst();
         labelDataDiri.setText("Memuat rekam medis...");
+        // Tombol ditahan selama memuat agar pemeriksaan tidak terbuka dengan identitas pasien sebelumnya.
+        tombolPeriksa.setDisable(true);
+        tombolResep.setDisable(true);
         LatarBelakang.jalankan(() -> pemeriksaanManager.susunRingkasan(kunjungan.getIdKunjungan()), rm -> {
+            // Hasil milik pasien yang sudah tidak dipilih dibuang.
+            if (kunjungan != this.kunjungan) {
+                return;
+            }
             isiRingkasan(rm);
             tampilkan(panelRingkasan, true);
             if (!bolehMemeriksa()) {
@@ -115,7 +122,11 @@ public class RekamMedisForm {
      * Kurang dari dua titik diganti tabel pengukuran hari ini (Algo-C06-01, KF08).
      */
     public void tampilkanGrafikTren() {
-        LatarBelakang.jalankan(() -> pemeriksaanManager.susunTren(idPasienTampil), seri -> {
+        int idPasien = idPasienTampil;
+        LatarBelakang.jalankan(() -> pemeriksaanManager.susunTren(idPasien), seri -> {
+            if (idPasien != idPasienTampil) {
+                return;
+            }
             seriTren = seri;
             grafikTren.getData().clear();
             if (seriTren.size() < 2) {

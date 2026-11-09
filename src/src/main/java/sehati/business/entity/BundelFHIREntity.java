@@ -1,11 +1,15 @@
 package sehati.business.entity;
 
+import java.util.logging.Logger;
+
 /**
  * C54 - BundelFHIREntity.
  *
  * Merepresentasikan bundel HL7 FHIR R4 satu kunjungan beserta status pengirimannya.
  */
 public class BundelFHIREntity {
+
+    private static final Logger LOG = Logger.getLogger(BundelFHIREntity.class.getName());
 
     private int idBundel;
     private int idKunjungan;
@@ -24,12 +28,29 @@ public class BundelFHIREntity {
         this.alasanGagal = alasanGagal;
     }
 
+    /**
+     * Algo-C54-01: menandai bundel diterima SATUSEHAT. Bundel yang sudah terkirim tidak boleh ditandai ulang,
+     * karena ambilTertunda() tidak pernah mengambilnya lagi (Q-C63-03).
+     */
     public void tandaiTerkirim(String kode) {
-        throw new UnsupportedOperationException("TODO");
+        if ("terkirim".equals(status)) {
+            throw new IllegalStateException("Bundel sudah terkirim");
+        }
+        status = "terkirim";
+        alasanGagal = null;
+        LOG.info(() -> "Bundel " + idBundel + " diterima SATUSEHAT, kode " + kode);
     }
 
+    /**
+     * Algo-C54-01: menandai bundel gagal dikirim dan menyimpan alasan penolakan SATUSEHAT. Bundel yang sudah
+     * terkirim tidak dapat ditandai gagal.
+     */
     public void tandaiGagal(String alasan) {
-        throw new UnsupportedOperationException("TODO");
+        if ("terkirim".equals(status)) {
+            throw new IllegalStateException("Bundel yang sudah terkirim tidak dapat ditandai gagal");
+        }
+        status = "gagal kirim";
+        alasanGagal = alasan == null || alasan.isBlank() ? "Ditolak tanpa alasan" : alasan;
     }
 
     public int getIdBundel() {
