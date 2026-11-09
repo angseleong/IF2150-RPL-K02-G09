@@ -288,7 +288,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C34 | RekamMedisEntity | Kelas | `src/src/main/java/sehati/business/entity/RekamMedisEntity.java` | Algo-C34-01 diisi. Ditambah `getEntriBaru()` dan `kosongkanEntriBaru()` agar `simpanRekamMedis()` dapat membaca dan mengosongkan penampung entri baru. |
 | C35 | KunjunganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C36 | PoliEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C37 | AntreanEntity | Kelas Java | `src/src/main/java/sehati/business/entity/AntreanEntity.java` - `AntreanEntity` | Algo-C37-01: `ambilTerdepan()`, `pindahkanKeBelakang()`, dan `keluarkan()` diisi untuk UC04 (`tambahkan()` dari #40). `keluarkan()` menolak entri yang tidak ada. |
+| C37 | AntreanEntity | Kelas Java | `src/src/main/java/sehati/business/entity/AntreanEntity.java` - `AntreanEntity` | Algo-C37-01: `ambilTerdepan()` dan `pindahkanKeBelakang()` diisi untuk UC04. `tambahkan()` dari #40 dan `keluarkan()` dari #42. `keluarkan()` menolak entri yang tidak ada. |
 | C38 | SkriningEntity | Kelas | `src/src/main/java/sehati/business/entity/SkriningEntity.java` | Ditambah atribut `tandaVital` dan `getTandaVital()` (Tabel B.1). |
 | C39 | TandaVitalEntity | Kelas | `src/src/main/java/sehati/business/entity/TandaVitalEntity.java` | Algo-C39-01. Ditambah atribut `waktu` (Tabel B.1). |
 | C40 | AmbangRisikoEntity | Kelas | `src/src/main/java/sehati/business/entity/AmbangRisikoEntity.java` | Algo-C40-01. |
