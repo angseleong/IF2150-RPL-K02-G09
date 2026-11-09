@@ -1,5 +1,7 @@
 package sehati.business.entity;
 
+import java.util.Locale;
+
 /**
  * C44 - KodeICD10Entity.
  *
@@ -20,8 +22,15 @@ public class KodeICD10Entity {
         this.bab = bab;
     }
 
+    /**
+     * Menyaring ulang saran di layar dengan aturan yang sama dengan Q-C59-11 (Algo-C44-01).
+     */
     public boolean cocok(String kataKunci) {
-        throw new UnsupportedOperationException("TODO");
+        String teks = kataKunci == null ? "" : kataKunci.strip().toLowerCase(Locale.ROOT);
+        if (teks.isEmpty()) {
+            return false;
+        }
+        return kode.toLowerCase(Locale.ROOT).startsWith(teks) || deskripsi.toLowerCase(Locale.ROOT).contains(teks);
     }
 
     public String getKode() {
