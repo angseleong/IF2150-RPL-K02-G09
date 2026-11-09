@@ -9,6 +9,9 @@ import java.time.LocalDate;
  */
 public class JadwalKontrolEntity {
 
+    public static final String STATUS_TERJADWAL = "terjadwal";
+    public static final String STATUS_SELESAI = "selesai";
+
     private int idJadwal;
     private int idPasien;
     private LocalDate tanggalRencana;
@@ -24,8 +27,14 @@ public class JadwalKontrolEntity {
         this.status = status;
     }
 
+    /**
+     * Menandai jadwal selesai saat pasien datang kontrol (Subbab 5.45, KF12).
+     */
     public void tandaiSelesai() {
-        throw new UnsupportedOperationException("TODO");
+        if (!STATUS_TERJADWAL.equals(status)) {
+            throw new IllegalStateException("Jadwal kontrol tidak berstatus terjadwal");
+        }
+        status = STATUS_SELESAI;
     }
 
     public int getIdJadwal() {

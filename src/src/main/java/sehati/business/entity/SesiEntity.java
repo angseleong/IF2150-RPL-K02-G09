@@ -1,5 +1,6 @@
 package sehati.business.entity;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -25,12 +26,18 @@ public class SesiEntity {
         this.statusAktif = statusAktif;
     }
 
+    /**
+     * Mengembalikan true bila sejak waktuMulai sudah lewat paling sedikit {@code menit} menit (Algo-C31-01, KNF04).
+     */
     public boolean habisWaktu(int menit) {
-        throw new UnsupportedOperationException("TODO");
+        if (menit <= 0) {
+            throw new IllegalArgumentException("Batas waktu harus lebih dari nol");
+        }
+        return Duration.between(waktuMulai, LocalDateTime.now()).toMinutes() >= menit;
     }
 
     public void tutup() {
-        throw new UnsupportedOperationException("TODO");
+        statusAktif = false;
     }
 
     public UUID getIdSesi() {

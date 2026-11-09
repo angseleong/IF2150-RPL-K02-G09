@@ -24,8 +24,14 @@ public class PemeriksaanEntity {
         this.terkunci = terkunci;
     }
 
+    /**
+     * Mengunci hasil pemeriksaan sehingga tidak dapat ditimpa lagi (Subbab 5.42, UC05).
+     */
     public void kunci() {
-        throw new UnsupportedOperationException("TODO");
+        if (terkunci) {
+            throw new IllegalStateException("Rekam medis kunjungan ini sudah dikunci");
+        }
+        terkunci = true;
     }
 
     public int getIdPemeriksaan() {
