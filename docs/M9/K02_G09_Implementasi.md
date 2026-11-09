@@ -303,7 +303,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C51 | DaftarPantauEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C52 | TindakLanjutEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C53 | LaporanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C54 | BundelFHIREntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C54 | BundelFHIREntity | Kelas Java | `src/src/main/java/sehati/business/entity/BundelFHIREntity.java` - `BundelFHIREntity` | Algo-C54-01: `tandaiTerkirim()` dan `tandaiGagal()` menolak bundel yang sudah terkirim |
 | C55 | PencadanganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C56 | DataAkunBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataAkunBoundary.java` - `DataAkunBoundary` | Q-C56-01 sampai Q-C56-08 sebagai konstanta `Q_C56_xx` |
 | C57 | DataPasienBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataPasienBoundary.java` | Q-C57-01 s.d. Q-C57-11 sebagai konstanta `Q_C57_xx`, Algo-C57-01 pada `polaPencarian()`. Pengerjaan Humam menggantikan Steven (#5). |
@@ -312,7 +312,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C60 | DataPantauBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C61 | DataFarmasiBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataFarmasiBoundary.java` - `DataFarmasiBoundary` | Atribut `koneksi` diterima lewat konstruktor dari `Manager`. Sepuluh operasi publik menjalankan konstanta `Q_C61_01` sampai `Q_C61_15` lewat `PreparedStatement`. `ambilObat`, `ambilBets`, dan `kunciResep` memakai `FOR UPDATE` (KF23, KNF11). `simpanPenerimaan` mewujudkan Algo-C61-01 dan melempar `IllegalArgumentException("nomorBets")` untuk bets ganda. `simpanStok`, `simpanPenerimaan`, dan `simpanResep` memakai pola `transaksiSendiri` (aturan 1 Subbab 5.56). Item resep dibaca ke `ResepEntity.daftarItem`. |
 | C62 | DataLaporanBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C63 | DataSinkronisasiBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C63 | DataSinkronisasiBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataSinkronisasiBoundary.java` - `DataSinkronisasiBoundary` | Q-C63-01 s.d. Q-C63-03 sebagai konstanta `Q_C63_xx`; `simpanBundel`, `ambilTertunda`, `perbaruiBundel` lewat `PreparedStatement`; `tulisArsipTerenkripsi` mewujudkan Algo-C63-01 (PBKDF2 600k + AES-GCM) |
 | C64 | DataPencadanganBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 
 Catatan:
