@@ -92,6 +92,9 @@ public class PantauManager {
         dataPantau.simpanTindakLanjut(idEntri, t);
         if (t.terhubung()) {
             RekamMedisEntity rm = dataPasien.ambilRekamMedis(entri.getIdPasien());
+            if (rm == null) {
+                throw new IllegalStateException("Rekam medis pasien tidak ditemukan: " + entri.getIdPasien());
+            }
             rm.tambahEntri("Tindak lanjut " + t.getJenisKontak() + ": " + t.getHasilUpaya() + ", "
                     + t.getStatusKedatangan());
             dataPasien.simpanRekamMedis(rm);

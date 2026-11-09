@@ -205,6 +205,8 @@ Tabel B.1. Perubahan dari DPPL
 | 8 | C21 RisikoManager | `evaluasiRisiko(kunjungan, tv)` | Ditambah overload package-private yang menerima `Connection` | Penanda dan entri daftar pantau harus satu transaksi dengan penyimpanan skrining |
 | 9 | C51 DaftarPantauEntity | Empat atribut pada Tabel 4.1 | Ditambah atribut tampilan `tanggalPemicu`, `namaPasien`, `nomorTelepon` | `saringDaftar()` perlu tanggal pemicu (Q-C60-01) dan identitas pasien, sedangkan entity tidak memuatnya |
 | 10 | C12 DaftarPantauForm | `tampilkanDaftar()` memanggil `RisikoManager.muatEntriAktif()` | Memanggil `PantauManager.saringDaftar(null, null, null)` | Tabel membutuhkan nama dan telepon pasien yang dimuat `saringDaftar()` |
+| 11 | C26 PantauManager.perbaruiStatus() | `perbaruiStatus(idEntri, status)` | `perbaruiStatus(dataPantau, entri, status)`, private | Pembaruan status berjalan dalam transaksi `catatTindakLanjut()` yang sama dengan koneksi milik Manager, dan entri sudah dimuat untuk pengecekan hasil upaya. Atas usul Adnan pada review #32 |
+| 12 | C12 DaftarPantauForm | Atribut `penyaring` tanpa penggunaan yang dijelaskan | `penyaring` berisi ringkasan saringan aktif dan ditampilkan pada keterangan di atas tabel | Agar perawat melihat saringan yang sedang berlaku. Atas usul Adnan pada review #32 |
 | *...* | *...* | *...* | *...* | *...* |
 
 ## B.2 Bukti Penerapan Best Practices

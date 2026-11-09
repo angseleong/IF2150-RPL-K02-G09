@@ -138,12 +138,12 @@ public class DaftarPantauForm {
         LatarBelakang.jalankan(() -> pantauManager.saringDaftar(jenis, mulai, akhir), hasil -> {
             daftarTampil = hasil;
             tabelPantau.getItems().setAll(daftarTampil);
-            if (daftarTampil.isEmpty()) {
-                tampilkanKeterangan("Tidak ada pasien yang cocok dengan kriteria saringan");
-            } else {
-                tampilkanKeterangan("Menampilkan " + daftarTampil.size() + " entri aktif");
-            }
             penyaring = ringkasan(jenis, mulai, akhir);
+            if (daftarTampil.isEmpty()) {
+                tampilkanKeterangan("Tidak ada pasien yang cocok dengan kriteria saringan (" + penyaring + ")");
+            } else {
+                tampilkanKeterangan("Menampilkan " + daftarTampil.size() + " entri aktif (" + penyaring + ")");
+            }
         }, this::tampilkanGalat);
     }
 
