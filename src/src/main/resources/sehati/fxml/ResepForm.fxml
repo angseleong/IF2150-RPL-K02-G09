@@ -1,6 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import sehati.presentation.PanelPeringatan?>
 
 <VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="sehati.presentation.ResepForm" styleClass="halaman"/>
+      fx:controller="sehati.presentation.ResepForm" styleClass="halaman" spacing="12">
+    <Label fx:id="labelPasien" styleClass="judul-panel"/>
+    <VBox styleClass="kartu" spacing="8">
+        <GridPane hgap="12" vgap="8">
+            <Label text="Cari obat" styleClass="label-kolom" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="kolomCariObat" promptText="Ketik nama obat" prefWidth="260"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <Label text="Obat" styleClass="label-kolom" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="kolomObat" prefWidth="360" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Label fx:id="lencanaStok" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+            <Label text="Jumlah" styleClass="label-kolom" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="kolomJumlah" prefWidth="120" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            <Label fx:id="pesanJumlah" styleClass="pesan-kolom" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+            <Label text="Dosis" styleClass="label-kolom" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="kolomDosis" promptText="Contoh: 5 mg" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            <Label fx:id="pesanDosis" styleClass="pesan-kolom" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+            <Label text="Aturan pakai" styleClass="label-kolom" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextField fx:id="kolomAturanPakai" promptText="Contoh: 1 x 1 sesudah makan"
+                       GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            <Label fx:id="pesanAturanPakai" styleClass="pesan-kolom" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
+        </GridPane>
+        <HBox spacing="10">
+            <Button text="Tambah" styleClass="tombol-utama" onAction="#tambah" defaultButton="true"/>
+            <Button text="Hapus Item" styleClass="tombol-kedua" onAction="#hapusItem"/>
+        </HBox>
+    </VBox>
+    <TableView fx:id="tabelItem" prefHeight="220" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="kolomTabelObat" text="Obat" prefWidth="320"/>
+            <TableColumn fx:id="kolomTabelJumlah" text="Jumlah" prefWidth="90"/>
+            <TableColumn fx:id="kolomTabelDosis" text="Dosis" prefWidth="140"/>
+            <TableColumn fx:id="kolomTabelAturan" text="Aturan pakai" prefWidth="240"/>
+            <TableColumn fx:id="kolomTabelStok" text="Stok" prefWidth="200"/>
+        </columns>
+    </TableView>
+    <PanelPeringatan fx:id="peringatanStok"/>
+    <Label fx:id="notifikasi" styleClass="notifikasi-hijau"/>
+    <HBox spacing="10">
+        <Button fx:id="tombolKirim" text="Kirim ke Apotek" styleClass="tombol-utama" onAction="#kirim"/>
+        <Button text="Batal  (Esc)" styleClass="tombol-kedua" onAction="#batal"/>
+    </HBox>
+</VBox>

@@ -257,7 +257,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C05 | SkriningForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C06 | RekamMedisForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/RekamMedisForm.java`, `src/src/main/resources/sehati/fxml/RekamMedisForm.fxml` - `RekamMedisForm` | Atribut `idPasienTampil` dan `seriTren` dipakai `tampilkanGrafikTren()`. Kelima operasi DPPL diwujudkan apa adanya: `tampilkanGrafikTren()` memakai `LineChart` dengan tanggal kunjungan pada sumbu-x (Algo-C06-01), dan `aturModeBacaSaja()` menonaktifkan Periksa Pasien bagi peran selain Dokter. Tambahan: daftar pasien siap diperiksa di sisi kiri (B.1). |
 | C07 | PemeriksaanForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/PemeriksaanForm.java`, `src/src/main/resources/sehati/fxml/PemeriksaanForm.fxml` - `PemeriksaanForm` | Atribut `isianAnamnesis` dan `kataKunciDiagnosis`. `kirimKataKunciDiagnosis()` dijalankan `PauseTransition` 300 ms, `kirimHasilPemeriksaan()` mewujudkan Algo-C07-01 dan terhubung ke Ctrl+S, `kirimFinal()` meminta konfirmasi lalu memanggil `kunciRekamMedis()`. Tambahan: `buka(kunjungan, pasien)` menerima kunjungan dari I-06 dan memuat draf tersimpan (B.1). |
-| C08 | ResepForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C08 | ResepForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/ResepForm.java`, `src/src/main/resources/sehati/fxml/ResepForm.fxml` - `ResepForm` | Atribut `isianItem` menampung item sampai dikirim, dan `indikatorStok` menyimpan indikator terakhir. `kirimItem()` mewujudkan Algo-C08-01, dan tombol Kirim ke Apotek aktif hanya bila semua item cukup stoknya. Tambahan: pencarian obat menyaring daftar `muatDataObat()`, tombol Hapus Item untuk memperbaiki resep, dan `tampilkanFormulir(kunjungan, pasien)` (B.1). |
 | C09 | AntreanResepForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C10 | PenyerahanObatForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C11 | PersediaanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -272,7 +272,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C20 | SkriningManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C21 | RisikoManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C22 | PemeriksaanManager | Kelas Java | `src/src/main/java/sehati/business/control/PemeriksaanManager.java` - `PemeriksaanManager` | Tanpa atribut, sesuai DPPL. Setiap operasi membuka koneksi lewat `KoneksiBasisData.buka()`. `simpanPemeriksaan()` mewujudkan Algo-C22-01, dan `kunciRekamMedis()` mewujudkan Algo-C22-02 dalam satu transaksi dengan pelaku audit dari `SesiAktif.idPenggunaSesi()`. Tambahan: `muatKunjunganSiapPeriksa()`, `muatPemeriksaan()`, `muatDiagnosis()`, dan `validasiTanggalKontrol()` (B.1). |
-| C23 | ResepManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C23 | ResepManager | Kelas Java | `src/src/main/java/sehati/business/control/ResepManager.java` - `ResepManager` | Tanpa atribut. `tambahItem()` mewujudkan Algo-C23-01. `kirimKeApotek()` mewujudkan Algo-C23-02: memeriksa ulang stok, lalu `simpanResep()` dan memasukkan resep ke antrean apotek dalam satu transaksi. `validasiStok()` menerima `DataFarmasiBoundary` agar satu operasi memakai satu koneksi, dan pada `kirimKeApotek()` memeriksa total jumlah per obat (B.1). |
 | C24 | ApotekManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C25 | PersediaanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C26 | PantauManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -295,8 +295,8 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C43 | DiagnosisEntity | Kelas Java | `src/src/main/java/sehati/business/entity/DiagnosisEntity.java` - `DiagnosisEntity` | Atribut sesuai Tabel 4.1. `ringkas()` mengembalikan "kode - deskripsi". |
 | C44 | KodeICD10Entity | Kelas Java | `src/src/main/java/sehati/business/entity/KodeICD10Entity.java` - `KodeICD10Entity` | Atribut sesuai Tabel 4.1. `cocok()` mewujudkan Algo-C44-01 tanpa membedakan huruf besar dan kecil. |
 | C45 | JadwalKontrolEntity | Kelas Java | `src/src/main/java/sehati/business/entity/JadwalKontrolEntity.java` - `JadwalKontrolEntity` | Atribut sesuai Tabel 4.1, ditambah konstanta `STATUS_TERJADWAL` dan `STATUS_SELESAI`. `tandaiSelesai()` menolak jadwal yang tidak berstatus terjadwal. |
-| C46 | ResepEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C47 | ItemResepEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C46 | ResepEntity | Kelas Java | `src/src/main/java/sehati/business/entity/ResepEntity.java` - `ResepEntity` | Atribut sesuai Tabel 4.1, dengan komposisi `daftarItem`. `perbaruiStatus()` mewujudkan Algo-C46-01 dengan konstanta `STATUS_MENUNGGU`, `STATUS_SELESAI_DILAYANI`, dan `STATUS_DIKEMBALIKAN`. |
+| C47 | ItemResepEntity | Kelas Java | `src/src/main/java/sehati/business/entity/ItemResepEntity.java` - `ItemResepEntity` | Atribut sesuai Tabel 4.1. `cukupStok()` mengembalikan `stok >= jumlah`. |
 | C48 | ObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C49 | BetsObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C50 | PenerimaanObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |

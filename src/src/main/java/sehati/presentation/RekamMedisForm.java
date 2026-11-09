@@ -84,8 +84,6 @@ public class RekamMedisForm {
         });
         tampilkan(panelRingkasan, false);
         tampilkan(lencanaBacaSaja, false);
-        // TODO(#15): aktifkan setelah ResepForm tersedia.
-        tombolResep.setDisable(true);
         muatDaftar();
     }
 
@@ -101,6 +99,7 @@ public class RekamMedisForm {
         labelDataDiri.setText("Memuat rekam medis...");
         // Tombol ditahan selama memuat agar pemeriksaan tidak terbuka dengan identitas pasien sebelumnya.
         tombolPeriksa.setDisable(true);
+        tombolResep.setDisable(true);
         LatarBelakang.jalankan(() -> pemeriksaanManager.susunRingkasan(kunjungan.getIdKunjungan()), rm -> {
             // Hasil milik pasien yang sudah tidak dipilih dibuang.
             if (kunjungan != this.kunjungan) {
@@ -113,6 +112,7 @@ public class RekamMedisForm {
             } else {
                 tampilkan(lencanaBacaSaja, false);
                 tombolPeriksa.setDisable(false);
+                tombolResep.setDisable(false);
             }
         }, this::tampilkanGalat);
     }
@@ -180,6 +180,7 @@ public class RekamMedisForm {
         lencanaBacaSaja.setText("Mode baca saja: Peran Anda tidak berwenang mengisi diagnosis");
         tampilkan(lencanaBacaSaja, true);
         tombolPeriksa.setDisable(true);
+        tombolResep.setDisable(true);
     }
 
     /**
@@ -211,7 +212,11 @@ public class RekamMedisForm {
 
     @FXML
     private void buatResep() {
-        // TODO(#15): buka ResepForm untuk kunjungan ini.
+        if (kunjungan == null || tombolResep.isDisabled()) {
+            return;
+        }
+        ResepForm form = Navigasi.buka("ResepForm");
+        form.tampilkanFormulir(kunjungan, pasien);
     }
 
     private boolean bolehMemeriksa() {
