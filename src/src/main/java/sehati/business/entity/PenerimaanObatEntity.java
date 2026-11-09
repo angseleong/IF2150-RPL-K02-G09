@@ -27,8 +27,15 @@ public class PenerimaanObatEntity {
         this.daftarBets = daftarBets;
     }
 
+    /**
+     * Jumlah seluruh bets pada penerimaan, yaitu penambahan stok obat (Algo-C50-01, KF17).
+     */
     public int totalJumlah() {
-        throw new UnsupportedOperationException("TODO");
+        int total = 0;
+        for (BetsObatEntity b : daftarBets) {
+            total += b.getJumlah();
+        }
+        return total;
     }
 
     public int getIdPenerimaan() {

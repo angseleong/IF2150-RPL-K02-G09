@@ -24,12 +24,25 @@ public class BetsObatEntity {
         this.tanggalKedaluwarsa = tanggalKedaluwarsa;
     }
 
+    /**
+     * Mengurangi sisa bets sebanyak yang diambil saat penyerahan obat (Algo-C49-01, KF14).
+     */
     public void kurangi(int jumlah) {
-        throw new UnsupportedOperationException("TODO");
+        if (jumlah <= 0) {
+            throw new IllegalArgumentException("Jumlah pengambilan harus lebih dari nol");
+        }
+        if (jumlah > this.jumlah) {
+            throw new IllegalStateException("Sisa bets " + nomorBets + " hanya " + this.jumlah);
+        }
+        this.jumlah -= jumlah;
     }
 
+    /**
+     * Bets yang sudah lewat tanggalnya ikut terhitung, sama dengan perbandingan tanggal pada Q-C61-08
+     * (Algo-C49-01, KF17).
+     */
     public boolean mendekatiKedaluwarsa(int hari) {
-        throw new UnsupportedOperationException("TODO");
+        return !tanggalKedaluwarsa.isAfter(LocalDate.now().plusDays(hari));
     }
 
     public String getNomorBets() {

@@ -3,6 +3,7 @@ package sehati.dataaccess;
 import sehati.business.entity.BetsObatEntity;
 import sehati.business.entity.ItemResepEntity;
 import sehati.business.entity.ObatEntity;
+import sehati.business.entity.PasienEntity;
 import sehati.business.entity.PenerimaanObatEntity;
 import sehati.business.entity.ResepEntity;
 
@@ -14,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +63,12 @@ public class DataFarmasiBoundary {
             + "FROM item_resep WHERE id_resep = ANY (?) ORDER BY id_resep, id_obat";
     private static final String Q_C61_15 = "SELECT id_resep, id_kunjungan, waktu_masuk, status, catatan "
             + "FROM resep WHERE id_resep = ? FOR UPDATE";
+
+    // Tambahan implementasi (B.1): identitas pasien seluruh resep antrean dalam satu kueri, bukan satu per resep.
+    private static final String Q_C61_16 = "SELECT r.id_resep, p.id_pasien, p.nik, p.nomor_rekam_medis, p.nama, "
+            + "p.tanggal_lahir, p.jenis_kelamin, p.alamat, p.nomor_telepon FROM resep r "
+            + "JOIN kunjungan k ON k.id_kunjungan = r.id_kunjungan JOIN pasien p ON p.id_pasien = k.id_pasien "
+            + "WHERE r.id_resep = ANY (?)";
 
     private static final String UNIQUE_VIOLATION = "23505";
     private static final String CHECK_VIOLATION = "23514";
@@ -291,6 +299,37 @@ public class DataFarmasiBoundary {
      */
     public ResepEntity kunciResep(int idResep) {
         return ambilSatuResep(Q_C61_15, idResep, "Gagal mengunci resep");
+    }
+
+    /**
+     * Mengambil pasien pemilik setiap resep pada daftar, dipetakan dengan idResep (Q-C61-16, tambahan implementasi
+     * untuk I-09 dan I-10).
+     */
+    public Map<Integer, PasienEntity> ambilPasienResep(List<Integer> daftarIdResep) {
+        Map<Integer, PasienEntity> hasil = new HashMap<>();
+        if (daftarIdResep == null || daftarIdResep.isEmpty()) {
+            return hasil;
+        }
+        try {
+            Array larikId = koneksi.createArrayOf("integer", daftarIdResep.toArray(new Integer[0]));
+            try (PreparedStatement ps = koneksi.prepareStatement(Q_C61_16)) {
+                ps.setArray(1, larikId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Date lahir = rs.getDate("tanggal_lahir");
+                        hasil.put(rs.getInt("id_resep"), new PasienEntity(rs.getInt("id_pasien"), rs.getString("nik"),
+                                rs.getString("nomor_rekam_medis"), rs.getString("nama"),
+                                lahir == null ? null : lahir.toLocalDate(), rs.getString("jenis_kelamin"),
+                                rs.getString("alamat"), rs.getString("nomor_telepon")));
+                    }
+                }
+            } finally {
+                larikId.free();
+            }
+            return hasil;
+        } catch (SQLException e) {
+            throw galat("Gagal mengambil pasien pemilik resep", e);
+        }
     }
 
     private void perbaruiResep(ResepEntity r) {

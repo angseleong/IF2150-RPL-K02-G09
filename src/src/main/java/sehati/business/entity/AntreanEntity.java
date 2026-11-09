@@ -55,13 +55,12 @@ public class AntreanEntity {
     }
 
     /**
-     * Menghapus entri dari antrean; entri yang tidak ada ditolak (Algo-C37-01).
+     * Menghapus entri dari antrean, misalnya resep yang dikembalikan ke dokter (Algo-C37-01, UC07).
      */
     public void keluarkan(int idEntri) {
-        if (!daftarEntri.contains(idEntri)) {
+        if (!daftarEntri.remove(Integer.valueOf(idEntri))) {
             throw new IllegalArgumentException("Entri tidak ada pada antrean " + jenis);
         }
-        daftarEntri.remove(Integer.valueOf(idEntri));
     }
 
     public int getIdAntrean() {
