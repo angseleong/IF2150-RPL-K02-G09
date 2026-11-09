@@ -51,6 +51,7 @@ public final class Navigasi {
     private static BorderPane bingkai;
     private static BilahAplikasi bilah;
     private static boolean sesiAktif;
+    private static String peranSesi;
 
     private Navigasi() {
     }
@@ -113,8 +114,16 @@ public final class Navigasi {
      */
     public static void mulaiSesi(String namaPengguna, String peran) {
         sesiAktif = true;
+        peranSesi = peran;
         bilah.setPengguna(namaPengguna, peran);
         bingkai.setTop(bilah);
+    }
+
+    /**
+     * Peran pengguna yang sedang masuk, untuk layar yang membatasi kolom menurut peran (misalnya I-06), atau null.
+     */
+    public static String peranSesi() {
+        return sesiAktif ? peranSesi : null;
     }
 
     /**
