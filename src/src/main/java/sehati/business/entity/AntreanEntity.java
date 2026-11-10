@@ -23,8 +23,14 @@ public class AntreanEntity {
         this.daftarEntri = daftarEntri;
     }
 
+    /**
+     * Menambah entri ke akhir antrean. Entri yang sudah ada diabaikan agar permintaan ulang tidak tampil dua kali
+     * (Algo-C37-01).
+     */
     public void tambahkan(int idEntri) {
-        daftarEntri.add(Integer.valueOf(idEntri));
+        if (!daftarEntri.contains(idEntri)) {
+            daftarEntri.add(idEntri);
+        }
     }
 
     public KunjunganEntity ambilTerdepan() {
@@ -44,8 +50,13 @@ public class AntreanEntity {
         }
     }
 
+    /**
+     * Menghapus entri dari antrean, misalnya resep yang dikembalikan ke dokter (Algo-C37-01, UC07).
+     */
     public void keluarkan(int idEntri) {
-        daftarEntri.remove(Integer.valueOf(idEntri));
+        if (!daftarEntri.remove(Integer.valueOf(idEntri))) {
+            throw new IllegalArgumentException("Entri tidak ada pada antrean " + jenis);
+        }
     }
 
     public int getIdAntrean() {

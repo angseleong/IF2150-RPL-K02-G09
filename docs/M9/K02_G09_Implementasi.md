@@ -195,7 +195,8 @@ Tabel B.1. Perubahan dari DPPL
 
 | No | Bagian DPPL | Rancangan Awal | Implementasi Akhir | Alasan |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | *[mis. Kelas C05, layar I-03, tabel `orders`]* | *[Yang direncanakan]* | *[Yang dibuat]* | *[Alasan perubahan]* |
+| 1 | C38 SkriningEntity | Atribut idSkrining, idKunjungan, keluhanAwal, waktu | Ditambah atribut `tandaVital` dan `getTandaVital()` | Subbab 5.38 menyebut tanda vital dipegang sebagai referensi, tetapi atributnya tidak ada di Tabel 4.1, sedangkan `simpanSkrining()` membutuhkannya |
+| 2 | C39 TandaVitalEntity, C59 Q-C59-03 dan Q-C59-05 | Tidak ada atribut waktu, `s.waktu` dipilih tetapi tidak disimpan | Ditambah atribut `waktu: LocalDateTime` dengan getter dan setter, diisi dari `s.waktu` pada Q-C59-03 dan Q-C59-05 | Grafik tren UC05 (KF08) memakai waktu pengukuran sebagai sumbu-x dan `RekamMedisForm.seriTren` hanya memegang `List<TandaVitalEntity>`. Atas usul Adnan pada review #29 |
 | *...* | *...* | *...* | *...* | *...* |
 
 ## B.2 Bukti Penerapan Best Practices
@@ -250,68 +251,68 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | ID Kelas | Nama Kelas Perancangan | Bentuk Implementasi | Lokasi (File dan Nama) | Keterangan |
 | :--- | :--- | :--- | :--- | :--- |
 | C01 | LoginForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C02 | PasienForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C02 | PasienForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/PasienForm.java` - `PasienForm`, `src/src/main/resources/sehati/fxml/PasienForm.fxml` | `kirimPencarian()` memakai `PauseTransition` 250 ms dan thread latar (Algo-C02-01). `kirimDataPasien()` mewujudkan Algo-C02-02. Pintasan Ctrl+S/F/N terpasang. Tombol Buka Kunjungan nonaktif dengan TODO sampai #12. |
 | C03 | KunjunganForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C04 | AntreanSkriningForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C05 | SkriningForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C06 | RekamMedisForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C07 | PemeriksaanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C08 | ResepForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C09 | AntreanResepForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C10 | PenyerahanObatForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C11 | PersediaanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C06 | RekamMedisForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/RekamMedisForm.java`, `src/src/main/resources/sehati/fxml/RekamMedisForm.fxml` - `RekamMedisForm` | Atribut `idPasienTampil` dan `seriTren` dipakai `tampilkanGrafikTren()`. Kelima operasi DPPL diwujudkan apa adanya: `tampilkanGrafikTren()` memakai `LineChart` dengan tanggal kunjungan pada sumbu-x (Algo-C06-01), dan `aturModeBacaSaja()` menonaktifkan Periksa Pasien bagi peran selain Dokter. Tambahan: daftar pasien siap diperiksa di sisi kiri (B.1). |
+| C07 | PemeriksaanForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/PemeriksaanForm.java`, `src/src/main/resources/sehati/fxml/PemeriksaanForm.fxml` - `PemeriksaanForm` | Atribut `isianAnamnesis` dan `kataKunciDiagnosis`. `kirimKataKunciDiagnosis()` dijalankan `PauseTransition` 300 ms, `kirimHasilPemeriksaan()` mewujudkan Algo-C07-01 dan terhubung ke Ctrl+S, `kirimFinal()` meminta konfirmasi lalu memanggil `kunciRekamMedis()`. Tambahan: `buka(kunjungan, pasien)` menerima kunjungan dari I-06 dan memuat draf tersimpan (B.1). |
+| C08 | ResepForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/ResepForm.java`, `src/src/main/resources/sehati/fxml/ResepForm.fxml` - `ResepForm` | Atribut `isianItem` menampung item sampai dikirim, dan `indikatorStok` menyimpan indikator terakhir. `kirimItem()` mewujudkan Algo-C08-01, dan tombol Kirim ke Apotek aktif hanya bila semua item cukup stoknya. Tambahan: pencarian obat menyaring daftar `muatDataObat()`, tombol Hapus Item untuk memperbaiki resep, dan `tampilkanFormulir(kunjungan, pasien)` (B.1). |
+| C09 | AntreanResepForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/AntreanResepForm.java`, `src/src/main/resources/sehati/fxml/AntreanResepForm.fxml` - `AntreanResepForm` | Atribut `daftarTampil`. `tampilkanAntrean()` dimuat ulang `Timeline` tiap 10 detik selama layar tampil, dan `pilihResep()` dipanggil tombol Layani, klik ganda, atau Enter. Tambahan: nama pasien dan obat dimuat sekali per penyegaran lewat `muatPasienResep()` dan `muatDataObat()` (B.1). |
+| C10 | PenyerahanObatForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/PenyerahanObatForm.java`, `src/src/main/resources/sehati/fxml/PenyerahanObatForm.fxml` - `PenyerahanObatForm` | Atribut `rincianTampil` dan `catatanPengembalian`. `kirimKonfirmasi()` mewujudkan Algo-C10-01 dan terhubung ke Ctrl+Enter. Penolakan tampil di `PanelPeringatan`, lalu rincian dimuat ulang. Tambahan: `aturKonteks()` menerima identitas pasien, nama obat, dan penerima pesan dari I-09 (B.1). |
+| C11 | PersediaanForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/PersediaanForm.java`, `src/src/main/resources/sehati/fxml/PersediaanForm.fxml` - `PersediaanForm` | Atribut `isianPenerimaan` dan `daftarPeringatan`. `kirimPenerimaan()` mewujudkan Algo-C11-01 dan terhubung ke tombol Simpan serta Ctrl+S. `tampilkanPesanKesalahan()` memetakan nama kolom dari pesan `catatPenerimaan()` ke `PenandaKolom`, dan `tampilkanPeringatan()` memakai `PanelPeringatan` berikon (KNF08). Pekerjaan basis data berjalan di `Task`. |
 | C12 | DaftarPantauForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C13 | LaporanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C14 | SinkronisasiForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C15 | SATUSEHATGateway | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C16 | KonfigurasiForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C17 | AutentikasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C18 | PasienManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C18 | PasienManager | Kelas Java | `src/src/main/java/sehati/business/control/PasienManager.java` - `PasienManager` | `cariPasien()`, `daftarkanPasien()` (Algo-C18-01), `perbaruiPasien()` (Algo-C18-02), `validasiNIK()`. Satu koneksi per operasi. Audit lewat `SesiAktif.idPenggunaSesi()`. `terbitkanNomorRM(DataPasienBoundary)` agar nomor terbit sekali per transaksi. |
 | C19 | KunjunganManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C20 | SkriningManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C21 | RisikoManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C22 | PemeriksaanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C23 | ResepManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C24 | ApotekManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C25 | PersediaanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C22 | PemeriksaanManager | Kelas Java | `src/src/main/java/sehati/business/control/PemeriksaanManager.java` - `PemeriksaanManager` | Tanpa atribut, sesuai DPPL. Setiap operasi membuka koneksi lewat `KoneksiBasisData.buka()`. `simpanPemeriksaan()` mewujudkan Algo-C22-01, dan `kunciRekamMedis()` mewujudkan Algo-C22-02 dalam satu transaksi dengan pelaku audit dari `SesiAktif.idPenggunaSesi()`. Tambahan: `muatKunjunganSiapPeriksa()`, `muatPemeriksaan()`, `muatDiagnosis()`, dan `validasiTanggalKontrol()` (B.1). |
+| C23 | ResepManager | Kelas Java | `src/src/main/java/sehati/business/control/ResepManager.java` - `ResepManager` | Tanpa atribut. `tambahItem()` mewujudkan Algo-C23-01. `kirimKeApotek()` mewujudkan Algo-C23-02: memeriksa ulang stok, lalu `simpanResep()` dan memasukkan resep ke antrean apotek dalam satu transaksi. `validasiStok()` menerima `DataFarmasiBoundary` agar satu operasi memakai satu koneksi, dan pada `kirimKeApotek()` memeriksa total jumlah per obat (B.1). |
+| C24 | ApotekManager | Kelas Java | `src/src/main/java/sehati/business/control/ApotekManager.java` - `ApotekManager` | Tanpa atribut. `serahkanObat()` mewujudkan Algo-C24-01 dalam satu transaksi dengan `kunciResep()`, dan `potongStok()` mewujudkan Algo-C24-02 (FEFO). `susunBundel()` memakai `PenyusunBundelFHIR` untuk isi JSON FHIR R4. Tambahan: `muatPasienResep()`, `muatDataObat()`, `muatBetsResep()`, resep yang selesai ikut dikeluarkan dari antrean apotek, dan `kembalikanKeDokter()` memakai `kunciResep()` (B.1). |
+| C25 | PersediaanManager | Kelas Java | `src/src/main/java/sehati/business/control/PersediaanManager.java` - `PersediaanManager` | Tanpa atribut. `catatPenerimaan()` mewujudkan Algo-C25-01 dalam satu transaksi dengan pelaku audit dari `SesiAktif.idPenggunaSesi()`, `validasiPenerimaan()` mewujudkan Algo-C25-02, dan `terbitkanPeringatan()` mewujudkan Algo-C25-03. `tambahStok()` menerima `DataFarmasiBoundary` agar memakai koneksi transaksi (B.1). |
 | C26 | PantauManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C27 | LaporanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C28 | SinkronisasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C29 | KonfigurasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C30 | PenggunaEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C31 | SesiEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C32 | AuditEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C33 | PasienEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C34 | RekamMedisEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C30 | PenggunaEntity | Kelas Java | `src/src/main/java/sehati/business/entity/PenggunaEntity.java` - `PenggunaEntity` | Algo-C30-01 lewat jBCrypt, ditambah konstruktor akun baru berstatus "aktif" |
+| C31 | SesiEntity | Kelas Java | `src/src/main/java/sehati/business/entity/SesiEntity.java` - `SesiEntity` | Algo-C31-01. Sesi yang sedang aktif dipegang `sehati.common.SesiAktif` |
+| C32 | AuditEntity | Kelas Java | `src/src/main/java/sehati/business/entity/AuditEntity.java` - `AuditEntity` | Algo-C32-01. Tanpa setter agar catatan tidak dapat diubah (KNF05) |
+| C33 | PasienEntity | Kelas Java | `src/src/main/java/sehati/business/entity/PasienEntity.java` - `PasienEntity` | Algo-C33-01 pada `perbarui()`; `idPasien` dan `nomorRekamMedis` tidak ikut berubah. |
+| C34 | RekamMedisEntity | Kelas | `src/src/main/java/sehati/business/entity/RekamMedisEntity.java` | Algo-C34-01 diisi. Ditambah `getEntriBaru()` dan `kosongkanEntriBaru()` agar `simpanRekamMedis()` dapat membaca dan mengosongkan penampung entri baru. |
 | C35 | KunjunganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C36 | PoliEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C37 | AntreanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C38 | SkriningEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C39 | TandaVitalEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C40 | AmbangRisikoEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C41 | PenandaRisikoEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C42 | PemeriksaanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C43 | DiagnosisEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C44 | KodeICD10Entity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C45 | JadwalKontrolEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C46 | ResepEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C47 | ItemResepEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C48 | ObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C49 | BetsObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C50 | PenerimaanObatEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C38 | SkriningEntity | Kelas | `src/src/main/java/sehati/business/entity/SkriningEntity.java` | Ditambah atribut `tandaVital` dan `getTandaVital()` (Tabel B.1). |
+| C39 | TandaVitalEntity | Kelas | `src/src/main/java/sehati/business/entity/TandaVitalEntity.java` | Algo-C39-01. Ditambah atribut `waktu` (Tabel B.1). |
+| C40 | AmbangRisikoEntity | Kelas | `src/src/main/java/sehati/business/entity/AmbangRisikoEntity.java` | Algo-C40-01. |
+| C41 | PenandaRisikoEntity | Kelas | `src/src/main/java/sehati/business/entity/PenandaRisikoEntity.java` | Konstanta `STATUS_AKTIF` dan `STATUS_DICABUT` ditambahkan. |
+| C42 | PemeriksaanEntity | Kelas Java | `src/src/main/java/sehati/business/entity/PemeriksaanEntity.java` - `PemeriksaanEntity` | Atribut sesuai Tabel 4.1 dengan getter dan setter. `kunci()` menolak penguncian kedua dengan `IllegalStateException`. |
+| C43 | DiagnosisEntity | Kelas Java | `src/src/main/java/sehati/business/entity/DiagnosisEntity.java` - `DiagnosisEntity` | Atribut sesuai Tabel 4.1. `ringkas()` mengembalikan "kode - deskripsi". |
+| C44 | KodeICD10Entity | Kelas Java | `src/src/main/java/sehati/business/entity/KodeICD10Entity.java` - `KodeICD10Entity` | Atribut sesuai Tabel 4.1. `cocok()` mewujudkan Algo-C44-01 tanpa membedakan huruf besar dan kecil. |
+| C45 | JadwalKontrolEntity | Kelas Java | `src/src/main/java/sehati/business/entity/JadwalKontrolEntity.java` - `JadwalKontrolEntity` | Atribut sesuai Tabel 4.1, ditambah konstanta `STATUS_TERJADWAL` dan `STATUS_SELESAI`. `tandaiSelesai()` menolak jadwal yang tidak berstatus terjadwal. |
+| C46 | ResepEntity | Kelas Java | `src/src/main/java/sehati/business/entity/ResepEntity.java` - `ResepEntity` | Atribut sesuai Tabel 4.1, dengan komposisi `daftarItem`. `perbaruiStatus()` mewujudkan Algo-C46-01 dengan konstanta `STATUS_MENUNGGU`, `STATUS_SELESAI_DILAYANI`, dan `STATUS_DIKEMBALIKAN`. |
+| C47 | ItemResepEntity | Kelas Java | `src/src/main/java/sehati/business/entity/ItemResepEntity.java` - `ItemResepEntity` | Atribut sesuai Tabel 4.1. `cukupStok()` mengembalikan `stok >= jumlah`. |
+| C48 | ObatEntity | Kelas Java | `src/src/main/java/sehati/business/entity/ObatEntity.java` - `ObatEntity` | Atribut sesuai Tabel 4.1. `kurangiStok()`, `tambahStok()`, dan `diBawahAmbang()` mewujudkan Algo-C48-01 dan hanya mengubah objek di memori; penulisan ke basis data lewat `DataFarmasiBoundary.simpanStok()`. |
+| C49 | BetsObatEntity | Kelas Java | `src/src/main/java/sehati/business/entity/BetsObatEntity.java` - `BetsObatEntity` | Atribut sesuai Tabel 4.1. `kurangi()` dan `mendekatiKedaluwarsa()` mewujudkan Algo-C49-01; bets yang sudah lewat tanggalnya ikut terhitung menjelang kedaluwarsa. |
+| C50 | PenerimaanObatEntity | Kelas Java | `src/src/main/java/sehati/business/entity/PenerimaanObatEntity.java` - `PenerimaanObatEntity` | Atribut sesuai Tabel 4.1, dengan agregasi `daftarBets`. `totalJumlah()` mewujudkan Algo-C50-01. |
 | C51 | DaftarPantauEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C52 | TindakLanjutEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C53 | LaporanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C54 | BundelFHIREntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C54 | BundelFHIREntity | Kelas Java | `src/src/main/java/sehati/business/entity/BundelFHIREntity.java` - `BundelFHIREntity` | Algo-C54-01: `tandaiTerkirim()` dan `tandaiGagal()` menolak bundel yang sudah terkirim |
 | C55 | PencadanganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C56 | DataAkunBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C57 | DataPasienBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C58 | DataKunjunganBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C59 | DataKlinisBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C56 | DataAkunBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataAkunBoundary.java` - `DataAkunBoundary` | Q-C56-01 sampai Q-C56-08 sebagai konstanta `Q_C56_xx` |
+| C57 | DataPasienBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataPasienBoundary.java` | Q-C57-01 s.d. Q-C57-11 sebagai konstanta `Q_C57_xx`, Algo-C57-01 pada `polaPencarian()`. Pengerjaan Humam menggantikan Steven (#5). |
+| C58 | DataKunjunganBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataKunjunganBoundary.java` | Q-C58-01 s.d. Q-C58-12 sebagai konstanta `Q_C58_xx`, Algo-C58-01 pada `ambilAntrean()` dan `simpanAntrean()`. Pengerjaan Humam menggantikan Steven (#5). |
+| C59 | DataKlinisBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataKlinisBoundary.java` - `DataKlinisBoundary` | Atribut `koneksi` diterima lewat konstruktor dari `Manager`. Bagian pemeriksaan: `cariKodeICD10`, `simpanPemeriksaan`, `ambilPemeriksaan`, `simpanJadwalKontrol`, dan `ambilJadwalKontrol` menjalankan konstanta `Q_C59_11` sampai `Q_C59_17` lewat `PreparedStatement`. `simpanPemeriksaan` mewujudkan Algo-C59-02 dan melempar `IllegalStateException` bila baris lama sudah terkunci. Tambahan: `ambilDiagnosis()` dengan kueri Q-C59-18 untuk memuat draf (B.1). |
 | C60 | DataPantauBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C61 | DataFarmasiBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C61 | DataFarmasiBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataFarmasiBoundary.java` - `DataFarmasiBoundary` | Atribut `koneksi` diterima lewat konstruktor dari `Manager`. Sepuluh operasi publik menjalankan konstanta `Q_C61_01` sampai `Q_C61_15` lewat `PreparedStatement`. `ambilObat`, `ambilBets`, dan `kunciResep` memakai `FOR UPDATE` (KF23, KNF11). `simpanPenerimaan` mewujudkan Algo-C61-01 dan melempar `IllegalArgumentException("nomorBets")` untuk bets ganda. `simpanStok`, `simpanPenerimaan`, dan `simpanResep` memakai pola `transaksiSendiri` (aturan 1 Subbab 5.56). Item resep dibaca ke `ResepEntity.daftarItem`. Tambahan UC07: `ambilPasienResep()` menjalankan `Q_C61_16` agar identitas pasien seluruh antrean diambil dalam satu kueri (B.1). |
 | C62 | DataLaporanBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C63 | DataSinkronisasiBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C63 | DataSinkronisasiBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataSinkronisasiBoundary.java` - `DataSinkronisasiBoundary` | Q-C63-01 s.d. Q-C63-03 sebagai konstanta `Q_C63_xx`; `simpanBundel`, `ambilTertunda`, `perbaruiBundel` lewat `PreparedStatement`; `tulisArsipTerenkripsi` mewujudkan Algo-C63-01 (PBKDF2 600k + AES-GCM) |
 | C64 | DataPencadanganBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 
 Catatan:
