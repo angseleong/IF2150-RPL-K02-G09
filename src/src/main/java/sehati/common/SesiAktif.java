@@ -10,16 +10,29 @@ public final class SesiAktif {
 
     // volatile karena Manager dapat dipanggil dari Task di luar JavaFX Application Thread.
     private static volatile SesiEntity sesi;
+    // SesiEntity tidak punya kolom peran, jadi dibawa di sini untuk cek hak akses
+    private static volatile String peran;
 
     private SesiAktif() {
     }
 
     public static void pasang(SesiEntity s) {
+        pasang(s, null);
+    }
+
+    public static void pasang(SesiEntity s, String peranPengguna) {
+        peran = peranPengguna;
         sesi = s;
     }
 
     public static void lepas() {
         sesi = null;
+        peran = null;
+    }
+
+    // null kalau belum ada yang masuk
+    public static String peran() {
+        return ambil() == null ? null : peran;
     }
 
     /**
