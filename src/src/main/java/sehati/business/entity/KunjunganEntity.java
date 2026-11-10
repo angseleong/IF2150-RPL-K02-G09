@@ -30,11 +30,11 @@ public class KunjunganEntity {
     }
 
     public void perbaruiStatus(String status) {
-        throw new UnsupportedOperationException("TODO");
+        this.status = status;
     }
 
     public boolean aktifHariIni() {
-        throw new UnsupportedOperationException("TODO");
+        return "AKTIF".equals(status) && tanggal != null && tanggal.equals(LocalDate.now());
     }
 
     public int getIdKunjungan() {
