@@ -107,6 +107,12 @@ public class SinkronisasiManager {
         return data.tulisArsipTerenkripsi(daftar, lokasi);
     }
 
+    // Pemeriksaan ringan tanpa basis data untuk indikator bilah aplikasi (KF22)
+    public boolean periksaKoneksi() {
+        daring = gatewaySupplier.get().periksaKoneksi();
+        return daring;
+    }
+
     public boolean isDaring() {
         return daring;
     }

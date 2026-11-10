@@ -25,7 +25,6 @@
     <VBox fx:id="panelDasbor" styleClass="panel-dasbor" spacing="14" HBox.hgrow="ALWAYS">
         <Label fx:id="labelDasbor" styleClass="judul-panel"/>
         <FlowPane fx:id="kartuMenu" hgap="10" vgap="10"/>
-        <!-- TODO(#21): tampilkan bila pencadangan terakhir gagal (I-01-08) -->
         <PanelPeringatan fx:id="panelPencadangan" visible="false"
                          pesan="Pencadangan terakhir gagal. Hubungi Petugas Administrasi."/>
         <Label fx:id="labelAksesDitolak" styleClass="pesan-kolom" wrapText="true"/>

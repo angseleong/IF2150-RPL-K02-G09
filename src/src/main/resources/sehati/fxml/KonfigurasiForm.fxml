@@ -1,6 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import sehati.presentation.PanelPeringatan?>
 
-<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="sehati.presentation.KonfigurasiForm" styleClass="halaman"/>
+<VBox fx:id="akar" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="sehati.presentation.KonfigurasiForm" styleClass="halaman">
+    <TabPane fx:id="tabKonfigurasi" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <Tab text="Akun Pengguna">
+            <HBox spacing="20" styleClass="halaman">
+                <TableView fx:id="tabelAkun" HBox.hgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="kolomAkunNama" text="Nama Pengguna" prefWidth="200"/>
+                        <TableColumn fx:id="kolomAkunPeran" text="Peran" prefWidth="180"/>
+                        <TableColumn fx:id="kolomAkunStatus" text="Status" prefWidth="100"/>
+                    </columns>
+                </TableView>
+                <VBox styleClass="kartu" spacing="8" minWidth="320" maxWidth="320">
+                    <Label text="Formulir Akun" styleClass="judul-panel"/>
+                    <Label text="Nama pengguna" styleClass="label-kolom"/>
+                    <TextField fx:id="kolomNamaPengguna"/>
+                    <Label fx:id="pesanNamaPengguna" styleClass="pesan-kolom" visible="false"/>
+                    <Label text="Peran" styleClass="label-kolom"/>
+                    <ComboBox fx:id="kolomPeran" maxWidth="Infinity"/>
+                    <Label text="Kata sandi (kosong = tidak diganti)" styleClass="label-kolom"/>
+                    <PasswordField fx:id="kolomKataSandi"/>
+                    <HBox spacing="8">
+                        <Button fx:id="tombolSimpanAkun" text="Simpan (Ctrl+S)" styleClass="tombol-utama"/>
+                        <Button fx:id="tombolAkunBaru" text="Akun Baru (Ctrl+N)" styleClass="tombol-kedua"/>
+                    </HBox>
+                    <Button fx:id="tombolNonaktifkan" text="Nonaktifkan" styleClass="tombol-kedua" disable="true"/>
+                </VBox>
+            </HBox>
+        </Tab>
+        <Tab text="Data Master">
+            <HBox spacing="20" styleClass="halaman">
+                <VBox styleClass="kartu" spacing="8" minWidth="320" maxWidth="320">
+                    <Label text="Ambang Risiko" styleClass="judul-panel"/>
+                    <TableView fx:id="tabelAmbang" prefHeight="140">
+                        <columns>
+                            <TableColumn fx:id="kolomAmbangJenis" text="Jenis Risiko" prefWidth="170"/>
+                            <TableColumn fx:id="kolomAmbangNilai" text="Nilai Batas" prefWidth="110"/>
+                        </columns>
+                    </TableView>
+                    <Label text="Nilai batas baru (lebih dari nol)" styleClass="label-kolom"/>
+                    <TextField fx:id="kolomNilaiAmbang"/>
+                    <Button fx:id="tombolSimpanAmbang" text="Simpan (Ctrl+S)" styleClass="tombol-utama"/>
+                </VBox>
+                <VBox styleClass="kartu" spacing="8" HBox.hgrow="ALWAYS">
+                    <Label text="Obat" styleClass="judul-panel"/>
+                    <TableView fx:id="tabelObat" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="kolomObatNama" text="Nama Obat" prefWidth="200"/>
+                            <TableColumn fx:id="kolomObatSediaan" text="Sediaan" prefWidth="140"/>
+                            <TableColumn fx:id="kolomObatStok" text="Stok" prefWidth="70"/>
+                            <TableColumn fx:id="kolomObatMinimum" text="Stok Min." prefWidth="80"/>
+                        </columns>
+                    </TableView>
+                    <Label text="Tambah jenis obat baru (stok diisi lewat Persediaan Obat)" styleClass="label-kolom"/>
+                    <HBox spacing="8">
+                        <TextField fx:id="kolomNamaObat" promptText="Nama obat" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="kolomSediaan" promptText="Sediaan, mis. tablet 500 mg" prefWidth="170"/>
+                        <TextField fx:id="kolomStokMinimum" promptText="Stok min." prefWidth="80"/>
+                        <Button fx:id="tombolTambahObat" text="Tambah Obat" styleClass="tombol-kedua"/>
+                    </HBox>
+                </VBox>
+                <VBox styleClass="kartu" spacing="8" minWidth="220" maxWidth="220">
+                    <Label text="Poli" styleClass="judul-panel"/>
+                    <ListView fx:id="daftarPoli" VBox.vgrow="ALWAYS"/>
+                    <Label text="Nama poli (pilih untuk ganti nama)" styleClass="label-kolom"/>
+                    <TextField fx:id="kolomNamaPoli"/>
+                    <HBox spacing="8">
+                        <Button fx:id="tombolSimpanPoli" text="Simpan Poli" styleClass="tombol-kedua"/>
+                        <Button fx:id="tombolPoliBaru" text="Poli Baru" styleClass="tombol-kedua"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+        </Tab>
+        <Tab text="Pemeliharaan Basis Data">
+            <VBox spacing="12" styleClass="halaman">
+                <VBox styleClass="kartu" spacing="8" maxWidth="640">
+                    <Label text="Status Pencadangan" styleClass="judul-panel"/>
+                    <GridPane hgap="16" vgap="6">
+                        <Label text="Waktu" styleClass="label-kolom" GridPane.rowIndex="0"/>
+                        <Label fx:id="labelWaktuCadangan" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                        <Label text="Ukuran" styleClass="label-kolom" GridPane.rowIndex="1"/>
+                        <Label fx:id="labelUkuranCadangan" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                        <Label text="Status" styleClass="label-kolom" GridPane.rowIndex="2"/>
+                        <Label fx:id="labelStatusCadangan" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                        <Label text="Lokasi media" styleClass="label-kolom" GridPane.rowIndex="3"/>
+                        <Label fx:id="labelLokasiCadangan" wrapText="true"
+                               GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                    </GridPane>
+                </VBox>
+                <PanelPeringatan fx:id="peringatanCadangan" visible="false" maxWidth="640"/>
+                <HBox spacing="10">
+                    <Button fx:id="tombolPencadangan" text="Jalankan Pencadangan" styleClass="tombol-utama"/>
+                    <ProgressIndicator fx:id="penandaBerjalan" prefWidth="24" prefHeight="24"/>
+                </HBox>
+            </VBox>
+        </Tab>
+    </TabPane>
+    <Label fx:id="bilahPesan" styleClass="label-kolom"/>
+</VBox>

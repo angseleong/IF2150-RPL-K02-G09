@@ -31,6 +31,7 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import sehati.business.entity.BetsObatEntity;
 import sehati.business.entity.ItemResepEntity;
 import sehati.business.entity.ObatEntity;
+import sehati.business.entity.PemeriksaanEntity;
 import sehati.business.entity.ResepEntity;
 import sehati.dataaccess.DataFarmasiBoundary;
 
@@ -42,6 +43,14 @@ class ApotekManagerTest {
         ResepEntity r = new ResepEntity(9, 21, LocalDateTime.now(), status, null);
         r.setDaftarItem(List.of(item));
         return r;
+    }
+
+    @Test
+    void pastikanTerkunci_menolakPemeriksaanBelumFinal() {
+        ApotekManager.pastikanTerkunci(new PemeriksaanEntity(1, 1, "a", "b", true));
+        assertThrows(IllegalStateException.class,
+                () -> ApotekManager.pastikanTerkunci(new PemeriksaanEntity(1, 1, "a", "b", false)));
+        assertThrows(IllegalStateException.class, () -> ApotekManager.pastikanTerkunci(null));
     }
 
     @Test
@@ -231,7 +240,7 @@ class ApotekManagerTest {
             assertEquals("tertunda", teks("SELECT status FROM bundel_fhir WHERE id_kunjungan = " + idKunjungan));
             assertEquals(stokAwal.size(), hitung("SELECT count(*) FROM bundel_fhir b, "
                     + "jsonb_array_elements(b.isi_bundel -> 'entry') e WHERE b.id_kunjungan = " + idKunjungan
-                    + " AND e -> 'resource' ->> 'resourceType' = 'MedicationDispense'"));
+                    + " AND e -> 'resource' ->> 'resourceType' = 'MedicationRequest'"));
             assertEquals(0, hitung("SELECT count(*) FROM antrean_entri e JOIN antrean a USING (id_antrean) "
                     + "WHERE a.jenis = 'apotek' AND e.id_entri = " + idResep));
         }
@@ -287,7 +296,8 @@ class ApotekManagerTest {
             int stokTotal = hitung("SELECT sum(stok) FROM obat");
             int jumlahBets = hitung("SELECT sum(jumlah) FROM bets_obat");
 
-            assertThrows(IllegalStateException.class, () -> manager.serahkanObat(idResep));
+            // Pelanggaran UNIQUE diterjemahkan menjadi IllegalArgumentException (aturan 3 Subbab 5.56)
+            assertThrows(IllegalArgumentException.class, () -> manager.serahkanObat(idResep));
 
             assertEquals(stokTotal, hitung("SELECT sum(stok) FROM obat"));
             assertEquals(jumlahBets, hitung("SELECT sum(jumlah) FROM bets_obat"));

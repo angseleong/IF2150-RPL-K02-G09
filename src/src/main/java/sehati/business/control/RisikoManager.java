@@ -2,6 +2,7 @@ package sehati.business.control;
 
 import sehati.business.entity.AmbangRisikoEntity;
 import sehati.business.entity.DaftarPantauEntity;
+import sehati.business.entity.JadwalKontrolEntity;
 import sehati.business.entity.KunjunganEntity;
 import sehati.business.entity.PenandaRisikoEntity;
 import sehati.business.entity.TandaVitalEntity;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 public class RisikoManager {
 
-    static final String STATUS_BELUM_DITINDAKLANJUTI = "belum ditindaklanjuti";
+    static final String JENIS_KUNJUNGAN_ULANG = "kunjungan ulang";
     private static final int JUMLAH_RIWAYAT = 3;
 
     /**
@@ -90,7 +91,7 @@ public class RisikoManager {
     }
 
     private void masukkanKeDaftarPantau(DataPantauBoundary dataPantau, int idPasien, String jenis) {
-        dataPantau.simpanEntri(new DaftarPantauEntity(0, idPasien, jenis, STATUS_BELUM_DITINDAKLANJUTI));
+        dataPantau.simpanEntri(new DaftarPantauEntity(0, idPasien, jenis, DaftarPantauEntity.STATUS_BELUM));
     }
 
     /**
@@ -104,8 +105,29 @@ public class RisikoManager {
         }
     }
 
+    /**
+     * Menggabungkan entri risiko yang belum selesai dengan jadwal kontrol yang belum punya entri (Algo-C21-02).
+     */
     public List<DaftarPantauEntity> muatEntriAktif() {
-        // TODO(#18): gabungkan entri risiko dan jadwal kontrol (Algo-C21-02).
-        throw new UnsupportedOperationException("TODO");
+        try (Connection koneksi = KoneksiBasisData.buka()) {
+            return SkriningManager.dalamTransaksi(koneksi, () -> muatEntriAktif(koneksi));
+        } catch (SQLException e) {
+            throw SkriningManager.galatTeknis("Daftar pantau gagal dimuat", e);
+        }
+    }
+
+    List<DaftarPantauEntity> muatEntriAktif(Connection koneksi) {
+        DataPantauBoundary dataPantau = new DataPantauBoundary(koneksi);
+        List<DaftarPantauEntity> entri = dataPantau.ambilEntri();
+        // Q-C59-17 hanya mengembalikan jadwal terjadwal yang belum memicu entri, sehingga tidak ada entri ganda.
+        for (JadwalKontrolEntity j : new DataKlinisBoundary(koneksi).ambilJadwalKontrol()) {
+            DaftarPantauEntity e = new DaftarPantauEntity(0, j.getIdPasien(), JENIS_KUNJUNGAN_ULANG,
+                    DaftarPantauEntity.STATUS_BELUM);
+            // Disimpan agar punya idEntri untuk tindak lanjut.
+            dataPantau.simpanEntri(e);
+            e.setTanggalPemicu(j.getTanggalRencana());
+            entri.add(e);
+        }
+        return entri;
     }
 }

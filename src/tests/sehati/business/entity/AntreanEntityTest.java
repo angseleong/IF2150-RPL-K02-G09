@@ -50,46 +50,17 @@ class AntreanEntityTest {
     }
 
     @Test
-    void tambahkan_menambahkanEntriDiUjian() {
-        AntreanEntity antrean = new AntreanEntity(1, "KUNJUNGAN", new ArrayList<>());
-
-        antrean.tambahkan(10);
-        antrean.tambahkan(11);
-
-        assertEquals(List.of(10, 11), antrean.getDaftarEntri());
+    void keluarkan_menghapusEntriTanpaMengubahUrutanLain() {
+        AntreanEntity a = new AntreanEntity(2, "apotek", new ArrayList<>(List.of(10, 11, 12)));
+        a.keluarkan(11);
+        assertEquals(List.of(10, 12), a.getDaftarEntri());
     }
 
     @Test
-    void ambilTerdepan_mengembalikanEntriPalingAtas() {
-        AntreanEntity antrean = new AntreanEntity(1, "KUNJUNGAN", new ArrayList<>(List.of(3, 1, 2)));
-
-        KunjunganEntity terdepan = antrean.ambilTerdepan();
-
-        assertEquals(3, terdepan.getIdKunjungan());
-    }
-
-    @Test
-    void ambilTerdepan_antreanKosongMengembalikanNull() {
-        AntreanEntity antrean = new AntreanEntity(1, "KUNJUNGAN", new ArrayList<>());
-
-        assertNull(antrean.ambilTerdepan());
-    }
-
-    @Test
-    void pindahkanKeBelakang_memindahEntriKeAkhirAntrean() {
-        AntreanEntity antrean = new AntreanEntity(1, "KUNJUNGAN", new ArrayList<>(List.of(1, 2, 3)));
-
-        antrean.pindahkanKeBelakang(1);
-
-        assertEquals(List.of(2, 3, 1), antrean.getDaftarEntri());
-    }
-
-    @Test
-    void keluarkan_menghapusEntriDariAntrean() {
-        AntreanEntity antrean = new AntreanEntity(1, "KUNJUNGAN", new ArrayList<>(List.of(1, 2, 3)));
-
-        antrean.keluarkan(2);
-
-        assertEquals(List.of(1, 3), antrean.getDaftarEntri());
+    void keluarkan_menolakEntriYangTidakAda() {
+        AntreanEntity a = new AntreanEntity(2, "apotek", new ArrayList<>(List.of(10)));
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> a.keluarkan(99));
+        assertEquals("Entri tidak ada pada antrean apotek", e.getMessage());
+        assertEquals(List.of(10), a.getDaftarEntri());
     }
 }

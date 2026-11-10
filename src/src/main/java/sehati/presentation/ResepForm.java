@@ -137,6 +137,12 @@ public class ResepForm {
                 : pasien.getNama() + "  /  " + pasien.getNomorRekamMedis();
         labelPasien.setText("Pasien: " + identitas + "  /  Kunjungan " + kunjungan.getTanggal().format(TANGGAL));
         tampilkanFormulir(kunjungan);
+        // Dokter perlu tahu alasan apotek sebelum menyusun resep revisi
+        LatarBelakang.jalankan(() -> resepManager.alasanDikembalikan(kunjungan.getIdKunjungan()), alasan -> {
+            if (alasan != null) {
+                tampilkanPesan("Resep sebelumnya dikembalikan apotek: " + alasan);
+            }
+        }, this::tampilkanGalat);
     }
 
     /**

@@ -63,6 +63,12 @@ public class DataFarmasiBoundary {
             + "FROM item_resep WHERE id_resep = ANY (?) ORDER BY id_resep, id_obat";
     private static final String Q_C61_15 = "SELECT id_resep, id_kunjungan, waktu_masuk, status, catatan "
             + "FROM resep WHERE id_resep = ? FOR UPDATE";
+    // Tambahan untuk data master I-15, tidak ada di Tabel 5.61.3. Stok awal 0, bertambah lewat penerimaan (UC08).
+    private static final String Q_C61_17 = "INSERT INTO obat (nama_obat, sediaan, stok, ambang_minimum) "
+            + "VALUES (?, ?, 0, ?) RETURNING id_obat";
+    // Tambahan (B.1): resep satu kunjungan untuk kunci rekam medis dan resep yang dikembalikan apotek.
+    private static final String Q_C61_18 = "SELECT id_resep, id_kunjungan, waktu_masuk, status, catatan FROM resep "
+            + "WHERE id_kunjungan = ? ORDER BY waktu_masuk, id_resep";
 
     // Tambahan implementasi (B.1): identitas pasien seluruh resep antrean dalam satu kueri, bukan satu per resep.
     private static final String Q_C61_16 = "SELECT r.id_resep, p.id_pasien, p.nik, p.nomor_rekam_medis, p.nama, "
@@ -78,6 +84,22 @@ public class DataFarmasiBoundary {
 
     public DataFarmasiBoundary(Connection koneksi) {
         this.koneksi = koneksi;
+    }
+
+    // Q-C61-17, mendaftarkan jenis obat baru lalu mengisi idObat
+    public void tambahObat(ObatEntity o) {
+        try (PreparedStatement ps = koneksi.prepareStatement(Q_C61_17)) {
+            ps.setString(1, o.getNamaObat());
+            ps.setString(2, o.getSediaan());
+            ps.setInt(3, o.getAmbangMinimum());
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                o.setIdObat(rs.getInt(1));
+                o.setStok(0);
+            }
+        } catch (SQLException e) {
+            throw galat("Gagal menambah obat", e);
+        }
     }
 
     /**
@@ -265,6 +287,22 @@ public class DataFarmasiBoundary {
             throw galat("Gagal menyimpan resep", e);
         } finally {
             akhiriTransaksi(transaksiSendiri);
+        }
+    }
+
+    // Q-C61-18, seluruh resep satu kunjungan tanpa item, terlama lebih dulu
+    public List<ResepEntity> ambilResepKunjungan(int idKunjungan) {
+        try (PreparedStatement ps = koneksi.prepareStatement(Q_C61_18)) {
+            ps.setInt(1, idKunjungan);
+            List<ResepEntity> hasil = new ArrayList<>();
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    hasil.add(bacaResep(rs));
+                }
+            }
+            return hasil;
+        } catch (SQLException e) {
+            throw galat("Gagal mengambil resep kunjungan", e);
         }
     }
 
