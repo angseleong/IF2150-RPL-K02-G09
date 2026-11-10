@@ -17,6 +17,7 @@ import sehati.business.entity.PoliEntity;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -32,7 +33,8 @@ public class KunjunganForm {
     private static final Logger LOG = Logger.getLogger(KunjunganForm.class.getName());
 
     private static final String STATUS_AWAL = "menunggu skrining";
-    private static final DateTimeFormatter FORMAT_TANGGAL = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy");
+    private static final DateTimeFormatter FORMAT_TANGGAL = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy",
+            Locale.forLanguageTag("id-ID"));
 
     private final KunjunganManager kunjunganManager = new KunjunganManager();
 
@@ -181,8 +183,9 @@ public class KunjunganForm {
         if (poliTerpilih != null && poliTerpilih.getIdPoli() == kunjungan.getIdPoli()) {
             return poliTerpilih.getNamaPoli();
         }
-        // Nama poli disebut bila tiket diperlihatkan dari luar alur pilihan poli.
-        return "Poli nomor " + kunjungan.getIdPoli();
+        // Kunjungan aktif bisa berada di poli lain dari pilihan petugas
+        return pilihanPoli.getItems().stream().filter(p -> p.getIdPoli() == kunjungan.getIdPoli())
+                .map(PoliEntity::getNamaPoli).findFirst().orElse("Poli nomor " + kunjungan.getIdPoli());
     }
 
     /**
@@ -219,6 +222,7 @@ public class KunjunganForm {
             } catch (RuntimeException galat) {
                 LOG.log(Level.SEVERE, keterangan, galat);
                 tampilkanNotifikasi(galat.getMessage());
+                pulihkanTombol();
             }
         });
         task.setOnFailed(e -> {
@@ -226,8 +230,14 @@ public class KunjunganForm {
             LOG.log(Level.SEVERE, keterangan, galat);
             tampilkanNotifikasi(galat == null || galat.getMessage() == null
                     ? "Terjadi kesalahan" : galat.getMessage());
+            pulihkanTombol();
         });
         new Thread(task, keterangan).start();
+    }
+
+    // Permintaan gagal tidak boleh membuat tombol mati terus
+    private void pulihkanTombol() {
+        tombolBukaKunjungan.setDisable(poliTerpilih == null);
     }
 
     private void tampilkanNotifikasi(String pesan) {
