@@ -170,8 +170,8 @@ public class PasienForm {
         kolomTelepon.setText(dataFormulir.getNomorTelepon() == null ? "" : dataFormulir.getNomorTelepon());
         hapusMasalahNik();
         tampilkanNotifikasi("");
-        tombolBukaKunjungan.setDisable(true);
-        // TODO(#12): aktifkan tombol Buka Kunjungan setelah pasien tersimpan.
+        // Tombol Buka Kunjungan aktif hanya untuk pasien yang sudah tersimpan (C02 → C03).
+        tombolBukaKunjungan.setDisable(pasien == null || dataFormulir.getIdPasien() == 0);
         if (pasien == null) {
             kolomNik.requestFocus();
         } else {
@@ -199,12 +199,12 @@ public class PasienForm {
         PasienEntity data = isianKeData();
         tombolSimpan.setDisable(true);
         if (data.getIdPasien() == 0) {
-            // TODO(#12): aktifkan tombol Buka Kunjungan setelah pasien terdaftar.
             jalankan(() -> pasienManager.daftarkanPasien(data), pasien -> {
                 dataFormulir = pasien;
                 kolomRm.setText(pasien.getNomorRekamMedis());
                 tampilkanNotifikasi("Pendaftaran berhasil, nomor rekam medis " + pasien.getNomorRekamMedis());
                 tombolSimpan.setDisable(false);
+                tombolBukaKunjungan.setDisable(false);
                 kirimPencarian(kolomPencarian.getText());
             }, "Pendaftaran pasien", true);
         } else {
@@ -243,7 +243,13 @@ public class PasienForm {
 
     @FXML
     private void bukaKunjungan() {
-        // TODO(#12): buka KunjunganForm untuk pasien tersimpan dan aktifkan tombol ini.
+        if (dataFormulir == null || dataFormulir.getIdPasien() == 0) {
+            tampilkanNotifikasi("Simpan data pasien terlebih dahulu.");
+            return;
+        }
+        // C03 membuka layar kunjungan untuk pasien yang sedang tampil (Algo-C03-01).
+        KunjunganForm kunjunganForm = Navigasi.buka("KunjunganForm");
+        kunjunganForm.buka(dataFormulir);
     }
 
     private boolean tampilkanJikaIsianKosong() {
