@@ -2,6 +2,7 @@ package sehati.presentation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.InputStream;
 import java.util.Map;
@@ -33,6 +34,11 @@ class NavigasiTest {
             }
             Class.forName(kelas).getConstructor();
         }
+    }
+
+    @Test
+    void buka_menolakLayarTidakDikenal() {
+        assertThrows(IllegalArgumentException.class, () -> Navigasi.buka("LayarTidakAda"));
     }
 
     @Test
