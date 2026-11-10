@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,6 +37,9 @@ public class DataAkunBoundary {
             + "VALUES (?, ?, ?, ?) ON CONFLICT (id_sesi) DO UPDATE SET status_aktif = EXCLUDED.status_aktif";
     private static final String Q_C56_07 = "UPDATE sesi SET status_aktif = FALSE WHERE id_pengguna = ? AND status_aktif";
     private static final String Q_C56_08 = "INSERT INTO audit (id_pengguna, waktu, deskripsi) VALUES (?, ?, ?)";
+    // Tambahan untuk tabel akun I-15-03, tidak ada di Tabel 5.56.3
+    private static final String Q_C56_09 = "SELECT id_pengguna, nama_pengguna, kata_sandi_hash, peran, status "
+            + "FROM pengguna ORDER BY nama_pengguna";
 
     private Connection koneksi;
 
@@ -63,6 +68,20 @@ public class DataAkunBoundary {
             return bacaPengguna(ps);
         } catch (SQLException e) {
             throw galat("Gagal mengambil pengguna", e);
+        }
+    }
+
+    // Q-C56-09, untuk daftar akun di I-15
+    public List<PenggunaEntity> semuaPengguna() {
+        try (PreparedStatement ps = koneksi.prepareStatement(Q_C56_09); ResultSet rs = ps.executeQuery()) {
+            List<PenggunaEntity> hasil = new ArrayList<>();
+            while (rs.next()) {
+                hasil.add(new PenggunaEntity(rs.getInt("id_pengguna"), rs.getString("nama_pengguna"),
+                        rs.getString("kata_sandi_hash"), rs.getString("peran"), rs.getString("status")));
+            }
+            return hasil;
+        } catch (SQLException e) {
+            throw galat("Gagal mengambil daftar akun", e);
         }
     }
 
