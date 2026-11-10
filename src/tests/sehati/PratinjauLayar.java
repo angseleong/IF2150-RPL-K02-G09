@@ -2,6 +2,7 @@ package sehati;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import sehati.business.control.AutentikasiManager;
 import sehati.presentation.Navigasi;
 
 /**
@@ -26,9 +27,14 @@ public final class PratinjauLayar {
 
         @Override
         public void start(Stage stage) {
+            String layar = getParameters().getRaw().get(0);
             Navigasi.mulai(stage);
-            Navigasi.mulaiSesi("Pratinjau", "Pemilik Layar");
-            Navigasi.buka(getParameters().getRaw().get(0));
+            // Navigasi menolak peran yang tidak berhak, jadi pakai peran pertama yang boleh membuka layar ini.
+            AutentikasiManager autentikasi = new AutentikasiManager();
+            String peran = java.util.stream.Stream.of("Petugas Administrasi", "Perawat", "Dokter", "Petugas Farmasi")
+                    .filter(p -> autentikasi.periksaHakAkses(p, layar)).findFirst().orElse("Pemilik Layar");
+            Navigasi.mulaiSesi("Pratinjau", peran);
+            Navigasi.buka(layar);
         }
     }
 }

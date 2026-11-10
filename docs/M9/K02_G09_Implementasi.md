@@ -252,7 +252,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 
 | ID Kelas | Nama Kelas Perancangan | Bentuk Implementasi | Lokasi (File dan Nama) | Keterangan |
 | :--- | :--- | :--- | :--- | :--- |
-| C01 | LoginForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C01 | LoginForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/LoginForm.java` - `LoginForm`, `LoginForm.fxml` | Algo-C01-01. Cek hak akses Algo-C01-02 dijalankan di `Navigasi.buka()` agar berlaku untuk semua layar |
 | C02 | PasienForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/PasienForm.java` - `PasienForm`, `src/src/main/resources/sehati/fxml/PasienForm.fxml` | `kirimPencarian()` memakai `PauseTransition` 250 ms dan thread latar (Algo-C02-01). `kirimDataPasien()` mewujudkan Algo-C02-02. Pintasan Ctrl+S/F/N terpasang. Tombol Buka Kunjungan nonaktif dengan TODO sampai #12. |
 | C03 | KunjunganForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C04 | AntreanSkriningForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -267,8 +267,8 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C13 | LaporanForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C14 | SinkronisasiForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C15 | SATUSEHATGateway | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C16 | KonfigurasiForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C17 | AutentikasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C16 | KonfigurasiForm | Kelas Java + FXML | `src/src/main/java/sehati/presentation/KonfigurasiForm.java` - `KonfigurasiForm`, `KonfigurasiForm.fxml` | Algo-C16-01. Pencadangan manual berjalan di `Task` agar layar tidak beku |
+| C17 | AutentikasiManager | Kelas Java | `src/src/main/java/sehati/business/control/AutentikasiManager.java` - `AutentikasiManager` | Algo-C17-01 dan Algo-C17-02, ditambah `tutupSesi()` untuk Keluar dan batas diam 15 menit |
 | C18 | PasienManager | Kelas Java | `src/src/main/java/sehati/business/control/PasienManager.java` - `PasienManager` | `cariPasien()`, `daftarkanPasien()` (Algo-C18-01), `perbaruiPasien()` (Algo-C18-02), `validasiNIK()`. Satu koneksi per operasi. Audit lewat `SesiAktif.idPenggunaSesi()`. `terbitkanNomorRM(DataPasienBoundary)` agar nomor terbit sekali per transaksi. |
 | C19 | KunjunganManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C20 | SkriningManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
@@ -280,7 +280,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C26 | PantauManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C27 | LaporanManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C28 | SinkronisasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C29 | KonfigurasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C29 | KonfigurasiManager | Kelas Java | `src/src/main/java/sehati/business/control/KonfigurasiManager.java` - `KonfigurasiManager` | Algo-C29-01 sampai C29-03. `muatDataMaster()` mengembalikan `DataMaster`, ditambah `simpanPoli()`, `tambahObat()`, dan `jadwalkanPencadangan()` (Tabel B.1) |
 | C30 | PenggunaEntity | Kelas Java | `src/src/main/java/sehati/business/entity/PenggunaEntity.java` - `PenggunaEntity` | Algo-C30-01 lewat jBCrypt, ditambah konstruktor akun baru berstatus "aktif" |
 | C31 | SesiEntity | Kelas Java | `src/src/main/java/sehati/business/entity/SesiEntity.java` - `SesiEntity` | Algo-C31-01. Sesi yang sedang aktif dipegang `sehati.common.SesiAktif` |
 | C32 | AuditEntity | Kelas Java | `src/src/main/java/sehati/business/entity/AuditEntity.java` - `AuditEntity` | Algo-C32-01. Tanpa setter agar catatan tidak dapat diubah (KNF05) |
@@ -306,16 +306,16 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C52 | TindakLanjutEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C53 | LaporanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C54 | BundelFHIREntity | Kelas Java | `src/src/main/java/sehati/business/entity/BundelFHIREntity.java` - `BundelFHIREntity` | Algo-C54-01: `tandaiTerkirim()` dan `tandaiGagal()` menolak bundel yang sudah terkirim |
-| C55 | PencadanganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C56 | DataAkunBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataAkunBoundary.java` - `DataAkunBoundary` | Q-C56-01 sampai Q-C56-08 sebagai konstanta `Q_C56_xx` |
+| C55 | PencadanganEntity | Kelas Java | `src/src/main/java/sehati/business/entity/PencadanganEntity.java` - `PencadanganEntity` | `berhasil()` hanya untuk status "berhasil" |
+| C56 | DataAkunBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataAkunBoundary.java` - `DataAkunBoundary` | Q-C56-01 sampai Q-C56-08 sebagai konstanta `Q_C56_xx`, ditambah Q-C56-09 `semuaPengguna()` untuk daftar akun I-15 (Tabel B.1) |
 | C57 | DataPasienBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataPasienBoundary.java` | Q-C57-01 s.d. Q-C57-11 sebagai konstanta `Q_C57_xx`, Algo-C57-01 pada `polaPencarian()`. Pengerjaan Humam menggantikan Steven (#5). |
 | C58 | DataKunjunganBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataKunjunganBoundary.java` | Q-C58-01 s.d. Q-C58-12 sebagai konstanta `Q_C58_xx`, Algo-C58-01 pada `ambilAntrean()` dan `simpanAntrean()`. Pengerjaan Humam menggantikan Steven (#5). |
 | C59 | DataKlinisBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataKlinisBoundary.java` - `DataKlinisBoundary` | Atribut `koneksi` diterima lewat konstruktor dari `Manager`. Bagian pemeriksaan: `cariKodeICD10`, `simpanPemeriksaan`, `ambilPemeriksaan`, `simpanJadwalKontrol`, dan `ambilJadwalKontrol` menjalankan konstanta `Q_C59_11` sampai `Q_C59_17` lewat `PreparedStatement`. `simpanPemeriksaan` mewujudkan Algo-C59-02 dan melempar `IllegalStateException` bila baris lama sudah terkunci. Tambahan: `ambilDiagnosis()` dengan kueri Q-C59-18 untuk memuat draf (B.1). |
 | C60 | DataPantauBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C61 | DataFarmasiBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataFarmasiBoundary.java` - `DataFarmasiBoundary` | Atribut `koneksi` diterima lewat konstruktor dari `Manager`. Sepuluh operasi publik menjalankan konstanta `Q_C61_01` sampai `Q_C61_15` lewat `PreparedStatement`. `ambilObat`, `ambilBets`, dan `kunciResep` memakai `FOR UPDATE` (KF23, KNF11). `simpanPenerimaan` mewujudkan Algo-C61-01 dan melempar `IllegalArgumentException("nomorBets")` untuk bets ganda. `simpanStok`, `simpanPenerimaan`, dan `simpanResep` memakai pola `transaksiSendiri` (aturan 1 Subbab 5.56). Item resep dibaca ke `ResepEntity.daftarItem`. Tambahan UC07: `ambilPasienResep()` menjalankan `Q_C61_16` agar identitas pasien seluruh antrean diambil dalam satu kueri (B.1). |
+| C61 | DataFarmasiBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataFarmasiBoundary.java` - `DataFarmasiBoundary` | Atribut `koneksi` diterima lewat konstruktor dari `Manager`. Sepuluh operasi publik menjalankan konstanta `Q_C61_01` sampai `Q_C61_15` lewat `PreparedStatement`. `ambilObat`, `ambilBets`, dan `kunciResep` memakai `FOR UPDATE` (KF23, KNF11). `simpanPenerimaan` mewujudkan Algo-C61-01 dan melempar `IllegalArgumentException("nomorBets")` untuk bets ganda. `simpanStok`, `simpanPenerimaan`, dan `simpanResep` memakai pola `transaksiSendiri` (aturan 1 Subbab 5.56). Item resep dibaca ke `ResepEntity.daftarItem`. Tambahan UC07: `ambilPasienResep()` menjalankan `Q_C61_16` agar identitas pasien seluruh antrean diambil dalam satu kueri (B.1). Ditambah Q-C61-17 `tambahObat()` untuk data master I-15 (Tabel B.1) |
 | C62 | DataLaporanBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C63 | DataSinkronisasiBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataSinkronisasiBoundary.java` - `DataSinkronisasiBoundary` | Q-C63-01 s.d. Q-C63-03 sebagai konstanta `Q_C63_xx`; `simpanBundel`, `ambilTertunda`, `perbaruiBundel` lewat `PreparedStatement`; `tulisArsipTerenkripsi` mewujudkan Algo-C63-01 (PBKDF2 600k + AES-GCM) |
-| C64 | DataPencadanganBoundary | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C64 | DataPencadanganBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataPencadanganBoundary.java` - `DataPencadanganBoundary` | Q-C64-01, Q-C64-02, Algo-C64-01, Algo-C64-02. Lokasi `pg_dump`, `pg_restore`, dan media diatur lewat `.env` |
 
 Catatan:
 - Satu kelas perancangan boleh diwujudkan oleh beberapa file/unit, dan satu file/unit boleh mewujudkan beberapa kelas perancangan. Tuliskan semuanya.

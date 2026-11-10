@@ -27,8 +27,9 @@ public class PencadanganEntity {
         this.ukuranBerkas = ukuranBerkas;
     }
 
+    // "gagal verifikasi" juga dihitung gagal, jadi peringatan tetap muncul untuk arsip rusak
     public boolean berhasil() {
-        throw new UnsupportedOperationException("TODO");
+        return "berhasil".equals(status);
     }
 
     public int getIdPencadangan() {
