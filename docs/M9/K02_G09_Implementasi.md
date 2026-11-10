@@ -227,11 +227,11 @@ Pilih minimal satu fitur yang diprofil.
 
 | Informasi | Keterangan |
 | :--- | :--- |
-| Fitur / proses yang diprofil | *[Nama fitur]* |
-| Alat | *[mis. Chrome DevTools, cProfile, EXPLAIN]* |
-| Temuan (sebelum) | *[Bottleneck yang ditemukan, sertakan angka/tangkapan layar]* |
-| Perbaikan | *[Yang diubah]* |
-| Hasil (sesudah) | *[Perbandingan dengan sebelumnya]* |
+| Fitur / proses yang diprofil | Rekapitulasi laporan periodik (Q-C62-01, Q-C62-02, Q-C62-03) dan pencarian pasien (Q-C57-01/KNF01). |
+| Alat | PostgreSQL 14 dengan `EXPLAIN (ANALYZE, BUFFERS)` dan data sintetis 50.000 rekam medis dari `src/db/seed_besar.sql`. |
+| Temuan (sebelum) | Pada rentang satu tahun penuh, Q-C62-01 37,052 ms, Q-C62-02 23,276 ms, dan Q-C62-03 167,205 ms. Ketiganya memakai sequential scan karena seluruh 50.000 baris `kunjungan` masuk ke rentang. Pada rentang satu bulan, Q-C62-01 3,689 ms, Q-C62-02 3,920 ms, dan Q-C62-03 46,145 ms, sudah memakai `idx_kunjungan_tanggal` atau index unik `(id_poli, tanggal, nomor_antrean)`. Pencarian pasien dengan kata kunci normal 0,283-0,485 ms memakai trigram. Kasus terburuk `%9998%` dan `%RM-9%` yang cocok dengan 50.000 baris tetap 24,529-39,334 ms. Semua operasi jauh di bawah batas KNF01 2 detik. |
+| Perbaikan | Tidak ada perubahan indeks permanen. Indeks `diagnosis(kode_icd10)` sempat diuji, tetapi planner tetap memilih sequential scan. Waktu Q-C62-03 justru 169,897 ms pada rentang setahun dan 53,967 ms pada rentang sebulan, sehingga indeks tersebut dibatalkan. |
+| Hasil (sesudah) | Tidak ada perubahan skema. Indeks yang sudah ada memadai. `idx_kunjungan_tanggal` dipakai untuk rentang sempit, sedangkan rentang setahun penuh memang lebih efisien dengan sequential scan. Indeks trigram menangani pencarian pasien. Operasi terlama 167,205 ms, masih jauh di bawah 2 detik. |
 
 Jika tidak ada perbaikan yang perlu dilakukan, jelaskan hasil profiling dan alasan kenapa fitur tersebut sudah memadai.
 
