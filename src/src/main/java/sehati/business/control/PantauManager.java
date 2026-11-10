@@ -1,5 +1,8 @@
 package sehati.business.control;
 
+import sehati.common.SesiAktif;
+import sehati.dataaccess.DataAkunBoundary;
+import sehati.business.entity.AuditEntity;
 import sehati.business.entity.DaftarPantauEntity;
 import sehati.business.entity.PasienEntity;
 import sehati.business.entity.RekamMedisEntity;
@@ -80,6 +83,8 @@ public class PantauManager {
         try (Connection koneksi = KoneksiBasisData.buka()) {
             SkriningManager.dalamTransaksi(koneksi, () -> {
                 catat(new DataPantauBoundary(koneksi), new DataPasienBoundary(koneksi), idEntri, t);
+                new DataAkunBoundary(koneksi).simpanAudit(AuditEntity.buat(SesiAktif.idPenggunaAudit(),
+                        "Tindak lanjut daftar pantau " + idEntri + ": " + t.getHasilUpaya()));
                 return null;
             });
         } catch (SQLException e) {

@@ -1,7 +1,11 @@
 package sehati.business.control;
 
+import sehati.common.SesiAktif;
+import sehati.dataaccess.DataAkunBoundary;
+import sehati.business.entity.AuditEntity;
 import sehati.business.entity.AntreanEntity;
 import sehati.business.entity.ItemResepEntity;
+import sehati.business.entity.KunjunganEntity;
 import sehati.business.entity.ObatEntity;
 import sehati.business.entity.ResepEntity;
 import sehati.common.KoneksiBasisData;
@@ -74,6 +78,11 @@ public class ResepManager {
         try (Connection koneksi = KoneksiBasisData.buka()) {
             DataFarmasiBoundary dataFarmasi = new DataFarmasiBoundary(koneksi);
             DataKunjunganBoundary dataKunjungan = new DataKunjunganBoundary(koneksi);
+            KunjunganEntity kunjungan = dataKunjungan.ambilKunjungan(idKunjungan);
+            // Kunjungan yang sudah ditutup tidak lagi dilayani apotek
+            if (kunjungan == null || KunjunganEntity.STATUS_SELESAI.equals(kunjungan.getStatus())) {
+                throw new IllegalStateException("Kunjungan sudah selesai, resep harus dikirim sebelum Simpan Final");
+            }
             List<String> kurang = new ArrayList<>();
             // Obat yang sama pada beberapa baris dijumlahkan, agar totalnya tidak lolos dari pemeriksaan per baris.
             Map<Integer, Integer> totalPerObat = new LinkedHashMap<>();
@@ -96,6 +105,8 @@ public class ResepManager {
                 AntreanEntity antrean = dataKunjungan.ambilAntrean("apotek");
                 antrean.tambahkan(resep.getIdResep());
                 dataKunjungan.simpanAntrean(antrean);
+                new DataAkunBoundary(koneksi).simpanAudit(AuditEntity.buat(SesiAktif.idPenggunaAudit(),
+                        "Resep kunjungan " + idKunjungan + " dikirim ke apotek"));
                 koneksi.commit();
             } catch (RuntimeException e) {
                 koneksi.rollback();
@@ -105,6 +116,17 @@ public class ResepManager {
             return resep;
         } catch (SQLException e) {
             throw galatTeknis("Resep gagal dikirim ke apotek", e);
+        }
+    }
+
+    // Alasan pengembalian resep terakhir dari apotek, atau null bila tidak ada (UC07 alternatif 1)
+    public String alasanDikembalikan(int idKunjungan) {
+        try (Connection koneksi = KoneksiBasisData.buka()) {
+            return new DataFarmasiBoundary(koneksi).ambilResepKunjungan(idKunjungan).stream()
+                    .filter(r -> ResepEntity.STATUS_DIKEMBALIKAN.equals(r.getStatus()))
+                    .reduce((a, b) -> b).map(ResepEntity::getCatatan).orElse(null);
+        } catch (SQLException e) {
+            throw galatTeknis("Resep kunjungan gagal dimuat", e);
         }
     }
 

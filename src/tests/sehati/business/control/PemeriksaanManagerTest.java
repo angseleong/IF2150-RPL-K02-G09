@@ -100,8 +100,9 @@ class PemeriksaanManagerTest {
                         + "(SELECT id_pemeriksaan FROM pemeriksaan WHERE id_kunjungan = " + idKunjungan + ")");
                 st.executeUpdate("DELETE FROM pemeriksaan WHERE id_kunjungan = " + idKunjungan);
                 st.executeUpdate("DELETE FROM jadwal_kontrol WHERE tanggal_rencana = DATE '2099-01-01'");
-                st.executeUpdate("DELETE FROM audit WHERE deskripsi = 'Pemeriksaan kunjungan " + idKunjungan
-                        + " dikunci'");
+                st.executeUpdate("DELETE FROM bundel_fhir WHERE id_kunjungan = " + idKunjungan);
+                st.executeUpdate("DELETE FROM audit WHERE deskripsi IN ('Pemeriksaan kunjungan " + idKunjungan
+                        + " dikunci', 'Pemeriksaan kunjungan " + idKunjungan + " disimpan')");
                 st.executeUpdate("UPDATE kunjungan SET status = '" + statusAwal + "' WHERE id_kunjungan = "
                         + idKunjungan);
             }
@@ -134,8 +135,11 @@ class PemeriksaanManagerTest {
 
             assertEquals(1, hitung("SELECT count(*) FROM pemeriksaan WHERE terkunci AND id_kunjungan = "
                     + idKunjungan));
-            assertEquals(1, hitung("SELECT count(*) FROM kunjungan WHERE status = 'selesai diperiksa' "
+            // Tanpa resep, kunjungan langsung ditutup dan dibundel lengkap dengan diagnosis
+            assertEquals(1, hitung("SELECT count(*) FROM kunjungan WHERE status = 'selesai' "
                     + "AND id_kunjungan = " + idKunjungan));
+            assertEquals(1, hitung("SELECT count(*) FROM bundel_fhir b, jsonb_array_elements(b.isi_bundel -> 'entry') e "
+                    + "WHERE e -> 'resource' ->> 'resourceType' = 'Condition' AND b.id_kunjungan = " + idKunjungan));
             assertEquals(1, hitung("SELECT count(*) FROM audit WHERE id_pengguna = 1 AND deskripsi = "
                     + "'Pemeriksaan kunjungan " + idKunjungan + " dikunci'"));
             assertEquals(1, hitung("SELECT count(*) FROM diagnosis d JOIN pemeriksaan p USING (id_pemeriksaan) "

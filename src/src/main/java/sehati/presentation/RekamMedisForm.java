@@ -220,12 +220,7 @@ public class RekamMedisForm {
     }
 
     private boolean bolehMemeriksa() {
-        try {
-            return autentikasiManager.periksaHakAkses(Navigasi.peranSesi(), "PemeriksaanForm");
-        } catch (UnsupportedOperationException e) {
-            // shortcut: hak akses dicek manual sampai periksaHakAkses() terisi di #10, hapus blok ini setelah itu.
-            return "Dokter".equals(Navigasi.peranSesi());
-        }
+        return autentikasiManager.periksaHakAkses(Navigasi.peranSesi(), "PemeriksaanForm");
     }
 
     private void isiRingkasan(RekamMedisEntity rm) {
@@ -254,7 +249,8 @@ public class RekamMedisForm {
     private String labelDaftar(KunjunganEntity k) {
         PasienEntity p = daftarSiapPeriksa.get(k);
         String nama = p == null ? "Pasien " + k.getIdPasien() : p.getNama() + "  |  " + p.getNomorRekamMedis();
-        return "Antrean " + k.getNomorAntrean() + "  -  " + nama;
+        String tanda = KunjunganEntity.STATUS_SELESAI_DIPERIKSA.equals(k.getStatus()) ? "  (resep dikembalikan)" : "";
+        return "Antrean " + k.getNomorAntrean() + "  -  " + nama + tanda;
     }
 
     private XYChart.Series<String, Number> garis(String nama, Function<TandaVitalEntity, Number> nilai) {

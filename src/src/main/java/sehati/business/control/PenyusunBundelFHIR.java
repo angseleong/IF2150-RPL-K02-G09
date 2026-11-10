@@ -1,5 +1,6 @@
 package sehati.business.control;
 
+import sehati.business.entity.DiagnosisEntity;
 import sehati.business.entity.ItemResepEntity;
 import sehati.business.entity.KunjunganEntity;
 import sehati.business.entity.ObatEntity;
@@ -30,11 +31,12 @@ final class PenyusunBundelFHIR {
     }
 
     /**
-     * Skrining boleh null bila kunjungan tidak melalui skrining. Obat dipetakan dengan idObat untuk nama sediaan.
+     * Skrining, diagnosis, dan resep boleh null; kunjungan tanpa resep tetap dibundel (SKPL 2.4 butir 6). Obat
+     * dipetakan dengan idObat untuk nama sediaan.
      */
-    static String susun(KunjunganEntity kunjungan, PasienEntity pasien, SkriningEntity skrining, ResepEntity resep,
-            Map<Integer, ObatEntity> obat, LocalDateTime waktuSerah) {
-        if (kunjungan == null || pasien == null || resep == null) {
+    static String susun(KunjunganEntity kunjungan, PasienEntity pasien, SkriningEntity skrining,
+            DiagnosisEntity diagnosis, ResepEntity resep, Map<Integer, ObatEntity> obat, LocalDateTime waktuResep) {
+        if (kunjungan == null || pasien == null) {
             throw new IllegalStateException("Data kunjungan tidak lengkap untuk menyusun bundel FHIR");
         }
         int id = kunjungan.getIdKunjungan();
@@ -64,9 +66,14 @@ final class PenyusunBundelFHIR {
                         waktu, urnPasien, urnKunjungan);
             }
         }
-        for (ItemResepEntity item : resep.getDaftarItem()) {
-            entri.add(entri(urn(id, "obat-" + item.getIdObat()), "MedicationDispense",
-                    penyerahan(item, obat.get(item.getIdObat()), waktuSerah, urnPasien, urnKunjungan)));
+        if (diagnosis != null) {
+            entri.add(entri(urn(id, "diagnosis"), "Condition", kondisi(diagnosis, urnPasien, urnKunjungan)));
+        }
+        if (resep != null) {
+            for (ItemResepEntity item : resep.getDaftarItem()) {
+                entri.add(entri(urn(id, "obat-" + item.getIdObat()), "MedicationRequest",
+                        permintaanObat(item, obat.get(item.getIdObat()), waktuResep, urnPasien, urnKunjungan)));
+            }
         }
 
         Map<String, Object> bundel = new LinkedHashMap<>();
@@ -116,18 +123,34 @@ final class PenyusunBundelFHIR {
         entri.add(entri(urn(idKunjungan, "observasi-" + kode), "Observation", r));
     }
 
-    private static Map<String, Object> penyerahan(ItemResepEntity item, ObatEntity obat, LocalDateTime waktuSerah,
+    // Diagnosis ICD-10 kunjungan sebagai Condition (SKPL 2.4 butir 6)
+    private static Map<String, Object> kondisi(DiagnosisEntity d, String urnPasien, String urnKunjungan) {
+        Map<String, Object> r = new LinkedHashMap<>();
+        r.put("resourceType", "Condition");
+        r.put("clinicalStatus", peta("coding", List.of(peta("system",
+                "http://terminology.hl7.org/CodeSystem/condition-clinical", "code", "active"))));
+        r.put("category", List.of(peta("coding", List.of(peta("system",
+                "http://terminology.hl7.org/CodeSystem/condition-category", "code", "encounter-diagnosis")))));
+        r.put("code", peta("coding", List.of(peta("system", "http://hl7.org/fhir/sid/icd-10", "code",
+                d.getKodeICD10(), "display", d.getDeskripsi()))));
+        r.put("subject", peta("reference", urnPasien));
+        r.put("encounter", peta("reference", urnKunjungan));
+        return r;
+    }
+
+    private static Map<String, Object> permintaanObat(ItemResepEntity item, ObatEntity obat, LocalDateTime waktu,
             String urnPasien, String urnKunjungan) {
         String namaObat = obat == null ? "Obat " + item.getIdObat() : obat.getNamaObat() + " " + obat.getSediaan();
         Map<String, Object> r = new LinkedHashMap<>();
-        r.put("resourceType", "MedicationDispense");
+        r.put("resourceType", "MedicationRequest");
         r.put("status", "completed");
+        r.put("intent", "order");
         r.put("medicationCodeableConcept", peta("text", namaObat));
         r.put("subject", peta("reference", urnPasien));
-        r.put("context", peta("reference", urnKunjungan));
-        r.put("quantity", peta("value", item.getJumlah()));
-        r.put("whenHandedOver", waktuSerah.withNano(0).toString());
+        r.put("encounter", peta("reference", urnKunjungan));
+        r.put("authoredOn", waktu.withNano(0).toString());
         r.put("dosageInstruction", List.of(peta("text", item.getDosis() + ", " + item.getAturanPakai())));
+        r.put("dispenseRequest", peta("quantity", peta("value", item.getJumlah())));
         return r;
     }
 

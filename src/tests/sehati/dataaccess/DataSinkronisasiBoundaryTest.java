@@ -200,7 +200,7 @@ class DataSinkronisasiBoundaryTest {
         assertTrue(json.contains("\"type\": \"transaction\""));
         assertTrue(json.contains("\"resourceType\": \"Patient\""));
         assertTrue(json.contains("\"resourceType\": \"Encounter\""));
-        assertTrue(json.contains("\"resourceType\": \"MedicationDispense\""));
+        assertTrue(json.contains("\"resourceType\": \"MedicationRequest\""));
     }
 
     // Membuka arsip: garam (16) + IV (12) + teks sandi AES-GCM.

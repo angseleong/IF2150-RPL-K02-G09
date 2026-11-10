@@ -1,5 +1,8 @@
 package sehati.business.control;
 
+import sehati.common.SesiAktif;
+import sehati.dataaccess.DataAkunBoundary;
+import sehati.business.entity.AuditEntity;
 import sehati.business.entity.AntreanEntity;
 import sehati.business.entity.BetsObatEntity;
 import sehati.business.entity.BundelFHIREntity;
@@ -7,6 +10,7 @@ import sehati.business.entity.ItemResepEntity;
 import sehati.business.entity.KunjunganEntity;
 import sehati.business.entity.ObatEntity;
 import sehati.business.entity.PasienEntity;
+import sehati.business.entity.PemeriksaanEntity;
 import sehati.business.entity.ResepEntity;
 import sehati.common.KoneksiBasisData;
 import sehati.dataaccess.DataFarmasiBoundary;
@@ -128,14 +132,18 @@ public class ApotekManager {
                     throw new IllegalArgumentException("Resep tidak ditemukan");
                 }
                 pastikanMenunggu(resep);
+                DataKlinisBoundary dataKlinis = new DataKlinisBoundary(koneksi);
+                pastikanTerkunci(dataKlinis.ambilPemeriksaan(resep.getIdKunjungan()));
                 Map<Integer, ObatEntity> obat = potongStok(resep, dataFarmasi);
                 resep.perbaruiStatus(ResepEntity.STATUS_SELESAI_DILAYANI);
                 dataFarmasi.simpanResep(resep);
                 keluarkanDariAntrean(idResep, dataKunjungan);
                 KunjunganEntity kunjungan = tutupKunjungan(resep.getIdKunjungan(), dataKunjungan);
                 BundelFHIREntity bundel = susunBundel(kunjungan, resep, obat, new DataPasienBoundary(koneksi),
-                        new DataKlinisBoundary(koneksi));
+                        dataKlinis);
                 dataSinkronisasi.simpanBundel(bundel);
+                new DataAkunBoundary(koneksi).simpanAudit(AuditEntity.buat(SesiAktif.idPenggunaAudit(),
+                        "Obat resep " + idResep + " diserahkan"));
                 koneksi.commit();
             } catch (SQLException | RuntimeException e) {
                 koneksi.rollback();
@@ -156,6 +164,13 @@ public class ApotekManager {
         }
         if (!ResepEntity.STATUS_MENUNGGU.equals(resep.getStatus())) {
             throw new IllegalStateException("Resep berstatus " + resep.getStatus() + " dan tidak dapat diserahkan");
+        }
+    }
+
+    // Kunjungan ditutup saat obat diserahkan, jadi rekam medis harus sudah final agar tidak bisa diubah lagi
+    static void pastikanTerkunci(PemeriksaanEntity pemeriksaan) {
+        if (pemeriksaan == null || !pemeriksaan.isTerkunci()) {
+            throw new IllegalStateException("Dokter belum menyimpan final pemeriksaan pasien ini");
         }
     }
 
@@ -211,7 +226,8 @@ public class ApotekManager {
             DataPasienBoundary dataPasien, DataKlinisBoundary dataKlinis) {
         PasienEntity pasien = dataPasien.ambilPasien(kunjungan.getIdPasien());
         String isi = PenyusunBundelFHIR.susun(kunjungan, pasien, dataKlinis.ambilSkrining(kunjungan.getIdKunjungan()),
-                resep, obat, LocalDateTime.now());
+                dataKlinis.ambilDiagnosis(kunjungan.getIdKunjungan()), resep, obat,
+                resep.getWaktuMasuk() == null ? LocalDateTime.now() : resep.getWaktuMasuk());
         return new BundelFHIREntity(0, kunjungan.getIdKunjungan(), isi, "tertunda", null);
     }
 
@@ -237,6 +253,8 @@ public class ApotekManager {
                 resep.setCatatan(alasan.strip());
                 dataFarmasi.simpanResep(resep);
                 keluarkanDariAntrean(idResep, dataKunjungan);
+                new DataAkunBoundary(koneksi).simpanAudit(AuditEntity.buat(SesiAktif.idPenggunaAudit(),
+                        "Resep " + idResep + " dikembalikan ke dokter: " + alasan.strip()));
                 koneksi.commit();
             } catch (SQLException | RuntimeException e) {
                 koneksi.rollback();
