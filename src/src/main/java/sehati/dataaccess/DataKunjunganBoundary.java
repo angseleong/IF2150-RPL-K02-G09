@@ -45,6 +45,9 @@ public class DataKunjunganBoundary {
     private static final String Q_C58_10 = "SELECT id_entri FROM antrean_entri WHERE id_antrean = ? ORDER BY urutan";
     private static final String Q_C58_11 = "DELETE FROM antrean_entri WHERE id_antrean = ?";
     private static final String Q_C58_12 = "INSERT INTO antrean_entri (id_antrean, urutan, id_entri) VALUES (?, ?, ?)";
+    // Tambahan implementasi (B.1): daftar pasien untuk dokter pada I-06, urut nomor antrean.
+    private static final String Q_C58_13 = KOLOM_KUNJUNGAN
+            + " WHERE tanggal = ? AND status = 'siap diperiksa dokter' ORDER BY nomor_antrean, id_kunjungan";
 
     private Connection koneksi;
 
@@ -138,6 +141,24 @@ public class DataKunjunganBoundary {
             }
         } catch (SQLException e) {
             throw galat("Gagal mengambil kunjungan", e);
+        }
+    }
+
+    /**
+     * Mengambil kunjungan pada tanggal tertentu yang sudah diskrining dan menunggu dokter (Q-C58-13, UC05).
+     */
+    public List<KunjunganEntity> kunjunganSiapPeriksa(LocalDate tanggal) {
+        try (PreparedStatement ps = koneksi.prepareStatement(Q_C58_13)) {
+            ps.setDate(1, Date.valueOf(tanggal));
+            List<KunjunganEntity> hasil = new ArrayList<>();
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    hasil.add(petakanKunjungan(rs));
+                }
+            }
+            return hasil;
+        } catch (SQLException e) {
+            throw galat("Gagal mengambil kunjungan siap diperiksa", e);
         }
     }
 

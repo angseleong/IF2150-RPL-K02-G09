@@ -20,8 +20,11 @@ public class DiagnosisEntity {
         this.deskripsi = deskripsi;
     }
 
+    /**
+     * Satu baris "kode - deskripsi" untuk riwayat dan ringkasan pemeriksaan (KF09, KF10).
+     */
     public String ringkas() {
-        throw new UnsupportedOperationException("TODO");
+        return kodeICD10 + " - " + deskripsi;
     }
 
     public int getIdDiagnosis() {

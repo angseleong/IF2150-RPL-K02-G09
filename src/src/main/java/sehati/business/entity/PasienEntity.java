@@ -34,8 +34,20 @@ public class PasienEntity {
         this.nomorTelepon = nomorTelepon;
     }
 
+    /**
+     * Menyalin NIK, nama, tanggal lahir, jenis kelamin, alamat, dan nomor telepon dari data.
+     * {@code idPasien} dan {@code nomorRekamMedis} tidak ikut berubah (Algo-C33-01, KF02).
+     */
     public void perbarui(PasienEntity data) {
-        throw new UnsupportedOperationException("TODO");
+        if (data == null) {
+            throw new IllegalArgumentException("Data pasien kosong");
+        }
+        this.nik = data.nik;
+        this.nama = data.nama;
+        this.tanggalLahir = data.tanggalLahir;
+        this.jenisKelamin = data.jenisKelamin;
+        this.alamat = data.alamat;
+        this.nomorTelepon = data.nomorTelepon;
     }
 
     public int getIdPasien() {
