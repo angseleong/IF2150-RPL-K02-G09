@@ -167,6 +167,12 @@
     -fx-font-weight: bold;
 }
 
+.subjudul {
+    -fx-text-fill: -teks;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
 .label-kolom {
     -fx-text-fill: -abu;
     -fx-font-size: 12px;
@@ -362,6 +368,11 @@
     -fx-font-size: 12px;
 }
 
+/* Teks sel sejajar tengah dengan tombol di kolom aksi. */
+.table-row-cell > .table-cell {
+    -fx-alignment: center-left;
+}
+
 .table-row-cell, .list-cell {
     -fx-cell-size: 36px;
 }
@@ -465,3 +476,71 @@
     -fx-text-fill: -abu;
     -fx-font-size: 13px;
 }
+
+/* Dialog, termasuk daftar pintasan F1 */
+.dialog-pane {
+    -fx-background-color: white;
+    -fx-padding: 0;
+}
+
+.dialog-pane > .header-panel {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent -garis transparent;
+    -fx-padding: 16 20 12 20;
+}
+
+.dialog-pane > .header-panel .label {
+    -fx-text-fill: -gelap;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane > .content {
+    -fx-padding: 16 20 16 20;
+}
+
+.dialog-pane > .button-bar > .container {
+    -fx-padding: 0 20 16 20;
+}
+
+.dialog-pane > .button-bar .button {
+    -fx-background-color: -teal;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane > .button-bar .button:hover {
+    -fx-background-color: -teal-tua;
+}
+
+/* Grafik tren tanda vital */
+.chart-plot-background {
+    -fx-background-color: white;
+}
+
+.chart-vertical-grid-lines, .chart-horizontal-grid-lines {
+    -fx-stroke: -garis;
+}
+
+.chart-title {
+    -fx-text-fill: -gelap;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+}
+
+.axis-label {
+    -fx-text-fill: -abu;
+}
+
+.default-color0.chart-series-line { -fx-stroke: #DC2626; }
+.default-color1.chart-series-line { -fx-stroke: #F59E0B; }
+.default-color2.chart-series-line { -fx-stroke: #0F766E; }
+.default-color3.chart-series-line { -fx-stroke: #2563EB; }
+.default-color0.chart-line-symbol { -fx-background-color: #DC2626, white; }
+.default-color1.chart-line-symbol { -fx-background-color: #F59E0B, white; }
+.default-color2.chart-line-symbol { -fx-background-color: #0F766E, white; }
+.default-color3.chart-line-symbol { -fx-background-color: #2563EB, white; }

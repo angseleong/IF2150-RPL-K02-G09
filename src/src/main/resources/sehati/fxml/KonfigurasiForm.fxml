@@ -47,11 +47,14 @@
         </Tab>
         <Tab text="Data Master">
             <HBox spacing="20" styleClass="halaman">
-                <VBox styleClass="kartu" spacing="8" minWidth="360" maxWidth="360">
+                <VBox styleClass="kartu" spacing="8" minWidth="300" maxWidth="300">
                     <Label text="Ambang Risiko" styleClass="judul-panel"/>
                     <TableView fx:id="tabelAmbang" prefHeight="140">
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
                         <columns>
-                            <TableColumn fx:id="kolomAmbangJenis" text="Jenis Risiko" prefWidth="170"/>
+                            <TableColumn fx:id="kolomAmbangJenis" text="Jenis Risiko" prefWidth="140"/>
                             <TableColumn fx:id="kolomAmbangNilai" text="Nilai Batas" prefWidth="110"/>
                         </columns>
                     </TableView>
@@ -72,19 +75,19 @@
                     <Label text="Tambah jenis obat baru (stok diisi lewat Persediaan Obat)" styleClass="label-kolom"/>
                     <HBox spacing="8">
                         <TextField fx:id="kolomNamaObat" promptText="Nama obat" HBox.hgrow="ALWAYS"/>
-                        <TextField fx:id="kolomSediaan" promptText="Sediaan, mis. tablet 500 mg" prefWidth="170"/>
-                        <TextField fx:id="kolomStokMinimum" promptText="Stok min." prefWidth="80"/>
-                        <Button fx:id="tombolTambahObat" text="Tambah Obat" styleClass="tombol-kedua"/>
+                        <TextField fx:id="kolomSediaan" promptText="Sediaan" prefWidth="170"/>
+                        <TextField fx:id="kolomStokMinimum" promptText="Stok min." prefWidth="100" minWidth="100"/>
+                        <Button fx:id="tombolTambahObat" text="Tambah Obat" styleClass="tombol-kedua" minWidth="-Infinity"/>
                     </HBox>
                 </VBox>
-                <VBox styleClass="kartu" spacing="8" minWidth="220" maxWidth="220">
+                <VBox styleClass="kartu" spacing="8" minWidth="260" maxWidth="260">
                     <Label text="Poli" styleClass="judul-panel"/>
                     <ListView fx:id="daftarPoli" VBox.vgrow="ALWAYS"/>
-                    <Label text="Nama poli (pilih untuk ganti nama)" styleClass="label-kolom"/>
+                    <Label text="Nama poli (pilih untuk ganti nama)" styleClass="label-kolom" wrapText="true"/>
                     <TextField fx:id="kolomNamaPoli"/>
                     <HBox spacing="8">
-                        <Button fx:id="tombolSimpanPoli" text="Simpan Poli" styleClass="tombol-kedua"/>
-                        <Button fx:id="tombolPoliBaru" text="Poli Baru" styleClass="tombol-kedua"/>
+                        <Button fx:id="tombolSimpanPoli" text="Simpan Poli" styleClass="tombol-kedua" minWidth="-Infinity"/>
+                        <Button fx:id="tombolPoliBaru" text="Poli Baru" styleClass="tombol-kedua" minWidth="-Infinity"/>
                     </HBox>
                 </VBox>
             </HBox>

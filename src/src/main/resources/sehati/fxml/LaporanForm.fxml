@@ -34,15 +34,15 @@
         <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
             <VBox spacing="12">
                 <VBox spacing="4">
-                    <Label text="Kunjungan per Poli" styleClass="judul-panel"/>
+                    <Label text="Kunjungan per Poli" styleClass="subjudul"/>
                     <VBox fx:id="daftarPoli" spacing="2"/>
                 </VBox>
                 <VBox spacing="4">
-                    <Label text="Kunjungan per Status" styleClass="judul-panel"/>
+                    <Label text="Kunjungan per Status" styleClass="subjudul"/>
                     <VBox fx:id="daftarStatus" spacing="2"/>
                 </VBox>
                 <VBox spacing="4">
-                    <Label text="10 Diagnosis Terbanyak" styleClass="judul-panel"/>
+                    <Label text="10 Diagnosis Terbanyak" styleClass="subjudul"/>
                     <VBox fx:id="daftarDiagnosis" spacing="2"/>
                 </VBox>
             </VBox>

@@ -265,7 +265,7 @@ public class PasienForm {
     @FXML
     private void bukaKunjungan() {
         if (dataFormulir == null || dataFormulir.getIdPasien() == 0) {
-            tampilkanNotifikasi("Simpan data pasien terlebih dahulu.");
+            tampilkanNotifikasiGagal("Simpan data pasien terlebih dahulu.");
             return;
         }
         // C03 membuka layar kunjungan untuk pasien yang sedang tampil (Algo-C03-01).
@@ -293,7 +293,7 @@ public class PasienForm {
         }
         if (bermasalah) {
             // Isian kosong hanya menghalangi pengiriman; nilai lain dibiarkan utuh.
-            tampilkanNotifikasi("Isi nama, tanggal lahir, jenis kelamin, dan alamat.");
+            tampilkanNotifikasiGagal("Isi nama, tanggal lahir, jenis kelamin, dan alamat.");
             return true;
         }
         kolomNama.getStyleClass().remove("kolom-bermasalah");
