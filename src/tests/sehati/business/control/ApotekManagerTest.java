@@ -82,6 +82,38 @@ class ApotekManagerTest {
     }
 
     @Test
+    void potongStok_betsKedaluwarsaDilewati() {
+        LocalDate hariIni = LocalDate.now();
+        DataFarmasiPalsu dataFarmasi = new DataFarmasiPalsu()
+                .obat(new ObatEntity(4, "Metformin 500 mg", "tablet", 50, 100),
+                        new BetsObatEntity("MET-LAMA", 4, 20, hariIni.minusDays(1)),
+                        new BetsObatEntity("MET-A", 4, 30, hariIni.plusDays(30)));
+
+        ApotekManager.potongStok(
+                resep(ResepEntity.STATUS_MENUNGGU, new ItemResepEntity(1, 4, "2x1", 25, "sesudah makan")),
+                dataFarmasi);
+
+        assertEquals(List.of("MET-LAMA=20", "MET-A=5"), dataFarmasi.betsTersimpan);
+        assertEquals(List.of("4=25"), dataFarmasi.stokTersimpan);
+    }
+
+    @Test
+    void potongStok_stokLayakKurangKarenaKedaluwarsaDitolak() {
+        LocalDate hariIni = LocalDate.now();
+        DataFarmasiPalsu dataFarmasi = new DataFarmasiPalsu()
+                .obat(new ObatEntity(4, "Metformin 500 mg", "tablet", 50, 100),
+                        new BetsObatEntity("MET-LAMA", 4, 40, hariIni.minusDays(1)),
+                        new BetsObatEntity("MET-A", 4, 10, hariIni.plusDays(30)));
+
+        IllegalStateException e = assertThrows(IllegalStateException.class, () -> ApotekManager.potongStok(
+                resep(ResepEntity.STATUS_MENUNGGU, new ItemResepEntity(1, 4, "2x1", 25, "sesudah makan")),
+                dataFarmasi));
+
+        assertTrue(e.getMessage().contains("belum kedaluwarsa"));
+        assertTrue(dataFarmasi.stokTersimpan.isEmpty());
+    }
+
+    @Test
     void potongStok_stokTidakCukupDitolakSebelumMenulis() {
         DataFarmasiPalsu dataFarmasi = new DataFarmasiPalsu()
                 .obat(new ObatEntity(5, "Glibenklamid 5 mg", "tablet", 20, 50),

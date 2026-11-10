@@ -9,6 +9,7 @@ import sehati.business.entity.KunjunganEntity;
 import sehati.business.entity.PasienEntity;
 import sehati.business.entity.PemeriksaanEntity;
 import sehati.business.entity.RekamMedisEntity;
+import sehati.business.entity.ResepEntity;
 import sehati.business.entity.TandaVitalEntity;
 import sehati.common.KoneksiBasisData;
 import sehati.common.SesiAktif;
@@ -208,8 +209,11 @@ public class PemeriksaanManager {
                 dataKlinis.simpanPemeriksaan(p, null);
                 KunjunganEntity kunjungan = dataKunjungan.ambilKunjungan(idKunjungan);
                 kunjungan.perbaruiStatus(KunjunganEntity.STATUS_SELESAI_DIPERIKSA);
-                // Tanpa resep tidak ada langkah apotek yang menutup kunjungan, jadi ditutup dan dibundel di sini (KF14)
-                if (new DataFarmasiBoundary(koneksi).ambilResepKunjungan(idKunjungan).isEmpty()) {
+                // Tanpa resep yang menunggu di apotek tidak ada langkah apotek yang menutup kunjungan, jadi ditutup dan
+                // dibundel di sini (KF14). Resep yang sudah dikembalikan apotek tidak lagi menahan kunjungan.
+                boolean adaResepMenunggu = new DataFarmasiBoundary(koneksi).ambilResepKunjungan(idKunjungan).stream()
+                        .anyMatch(r -> ResepEntity.STATUS_MENUNGGU.equals(r.getStatus()));
+                if (!adaResepMenunggu) {
                     kunjungan.perbaruiStatus(KunjunganEntity.STATUS_SELESAI);
                     String isi = PenyusunBundelFHIR.susun(kunjungan,
                             new DataPasienBoundary(koneksi).ambilPasien(kunjungan.getIdPasien()),

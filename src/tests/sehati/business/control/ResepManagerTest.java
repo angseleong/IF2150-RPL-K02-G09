@@ -102,6 +102,16 @@ class ResepManagerTest {
         }
 
         @Test
+        void kirimKeApotek_resepKeduaSaatMasihMenungguDitolak() throws SQLException {
+            manager.kirimKeApotek(idKunjungan, List.of(new ItemResepEntity(0, 1, "500 mg", 10, "3 x 1")));
+
+            assertThrows(IllegalStateException.class, () -> manager.kirimKeApotek(idKunjungan,
+                    List.of(new ItemResepEntity(0, 1, "500 mg", 5, "3 x 1"))));
+            assertEquals(1, hitung("SELECT count(*) FROM resep WHERE status = 'menunggu' AND id_resep > "
+                    + resepTerakhir));
+        }
+
+        @Test
         void kirimKeApotek_stokKurangDitolakTanpaMenyimpan() throws SQLException {
             IllegalStateException e = assertThrows(IllegalStateException.class, () -> manager.kirimKeApotek(
                     idKunjungan, List.of(new ItemResepEntity(0, 12, "500 mg", 1, "3 x 1"))));

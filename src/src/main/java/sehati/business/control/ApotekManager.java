@@ -190,12 +190,21 @@ public class ApotekManager {
             if (!item.cukupStok(obat.getStok())) {
                 throw new IllegalStateException("Stok " + obat.getNamaObat() + " tidak cukup");
             }
-            obat.kurangiStok(item.getJumlah());
             List<BetsObatEntity> daftarBets = dataFarmasi.ambilBets(item.getIdObat());
+            // Saldo obat ikut menghitung bets kedaluwarsa, jadi kecukupan juga dinilai dari bets yang masih layak.
+            if (BetsObatEntity.jumlahLayak(daftarBets) < item.getJumlah()) {
+                throw new IllegalStateException("Stok " + obat.getNamaObat()
+                        + " yang belum kedaluwarsa tidak cukup, periksa persediaan");
+            }
+            obat.kurangiStok(item.getJumlah());
             int sisa = item.getJumlah();
             for (BetsObatEntity bets : daftarBets) {
                 if (sisa == 0) {
                     break;
+                }
+                // Bets kedaluwarsa dilewati agar tidak pernah diserahkan ke pasien.
+                if (bets.sudahKedaluwarsa()) {
+                    continue;
                 }
                 int ambil = Math.min(sisa, bets.getJumlah());
                 bets.kurangi(ambil);

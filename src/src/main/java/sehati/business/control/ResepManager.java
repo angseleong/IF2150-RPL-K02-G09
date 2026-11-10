@@ -4,6 +4,7 @@ import sehati.common.SesiAktif;
 import sehati.dataaccess.DataAkunBoundary;
 import sehati.business.entity.AuditEntity;
 import sehati.business.entity.AntreanEntity;
+import sehati.business.entity.BetsObatEntity;
 import sehati.business.entity.ItemResepEntity;
 import sehati.business.entity.KunjunganEntity;
 import sehati.business.entity.ObatEntity;
@@ -62,9 +63,14 @@ public class ResepManager {
     }
 
     // Boundary ikut diteruskan agar satu operasi memakai satu koneksi (aturan 1 Subbab 5.56).
+    // Saldo obat ikut menghitung bets kedaluwarsa, jadi yang dibandingkan adalah stok yang masih layak diserahkan.
     static boolean validasiStok(ItemResepEntity item, DataFarmasiBoundary dataFarmasi) {
         ObatEntity obat = dataFarmasi.ambilObat(item.getIdObat());
-        return obat != null && item.cukupStok(obat.getStok());
+        if (obat == null) {
+            return false;
+        }
+        int layak = Math.min(obat.getStok(), BetsObatEntity.jumlahLayak(dataFarmasi.ambilBets(item.getIdObat())));
+        return item.cukupStok(layak);
     }
 
     /**
@@ -101,8 +107,16 @@ public class ResepManager {
             resep.setDaftarItem(new ArrayList<>(items));
             koneksi.setAutoCommit(false);
             try {
-                dataFarmasi.simpanResep(resep);
+                // Baris antrean apotek dikunci lebih dulu, sehingga dua pengiriman bersamaan untuk kunjungan yang sama
+                // diproses bergantian dan yang kedua melihat resep pertama.
                 AntreanEntity antrean = dataKunjungan.ambilAntrean("apotek");
+                boolean adaResepMenunggu = dataFarmasi.ambilResepKunjungan(idKunjungan).stream()
+                        .anyMatch(r -> ResepEntity.STATUS_MENUNGGU.equals(r.getStatus()));
+                if (adaResepMenunggu) {
+                    throw new IllegalStateException("Kunjungan ini masih memiliki resep yang menunggu di apotek. "
+                            + "Tunggu resep dilayani atau minta apotek mengembalikannya sebelum mengirim resep baru");
+                }
+                dataFarmasi.simpanResep(resep);
                 antrean.tambahkan(resep.getIdResep());
                 dataKunjungan.simpanAntrean(antrean);
                 new DataAkunBoundary(koneksi).simpanAudit(AuditEntity.buat(SesiAktif.idPenggunaAudit(),

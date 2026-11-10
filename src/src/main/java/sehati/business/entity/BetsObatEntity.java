@@ -1,6 +1,7 @@
 package sehati.business.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * C49 - BetsObatEntity.
@@ -43,6 +44,27 @@ public class BetsObatEntity {
      */
     public boolean mendekatiKedaluwarsa(int hari) {
         return !tanggalKedaluwarsa.isAfter(LocalDate.now().plusDays(hari));
+    }
+
+    /**
+     * Bets yang tanggal kedaluwarsanya sudah lewat tidak boleh diserahkan ke pasien. Bets yang kedaluwarsa hari ini
+     * masih boleh dipakai.
+     */
+    public boolean sudahKedaluwarsa() {
+        return tanggalKedaluwarsa != null && tanggalKedaluwarsa.isBefore(LocalDate.now());
+    }
+
+    /**
+     * Total sisa bets yang belum kedaluwarsa, yaitu stok yang benar-benar boleh diserahkan (FEFO, KF14).
+     */
+    public static int jumlahLayak(List<BetsObatEntity> daftarBets) {
+        int total = 0;
+        for (BetsObatEntity bets : daftarBets) {
+            if (!bets.sudahKedaluwarsa()) {
+                total += bets.getJumlah();
+            }
+        }
+        return total;
     }
 
     public String getNomorBets() {

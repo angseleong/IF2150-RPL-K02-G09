@@ -151,6 +151,28 @@ class PemeriksaanManagerTest {
         }
 
         @Test
+        void kunciRekamMedis_resepDikembalikanTidakMenahanKunjungan() throws SQLException {
+            try (Statement st = koneksi.createStatement()) {
+                st.executeUpdate("INSERT INTO resep (id_kunjungan, waktu_masuk, status, catatan) VALUES ("
+                        + idKunjungan + ", now(), 'dikembalikan', 'uji kunci rekam medis')");
+            }
+            try {
+                manager.simpanPemeriksaan(idKunjungan, new PemeriksaanEntity(0, 0, "Batuk", "Edukasi", false),
+                        new DiagnosisEntity(0, "J00", "Nasofaringitis akut (common cold)"));
+                manager.kunciRekamMedis(idKunjungan);
+
+                assertEquals(1, hitung("SELECT count(*) FROM kunjungan WHERE status = 'selesai' "
+                        + "AND id_kunjungan = " + idKunjungan));
+                assertEquals(1, hitung("SELECT count(*) FROM bundel_fhir WHERE id_kunjungan = " + idKunjungan));
+            } finally {
+                try (Statement st = koneksi.createStatement()) {
+                    st.executeUpdate("DELETE FROM resep WHERE id_kunjungan = " + idKunjungan
+                            + " AND catatan = 'uji kunci rekam medis'");
+                }
+            }
+        }
+
+        @Test
         void susunRingkasan_memuatPasienSkriningDanPenanda() throws SQLException {
             int idKunjunganSkrining = hitung("SELECT min(s.id_kunjungan) FROM skrining s");
             RekamMedisEntity rm = manager.susunRingkasan(idKunjunganSkrining);
