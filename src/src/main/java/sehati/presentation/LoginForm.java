@@ -2,6 +2,7 @@ package sehati.presentation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -10,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import sehati.business.control.AutentikasiManager;
 import sehati.business.control.KonfigurasiManager;
@@ -29,6 +31,18 @@ public class LoginForm {
             "RekamMedisForm", "AntreanResepForm", "PersediaanForm", "DaftarPantauForm", "LaporanForm",
             "SinkronisasiForm", "KonfigurasiForm");
 
+    static final Map<String, String> DESKRIPSI = Map.of(
+            "PasienForm", "Cari, daftarkan, dan perbarui data pasien.",
+            "KunjunganForm", "Buka kunjungan dan terbitkan nomor antrean.",
+            "AntreanSkriningForm", "Panggil pasien dan catat tanda vital.",
+            "RekamMedisForm", "Lihat riwayat pasien, lalu mulai pemeriksaan.",
+            "AntreanResepForm", "Siapkan resep yang dikirim dokter.",
+            "PersediaanForm", "Catat obat masuk dan pantau stok.",
+            "DaftarPantauForm", "Hubungi pasien berisiko yang perlu tindak lanjut.",
+            "LaporanForm", "Susun rekap kunjungan per periode.",
+            "SinkronisasiForm", "Kirim data kunjungan ke SATUSEHAT.",
+            "KonfigurasiForm", "Atur akun, data master, dan pencadangan.");
+
     private final AutentikasiManager autentikasiManager = new AutentikasiManager();
 
     private String namaPengguna;
@@ -38,7 +52,10 @@ public class LoginForm {
     @FXML private PasswordField kolomKataSandi;
     @FXML private Label labelPesanGagal;
     @FXML private Button tombolMasuk;
+    @FXML private VBox kartuMasuk;
+    @FXML private HBox merekMasuk;
     @FXML private VBox panelDasbor;
+    @FXML private Label labelPeranDasbor;
     @FXML private Label labelDasbor;
     @FXML private FlowPane kartuMenu;
     @FXML private Label labelAksesDitolak;
@@ -50,6 +67,10 @@ public class LoginForm {
         tombolMasuk.setOnAction(e -> kirimKredensial());
         labelPesanGagal.managedProperty().bind(labelPesanGagal.visibleProperty());
         labelAksesDitolak.managedProperty().bind(labelAksesDitolak.visibleProperty());
+        kartuMasuk.managedProperty().bind(kartuMasuk.visibleProperty());
+        panelDasbor.managedProperty().bind(panelDasbor.visibleProperty());
+        panelPencadangan.managedProperty().bind(panelPencadangan.visibleProperty());
+        merekMasuk.getChildren().add(0, LogoSehati.tanda(48));
         tampilkan();
     }
 
@@ -59,6 +80,7 @@ public class LoginForm {
         labelPesanGagal.setVisible(false);
         labelAksesDitolak.setVisible(false);
         panelDasbor.setVisible(false);
+        kartuMasuk.setVisible(true);
         // runLater karena Navigasi memfokuskan akar layar setelah layar dipasang
         Platform.runLater(kolomNamaPengguna::requestFocus);
     }
@@ -68,7 +90,7 @@ public class LoginForm {
         namaPengguna = kolomNamaPengguna.getText() == null ? "" : kolomNamaPengguna.getText().strip();
         kataSandi = kolomKataSandi.getText();
         if (namaPengguna.isEmpty() || kataSandi == null || kataSandi.isEmpty()) {
-            tampilkanPesanGagal("Nama pengguna dan kata sandi wajib diisi");
+            tampilkanPesanGagal("Isi nama pengguna dan kata sandi.");
             return;
         }
         SesiEntity sesi;
@@ -81,7 +103,7 @@ public class LoginForm {
         }
         hapusSandi();
         if (sesi == null) {
-            tampilkanPesanGagal("Nama pengguna atau kata sandi salah");
+            tampilkanPesanGagal("Nama pengguna atau kata sandi salah.");
             return;
         }
         String peran = SesiAktif.peran();
@@ -103,15 +125,25 @@ public class LoginForm {
     public void tampilkanDasbor(List<String> menu) {
         labelPesanGagal.setVisible(false);
         labelAksesDitolak.setVisible(false);
-        labelDasbor.setText("Dasbor (peran " + Navigasi.peranSesi() + ")");
+        labelDasbor.setText(namaPengguna == null ? "Dasbor" : "Selamat datang, " + namaPengguna);
+        labelPeranDasbor.setText("Masuk sebagai " + Navigasi.peranSesi() + ". Pilih layar untuk mulai bekerja.");
         kartuMenu.getChildren().clear();
         for (String layar : menu) {
-            Button kartu = new Button(Navigasi.JUDUL.get(layar));
+            Label namaLayar = new Label(Navigasi.JUDUL.get(layar));
+            namaLayar.getStyleClass().add("kartu-menu-judul");
+            Label keterangan = new Label(DESKRIPSI.getOrDefault(layar, ""));
+            keterangan.getStyleClass().add("kartu-menu-teks");
+            keterangan.setWrapText(true);
+            // Lebar tetap agar tinggi label yang terbungkus terhitung benar dan semua kartu sama tinggi.
+            keterangan.setPrefWidth(208);
+            Button kartu = new Button(null, new VBox(6, namaLayar, keterangan));
+            kartu.setAccessibleText(namaLayar.getText());
             kartu.getStyleClass().add("kartu-menu");
             kartu.setOnAction(e -> bukaLayar(layar));
             kartuMenu.getChildren().add(kartu);
         }
         tampilkanPeringatanPencadangan();
+        kartuMasuk.setVisible(false);
         panelDasbor.setVisible(true);
         if (!kartuMenu.getChildren().isEmpty()) {
             Platform.runLater(kartuMenu.getChildren().get(0)::requestFocus);

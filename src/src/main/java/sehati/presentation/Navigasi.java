@@ -36,7 +36,7 @@ public final class Navigasi {
 
     /** Nama layar sesuai Subbab 6.1 sampai 6.15 DPPL. */
     static final Map<String, String> JUDUL = Map.ofEntries(
-            Map.entry(LAYAR_MASUK, "Masuk dan Dasbor"),
+            Map.entry(LAYAR_MASUK, "Dasbor"),
             Map.entry("PasienForm", "Pendaftaran Pasien"),
             Map.entry("KunjunganForm", "Kunjungan Pasien"),
             Map.entry("AntreanSkriningForm", "Antrean Skrining"),
@@ -70,7 +70,7 @@ public final class Navigasi {
 
     public static void mulai(Stage stage) {
         bingkai = new BorderPane();
-        bilah = new BilahAplikasi(Navigasi::keluar);
+        bilah = new BilahAplikasi(Navigasi::kembali, Navigasi::keluar);
         Scene scene = new Scene(bingkai, 1280, 800);
         scene.getStylesheets().add(Navigasi.class.getResource("/sehati/css/sehati.css").toExternalForm());
         pasangPintasan(scene);
@@ -80,6 +80,7 @@ public final class Navigasi {
         pantauKoneksi.setCycleCount(Timeline.INDEFINITE);
         pantauKoneksi.play();
         stage.setTitle("SEHATI");
+        stage.getIcons().add(LogoSehati.ikon(64));
         stage.setScene(scene);
         buka(LAYAR_MASUK);
         stage.show();
@@ -174,8 +175,8 @@ public final class Navigasi {
         if (galat != null) {
             masuk.tampilkanPesanGagal(galat);
         } else if (habisWaktu) {
-            masuk.tampilkanPesanGagal("Sesi berakhir setelah diam " + AutentikasiManager.BATAS_DIAM_MENIT
-                    + " menit, silakan masuk kembali");
+            masuk.tampilkanPesanGagal("Anda tidak aktif selama " + AutentikasiManager.BATAS_DIAM_MENIT
+                    + " menit. Masuk lagi untuk melanjutkan.");
         }
     }
 
@@ -188,6 +189,7 @@ public final class Navigasi {
 
     private static void tampilkan(Layar layar) {
         bilah.setJudul(JUDUL.get(layar.nama()));
+        bilah.setBisaKembali(RIWAYAT.size() > 1);
         // Dasbor berbagi I-01 dengan layar masuk, jadi bilah mengikuti sesi agar Keluar tetap terlihat di dasbor.
         bingkai.setTop(sesiAktif ? bilah : null);
         bingkai.setCenter(layar.isi());
