@@ -186,3 +186,52 @@
     -fx-hgap: 24;
     -fx-vgap: 8;
 }
+
+/* I-01 Masuk dan Dasbor */
+.layar-masuk {
+    -fx-background-color: -teal;
+    -fx-padding: 30;
+}
+
+.kartu-masuk, .panel-dasbor {
+    -fx-background-radius: 14;
+    -fx-padding: 30;
+}
+
+.kartu-masuk {
+    -fx-background-color: white;
+}
+
+.panel-dasbor {
+    -fx-background-color: #F8FAFC;
+}
+
+.logo-masuk {
+    -fx-text-fill: -teal;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+.judul-masuk {
+    -fx-text-fill: -gelap;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 16 0 6 0;
+}
+
+.kartu-menu {
+    -fx-background-color: white;
+    -fx-border-color: -garis;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-pref-width: 160;
+    -fx-pref-height: 90;
+    -fx-font-weight: bold;
+    -fx-text-fill: -gelap;
+    -fx-wrap-text: true;
+}
+
+.kartu-menu:focused {
+    -fx-border-color: -teal;
+    -fx-border-width: 2;
+}
