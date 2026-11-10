@@ -33,12 +33,25 @@ public class AntreanEntity {
         }
     }
 
+    /**
+     * Mengembalikan kunjungan yang hanya {@code idKunjungan}-nya terisi, atau null bila antrean kosong
+     * (Algo-C37-01).
+     */
     public KunjunganEntity ambilTerdepan() {
-        throw new UnsupportedOperationException("TODO");
+        if (daftarEntri.isEmpty()) {
+            return null;
+        }
+        KunjunganEntity k = new KunjunganEntity();
+        k.setIdKunjungan(daftarEntri.get(0));
+        return k;
     }
 
+    /**
+     * Memindahkan entri ke akhir antrean (Algo-C37-01).
+     */
     public void pindahkanKeBelakang(int idEntri) {
-        throw new UnsupportedOperationException("TODO");
+        keluarkan(idEntri);
+        daftarEntri.add(idEntri);
     }
 
     /**
