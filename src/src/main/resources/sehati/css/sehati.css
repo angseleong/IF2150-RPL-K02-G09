@@ -1,93 +1,193 @@
-/* Warna mengikuti rancangan antarmuka BAB 6 DPPL (docs/M8/assets/diagram/src/gen_ui.py). */
+/*
+ * Tema SEHATI. Teal mengikuti warna logo dan dipakai untuk aksi utama;
+ * judul memakai warna gelap agar hierarki tidak bergantung pada warna.
+ */
 .root {
     -teal: #0F766E;
+    -teal-tua: #115E59;
+    -teal-pekat: #134E4A;
+    -teal-muda: #F0FDFA;
+    -teal-garis: #99F6E4;
     -gelap: #0F172A;
+    -teks: #334155;
     -abu: #64748B;
-    -garis: #94A3B8;
+    -garis: #E2E8F0;
+    -garis-kolom: #94A3B8;
+    -latar: #F8FAFC;
     -merah: #DC2626;
-    -merah-muda: #FEE2E2;
+    -merah-tua: #991B1B;
+    -merah-muda: #FEF2F2;
     -hijau: #16A34A;
-    -hijau-muda: #DCFCE7;
+    -hijau-muda: #F0FDF4;
     -hijau-tua: #166534;
-    -kuning: #D97706;
-    -kuning-muda: #FEF3C7;
-    -fx-font-family: "Arial";
-    -fx-font-size: 13px;
-    -fx-background-color: #F8FAFC;
+    -kuning: #B45309;
+    -kuning-muda: #FFFBEB;
+
+    -fx-font-family: "System";
+    -fx-font-size: 14px;
+    -fx-background-color: -latar;
+    -fx-text-fill: -teks;
+
+    /* Warna turunan modena, agar kolom isian, daftar, dan tabel ikut tema tanpa aturan per kontrol. */
+    -fx-accent: -teal;
+    -fx-focus-color: -teal;
+    -fx-faint-focus-color: #0F766E33;
+    -fx-selection-bar: -teal;
+    -fx-selection-bar-non-focused: #CCFBF1;
+    -fx-text-box-border: -garis-kolom;
+    -fx-control-inner-background: white;
+    -fx-dark-text-color: -gelap;
+    -fx-mid-text-color: -teks;
+}
+
+.label {
+    -fx-text-fill: -teks;
 }
 
 .halaman {
-    -fx-padding: 20 30 20 30;
-    -fx-spacing: 12;
+    -fx-padding: 24 32 24 32;
+    -fx-spacing: 16;
 }
 
 /* Bilah aplikasi */
 .bilah {
-    -fx-background-color: -teal;
-    -fx-padding: 10 16 10 16;
-    -fx-spacing: 16;
-    -fx-min-height: 48px;
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent -garis transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10 20 10 20;
+    -fx-spacing: 14;
+    -fx-min-height: 60px;
 }
 
 .bilah-logo {
-    -fx-text-fill: white;
+    -fx-text-fill: -teal;
     -fx-font-size: 18px;
     -fx-font-weight: bold;
 }
 
-.bilah-judul {
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
+.bilah-pemisah {
+    -fx-background-color: -garis;
+    -fx-min-width: 1px;
+    -fx-max-width: 1px;
+    -fx-min-height: 28px;
+    -fx-max-height: 28px;
 }
 
-.bilah-teks {
-    -fx-text-fill: white;
+.bilah-judul {
+    -fx-text-fill: -gelap;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.bilah-pengguna {
+    -fx-text-fill: -gelap;
+    -fx-font-weight: bold;
+}
+
+.bilah-peran {
+    -fx-text-fill: -abu;
     -fx-font-size: 12px;
 }
 
+/* Lampu kuning untuk Luring, hijau untuk Daring, dengan teks agar tidak bergantung pada warna saja. */
+.indikator-koneksi {
+    -fx-background-color: -kuning-muda;
+    -fx-background-radius: 999;
+    -fx-padding: 4 10 4 10;
+}
+
+.indikator-koneksi:daring {
+    -fx-background-color: -hijau-muda;
+}
+
 .lampu-koneksi {
-    -fx-fill: #FACC15;
+    -fx-fill: #F59E0B;
 }
 
 .lampu-koneksi:daring {
-    -fx-fill: #4ADE80;
+    -fx-fill: -hijau;
+}
+
+.teks-koneksi {
+    -fx-text-fill: -kuning;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.indikator-koneksi:daring .teks-koneksi {
+    -fx-text-fill: -hijau-tua;
+}
+
+.tombol-kembali {
+    -fx-background-color: transparent;
+    -fx-text-fill: -teal;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12 6 8;
+    -fx-graphic-text-gap: 6;
+}
+
+.tombol-kembali:hover {
+    -fx-background-color: -teal-muda;
+}
+
+.ikon-kembali {
+    -fx-fill: transparent;
+    -fx-stroke: -teal;
+    -fx-stroke-width: 2;
+    -fx-stroke-line-cap: round;
+    -fx-stroke-line-join: round;
 }
 
 .tombol-bilah {
-    -fx-background-color: transparent;
-    -fx-border-color: white;
-    -fx-border-radius: 5;
-    -fx-text-fill: white;
-    -fx-font-size: 11px;
+    -fx-background-color: white;
+    -fx-border-color: -garis-kolom;
+    -fx-border-radius: 8;
+    -fx-text-fill: -teks;
+    -fx-font-weight: bold;
 }
 
-.tombol-bilah:focused {
-    -fx-border-width: 2;
+.tombol-bilah:hover {
+    -fx-border-color: -merah;
+    -fx-text-fill: -merah;
 }
 
 /* Kartu dan judul */
 .kartu {
     -fx-background-color: white;
-    -fx-background-radius: 8;
+    -fx-background-radius: 12;
     -fx-border-color: -garis;
-    -fx-border-radius: 8;
-    -fx-padding: 14;
+    -fx-border-radius: 12;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.06), 10, 0, 0, 2);
 }
 
 .judul-panel {
-    -fx-text-fill: -teal;
+    -fx-text-fill: -gelap;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
 }
 
 .label-kolom {
     -fx-text-fill: -abu;
-    -fx-font-size: 11px;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.teks-bantu {
+    -fx-text-fill: -abu;
+    -fx-font-size: 13px;
 }
 
 /* Tombol */
 .button {
-    -fx-background-radius: 6;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 8 14 8 14;
     -fx-cursor: hand;
+}
+
+.button:disabled {
+    -fx-opacity: 0.45;
 }
 
 .tombol-utama {
@@ -96,23 +196,84 @@
     -fx-font-weight: bold;
 }
 
+.tombol-utama:hover {
+    -fx-background-color: -teal-tua;
+}
+
+.tombol-utama:pressed {
+    -fx-background-color: -teal-pekat;
+}
+
 .tombol-kedua {
     -fx-background-color: white;
     -fx-border-color: -teal;
-    -fx-border-radius: 6;
     -fx-text-fill: -teal;
     -fx-font-weight: bold;
 }
 
+.tombol-kedua:hover {
+    -fx-background-color: -teal-muda;
+}
+
+.tombol-kedua:pressed {
+    -fx-background-color: #CCFBF1;
+}
+
+/* Cincin fokus terlihat untuk pengguna papan ketik, pada semua jenis tombol. */
+.tombol-utama:focused, .tombol-kedua:focused, .tombol-bilah:focused, .tombol-kembali:focused {
+    -fx-border-color: -teal-garis;
+    -fx-border-width: 2;
+}
+
+.tombol-utama:focused {
+    -fx-border-color: -teal-pekat;
+}
+
 /* Isian */
-.text-field, .text-area, .combo-box, .date-picker {
-    -fx-background-radius: 6;
+.text-field, .password-field, .text-area, .combo-box, .date-picker {
+    -fx-background-radius: 8;
+}
+
+.text-field, .password-field {
+    -fx-padding: 8 10 8 10;
+}
+
+/* ComboBox dan DatePicker disamakan dengan kolom teks, tanpa gradasi bawaan modena. */
+.combo-box, .date-picker, .combo-box-base {
+    -fx-background-color: -garis-kolom, white;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 8;
+}
+
+.combo-box-base:focused, .date-picker:focused {
+    -fx-background-color: -teal, white;
+    -fx-background-insets: 0, 2;
+}
+
+.combo-box-base > .arrow-button, .date-picker > .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box-base > .arrow-button > .arrow, .date-picker > .arrow-button > .arrow {
+    -fx-background-color: -abu;
+}
+
+.date-picker > .date-picker-display-node {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane, .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.text-area .content {
+    -fx-background-radius: 8;
 }
 
 .kolom-bermasalah {
     -fx-border-color: -merah;
     -fx-border-width: 2;
-    -fx-border-radius: 6;
+    -fx-border-radius: 8;
 }
 
 .pesan-kolom {
@@ -123,11 +284,11 @@
 /* Peringatan dan notifikasi */
 .panel-peringatan {
     -fx-background-color: -merah-muda;
-    -fx-background-radius: 8;
+    -fx-background-radius: 10;
     -fx-border-color: -merah;
-    -fx-border-width: 2;
-    -fx-border-radius: 8;
-    -fx-padding: 12;
+    -fx-border-width: 0 0 0 4;
+    -fx-border-radius: 10 0 0 10;
+    -fx-padding: 12 14 12 14;
 }
 
 .ikon-peringatan {
@@ -135,15 +296,15 @@
 }
 
 .teks-peringatan {
-    -fx-text-fill: -merah;
+    -fx-text-fill: -merah-tua;
     -fx-font-weight: bold;
 }
 
 .notifikasi-hijau {
     -fx-background-color: -hijau-muda;
-    -fx-background-radius: 6;
-    -fx-border-color: -hijau;
-    -fx-border-radius: 6;
+    -fx-background-radius: 8;
+    -fx-border-color: #BBF7D0;
+    -fx-border-radius: 8;
     -fx-text-fill: -hijau-tua;
     -fx-font-weight: bold;
     -fx-padding: 8 12 8 12;
@@ -151,34 +312,80 @@
 
 /* Lencana status */
 .lencana-hijau, .lencana-merah, .lencana-kuning {
-    -fx-background-radius: 10;
-    -fx-padding: 2 10 2 10;
+    -fx-background-radius: 999;
+    -fx-padding: 3 10 3 10;
+    -fx-font-size: 12px;
     -fx-font-weight: bold;
 }
 
 .lencana-hijau {
-    -fx-background-color: -hijau-muda;
+    -fx-background-color: #DCFCE7;
     -fx-text-fill: -hijau-tua;
 }
 
 .lencana-merah {
-    -fx-background-color: -merah-muda;
-    -fx-text-fill: -merah;
+    -fx-background-color: #FEE2E2;
+    -fx-text-fill: -merah-tua;
 }
 
 .lencana-kuning {
-    -fx-background-color: -kuning-muda;
+    -fx-background-color: #FEF3C7;
     -fx-text-fill: -kuning;
 }
 
-/* Tabel */
+/* Tabel dan daftar */
+.table-view, .list-view {
+    -fx-background-color: -garis, white;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 10;
+    -fx-padding: 1;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #F1F5F9;
+    -fx-background-radius: 10 10 0 0;
+}
+
 .table-view .column-header {
-    -fx-background-color: #E2F3F1;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent -garis -garis transparent;
+    -fx-size: 36px;
+}
+
+.table-view .filler, .table-view .column-header-background .filler {
+    -fx-background-color: transparent;
 }
 
 .table-view .column-header .label {
+    -fx-text-fill: -teks;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.table-row-cell, .list-cell {
+    -fx-cell-size: 36px;
+}
+
+/* Tab */
+.tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-background-color: transparent;
+    -fx-padding: 6 14 6 14;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color: transparent transparent -teal transparent;
+    -fx-background-insets: 0, 0 0 0 0;
+    -fx-border-color: transparent transparent -teal transparent;
+    -fx-border-width: 0 0 3 0;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected .tab-label {
     -fx-text-fill: -teal;
     -fx-font-weight: bold;
+}
+
+.tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: transparent;
 }
 
 /* Layar bantuan F1 */
@@ -189,49 +396,72 @@
 
 /* I-01 Masuk dan Dasbor */
 .layar-masuk {
-    -fx-background-color: -teal;
-    -fx-padding: 30;
-}
-
-.kartu-masuk, .panel-dasbor {
-    -fx-background-radius: 14;
-    -fx-padding: 30;
+    -fx-background-color: linear-gradient(to bottom right, #F0FDFA, #E0F2FE);
+    -fx-padding: 32;
 }
 
 .kartu-masuk {
     -fx-background-color: white;
-}
-
-.panel-dasbor {
-    -fx-background-color: #F8FAFC;
+    -fx-background-radius: 16;
+    -fx-padding: 32;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.12), 32, 0, 0, 8);
 }
 
 .logo-masuk {
     -fx-text-fill: -teal;
-    -fx-font-size: 28px;
+    -fx-font-size: 26px;
     -fx-font-weight: bold;
 }
 
 .judul-masuk {
     -fx-text-fill: -gelap;
-    -fx-font-size: 16px;
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
-    -fx-padding: 16 0 6 0;
+    -fx-padding: 16 0 0 0;
+}
+
+.panel-dasbor {
+    -fx-background-color: transparent;
+    -fx-padding: 8 16 8 16;
+}
+
+.judul-dasbor {
+    -fx-text-fill: -gelap;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
 }
 
 .kartu-menu {
     -fx-background-color: white;
     -fx-border-color: -garis;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
-    -fx-pref-width: 160;
-    -fx-pref-height: 90;
-    -fx-font-weight: bold;
-    -fx-text-fill: -gelap;
-    -fx-wrap-text: true;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-pref-width: 240;
+    -fx-min-height: 112;
+    -fx-max-height: 112;
+    -fx-alignment: top-left;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.05), 8, 0, 0, 2);
 }
 
 .kartu-menu:focused {
     -fx-border-color: -teal;
     -fx-border-width: 2;
+    -fx-padding: 15;
+}
+
+.kartu-menu:hover {
+    -fx-border-color: -teal;
+    -fx-background-color: -teal-muda;
+}
+
+.kartu-menu-judul {
+    -fx-text-fill: -gelap;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.kartu-menu-teks {
+    -fx-text-fill: -abu;
+    -fx-font-size: 13px;
 }

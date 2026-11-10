@@ -28,7 +28,7 @@
                         <TableColumn fx:id="kolomAkunStatus" text="Status" prefWidth="100"/>
                     </columns>
                 </TableView>
-                <VBox styleClass="kartu" spacing="8" minWidth="320" maxWidth="320">
+                <VBox styleClass="kartu" spacing="8" minWidth="360" maxWidth="360">
                     <Label text="Formulir Akun" styleClass="judul-panel"/>
                     <Label text="Nama pengguna" styleClass="label-kolom"/>
                     <TextField fx:id="kolomNamaPengguna"/>
@@ -47,7 +47,7 @@
         </Tab>
         <Tab text="Data Master">
             <HBox spacing="20" styleClass="halaman">
-                <VBox styleClass="kartu" spacing="8" minWidth="320" maxWidth="320">
+                <VBox styleClass="kartu" spacing="8" minWidth="360" maxWidth="360">
                     <Label text="Ambang Risiko" styleClass="judul-panel"/>
                     <TableView fx:id="tabelAmbang" prefHeight="140">
                         <columns>

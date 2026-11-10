@@ -15,7 +15,7 @@
 
 <HBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="sehati.presentation.RekamMedisForm" styleClass="halaman" spacing="16">
-    <VBox styleClass="kartu" spacing="8" prefWidth="300" minWidth="260">
+    <VBox styleClass="kartu" spacing="8" prefWidth="360" minWidth="320">
         <Label text="Pasien siap diperiksa hari ini" styleClass="judul-panel"/>
         <ListView fx:id="daftarPasien" VBox.vgrow="ALWAYS"/>
         <Label fx:id="keteranganDaftar" wrapText="true"/>

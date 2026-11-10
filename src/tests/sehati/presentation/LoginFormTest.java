@@ -29,5 +29,6 @@ class LoginFormTest {
     @Test
     void daftarMenu_semuaPunyaJudul() {
         assertTrue(Navigasi.JUDUL.keySet().containsAll(LoginForm.DAFTAR_MENU));
+        assertTrue(LoginForm.DESKRIPSI.keySet().containsAll(LoginForm.DAFTAR_MENU));
     }
 }
