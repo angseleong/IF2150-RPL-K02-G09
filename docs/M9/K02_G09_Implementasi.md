@@ -268,7 +268,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C16 | KonfigurasiForm | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C17 | AutentikasiManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C18 | PasienManager | Kelas Java | `src/src/main/java/sehati/business/control/PasienManager.java` - `PasienManager` | `cariPasien()`, `daftarkanPasien()` (Algo-C18-01), `perbaruiPasien()` (Algo-C18-02), `validasiNIK()`. Satu koneksi per operasi. Audit lewat `SesiAktif.idPenggunaSesi()`. `terbitkanNomorRM(DataPasienBoundary)` agar nomor terbit sekali per transaksi. |
-| C19 | KunjunganManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C19 | KunjunganManager | Kelas Java | `src/src/main/java/sehati/business/control/KunjunganManager.java` - `KunjunganManager` | `bukaKunjungan()` mewujudkan Algo-C19-01: cek kunjungan aktif ganda lewat `DataKunjunganBoundary.kunjunganAktif()`, terbitkan nomor antrean lewat `PoliEntity.ambilNomorBerikutnya()` (Algo-C19-02), lalu simpan kunjungan dan masukkan entri ke antrean jenis KUNJUNGAN. Manager menerima `DataKunjunganBoundary` lewat konstruktor. |
 | C20 | SkriningManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C21 | RisikoManager | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C22 | PemeriksaanManager | Kelas Java | `src/src/main/java/sehati/business/control/PemeriksaanManager.java` - `PemeriksaanManager` | Tanpa atribut, sesuai DPPL. Setiap operasi membuka koneksi lewat `KoneksiBasisData.buka()`. `simpanPemeriksaan()` mewujudkan Algo-C22-01, dan `kunciRekamMedis()` mewujudkan Algo-C22-02 dalam satu transaksi dengan pelaku audit dari `SesiAktif.idPenggunaSesi()`. Tambahan: `muatKunjunganSiapPeriksa()`, `muatPemeriksaan()`, `muatDiagnosis()`, dan `validasiTanggalKontrol()` (B.1). |
@@ -284,9 +284,9 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C32 | AuditEntity | Kelas Java | `src/src/main/java/sehati/business/entity/AuditEntity.java` - `AuditEntity` | Algo-C32-01. Tanpa setter agar catatan tidak dapat diubah (KNF05) |
 | C33 | PasienEntity | Kelas Java | `src/src/main/java/sehati/business/entity/PasienEntity.java` - `PasienEntity` | Algo-C33-01 pada `perbarui()`; `idPasien` dan `nomorRekamMedis` tidak ikut berubah. |
 | C34 | RekamMedisEntity | Kelas | `src/src/main/java/sehati/business/entity/RekamMedisEntity.java` | Algo-C34-01 diisi. Ditambah `getEntriBaru()` dan `kosongkanEntriBaru()` agar `simpanRekamMedis()` dapat membaca dan mengosongkan penampung entri baru. |
-| C35 | KunjunganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C36 | PoliEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C37 | AntreanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C35 | KunjunganEntity | Kelas Java | `src/src/main/java/sehati/business/entity/KunjunganEntity.java` - `KunjunganEntity` | `perbaruiStatus()` mewujudkan Algo-C35-01 (validasi status dan kunci status selesai), dan `aktifHariIni()` menentukan kunjungan aktif hari ini. |
+| C36 | PoliEntity | Kelas Java | `src/src/main/java/sehati/business/entity/PoliEntity.java` - `PoliEntity` | `ambilNomorBerikutnya()` mewujudkan algoritma nomor antrean berurutan per poli per hari dengan mulai ulang saat hari berganti (KF03). |
+| C37 | AntreanEntity | Kelas Java | `src/src/main/java/sehati/business/entity/AntreanEntity.java` - `AntreanEntity` | `tambahkan()` idempoten (Algo-C37-01), `ambilTerdepan()`, `pindahkanKeBelakang()`, dan `keluarkan()` (penolakan `IllegalArgumentException` bila entri tidak ada). |
 | C38 | SkriningEntity | Kelas | `src/src/main/java/sehati/business/entity/SkriningEntity.java` | Ditambah atribut `tandaVital` dan `getTandaVital()` (Tabel B.1). |
 | C39 | TandaVitalEntity | Kelas | `src/src/main/java/sehati/business/entity/TandaVitalEntity.java` | Algo-C39-01. Ditambah atribut `waktu` (Tabel B.1). |
 | C40 | AmbangRisikoEntity | Kelas | `src/src/main/java/sehati/business/entity/AmbangRisikoEntity.java` | Algo-C40-01. |
