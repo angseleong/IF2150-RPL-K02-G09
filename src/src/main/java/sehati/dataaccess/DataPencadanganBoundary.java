@@ -34,7 +34,7 @@ public class DataPencadanganBoundary {
     private static final String Q_C64_02 = "INSERT INTO pencadangan (waktu, status, lokasi_media, ukuran_berkas) "
             + "VALUES (?, ?, ?, ?) RETURNING id_pencadangan";
 
-    private static final DateTimeFormatter NAMA_BERKAS = DateTimeFormatter.ofPattern("yyyyMMdd-HHmm");
+    private static final DateTimeFormatter NAMA_BERKAS = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     private static final long BATAS_MENIT = 30;
 
     private Connection koneksi;
