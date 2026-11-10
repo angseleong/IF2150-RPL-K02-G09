@@ -1,4 +1,4 @@
-# SEHATI — Sistem Informasi Puskesmas
+# SEHATI — Sistem Elektronik Pelayanan Kesehatan Terintegrasi
 
 Aplikasi desktop untuk pelayanan puskesmas: pendaftaran pasien, kunjungan, skrining, pemeriksaan medis, resep elektronik, dan apotek, dengan integrasi SATUSEHAT.
 
@@ -47,26 +47,22 @@ Buat basis data (Docker, dari folder `src/`):
 docker compose up -d
 ```
 
-Atau manual: jalankan `db/schema.sql` lalu `db/seed.sql` lalu `db/sandi-aplikasi.sh` pada PostgreSQL 15. Skema tabel ada di `db/schema.sql`.
+Atau manual pada PostgreSQL 15: buat basis data `sehati`, jalankan `db/schema.sql` lalu `db/seed.sql` sebagai akun pemilik, lalu beri sandi akun aplikasi dengan `ALTER ROLE sehati_app PASSWORD '<isi DB_PASSWORD>';`. Skema tabel ada di `db/schema.sql`.
 
 ## Konfigurasi
 
-- `SATUSEHAT_URL`, `SATUSEHAT_TOKEN`: REST API sandbox SATUSEHAT (opsional, untuk sinkronisasi).
-- `EKSPOR_FRASA_SANDI`: frasa sandi enkripsi berkas ekspor bundel (Algo-C63-01).
-- `DB_UJI_URL`: URL JDBC lengkap untuk uji berbasis data, misalnya `jdbc:postgresql://localhost:5432/sehati?user=sehati_app&password=...`. Uji DB di-gate variabel ini.
+- `SATUSEHAT_URL`, `SATUSEHAT_TOKEN`: REST API sandbox SATUSEHAT. Bila `SATUSEHAT_URL` kosong, sinkronisasi berjalan dalam mode simulasi.
+- `EKSPOR_FRASA_SANDI`: frasa sandi enkripsi berkas ekspor bundel saat luring (Algo-C63-01).
+- `LOKASI_MEDIA_CADANGAN`: folder di media terpisah (misalnya HDD eksternal) tempat arsip `pg_dump` disimpan.
+- `PENCADANGAN_JAM`: jam pencadangan harian 0 sampai 23. Isi hanya di komputer server; kosong berarti tidak terjadwal.
+- `PG_DUMP`, `PG_RESTORE`: lokasi perintah bila tidak ada di `PATH`, misalnya `/opt/homebrew/opt/libpq/bin/pg_dump`.
+- `DB_UJI_URL`: URL JDBC untuk uji berbasis data dengan **akun pemilik**, karena uji membersihkan tabel yang tidak boleh diubah akun aplikasi. Contoh: `jdbc:postgresql://localhost:5432/sehati?user=sehati_admin&password=<DB_ADMIN_PASSWORD>`. Variabel `DB_*` harus menunjuk basis data yang sama. Uji berbasis data dilewati bila variabel ini kosong.
 
 ## Menjalankan Aplikasi
 
 ```bash
 cd src
 mvn javafx:run
-```
-
-Atau build jar lalu jalankan:
-
-```bash
-mvn -q package
-java -jar target/sehati-*.jar
 ```
 
 ## Menjalankan Test
@@ -110,8 +106,8 @@ Skema lengkap (tabel, kolom, kendala, indeks) ada di `db/schema.sql`. Tabel utam
 src/
   src/main/java/sehati/   # kode aplikasi (presentation, business, dataaccess, common)
   src/main/resources/     # FXML, CSS
-  src/tests/              # uji JUnit
-  db/                     # schema.sql, seed.sql, uji-kueri.sql
+  tests/                  # uji JUnit
+  db/                     # schema.sql, seed.sql, seed_besar.sql, uji-kueri.sql
   pom.xml
   docker-compose.yml
   .env.example
