@@ -116,6 +116,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | *Claude (Claude Code)* | *Menyusun DataFarmasiBoundary dan uji JUnit-nya dari DPPL Subbab 5.61 untuk issue #8* | *"Kerjain yang punya gw (Malik) yang hari Jumat."* | *Kueri disalin dari Tabel 5.61.3 dan dicocokkan dengan schema.sql. `mvn test` lulus untuk uji tanpa basis data; uji dengan basis data (DB_UJI_URL) menyusul.* |
 | *Claude (Claude Code)* | *Menyusun implementasi UC02 (#11): Algo-C33-01 pada PasienEntity, PasienManager (validasi NIK, pencarian, pendaftaran, pembaruan, audit), layar I-02 berikut pintasan papan ketik, dan unit test* | *"Kerjakan issue #11 berdasarkan Panduan Kerja dan Pembagian Tugas."* | *Operasi dan algoritma dicocokkan dengan DPPL Subbab 3.2, 5.18, 5.33, dan 6.2 beserta Panduan Kerja Subbab 6. `mvn test` belum dapat dijalankan di perangkat pengerjaan dan uji basis data di-gate `DB_UJI_URL`; CI menjalankan `mvn -B test` pada PR. Setiap file diperiksa manual sebelum commit.* |
 | *Claude (Claude Code)* | *Menurunkan schema.sql, seed.sql, dan docker-compose.yml dari kueri DPPL Subbab 5.56 sampai 5.64 untuk issue #2* | *"Kerjakan tugas Malik hari Rabu 4 Nov dan cek aturan workflow-nya."* | *Nama tabel, kolom, dan nilai CHECK dicocokkan dengan atribut entity DPPL. Seluruh kueri dan seed diperiksa dengan parser PostgreSQL terhadap katalog skema; uji PREPARE pada postgres:15 lewat db/uji-kueri.sql menyusul.* |
+| *Claude (Claude Code)* | *Menyusun draf UC09 (#18): DataPantauBoundary, PantauManager, DaftarPantauForm, entity C51 dan C52, serta unit test; mengisi baris Tabel B.1 dan B.5 milik Humam pada laporan* | *"Selesaikan semua."* | *Kueri dan algoritma dicocokkan dengan Subbab 5.12, 5.26, 5.51, 5.52, dan 5.60 DPPL. Unit test memakai pengganti DataBoundary di memori dan lulus lewat `mvn test`; layar dimuat lewat `mvn javafx:run`. Pengujian ke PostgreSQL menunggu skema (#2).* |
 
 ---
 
@@ -126,6 +127,7 @@ Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan A
 | Tanda Tangan | Nama Anggota |
 | :---: | :--- |
 | <img src="./assets/ttd-anggota1.png" width="100"> | **13525008 - Malik Arsyafiandra Madani** |
+| <img src="./assets/ttd-anggota6.png" width="100"> | **13525032 - Ahmad Humam Isma** |
 | <img src="./assets/ttd-anggota2.png" width="100"> | **13525044 - Steven Vanako** |
 | <img src="./assets/ttd-anggota3.png" width="100"> | **13525071 - Muhammad Adnan Kurniawan** |
 | <img src="./assets/ttd-anggota4.png" width="100"> | **13525074 - Axeleon Justin Algianto** |
