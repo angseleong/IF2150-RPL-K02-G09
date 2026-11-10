@@ -1,6 +1,7 @@
 package sehati.business.control;
 
 import sehati.business.entity.AuditEntity;
+import sehati.business.entity.BundelFHIREntity;
 import sehati.business.entity.DiagnosisEntity;
 import sehati.business.entity.JadwalKontrolEntity;
 import sehati.business.entity.KodeICD10Entity;
@@ -14,11 +15,14 @@ import sehati.common.SesiAktif;
 import sehati.dataaccess.DataAkunBoundary;
 import sehati.dataaccess.DataKlinisBoundary;
 import sehati.dataaccess.DataKunjunganBoundary;
+import sehati.dataaccess.DataFarmasiBoundary;
 import sehati.dataaccess.DataPasienBoundary;
+import sehati.dataaccess.DataSinkronisasiBoundary;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,6 +127,8 @@ public class PemeriksaanManager {
                 throw new IllegalStateException("Rekam medis kunjungan ini sudah dikunci");
             }
             dataKlinis.simpanPemeriksaan(p, d);
+            new DataAkunBoundary(koneksi).simpanAudit(AuditEntity.buat(SesiAktif.idPenggunaAudit(),
+                    "Pemeriksaan kunjungan " + idKunjungan + " disimpan"));
         } catch (SQLException e) {
             throw galatTeknis("Pemeriksaan gagal disimpan", e);
         }
@@ -202,6 +208,16 @@ public class PemeriksaanManager {
                 dataKlinis.simpanPemeriksaan(p, null);
                 KunjunganEntity kunjungan = dataKunjungan.ambilKunjungan(idKunjungan);
                 kunjungan.perbaruiStatus(KunjunganEntity.STATUS_SELESAI_DIPERIKSA);
+                // Tanpa resep tidak ada langkah apotek yang menutup kunjungan, jadi ditutup dan dibundel di sini (KF14)
+                if (new DataFarmasiBoundary(koneksi).ambilResepKunjungan(idKunjungan).isEmpty()) {
+                    kunjungan.perbaruiStatus(KunjunganEntity.STATUS_SELESAI);
+                    String isi = PenyusunBundelFHIR.susun(kunjungan,
+                            new DataPasienBoundary(koneksi).ambilPasien(kunjungan.getIdPasien()),
+                            dataKlinis.ambilSkrining(idKunjungan), dataKlinis.ambilDiagnosis(idKunjungan), null,
+                            Map.of(), LocalDateTime.now());
+                    new DataSinkronisasiBoundary(koneksi).simpanBundel(
+                            new BundelFHIREntity(0, idKunjungan, isi, "tertunda", null));
+                }
                 dataKunjungan.simpanKunjungan(kunjungan);
                 new DataAkunBoundary(koneksi).simpanAudit(
                         AuditEntity.buat(idPengguna, "Pemeriksaan kunjungan " + idKunjungan + " dikunci"));

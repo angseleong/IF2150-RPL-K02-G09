@@ -46,8 +46,12 @@ public class DataKunjunganBoundary {
     private static final String Q_C58_11 = "DELETE FROM antrean_entri WHERE id_antrean = ?";
     private static final String Q_C58_12 = "INSERT INTO antrean_entri (id_antrean, urutan, id_entri) VALUES (?, ?, ?)";
     // Tambahan implementasi (B.1): daftar pasien untuk dokter pada I-06, urut nomor antrean.
-    private static final String Q_C58_13 = KOLOM_KUNJUNGAN
-            + " WHERE tanggal = ? AND status = 'siap diperiksa dokter' ORDER BY nomor_antrean, id_kunjungan";
+    // Ditambah kunjungan yang resepnya dikembalikan apotek dan belum diganti resep revisi (UC07 alternatif 1)
+    private static final String Q_C58_13 = KOLOM_KUNJUNGAN + " k WHERE tanggal = ? AND (status = 'siap diperiksa dokter'"
+            + " OR (status = 'selesai diperiksa'"
+            + " AND EXISTS (SELECT 1 FROM resep r WHERE r.id_kunjungan = k.id_kunjungan AND r.status = 'dikembalikan')"
+            + " AND NOT EXISTS (SELECT 1 FROM resep r WHERE r.id_kunjungan = k.id_kunjungan AND r.status = 'menunggu')))"
+            + " ORDER BY nomor_antrean, id_kunjungan";
 
     private Connection koneksi;
 

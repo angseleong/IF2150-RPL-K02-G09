@@ -1,5 +1,8 @@
 package sehati.business.control;
 
+import sehati.common.SesiAktif;
+import sehati.dataaccess.DataAkunBoundary;
+import sehati.business.entity.AuditEntity;
 import sehati.business.entity.AntreanEntity;
 import sehati.business.entity.KunjunganEntity;
 import sehati.business.entity.PasienEntity;
@@ -129,6 +132,8 @@ public class SkriningManager {
                 risikoManager.evaluasiRisiko(koneksi, kunjungan, tv);
                 kunjungan.perbaruiStatus(STATUS_SIAP_DIPERIKSA);
                 dataKunjungan.simpanKunjungan(kunjungan);
+                new DataAkunBoundary(koneksi).simpanAudit(AuditEntity.buat(SesiAktif.idPenggunaAudit(),
+                        "Skrining kunjungan " + idKunjungan + " disimpan"));
                 // Pasien yang selesai diskrining keluar dari antrean agar daftar tidak terus membesar.
                 AntreanEntity antrean = dataKunjungan.ambilAntrean("skrining");
                 if (antrean.getDaftarEntri().contains(idKunjungan)) {
