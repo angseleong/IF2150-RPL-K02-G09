@@ -22,6 +22,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import sehati.business.control.AutentikasiManager;
+import sehati.business.control.SinkronisasiManager;
 import sehati.business.entity.SesiEntity;
 import sehati.common.SesiAktif;
 
@@ -62,6 +63,7 @@ public final class Navigasi {
     private static boolean sesiAktif;
     private static String peranSesi;
     private static final AutentikasiManager AUTENTIKASI = new AutentikasiManager();
+    private static final SinkronisasiManager SINKRONISASI = new SinkronisasiManager();
 
     private Navigasi() {
     }
@@ -73,6 +75,10 @@ public final class Navigasi {
         scene.getStylesheets().add(Navigasi.class.getResource("/sehati/css/sehati.css").toExternalForm());
         pasangPintasan(scene);
         pasangPewaktuDiam(scene);
+        // Indikator koneksi diperbarui berkala untuk semua peran, bukan hanya saat layar sinkronisasi dibuka (KF22)
+        Timeline pantauKoneksi = new Timeline(new KeyFrame(Duration.seconds(30), e -> periksaKoneksi()));
+        pantauKoneksi.setCycleCount(Timeline.INDEFINITE);
+        pantauKoneksi.play();
         stage.setTitle("SEHATI");
         stage.setScene(scene);
         buka(LAYAR_MASUK);
@@ -131,6 +137,13 @@ public final class Navigasi {
         peranSesi = peran;
         bilah.setPengguna(namaPengguna, peran);
         bingkai.setTop(bilah);
+        periksaKoneksi();
+    }
+
+    private static void periksaKoneksi() {
+        if (sesiAktif) {
+            LatarBelakang.jalankan(SINKRONISASI::periksaKoneksi, bilah::setDaring, e -> bilah.setDaring(false));
+        }
     }
 
     /**

@@ -20,10 +20,14 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import javafx.util.StringConverter;
 
 import sehati.business.control.PasienManager;
 import sehati.business.entity.PasienEntity;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -64,6 +68,7 @@ public class PasienForm {
     @FXML private TextField kolomRm;
     @FXML private TextField kolomNama;
     @FXML private DatePicker kolomTanggalLahir;
+    private static final DateTimeFormatter TANGGAL = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     @FXML private ComboBox<String> kolomJenisKelamin;
     @FXML private TextArea kolomAlamat;
     @FXML private TextField kolomTelepon;
@@ -75,13 +80,29 @@ public class PasienForm {
     @FXML
     private void initialize() {
         kolomJenisKelamin.setItems(FXCollections.observableArrayList("Laki-laki", "Perempuan"));
+        // Format sama dengan layar lain, tidak ikut locale OS; teks salah jadi kosong dan ditandai saat simpan
+        kolomTanggalLahir.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(LocalDate tanggal) {
+                return tanggal == null ? "" : tanggal.format(TANGGAL);
+            }
+
+            @Override
+            public LocalDate fromString(String teks) {
+                try {
+                    return teks == null || teks.isBlank() ? null : LocalDate.parse(teks.strip(), TANGGAL);
+                } catch (DateTimeParseException e) {
+                    return null;
+                }
+            }
+        });
 
         kolomNikTabel.setCellValueFactory(p -> new ReadOnlyStringWrapper(p.getValue().getNik()));
         kolomRmTabel.setCellValueFactory(p -> new ReadOnlyStringWrapper(p.getValue().getNomorRekamMedis()));
         kolomNamaTabel.setCellValueFactory(p -> new ReadOnlyStringWrapper(p.getValue().getNama()));
         kolomLahirTabel.setCellValueFactory(p ->
                 new ReadOnlyStringWrapper(p.getValue().getTanggalLahir() == null
-                        ? "" : p.getValue().getTanggalLahir().toString()));
+                        ? "" : p.getValue().getTanggalLahir().format(TANGGAL)));
 
         tabelHasil.getSelectionModel().selectedItemProperty().addListener((obs, lama, baru) -> {
             if (baru != null) {
