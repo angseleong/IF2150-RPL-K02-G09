@@ -197,6 +197,8 @@ Tabel B.1. Perubahan dari DPPL
 | :--- | :--- | :--- | :--- | :--- |
 | 1 | C38 SkriningEntity | Atribut idSkrining, idKunjungan, keluhanAwal, waktu | Ditambah atribut `tandaVital` dan `getTandaVital()` | Subbab 5.38 menyebut tanda vital dipegang sebagai referensi, tetapi atributnya tidak ada di Tabel 4.1, sedangkan `simpanSkrining()` membutuhkannya |
 | 2 | C39 TandaVitalEntity, C59 Q-C59-03 dan Q-C59-05 | Tidak ada atribut waktu, `s.waktu` dipilih tetapi tidak disimpan | Ditambah atribut `waktu: LocalDateTime` dengan getter dan setter, diisi dari `s.waktu` pada Q-C59-03 dan Q-C59-05 | Grafik tren UC05 (KF08) memakai waktu pengukuran sebagai sumbu-x dan `RekamMedisForm.seriTren` hanya memegang `List<TandaVitalEntity>`. Atas usul Adnan pada review #29 |
+| 3 | C20 SkriningManager.muatAntrean(), panggilPasien(), lewatiPasien() | Antrean skrining tampil menurut `nomorAntrean` | Antrean tampil menurut urutan `AntreanEntity.daftarEntri`, dibatasi kunjungan hari ini (`aktifHariIni()`). `lewatiPasien()` hanya menerima kunjungan berstatus "sedang diskrining" | `nomorAntrean` berlaku per poli, sehingga baris teratas dapat berbeda dari pasien yang dipanggil dan pasien yang dilewati tidak terlihat pindah. Atas usul Adnan pada review #31 |
+| 4 | C20 SkriningManager.simpanSkrining() | Algo-C20-01 tidak mengeluarkan kunjungan dari antrean | Setelah status menjadi "siap diperiksa dokter", kunjungan dikeluarkan dari antrean skrining lewat `AntreanEntity.keluarkan()` dan `simpanAntrean()` dalam transaksi yang sama | Tanpa ini antrean terus membesar dan penyegaran 10 detik membaca semua entri lama. Tabel 5.37 sudah menyediakan `keluarkan()` untuk UC04. Atas usul Adnan pada review #31 |
 | *...* | *...* | *...* | *...* | *...* |
 
 ## B.2 Bukti Penerapan Best Practices
@@ -286,7 +288,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C34 | RekamMedisEntity | Kelas | `src/src/main/java/sehati/business/entity/RekamMedisEntity.java` | Algo-C34-01 diisi. Ditambah `getEntriBaru()` dan `kosongkanEntriBaru()` agar `simpanRekamMedis()` dapat membaca dan mengosongkan penampung entri baru. |
 | C35 | KunjunganEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
 | C36 | PoliEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
-| C37 | AntreanEntity | *[Bentuk]* | *[File - nama]* | *[Keterangan]* |
+| C37 | AntreanEntity | Kelas Java | `src/src/main/java/sehati/business/entity/AntreanEntity.java` - `AntreanEntity` | Algo-C37-01: `ambilTerdepan()` dan `pindahkanKeBelakang()` diisi untuk UC04. `tambahkan()` dari #40 dan `keluarkan()` dari #42. `keluarkan()` menolak entri yang tidak ada. |
 | C38 | SkriningEntity | Kelas | `src/src/main/java/sehati/business/entity/SkriningEntity.java` | Ditambah atribut `tandaVital` dan `getTandaVital()` (Tabel B.1). |
 | C39 | TandaVitalEntity | Kelas | `src/src/main/java/sehati/business/entity/TandaVitalEntity.java` | Algo-C39-01. Ditambah atribut `waktu` (Tabel B.1). |
 | C40 | AmbangRisikoEntity | Kelas | `src/src/main/java/sehati/business/entity/AmbangRisikoEntity.java` | Algo-C40-01. |
