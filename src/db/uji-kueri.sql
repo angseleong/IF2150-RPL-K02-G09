@@ -6,6 +6,32 @@
 \set ON_ERROR_STOP on
 \set QUIET on
 
+-- Seluruh uji berjalan sebagai peran aplikasi, sama dengan koneksi SEHATI (aturan 5 Subbab 5.56).
+SET ROLE sehati_app;
+
+-- Hak akses audit (KF16, KNF05): INSERT diizinkan, UPDATE, DELETE, dan TRUNCATE ditolak dengan SQLSTATE 42501.
+-- Hak akses diperiksa saat eksekusi, bukan saat PREPARE, jadi bagian ini benar-benar menjalankan perintahnya
+-- di dalam transaksi yang selalu di-ROLLBACK agar tidak meninggalkan catatan audit.
+\echo Hak akses audit
+BEGIN;
+INSERT INTO audit (id_pengguna, waktu, deskripsi) VALUES (0, now(), 'Uji hak akses audit');
+DO $$
+DECLARE
+    perintah TEXT;
+BEGIN
+    FOREACH perintah IN ARRAY ARRAY['UPDATE audit SET deskripsi = deskripsi', 'DELETE FROM audit', 'TRUNCATE audit']
+    LOOP
+        BEGIN
+            EXECUTE perintah;
+            RAISE EXCEPTION 'Perintah "%" seharusnya ditolak untuk sehati_app', perintah;
+        EXCEPTION WHEN insufficient_privilege THEN
+            NULL;
+        END;
+    END LOOP;
+END
+$$;
+ROLLBACK;
+
 \echo Q-C56-01
 PREPARE q_c56_01 AS
     SELECT id_pengguna, nama_pengguna, kata_sandi_hash, peran, status
@@ -448,4 +474,5 @@ PREPARE q_c64_02 AS
     VALUES ($1, $2, $3, $4) RETURNING id_pencadangan;
 
 DEALLOCATE ALL;
-\echo 'Seluruh 78 kueri lolos PREPARE.'
+RESET ROLE;
+\echo 'Seluruh 78 kueri lolos PREPARE sebagai sehati_app, dan hak akses audit sesuai KNF05.'

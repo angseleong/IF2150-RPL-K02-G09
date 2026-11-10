@@ -15,6 +15,10 @@ public class RekamMedisEntity {
     private List<String> riwayatObat = new ArrayList<>();
     // Penampung entri dari tambahEntri() sampai DataPasienBoundary.simpanRekamMedis() menyimpannya (Q-C57-11).
     private final List<String> entriBaru = new ArrayList<>();
+    // Tiga isian berikut hanya untuk tampilan I-06, diisi PemeriksaanManager.susunRingkasan() (KF09).
+    private PasienEntity pasien;
+    private SkriningEntity skriningHariIni;
+    private List<PenandaRisikoEntity> penandaAktif = new ArrayList<>();
 
     public RekamMedisEntity() {
     }
@@ -67,5 +71,29 @@ public class RekamMedisEntity {
 
     public void setRiwayatObat(List<String> riwayatObat) {
         this.riwayatObat = riwayatObat;
+    }
+
+    public PasienEntity getPasien() {
+        return pasien;
+    }
+
+    public void setPasien(PasienEntity pasien) {
+        this.pasien = pasien;
+    }
+
+    public SkriningEntity getSkriningHariIni() {
+        return skriningHariIni;
+    }
+
+    public void setSkriningHariIni(SkriningEntity skriningHariIni) {
+        this.skriningHariIni = skriningHariIni;
+    }
+
+    public List<PenandaRisikoEntity> getPenandaAktif() {
+        return penandaAktif;
+    }
+
+    public void setPenandaAktif(List<PenandaRisikoEntity> penandaAktif) {
+        this.penandaAktif = penandaAktif;
     }
 }
