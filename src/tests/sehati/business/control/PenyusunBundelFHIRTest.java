@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import sehati.business.entity.DiagnosisEntity;
 import sehati.business.entity.ItemResepEntity;
 import sehati.business.entity.KunjunganEntity;
 import sehati.business.entity.ObatEntity;
@@ -31,6 +32,8 @@ class PenyusunBundelFHIRTest {
             LocalDate.of(1975, 7, 21), "Perempuan", "Jl. Mawar No. 2", null);
     private final Map<Integer, ObatEntity> obat = Map.of(4, new ObatEntity(4, "Metformin 500 mg", "tablet", 190, 100));
 
+    private final DiagnosisEntity diagnosis = new DiagnosisEntity(3, "E11.9", "Diabetes melitus tipe 2 tanpa komplikasi");
+
     private ResepEntity resep() {
         ResepEntity r = new ResepEntity(9, 21, WAKTU.minusMinutes(30), ResepEntity.STATUS_SELESAI_DILAYANI, null);
         r.setDaftarItem(List.of(new ItemResepEntity(1, 4, "2x1", 60, "sesudah makan")));
@@ -42,29 +45,31 @@ class PenyusunBundelFHIRTest {
     }
 
     @Test
-    void susun_bundelTransactionBerisiPasienKunjunganObservasiDanPenyerahan() {
+    void susun_bundelTransactionBerisiPasienKunjunganObservasiDiagnosisDanResep() {
         SkriningEntity skrining = new SkriningEntity(5, 21, "Sering haus", WAKTU.minusHours(1));
         skrining.lampirkanTandaVital(new TandaVitalEntity(150, 95, 70.5, 158, 36.8, 88, 210, WAKTU.minusHours(1)));
 
-        String json = PenyusunBundelFHIR.susun(kunjungan, pasien, skrining, resep(), obat, WAKTU);
+        String json = PenyusunBundelFHIR.susun(kunjungan, pasien, skrining, diagnosis, resep(), obat, WAKTU);
 
         assertTrue(json.startsWith("{\"resourceType\":\"Bundle\",\"type\":\"transaction\",\"entry\":["));
         assertEquals(1, hitung(json, "\"resourceType\":\"Patient\""));
         assertEquals(1, hitung(json, "\"resourceType\":\"Encounter\""));
         // Enam tanda vital wajib ditambah gula darah yang terisi.
         assertEquals(7, hitung(json, "\"resourceType\":\"Observation\""));
-        assertEquals(1, hitung(json, "\"resourceType\":\"MedicationDispense\""));
+        assertEquals(1, hitung(json, "\"resourceType\":\"Condition\""));
+        assertTrue(json.contains("\"system\":\"http://hl7.org/fhir/sid/icd-10\",\"code\":\"E11.9\""));
+        assertEquals(1, hitung(json, "\"resourceType\":\"MedicationRequest\""));
         assertTrue(json.contains("\"system\":\"https://fhir.kemkes.go.id/id/nik\",\"value\":\"9999010101750002\""));
         assertTrue(json.contains("\"gender\":\"female\""));
         assertTrue(json.contains("\"text\":\"Siti \\\"Ami\\\" Aminah\""));
         assertTrue(json.contains("\"medicationCodeableConcept\":{\"text\":\"Metformin 500 mg tablet\"}"));
-        assertTrue(json.contains("\"whenHandedOver\":\"2026-11-08T09:15\""));
+        assertTrue(json.contains("\"authoredOn\":\"2026-11-08T09:15\""));
     }
 
     @Test
     void susun_tanpaSkriningTidakMemuatObservasiDanIdentitasStabil() {
-        String pertama = PenyusunBundelFHIR.susun(kunjungan, pasien, null, resep(), obat, WAKTU);
-        String kedua = PenyusunBundelFHIR.susun(kunjungan, pasien, null, resep(), obat, WAKTU);
+        String pertama = PenyusunBundelFHIR.susun(kunjungan, pasien, null, diagnosis, resep(), obat, WAKTU);
+        String kedua = PenyusunBundelFHIR.susun(kunjungan, pasien, null, diagnosis, resep(), obat, WAKTU);
 
         assertFalse(pertama.contains("Observation"));
         assertEquals(pertama, kedua);
@@ -73,7 +78,15 @@ class PenyusunBundelFHIRTest {
     @Test
     void susun_dataTidakLengkapDitolak() {
         assertThrows(IllegalStateException.class,
-                () -> PenyusunBundelFHIR.susun(kunjungan, null, null, resep(), obat, WAKTU));
+                () -> PenyusunBundelFHIR.susun(kunjungan, null, null, diagnosis, resep(), obat, WAKTU));
+    }
+
+    @Test
+    void susun_kunjunganTanpaResepTetapMemuatDiagnosis() {
+        String json = PenyusunBundelFHIR.susun(kunjungan, pasien, null, diagnosis, null, Map.of(), WAKTU);
+
+        assertEquals(1, hitung(json, "\"resourceType\":\"Condition\""));
+        assertFalse(json.contains("MedicationRequest"));
     }
 
     @Test

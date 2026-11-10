@@ -73,7 +73,7 @@
             <TextField fx:id="kolomNama" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="2"/>
 
             <Label text="Tanggal lahir" styleClass="label-kolom" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-            <DatePicker fx:id="kolomTanggalLahir" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            <DatePicker fx:id="kolomTanggalLahir" promptText="dd-mm-yyyy" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
             <Label text="Jenis kelamin" styleClass="label-kolom" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
             <ComboBox fx:id="kolomJenisKelamin" promptText="Pilih" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 

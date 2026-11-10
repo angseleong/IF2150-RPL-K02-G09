@@ -50,7 +50,7 @@ class ResepManagerTest {
         @BeforeEach
         void buka() throws SQLException {
             koneksi = DriverManager.getConnection(System.getenv("DB_UJI_URL"));
-            idKunjungan = hitung("SELECT min(id_kunjungan) FROM kunjungan");
+            idKunjungan = hitung("SELECT min(id_kunjungan) FROM kunjungan WHERE status <> 'selesai'");
             resepTerakhir = hitung("SELECT coalesce(max(id_resep), 0) FROM resep");
         }
 
@@ -71,6 +71,14 @@ class ResepManagerTest {
             assertTrue(ResepManager.validasiStok(new ItemResepEntity(0, 1, "500 mg", 300, "3 x 1"), dataFarmasi));
             assertFalse(ResepManager.validasiStok(new ItemResepEntity(0, 1, "500 mg", 301, "3 x 1"), dataFarmasi));
             assertFalse(ResepManager.validasiStok(new ItemResepEntity(0, 12, "500 mg", 1, "3 x 1"), dataFarmasi));
+        }
+
+        @Test
+        void kirimKeApotek_kunjunganSelesaiDitolak() throws SQLException {
+            int selesai = hitung("SELECT min(id_kunjungan) FROM kunjungan WHERE status = 'selesai'");
+            assertThrows(IllegalStateException.class,
+                    () -> manager.kirimKeApotek(selesai, List.of(manager.tambahItem(1, 1, "500 mg", "3 x 1"))));
+            assertEquals(resepTerakhir, hitung("SELECT coalesce(max(id_resep), 0) FROM resep"));
         }
 
         @Test

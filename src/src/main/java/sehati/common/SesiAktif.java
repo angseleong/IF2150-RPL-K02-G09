@@ -46,6 +46,12 @@ public final class SesiAktif {
     /**
      * Mengembalikan idPengguna milik sesi aktif. Melempar IllegalStateException bila belum ada pengguna yang masuk.
      */
+    // Pelaku jejak audit; 0 bila tidak ada sesi, sama seperti audit masuk gagal (Algo-C17-01)
+    public static int idPenggunaAudit() {
+        SesiEntity s = ambil();
+        return s == null ? 0 : s.getIdPengguna();
+    }
+
     public static int idPenggunaSesi() {
         SesiEntity s = ambil();
         if (s == null) {
