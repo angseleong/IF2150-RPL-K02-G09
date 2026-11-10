@@ -41,17 +41,20 @@ public class AntreanEntity {
         if (daftarEntri.isEmpty()) {
             return null;
         }
-        KunjunganEntity k = new KunjunganEntity();
-        k.setIdKunjungan(daftarEntri.get(0));
-        return k;
+        KunjunganEntity kunjungan = new KunjunganEntity();
+        kunjungan.setIdKunjungan(daftarEntri.get(0));
+        return kunjungan;
     }
 
     /**
      * Memindahkan entri ke akhir antrean (Algo-C37-01).
      */
     public void pindahkanKeBelakang(int idEntri) {
-        keluarkan(idEntri);
-        daftarEntri.add(idEntri);
+        int indeks = daftarEntri.indexOf(Integer.valueOf(idEntri));
+        if (indeks >= 0) {
+            daftarEntri.remove(Integer.valueOf(idEntri));
+            daftarEntri.add(Integer.valueOf(idEntri));
+        }
     }
 
     /**

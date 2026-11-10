@@ -25,7 +25,14 @@ public class PoliEntity {
     }
 
     public int ambilNomorBerikutnya(LocalDate hariIni) {
-        throw new UnsupportedOperationException("TODO");
+        if (hariIni == null) {
+            throw new IllegalArgumentException("Hari layanan tidak boleh kosong");
+        }
+        if (!hariIni.equals(tanggalUrutan)) {
+            urutanTerakhir = 0;
+            tanggalUrutan = hariIni;
+        }
+        return ++urutanTerakhir;
     }
 
     public int getIdPoli() {
