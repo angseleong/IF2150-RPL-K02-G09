@@ -1,5 +1,8 @@
 package sehati.business.entity;
 
+import java.time.LocalDate;
+import java.util.Set;
+
 /**
  * C51 - DaftarPantauEntity.
  *
@@ -7,10 +10,19 @@ package sehati.business.entity;
  */
 public class DaftarPantauEntity {
 
+    public static final String STATUS_BELUM = "belum ditindaklanjuti";
+    public static final String STATUS_ULANG = "perlu dihubungi ulang";
+    public static final String STATUS_SELESAI = "selesai ditindaklanjuti";
+    private static final Set<String> STATUS_SAH = Set.of(STATUS_BELUM, STATUS_ULANG, STATUS_SELESAI);
+
     private int idEntri;
     private int idPasien;
     private String jenisRisiko;
     private String statusTindakLanjut;
+    // Data tampilan yang diisi PantauManager.saringDaftar(); bukan kolom tabel daftar_pantau.
+    private LocalDate tanggalPemicu;
+    private String namaPasien;
+    private String nomorTelepon;
 
     public DaftarPantauEntity() {
     }
@@ -22,8 +34,41 @@ public class DaftarPantauEntity {
         this.statusTindakLanjut = statusTindakLanjut;
     }
 
+    /**
+     * Mengubah status ke status sah; entri yang sudah selesai tidak dapat diubah lagi (Algo-C51-01).
+     */
     public void perbaruiStatus(String status) {
-        throw new UnsupportedOperationException("TODO");
+        if (!STATUS_SAH.contains(status)) {
+            throw new IllegalArgumentException("Status tindak lanjut tidak dikenal: " + status);
+        }
+        if (STATUS_SELESAI.equals(statusTindakLanjut)) {
+            throw new IllegalStateException("Entri sudah selesai ditindaklanjuti");
+        }
+        this.statusTindakLanjut = status;
+    }
+
+    public LocalDate getTanggalPemicu() {
+        return tanggalPemicu;
+    }
+
+    public void setTanggalPemicu(LocalDate tanggalPemicu) {
+        this.tanggalPemicu = tanggalPemicu;
+    }
+
+    public String getNamaPasien() {
+        return namaPasien;
+    }
+
+    public void setNamaPasien(String namaPasien) {
+        this.namaPasien = namaPasien;
+    }
+
+    public String getNomorTelepon() {
+        return nomorTelepon;
+    }
+
+    public void setNomorTelepon(String nomorTelepon) {
+        this.nomorTelepon = nomorTelepon;
     }
 
     public int getIdEntri() {

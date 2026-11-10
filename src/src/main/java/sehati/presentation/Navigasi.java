@@ -1,11 +1,15 @@
 package sehati.presentation;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,8 +17,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import sehati.business.control.AutentikasiManager;
+import sehati.business.entity.SesiEntity;
+import sehati.common.SesiAktif;
 
 /**
  * Cangkang aplikasi: satu jendela, bilah aplikasi, perpindahan layar, dan pintasan global (DPPL pengantar BAB 6, KF22,
@@ -52,6 +61,7 @@ public final class Navigasi {
     private static BilahAplikasi bilah;
     private static boolean sesiAktif;
     private static String peranSesi;
+    private static final AutentikasiManager AUTENTIKASI = new AutentikasiManager();
 
     private Navigasi() {
     }
@@ -62,6 +72,7 @@ public final class Navigasi {
         Scene scene = new Scene(bingkai, 1280, 800);
         scene.getStylesheets().add(Navigasi.class.getResource("/sehati/css/sehati.css").toExternalForm());
         pasangPintasan(scene);
+        pasangPewaktuDiam(scene);
         stage.setTitle("SEHATI");
         stage.setScene(scene);
         buka(LAYAR_MASUK);
@@ -76,7 +87,10 @@ public final class Navigasi {
         if (!JUDUL.containsKey(layar)) {
             throw new IllegalArgumentException("Layar tidak dikenal: " + layar);
         }
-        // TODO(#10): periksa hak akses lewat AutentikasiManager.periksaHakAkses() sebelum memuat (Algo-C01-02).
+        // Algo-C01-02: dicek tiap buka, bukan cuma lewat menu, karena layar bisa dibuka dari layar lain
+        if (!LAYAR_MASUK.equals(layar) && !AUTENTIKASI.periksaHakAkses(peranSesi(), layar)) {
+            throw new IllegalStateException("Peran " + peranSesi() + " tidak berwenang membuka layar ini");
+        }
         FXMLLoader loader = new FXMLLoader(Navigasi.class.getResource("/sehati/fxml/" + layar + ".fxml"));
         Parent isi;
         try {
@@ -130,10 +144,26 @@ public final class Navigasi {
      * Mengakhiri sesi di layar dan kembali ke I-01 dengan LoginForm yang baru, sehingga isian lama tidak tertinggal.
      */
     public static void keluar() {
-        // TODO(#10): tutup sesi lewat SesiEntity.tutup() dan catat ke audit.
+        akhiriSesi(false);
+    }
+
+    private static void akhiriSesi(boolean habisWaktu) {
+        String galat = null;
+        try {
+            AUTENTIKASI.tutupSesi(habisWaktu);
+        } catch (IllegalStateException e) {
+            galat = e.getMessage();
+        }
         sesiAktif = false;
+        peranSesi = null;
         RIWAYAT.clear();
-        buka(LAYAR_MASUK);
+        LoginForm masuk = buka(LAYAR_MASUK);
+        if (galat != null) {
+            masuk.tampilkanPesanGagal(galat);
+        } else if (habisWaktu) {
+            masuk.tampilkanPesanGagal("Sesi berakhir setelah diam " + AutentikasiManager.BATAS_DIAM_MENIT
+                    + " menit, silakan masuk kembali");
+        }
     }
 
     /**
@@ -150,6 +180,28 @@ public final class Navigasi {
         bingkai.setCenter(layar.isi());
         // Fokus awal tidak boleh jatuh ke tombol Keluar, karena tombol Spasi akan langsung mengakhiri sesi.
         layar.isi().requestFocus();
+    }
+
+    // Subbab 5.31: tiap ketukan/klik menggeser waktuMulai di memori, lalu tiap menit dicek habisWaktu(15).
+    // Waktu masuk di DB tetap, karena simpanSesi() hanya mengubah status_aktif.
+    private static void pasangPewaktuDiam(Scene scene) {
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, Navigasi::catatAktivitas);
+        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, Navigasi::catatAktivitas);
+        Timeline pewaktu = new Timeline(new KeyFrame(Duration.minutes(1), e -> {
+            SesiEntity sesi = SesiAktif.ambil();
+            if (sesiAktif && sesi != null && sesi.habisWaktu(AutentikasiManager.BATAS_DIAM_MENIT)) {
+                akhiriSesi(true);
+            }
+        }));
+        pewaktu.setCycleCount(Timeline.INDEFINITE);
+        pewaktu.play();
+    }
+
+    private static void catatAktivitas(Event e) {
+        SesiEntity sesi = SesiAktif.ambil();
+        if (sesi != null) {
+            sesi.setWaktuMulai(LocalDateTime.now());
+        }
     }
 
     private static void pasangPintasan(Scene scene) {

@@ -1,56 +1,66 @@
 package sehati.business.entity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AntreanEntityTest {
 
-    @Test
-    void tambahkan_menambahkanEntriDiUjian() {
-        AntreanEntity antrean = new AntreanEntity(1, "KUNJUNGAN", new ArrayList<>());
-
-        antrean.tambahkan(10);
-        antrean.tambahkan(11);
-
-        assertEquals(List.of(10, 11), antrean.getDaftarEntri());
+    private AntreanEntity antrean(Integer... isi) {
+        return new AntreanEntity(1, "skrining", new ArrayList<>(List.of(isi)));
     }
 
     @Test
-    void ambilTerdepan_mengembalikanEntriPalingAtas() {
-        AntreanEntity antrean = new AntreanEntity(1, "KUNJUNGAN", new ArrayList<>(List.of(3, 1, 2)));
-
-        KunjunganEntity terdepan = antrean.ambilTerdepan();
-
-        assertEquals(3, terdepan.getIdKunjungan());
+    void ambilTerdepan_mengembalikanEntriPertamaDanNullBilaKosong() {
+        assertEquals(3, antrean(3, 2, 11).ambilTerdepan().getIdKunjungan());
+        assertNull(antrean().ambilTerdepan());
     }
 
     @Test
-    void ambilTerdepan_antreanKosongMengembalikanNull() {
-        AntreanEntity antrean = new AntreanEntity(1, "KUNJUNGAN", new ArrayList<>());
+    void pindahkanKeBelakang_menaruhEntriDiAkhir() {
+        AntreanEntity a = antrean(3, 2, 11);
 
-        assertNull(antrean.ambilTerdepan());
+        a.pindahkanKeBelakang(3);
+
+        assertEquals(List.of(2, 11, 3), a.getDaftarEntri());
     }
 
     @Test
-    void pindahkanKeBelakang_memindahEntriKeAkhirAntrean() {
-        AntreanEntity antrean = new AntreanEntity(1, "KUNJUNGAN", new ArrayList<>(List.of(1, 2, 3)));
+    void keluarkan_menghapusEntri() {
+        AntreanEntity a = antrean(3, 2, 11);
 
-        antrean.pindahkanKeBelakang(1);
+        a.keluarkan(2);
 
-        assertEquals(List.of(2, 3, 1), antrean.getDaftarEntri());
+        assertEquals(List.of(3, 11), a.getDaftarEntri());
     }
 
     @Test
-    void keluarkan_menghapusEntriDariAntrean() {
-        AntreanEntity antrean = new AntreanEntity(1, "KUNJUNGAN", new ArrayList<>(List.of(1, 2, 3)));
+    void keluarkan_dan_pindahkanKeBelakang_menolakEntriYangTidakAda() {
+        AntreanEntity a = antrean(3, 2);
 
-        antrean.keluarkan(2);
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> a.keluarkan(99));
+        assertEquals("Entri tidak ada pada antrean skrining", e.getMessage());
+        assertThrows(IllegalArgumentException.class, () -> a.pindahkanKeBelakang(99));
+        assertEquals(List.of(3, 2), a.getDaftarEntri());
+    }
 
-        assertEquals(List.of(1, 3), antrean.getDaftarEntri());
+    @Test
+    void keluarkan_menghapusEntriTanpaMengubahUrutanLain() {
+        AntreanEntity a = new AntreanEntity(2, "apotek", new ArrayList<>(List.of(10, 11, 12)));
+        a.keluarkan(11);
+        assertEquals(List.of(10, 12), a.getDaftarEntri());
+    }
+
+    @Test
+    void keluarkan_menolakEntriYangTidakAda() {
+        AntreanEntity a = new AntreanEntity(2, "apotek", new ArrayList<>(List.of(10)));
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> a.keluarkan(99));
+        assertEquals("Entri tidak ada pada antrean apotek", e.getMessage());
+        assertEquals(List.of(10), a.getDaftarEntri());
     }
 }

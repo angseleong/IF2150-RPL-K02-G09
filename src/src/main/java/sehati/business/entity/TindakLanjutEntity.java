@@ -7,6 +7,9 @@ package sehati.business.entity;
  */
 public class TindakLanjutEntity {
 
+    public static final String HASIL_TERHUBUNG = "terhubung";
+    public static final String HASIL_TIDAK_TERHUBUNG = "tidak terhubung";
+
     private int idTindakLanjut;
     private String jenisKontak;
     private String hasilUpaya;
@@ -22,8 +25,11 @@ public class TindakLanjutEntity {
         this.statusKedatangan = statusKedatangan;
     }
 
+    /**
+     * True bila pasien berhasil dihubungi dan memberi keterangan (Subbab 5.52).
+     */
     public boolean terhubung() {
-        throw new UnsupportedOperationException("TODO");
+        return HASIL_TERHUBUNG.equals(hasilUpaya);
     }
 
     public int getIdTindakLanjut() {
