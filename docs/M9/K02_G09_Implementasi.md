@@ -34,7 +34,7 @@ Dipersiapkan oleh:
 
 
 **Deadline:** Rabu, 11 November 2026, 21.50 WIB
-**Asistensi akbar:** *[Hari, DD Bulan YYYY, HH.MM WIB, lokasi/link]*
+**Asistensi akbar:** Senin, 2 November 2026, 19.10-19.45 WIB
 
 ---
 
@@ -167,8 +167,6 @@ Tuliskan kendala yang ditemui, fitur yang belum sempurna (*known issues*), serta
 - Dua komputer yang membuka daftar pantau bersamaan dapat bertabrakan pada `UNIQUE id_jadwal` saat membuat entri "kunjungan ulang" untuk jadwal yang sama, sehingga satu komputer menerima dialog galat. Data tetap konsisten dan perilaku ini belum ditangani maupun diuji konkurensi.
 - Entri antrean skrining hanya dibaca untuk kunjungan hari ini. Pasien "tidak hadir" dari hari sebelumnya tidak ikut ditampilkan.
 - JDK yang tersedia di perangkat Humam adalah 17, sehingga pengujian lokal memakai `-Dmaven.compiler.release=17`. Pada JDK 21 tidak ada perbedaan perilaku.
-
-*Anggota lain menambahkan catatan modulnya sendiri di bawah ini sebelum laporan dikumpulkan.*
 
 ## B.4 Kontribusi Anggota
 
