@@ -320,12 +320,12 @@ Tabel B.4. Kontribusi Anggota
 
 | NIM | Nama | Modul / Fitur yang Dikerjakan | Persentase Kontribusi |
 | :--- | :--- | :--- | :--- |
-| 13525008 | Malik Arsyafiandra Madani | Farmasi (UC07, UC08) | 17% |
-| 13525032 | Ahmad Humam Isma | Skrining dan pemantauan (UC04, UC09) | 17% |
-| 13525044 | Steven Vanako | Loket (UC02, UC03) | 17% |
-| 13525071 | Muhammad Adnan Kurniawan | Pemeriksaan dan resep (UC05, UC06) | 17% |
-| 13525074 | Axeleon Justin Algianto | Akses dan administrasi (UC01, UC12) | 16% |
-| 13525110 | Fachry Azriel Fajdwani | Pelaporan dan integrasi (UC10, UC11) | 16% |
+| 13525008 | Malik Arsyafiandra Madani | Farmasi (UC07, UC08) | 16.67% |
+| 13525032 | Ahmad Humam Isma | Skrining dan pemantauan (UC04, UC09) | 16.67% |
+| 13525044 | Steven Vanako | Loket (UC02, UC03) | 16.67% |
+| 13525071 | Muhammad Adnan Kurniawan | Pemeriksaan dan resep (UC05, UC06) | 16.67% |
+| 13525074 | Axeleon Justin Algianto | Akses dan administrasi (UC01, UC12) | 16.67% |
+| 13525110 | Fachry Azriel Fajdwani | Pelaporan dan integrasi (UC10, UC11) | 16.67% |
 
 ## B.5 Traceability Kelas Perancangan ke Implementasi
 

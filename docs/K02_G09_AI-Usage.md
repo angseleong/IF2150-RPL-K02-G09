@@ -133,7 +133,7 @@ Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan A
 | Tanda Tangan | Nama Anggota |
 | :---: | :--- |
 | <img src="./assets/ttd-anggota1.png" width="100"> | **13525008 - Malik Arsyafiandra Madani** |
-| <img src="./assets/ttd-anggota6.png" width="100"> | **13525032 - Ahmad Humam Isma** |
+| <img src="./assets/ttd-anggota.png" width="100"> | **13525032 - Ahmad Humam Isma** |
 | <img src="./assets/ttd-anggota2.png" width="100"> | **13525044 - Steven Vanako** |
 | <img src="./assets/ttd-anggota3.png" width="100"> | **13525071 - Muhammad Adnan Kurniawan** |
 | <img src="./assets/ttd-anggota4.png" width="100"> | **13525074 - Axeleon Justin Algianto** |
