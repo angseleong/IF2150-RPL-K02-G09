@@ -9,7 +9,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +21,8 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import sehati.business.entity.ItemResepEntity;
 import sehati.business.entity.ResepEntity;
+import sehati.business.entity.SesiEntity;
+import sehati.common.SesiAktif;
 import sehati.dataaccess.DataFarmasiBoundary;
 
 class ResepManagerTest {
@@ -49,6 +53,7 @@ class ResepManagerTest {
 
         @BeforeEach
         void buka() throws SQLException {
+            SesiAktif.pasang(new SesiEntity(UUID.randomUUID(), 1, LocalDateTime.now(), true), "Dokter");
             koneksi = DriverManager.getConnection(System.getenv("DB_UJI_URL"));
             idKunjungan = hitung("SELECT min(id_kunjungan) FROM kunjungan WHERE status <> 'selesai'");
             resepTerakhir = hitung("SELECT coalesce(max(id_resep), 0) FROM resep");
@@ -56,6 +61,7 @@ class ResepManagerTest {
 
         @AfterEach
         void pulihkan() throws SQLException {
+            SesiAktif.lepas();
             try (Statement st = koneksi.createStatement()) {
                 st.executeUpdate("DELETE FROM antrean_entri e USING antrean a WHERE e.id_antrean = a.id_antrean "
                         + "AND a.jenis = 'apotek' AND e.id_entri > " + resepTerakhir);

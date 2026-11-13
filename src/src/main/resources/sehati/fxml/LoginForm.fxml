@@ -34,7 +34,8 @@
             <Label fx:id="labelPeranDasbor" styleClass="teks-bantu"/>
         </VBox>
         <PanelPeringatan fx:id="panelPencadangan" visible="false"
-                         pesan="Pencadangan terakhir gagal. Hubungi Petugas Administrasi."/>
+                         pesan="Pencadangan terakhir gagal. Jalankan ulang dari layar Konfigurasi dan Basis Data."/>
+        <Label fx:id="labelPencadangan" styleClass="teks-bantu" wrapText="true"/>
         <FlowPane fx:id="kartuMenu" hgap="12" vgap="12" rowValignment="TOP"/>
         <Label fx:id="labelAksesDitolak" styleClass="pesan-kolom" wrapText="true"/>
         <Label text="F1 daftar pintasan  ·  Ctrl+D dasbor  ·  Esc kembali" styleClass="teks-bantu"/>

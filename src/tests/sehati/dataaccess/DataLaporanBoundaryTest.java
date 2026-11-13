@@ -43,7 +43,7 @@ class DataLaporanBoundaryTest {
                 .hasil("SELECT d.kode_icd10", List.of(
                         JdbcPalsu.baris("kode_icd10", "E11.9", "deskripsi", "Diabetes melitus", "jumlah", 2)));
 
-        LaporanEntity laporan = new DataLaporanBoundary(jdbc.koneksi()).agregasiKunjungan(MULAI, AKHIR);
+        LaporanEntity laporan = new DataLaporanBoundary(jdbc.koneksi()).agregasiKunjungan(MULAI, AKHIR, null);
 
         assertEquals("total;semua kunjungan;5\n"
                 + "poli;Gigi;2\npoli;Umum;3\n"
@@ -60,13 +60,29 @@ class DataLaporanBoundaryTest {
     }
 
     @Test
+    void agregasi_penyaringPoliDikirimKeKetigaKueri() {
+        JdbcPalsu jdbc = new JdbcPalsu()
+                .hasil("SELECT p.nama_poli", List.of(JdbcPalsu.baris("nama_poli", "Gigi", "jumlah", 2)))
+                .hasil("SELECT k.status", List.of(JdbcPalsu.baris("status", "selesai", "jumlah", 2)))
+                .hasil("SELECT d.kode_icd10", List.of());
+
+        new DataLaporanBoundary(jdbc.koneksi()).agregasiKunjungan(MULAI, AKHIR, 7);
+
+        for (String kueri : List.of("SELECT p.nama_poli", "SELECT k.status", "SELECT d.kode_icd10")) {
+            JdbcPalsu.Jalan jalan = jdbc.dijalankanMemuat(kueri).get(0);
+            assertEquals(7, jalan.parameter().get(3));
+            assertEquals(7, jalan.parameter().get(4));
+        }
+    }
+
+    @Test
     void agregasi_menggantiTitikKomaPadaLabel() {
         JdbcPalsu jdbc = new JdbcPalsu()
                 .hasil("SELECT p.nama_poli", List.of(JdbcPalsu.baris("nama_poli", "Umum;Pagi", "jumlah", 1)))
                 .hasil("SELECT k.status", List.of(JdbcPalsu.baris("status", "selesai", "jumlah", 1)))
                 .hasil("SELECT d.kode_icd10", List.of());
 
-        LaporanEntity laporan = new DataLaporanBoundary(jdbc.koneksi()).agregasiKunjungan(MULAI, AKHIR);
+        LaporanEntity laporan = new DataLaporanBoundary(jdbc.koneksi()).agregasiKunjungan(MULAI, AKHIR, null);
 
         assertTrue(laporan.getRingkasan().contains("poli;Umum,Pagi;1"));
     }
@@ -76,7 +92,7 @@ class DataLaporanBoundaryTest {
         JdbcPalsu jdbc = new JdbcPalsu().gagal("SELECT p.nama_poli", "08006", "putus");
 
         IllegalStateException e = assertThrows(IllegalStateException.class,
-                () -> new DataLaporanBoundary(jdbc.koneksi()).agregasiKunjungan(MULAI, AKHIR));
+                () -> new DataLaporanBoundary(jdbc.koneksi()).agregasiKunjungan(MULAI, AKHIR, null));
 
         assertTrue(e.getMessage().startsWith("Gagal menghitung rekapitulasi kunjungan"));
         assertTrue(jdbc.peristiwa.contains("rollback"));
@@ -182,10 +198,17 @@ class DataLaporanBoundaryTest {
 
         @Test
         void agregasi_mengembalikanRingkasanTotal() {
-            LaporanEntity laporan = data.agregasiKunjungan(LocalDate.now().minusDays(30), LocalDate.now());
+            LaporanEntity laporan = data.agregasiKunjungan(LocalDate.now().minusDays(30), LocalDate.now(), null);
 
             assertNotNull(laporan.getRingkasan());
             assertTrue(laporan.getRingkasan().startsWith("total;semua kunjungan;"));
+        }
+
+        @Test
+        void agregasi_poliTanpaKunjunganMengembalikanNol() {
+            LaporanEntity laporan = data.agregasiKunjungan(LocalDate.now().minusDays(30), LocalDate.now(), -1);
+
+            assertEquals("total;semua kunjungan;0", laporan.getRingkasan());
         }
 
         @Test

@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Date;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -76,6 +77,9 @@ public class DataKlinisBoundary {
             + "FROM jadwal_kontrol jk WHERE jk.status = 'terjadwal' "
             + "AND NOT EXISTS (SELECT 1 FROM daftar_pantau dp WHERE dp.id_jadwal = jk.id_jadwal) "
             + "ORDER BY jk.tanggal_rencana, jk.id_jadwal";
+    // Tambahan implementasi (B.1): jadwal seorang pasien yang sudah jatuh tempo, ditandai selesai saat ia datang.
+    private static final String Q_C59_19 = "SELECT id_jadwal, id_pasien, tanggal_rencana, status FROM jadwal_kontrol "
+            + "WHERE id_pasien = ? AND status = 'terjadwal' AND tanggal_rencana <= ? ORDER BY id_jadwal";
 
     private Connection koneksi;
 
@@ -393,6 +397,26 @@ public class DataKlinisBoundary {
             return hasil;
         } catch (SQLException e) {
             throw galat("Gagal mengambil jadwal kontrol", e);
+        }
+    }
+
+    /**
+     * Mengambil jadwal "terjadwal" milik satu pasien dengan tanggal rencana sampai {@code tanggal} (Q-C59-19).
+     */
+    public List<JadwalKontrolEntity> jadwalJatuhTempo(int idPasien, LocalDate tanggal) {
+        try (PreparedStatement ps = koneksi.prepareStatement(Q_C59_19)) {
+            ps.setInt(1, idPasien);
+            ps.setDate(2, Date.valueOf(tanggal));
+            try (ResultSet rs = ps.executeQuery()) {
+                List<JadwalKontrolEntity> hasil = new ArrayList<>();
+                while (rs.next()) {
+                    hasil.add(new JadwalKontrolEntity(rs.getInt("id_jadwal"), rs.getInt("id_pasien"),
+                            rs.getDate("tanggal_rencana").toLocalDate(), rs.getString("status")));
+                }
+                return hasil;
+            }
+        } catch (SQLException e) {
+            throw galat("Gagal mengambil jadwal kontrol pasien", e);
         }
     }
 

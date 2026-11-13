@@ -126,6 +126,19 @@ class DataSinkronisasiBoundaryTest {
     }
 
     @Test
+    void ambilTerkirimTerakhir_mengirimBatasDanMembacaBundel() {
+        JdbcPalsu jdbc = new JdbcPalsu().hasil("WHERE status = 'terkirim'", List.of(
+                JdbcPalsu.baris("id_bundel", 9, "id_kunjungan", 30, "isi_bundel", "{}", "status", "terkirim",
+                        "alasan_gagal", null)));
+
+        List<BundelFHIREntity> hasil = new DataSinkronisasiBoundary(jdbc.koneksi()).ambilTerkirimTerakhir(10);
+
+        assertEquals(1, hasil.size());
+        assertEquals("terkirim", hasil.get(0).getStatus());
+        assertEquals(10, jdbc.dijalankanMemuat("WHERE status = 'terkirim'").get(0).parameter().get(1));
+    }
+
+    @Test
     void ambilTertunda_galatKoneksiMenjadiIllegalStateException() {
         JdbcPalsu jdbc = new JdbcPalsu().gagal("SELECT id_bundel", "08006", "putus");
 

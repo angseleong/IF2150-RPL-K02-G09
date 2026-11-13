@@ -90,7 +90,7 @@ class PemeriksaanManagerTest {
                 rs.next();
                 statusAwal = rs.getString(1);
             }
-            SesiAktif.pasang(new SesiEntity(UUID.randomUUID(), 1, LocalDateTime.now(), true));
+            SesiAktif.pasang(new SesiEntity(UUID.randomUUID(), 1, LocalDateTime.now(), true), "Dokter");
         }
 
         @AfterEach
@@ -148,6 +148,18 @@ class PemeriksaanManagerTest {
             assertThrows(IllegalStateException.class, () -> manager.kunciRekamMedis(idKunjungan));
             assertEquals(1, hitung("SELECT count(*) FROM audit WHERE deskripsi = 'Pemeriksaan kunjungan "
                     + idKunjungan + " dikunci'"));
+        }
+
+        @Test
+        void kunciRekamMedis_tanpaDiagnosisDitolak() throws SQLException {
+            manager.simpanPemeriksaan(idKunjungan, new PemeriksaanEntity(0, 0, "Batuk", "Edukasi", false), null);
+
+            IllegalStateException e = assertThrows(IllegalStateException.class,
+                    () -> manager.kunciRekamMedis(idKunjungan));
+
+            assertEquals("Diagnosis ICD-10 belum diisi", e.getMessage());
+            assertEquals(0, hitung("SELECT count(*) FROM pemeriksaan WHERE terkunci AND id_kunjungan = "
+                    + idKunjungan));
         }
 
         @Test

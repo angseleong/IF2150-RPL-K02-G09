@@ -31,7 +31,9 @@ public class DataPantauBoundary {
             + "LEFT JOIN jadwal_kontrol jk ON jk.id_jadwal = dp.id_jadwal "
             + "WHERE dp.status_tindak_lanjut <> 'selesai ditindaklanjuti' ORDER BY tanggal_pemicu, dp.id_entri";
     private static final String Q_C60_02 = "INSERT INTO daftar_pantau (id_pasien, jenis_risiko, "
-            + "status_tindak_lanjut, id_penanda, id_jadwal) VALUES (?, ?, ?, ?, ?) RETURNING id_entri";
+            + "status_tindak_lanjut, id_penanda, id_jadwal) VALUES (?, ?, ?, ?, ?) "
+            // Dua komputer yang membuka daftar pantau bersamaan tidak lagi gagal pada UNIQUE id_jadwal.
+            + "ON CONFLICT (id_jadwal) DO NOTHING RETURNING id_entri";
     private static final String Q_C60_03 = "SELECT pr.id_penanda FROM penanda_risiko pr "
             + "JOIN kunjungan k ON k.id_kunjungan = pr.id_kunjungan "
             + "WHERE k.id_pasien = ? AND pr.jenis_risiko = ? ORDER BY pr.id_penanda DESC LIMIT 1";
@@ -85,6 +87,10 @@ public class DataPantauBoundary {
             Integer idJadwal = null;
             if ("kunjungan ulang".equals(e.getJenisRisiko())) {
                 idJadwal = cariId(Q_C60_04, e.getIdPasien(), null);
+                if (idJadwal == null) {
+                    // Jadwalnya sudah dibuatkan entri oleh komputer lain sesaat lalu, idEntri tetap 0.
+                    return;
+                }
             } else {
                 idPenanda = cariId(Q_C60_03, e.getIdPasien(), e.getJenisRisiko());
             }
@@ -98,8 +104,10 @@ public class DataPantauBoundary {
                 ps.setObject(4, idPenanda, java.sql.Types.INTEGER);
                 ps.setObject(5, idJadwal, java.sql.Types.INTEGER);
                 try (ResultSet rs = ps.executeQuery()) {
-                    rs.next();
-                    e.setIdEntri(rs.getInt(1));
+                    // Tanpa baris berarti entri jadwal ini sudah dibuat komputer lain, idEntri tetap 0.
+                    if (rs.next()) {
+                        e.setIdEntri(rs.getInt(1));
+                    }
                 }
             }
         } catch (SQLException ex) {

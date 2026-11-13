@@ -81,6 +81,7 @@ public class ResepManager {
         if (items == null || items.isEmpty()) {
             throw new IllegalArgumentException("Resep belum berisi obat");
         }
+        SesiAktif.wajibPeran("Dokter");
         try (Connection koneksi = KoneksiBasisData.buka()) {
             DataFarmasiBoundary dataFarmasi = new DataFarmasiBoundary(koneksi);
             DataKunjunganBoundary dataKunjungan = new DataKunjunganBoundary(koneksi);

@@ -63,6 +63,7 @@ public class SkriningManager {
      * Memanggil kunjungan terdepan yang menunggu, atau null bila antrean kosong (KF04).
      */
     public KunjunganEntity panggilPasien() {
+        SesiAktif.wajibPeran("Perawat", "Dokter");
         try (Connection koneksi = KoneksiBasisData.buka()) {
             DataKunjunganBoundary data = new DataKunjunganBoundary(koneksi);
             return dalamTransaksi(koneksi, () -> {
@@ -86,6 +87,7 @@ public class SkriningManager {
      * (Algo-C20-03).
      */
     public KunjunganEntity lewatiPasien(int idKunjungan) {
+        SesiAktif.wajibPeran("Perawat", "Dokter");
         try (Connection koneksi = KoneksiBasisData.buka()) {
             DataKunjunganBoundary data = new DataKunjunganBoundary(koneksi);
             return dalamTransaksi(koneksi, () -> {
@@ -118,6 +120,7 @@ public class SkriningManager {
         if (!galat.isEmpty()) {
             return galat;
         }
+        SesiAktif.wajibPeran("Perawat", "Dokter");
         try (Connection koneksi = KoneksiBasisData.buka()) {
             DataKlinisBoundary dataKlinis = new DataKlinisBoundary(koneksi);
             DataKunjunganBoundary dataKunjungan = new DataKunjunganBoundary(koneksi);

@@ -43,6 +43,9 @@ public class DataSinkronisasiBoundary {
     private static final String Q_C63_02 = "SELECT id_bundel, id_kunjungan, isi_bundel::text, status, alasan_gagal "
             + "FROM bundel_fhir WHERE status IN ('tertunda', 'gagal kirim') ORDER BY id_bundel";
     private static final String Q_C63_03 = "UPDATE bundel_fhir SET status = ?, alasan_gagal = ? WHERE id_bundel = ?";
+    // Tambahan implementasi (B.1): riwayat pengiriman terakhir pada I-14 (UC11 langkah 1).
+    private static final String Q_C63_04 = "SELECT id_bundel, id_kunjungan, isi_bundel::text, status, alasan_gagal "
+            + "FROM bundel_fhir WHERE status = 'terkirim' ORDER BY id_bundel DESC LIMIT ?";
 
     private static final String UNIQUE_VIOLATION = "23505";
     private static final String CHECK_VIOLATION = "23514";
@@ -93,6 +96,24 @@ public class DataSinkronisasiBoundary {
             return hasil;
         } catch (SQLException e) {
             throw galat("Gagal mengambil antrean bundel", e);
+        }
+    }
+
+    /**
+     * Mengambil bundel terkirim terbaru, paling baru lebih dulu (Q-C63-04).
+     */
+    public List<BundelFHIREntity> ambilTerkirimTerakhir(int batas) {
+        try (PreparedStatement ps = koneksi.prepareStatement(Q_C63_04)) {
+            ps.setInt(1, batas);
+            try (ResultSet rs = ps.executeQuery()) {
+                List<BundelFHIREntity> hasil = new ArrayList<>();
+                while (rs.next()) {
+                    hasil.add(bacaBundel(rs));
+                }
+                return hasil;
+            }
+        } catch (SQLException e) {
+            throw galat("Gagal mengambil riwayat pengiriman", e);
         }
     }
 

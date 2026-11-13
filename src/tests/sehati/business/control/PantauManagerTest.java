@@ -132,7 +132,7 @@ class PantauManagerTest {
     void saring_menurutJenisRisiko() {
         List<DaftarPantauEntity> semua = List.of(entri(1, "hipertensi", LocalDate.of(2026, 11, 1)),
                 entri(2, "obesitas", LocalDate.of(2026, 11, 2)));
-        assertEquals(List.of(2), ids(PantauManager.saring(semua, "obesitas", null, null)));
+        assertEquals(List.of(2), ids(PantauManager.saring(semua, "obesitas", null, null, null)));
     }
 
     @Test
@@ -142,7 +142,7 @@ class PantauManagerTest {
                 entri(3, "hipertensi", LocalDate.of(2026, 11, 30)),
                 entri(4, "hipertensi", LocalDate.of(2026, 12, 1)));
         assertEquals(List.of(2, 3),
-                ids(PantauManager.saring(semua, null, LocalDate.of(2026, 11, 1), LocalDate.of(2026, 11, 30))));
+                ids(PantauManager.saring(semua, null, LocalDate.of(2026, 11, 1), LocalDate.of(2026, 11, 30), null)));
     }
 
     @Test
@@ -150,19 +150,29 @@ class PantauManagerTest {
         List<DaftarPantauEntity> semua = List.of(entri(1, "kunjungan ulang", LocalDate.of(2026, 11, 1)),
                 entri(2, "hipertensi", LocalDate.of(2026, 11, 5)),
                 entri(3, "obesitas", LocalDate.of(2026, 11, 2)));
-        assertEquals(List.of(3, 2, 1), ids(PantauManager.saring(semua, null, null, null)));
+        assertEquals(List.of(3, 2, 1), ids(PantauManager.saring(semua, null, null, null, null)));
     }
 
     @Test
     void saring_hasilKosongBilaTidakAdaYangCocok() {
         List<DaftarPantauEntity> semua = List.of(entri(1, "hipertensi", LocalDate.of(2026, 11, 1)));
-        assertTrue(PantauManager.saring(semua, "obesitas", null, null).isEmpty());
+        assertTrue(PantauManager.saring(semua, "obesitas", null, null, null).isEmpty());
+    }
+
+    @Test
+    void saring_menurutStatusTindakLanjut() {
+        DaftarPantauEntity ulang = entri(2, "hipertensi", LocalDate.of(2026, 11, 2));
+        ulang.setStatusTindakLanjut(DaftarPantauEntity.STATUS_ULANG);
+        List<DaftarPantauEntity> semua = List.of(entri(1, "hipertensi", LocalDate.of(2026, 11, 1)), ulang);
+        assertEquals(List.of(2), ids(PantauManager.saring(semua, null, null, null, DaftarPantauEntity.STATUS_ULANG)));
+        assertEquals(List.of(1), ids(PantauManager.saring(semua, "hipertensi", null, null,
+                DaftarPantauEntity.STATUS_BELUM)));
     }
 
     @Test
     void saringDaftar_tanggalMulaiSetelahAkhirDitolak() {
         assertThrows(IllegalArgumentException.class,
-                () -> manager.saringDaftar(null, LocalDate.of(2026, 11, 5), LocalDate.of(2026, 11, 1)));
+                () -> manager.saringDaftar(null, LocalDate.of(2026, 11, 5), LocalDate.of(2026, 11, 1), null));
     }
 
     private static List<Integer> ids(List<DaftarPantauEntity> daftar) {

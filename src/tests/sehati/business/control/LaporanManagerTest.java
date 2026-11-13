@@ -23,13 +23,13 @@ class LaporanManagerTest {
         LaporanEntity hasil = new LaporanEntity(0, MULAI, AKHIR, null, "total;semua kunjungan;5");
         DataLaporanPalsu data = new DataLaporanPalsu(hasil);
 
-        assertSame(hasil, LaporanManager.hitungRekapitulasi(MULAI, AKHIR, data));
+        assertSame(hasil, LaporanManager.hitungRekapitulasi(MULAI, AKHIR, null, data));
     }
 
     @Test
     void hitungRekapitulasi_menolakRentangTerbalik() {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-                () -> new LaporanManager().hitungRekapitulasi(AKHIR, MULAI));
+                () -> new LaporanManager().hitungRekapitulasi(AKHIR, MULAI, null));
 
         assertEquals("Rentang tanggal tidak valid", e.getMessage());
     }
@@ -37,13 +37,13 @@ class LaporanManagerTest {
     @Test
     void hitungRekapitulasi_menolakTanggalMasaDepan() {
         assertThrows(IllegalArgumentException.class,
-                () -> new LaporanManager().hitungRekapitulasi(HARI_INI, HARI_INI.plusDays(1)));
+                () -> new LaporanManager().hitungRekapitulasi(HARI_INI, HARI_INI.plusDays(1), null));
     }
 
     @Test
     void hitungRekapitulasi_menolakTanggalNull() {
         assertThrows(IllegalArgumentException.class,
-                () -> new LaporanManager().hitungRekapitulasi(null, AKHIR));
+                () -> new LaporanManager().hitungRekapitulasi(null, AKHIR, null));
     }
 
     @Test
@@ -95,7 +95,7 @@ class LaporanManagerTest {
         }
 
         @Override
-        public LaporanEntity agregasiKunjungan(LocalDate mulai, LocalDate akhir) {
+        public LaporanEntity agregasiKunjungan(LocalDate mulai, LocalDate akhir, Integer idPoli) {
             return hasil;
         }
 

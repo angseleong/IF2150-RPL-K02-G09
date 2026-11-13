@@ -2,12 +2,16 @@ package sehati.business.control;
 
 import sehati.business.entity.AntreanEntity;
 import sehati.business.entity.AuditEntity;
+import sehati.business.entity.DaftarPantauEntity;
+import sehati.business.entity.JadwalKontrolEntity;
 import sehati.business.entity.KunjunganEntity;
 import sehati.business.entity.PoliEntity;
 import sehati.common.KoneksiBasisData;
 import sehati.common.SesiAktif;
 import sehati.dataaccess.DataAkunBoundary;
+import sehati.dataaccess.DataKlinisBoundary;
 import sehati.dataaccess.DataKunjunganBoundary;
+import sehati.dataaccess.DataPantauBoundary;
 import sehati.dataaccess.DataPasienBoundary;
 
 import java.sql.Connection;
@@ -62,6 +66,7 @@ public class KunjunganManager {
             if (kunjunganAktif != null) {
                 return kunjunganAktif;
             }
+            SesiAktif.wajibPeran("Petugas Administrasi");
             int idPengguna = SesiAktif.idPenggunaSesi();
             koneksi.setAutoCommit(false);
             try {
@@ -76,6 +81,7 @@ public class KunjunganManager {
                 AntreanEntity antrean = dataKunjungan.ambilAntrean(JENIS_ANTREAN_SKRINING);
                 antrean.tambahkan(kunjungan.getIdKunjungan());
                 dataKunjungan.simpanAntrean(antrean);
+                selesaikanJadwalKontrol(koneksi, idPasien);
                 dataAkun.simpanAudit(AuditEntity.buat(idPengguna, "Kunjungan baru, antrean " + nomor));
                 koneksi.commit();
                 return kunjungan;
@@ -85,6 +91,25 @@ public class KunjunganManager {
             }
         } catch (SQLException e) {
             throw galatTeknis("Pembukaan kunjungan gagal", e);
+        }
+    }
+
+    // Pasien yang datang pada atau setelah tanggal kontrolnya dianggap sudah kontrol (Subbab 5.45, KF12), sehingga
+    // jadwalnya selesai dan entri "kunjungan ulang" miliknya tidak lagi meminta perawat menghubungi.
+    private void selesaikanJadwalKontrol(Connection koneksi, int idPasien) {
+        LocalDate hariIni = LocalDate.now();
+        DataKlinisBoundary dataKlinis = new DataKlinisBoundary(koneksi);
+        for (JadwalKontrolEntity j : dataKlinis.jadwalJatuhTempo(idPasien, hariIni)) {
+            j.tandaiSelesai();
+            dataKlinis.simpanJadwalKontrol(j);
+        }
+        DataPantauBoundary dataPantau = new DataPantauBoundary(koneksi);
+        for (DaftarPantauEntity e : dataPantau.ambilEntri()) {
+            if (e.getIdPasien() == idPasien && RisikoManager.JENIS_KUNJUNGAN_ULANG.equals(e.getJenisRisiko())
+                    && e.getTanggalPemicu() != null && !e.getTanggalPemicu().isAfter(hariIni)) {
+                e.perbaruiStatus(DaftarPantauEntity.STATUS_SELESAI);
+                dataPantau.simpanEntri(e);
+            }
         }
     }
 

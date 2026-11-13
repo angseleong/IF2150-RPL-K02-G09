@@ -35,4 +35,13 @@ class SesiAktifTest {
         assertNull(SesiAktif.ambil());
         assertThrows(IllegalStateException.class, SesiAktif::idPenggunaSesi);
     }
+
+    @Test
+    void wajibPeran_menolakTanpaSesiDanPeranLain() {
+        assertThrows(IllegalStateException.class, () -> SesiAktif.wajibPeran("Dokter"));
+
+        SesiAktif.pasang(new SesiEntity(UUID.randomUUID(), 3, LocalDateTime.now(), true), "Perawat");
+        assertThrows(IllegalStateException.class, () -> SesiAktif.wajibPeran("Dokter"));
+        SesiAktif.wajibPeran("Perawat", "Dokter");
+    }
 }

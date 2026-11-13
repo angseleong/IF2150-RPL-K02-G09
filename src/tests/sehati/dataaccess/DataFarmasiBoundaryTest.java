@@ -92,6 +92,21 @@ class DataFarmasiBoundaryTest {
         }
 
         @Test
+        void ambilAsalResep_memuatPoliDanNomorAntrean() throws SQLException {
+            int idResep;
+            String harapan;
+            try (var st = koneksi.createStatement(); var rs = st.executeQuery("SELECT r.id_resep, po.nama_poli, "
+                    + "k.nomor_antrean FROM resep r JOIN kunjungan k USING (id_kunjungan) "
+                    + "JOIN poli po ON po.id_poli = k.id_poli ORDER BY r.id_resep LIMIT 1")) {
+                assertTrue(rs.next());
+                idResep = rs.getInt(1);
+                harapan = rs.getString(2) + " / Antrean " + rs.getInt(3);
+            }
+            assertEquals(harapan, dataFarmasi.ambilAsalResep(List.of(idResep)).get(idResep));
+            assertTrue(dataFarmasi.ambilAsalResep(List.of()).isEmpty());
+        }
+
+        @Test
         void ambilObat_nullBilaTidakAda() {
             assertNull(dataFarmasi.ambilObat(-1));
         }

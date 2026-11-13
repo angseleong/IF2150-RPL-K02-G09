@@ -52,6 +52,16 @@ public final class SesiAktif {
         return s == null ? 0 : s.getIdPengguna();
     }
 
+    // KNF05: peran diperiksa lagi di Manager sebelum data diubah, tidak hanya saat layar dibuka di Navigasi.
+    public static void wajibPeran(String... peranSah) {
+        if (ambil() == null) {
+            throw new IllegalStateException("Sesi sudah berakhir, silakan masuk kembali");
+        }
+        if (!java.util.List.of(peranSah).contains(peran)) {
+            throw new IllegalStateException("Peran " + peran + " tidak berwenang menjalankan tindakan ini");
+        }
+    }
+
     public static int idPenggunaSesi() {
         SesiEntity s = ambil();
         if (s == null) {
