@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:id="akar" fx:controller="sehati.presentation.PemeriksaanForm" styleClass="halaman" spacing="12">
+    <Label fx:id="labelPasien" styleClass="judul-panel"/>
+    <VBox styleClass="kartu" spacing="8">
+        <Label text="Anamnesis" styleClass="label-kolom"/>
+        <TextArea fx:id="kolomAnamnesis" prefRowCount="3" wrapText="true"/>
+        <Label text="Diagnosis (cari kode atau istilah ICD-10)" styleClass="label-kolom"/>
+        <TextField fx:id="kolomDiagnosis" promptText="Contoh: I10 atau hipertensi"/>
+        <ListView fx:id="daftarSaran" prefHeight="150"/>
+        <Label fx:id="labelDiagnosis" text="Diagnosis terpilih: belum ada"/>
+        <Label text="Tindakan" styleClass="label-kolom"/>
+        <TextArea fx:id="kolomTindakan" prefRowCount="3" wrapText="true"/>
+        <Label text="Jadwal kontrol (opsional)" styleClass="label-kolom"/>
+        <DatePicker fx:id="kolomKontrol" promptText="dd-mm-yyyy"/>
+    </VBox>
+    <HBox spacing="10">
+        <Button fx:id="tombolSimpan" text="Simpan  (Ctrl+S)" styleClass="tombol-utama" onAction="#simpan"/>
+        <Button fx:id="tombolFinal" text="Simpan Final (Kunci)" styleClass="tombol-kedua" onAction="#simpanFinal"/>
+        <Button fx:id="tombolResep" text="Buat Resep" styleClass="tombol-kedua" onAction="#buatResep"/>
+    </HBox>
+    <Label fx:id="bilahPesan" styleClass="notifikasi-hijau" wrapText="true"/>
+</VBox>

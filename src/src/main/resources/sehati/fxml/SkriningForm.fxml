@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:id="akar" fx:controller="sehati.presentation.SkriningForm" styleClass="halaman" spacing="12">
+    <Label fx:id="labelPasien" styleClass="judul-panel"/>
+    <VBox styleClass="kartu" spacing="8">
+        <Label text="Keluhan awal" styleClass="label-kolom"/>
+        <TextArea fx:id="kolomKeluhan" prefRowCount="3" wrapText="true"/>
+        <GridPane hgap="12" vgap="8">
+            <Label text="Sistolik (mmHg)" styleClass="label-kolom" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="kolomSistolik" prefWidth="160" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <Label fx:id="pesanSistolik" styleClass="pesan-kolom" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+            <Label text="Diastolik (mmHg)" styleClass="label-kolom" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="kolomDiastolik" prefWidth="160" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Label fx:id="pesanDiastolik" styleClass="pesan-kolom" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+            <Label text="Berat badan (kg)" styleClass="label-kolom" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="kolomBeratBadan" prefWidth="160" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            <Label fx:id="pesanBeratBadan" styleClass="pesan-kolom" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+            <Label text="Tinggi badan (cm)" styleClass="label-kolom" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="kolomTinggiBadan" prefWidth="160" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            <Label fx:id="pesanTinggiBadan" styleClass="pesan-kolom" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+            <Label text="Suhu (°C)" styleClass="label-kolom" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextField fx:id="kolomSuhu" prefWidth="160" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            <Label fx:id="pesanSuhu" styleClass="pesan-kolom" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
+            <Label text="Nadi (bpm)" styleClass="label-kolom" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <TextField fx:id="kolomNadi" prefWidth="160" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+            <Label fx:id="pesanNadi" styleClass="pesan-kolom" GridPane.rowIndex="5" GridPane.columnIndex="2"/>
+            <Label text="Gula darah (mg/dL), opsional" styleClass="label-kolom" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+            <TextField fx:id="kolomGulaDarah" prefWidth="160" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+            <Label fx:id="pesanGulaDarah" styleClass="pesan-kolom" GridPane.rowIndex="6" GridPane.columnIndex="2"/>
+        </GridPane>
+    </VBox>
+    <VBox fx:id="panelPenanda" spacing="8"/>
+    <Label fx:id="notifikasi" styleClass="notifikasi-hijau"/>
+    <HBox spacing="10">
+        <Button fx:id="tombolSimpan" text="Simpan  (Ctrl+S)" styleClass="tombol-utama" onAction="#kirimHasilSkrining"/>
+        <Button text="Batal  (Esc)" styleClass="tombol-kedua" onAction="#batal"/>
+    </HBox>
+</VBox>

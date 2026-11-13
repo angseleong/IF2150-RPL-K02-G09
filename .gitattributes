@@ -1,0 +1,3 @@
+# Skrip shell dijalankan di dalam kontainer Linux (docker-entrypoint), jadi harus selalu LF meskipun
+# di-clone di Windows dengan core.autocrlf=true. CRLF membuat shebang terbaca "bash\r" dan heredoc gagal.
+*.sh text eol=lf

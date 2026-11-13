@@ -1,0 +1,118 @@
+package sehati.business.entity;
+
+import java.time.LocalDateTime;
+
+/**
+ * C39 - TandaVitalEntity.
+ *
+ * Merepresentasikan nilai tekanan darah, berat, tinggi, suhu, nadi, dan gula darah, termasuk perhitungan IMT.
+ */
+public class TandaVitalEntity {
+
+    private int sistolik;
+    private int diastolik;
+    private double beratBadan;
+    private double tinggiBadan;
+    private double suhu;
+    private int nadi;
+    private Integer gulaDarah;
+    // Waktu pengukuran, diisi dari skrining.waktu saat dibaca (Q-C59-03, Q-C59-05); null pada pengukuran baru.
+    private LocalDateTime waktu;
+
+    public TandaVitalEntity() {
+    }
+
+    public TandaVitalEntity(
+            int sistolik, int diastolik, double beratBadan, double tinggiBadan, double suhu, int nadi,
+            Integer gulaDarah) {
+        this.sistolik = sistolik;
+        this.diastolik = diastolik;
+        this.beratBadan = beratBadan;
+        this.tinggiBadan = tinggiBadan;
+        this.suhu = suhu;
+        this.nadi = nadi;
+        this.gulaDarah = gulaDarah;
+    }
+
+    public TandaVitalEntity(
+            int sistolik, int diastolik, double beratBadan, double tinggiBadan, double suhu, int nadi,
+            Integer gulaDarah, LocalDateTime waktu) {
+        this(sistolik, diastolik, beratBadan, tinggiBadan, suhu, nadi, gulaDarah);
+        this.waktu = waktu;
+    }
+
+    /**
+     * Menghitung IMT tanpa pembulatan agar perbandingan ambang tidak bergeser (Algo-C39-01).
+     */
+    public double hitungIMT() {
+        if (tinggiBadan <= 0) {
+            throw new IllegalStateException("Tinggi badan belum terisi");
+        }
+        double meter = tinggiBadan / 100;
+        return beratBadan / (meter * meter);
+    }
+
+    public int getSistolik() {
+        return sistolik;
+    }
+
+    public void setSistolik(int sistolik) {
+        this.sistolik = sistolik;
+    }
+
+    public int getDiastolik() {
+        return diastolik;
+    }
+
+    public void setDiastolik(int diastolik) {
+        this.diastolik = diastolik;
+    }
+
+    public double getBeratBadan() {
+        return beratBadan;
+    }
+
+    public void setBeratBadan(double beratBadan) {
+        this.beratBadan = beratBadan;
+    }
+
+    public double getTinggiBadan() {
+        return tinggiBadan;
+    }
+
+    public void setTinggiBadan(double tinggiBadan) {
+        this.tinggiBadan = tinggiBadan;
+    }
+
+    public double getSuhu() {
+        return suhu;
+    }
+
+    public void setSuhu(double suhu) {
+        this.suhu = suhu;
+    }
+
+    public int getNadi() {
+        return nadi;
+    }
+
+    public void setNadi(int nadi) {
+        this.nadi = nadi;
+    }
+
+    public Integer getGulaDarah() {
+        return gulaDarah;
+    }
+
+    public void setGulaDarah(Integer gulaDarah) {
+        this.gulaDarah = gulaDarah;
+    }
+
+    public LocalDateTime getWaktu() {
+        return waktu;
+    }
+
+    public void setWaktu(LocalDateTime waktu) {
+        this.waktu = waktu;
+    }
+}

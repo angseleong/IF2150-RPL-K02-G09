@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:id="akar" fx:controller="sehati.presentation.DaftarPantauForm" styleClass="halaman" spacing="12">
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Jenis risiko" styleClass="label-kolom"/>
+        <ComboBox fx:id="pilihJenisRisiko" prefWidth="170"/>
+        <Label text="Mulai" styleClass="label-kolom"/>
+        <DatePicker fx:id="pilihMulai" prefWidth="140"/>
+        <Label text="Akhir" styleClass="label-kolom"/>
+        <DatePicker fx:id="pilihAkhir" prefWidth="140"/>
+        <Label text="Status" styleClass="label-kolom"/>
+        <ComboBox fx:id="pilihStatus" prefWidth="190"/>
+        <Button text="Terapkan" styleClass="tombol-utama" onAction="#terapkanPenyaring"/>
+    </HBox>
+    <Label fx:id="labelKeterangan" styleClass="judul-panel"/>
+    <TableView fx:id="tabelPantau" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="kolomPasien" text="Pasien" prefWidth="220"/>
+            <TableColumn fx:id="kolomTelepon" text="Telepon" prefWidth="130"/>
+            <TableColumn fx:id="kolomJenis" text="Jenis risiko" prefWidth="185"/>
+            <TableColumn fx:id="kolomTanggal" text="Tanggal pemicu" prefWidth="130"/>
+            <TableColumn fx:id="kolomStatus" text="Status" prefWidth="180"/>
+            <TableColumn fx:id="kolomAksi" text="Aksi" prefWidth="140" sortable="false"/>
+        </columns>
+    </TableView>
+    <VBox fx:id="panelTindakLanjut" styleClass="kartu" spacing="8">
+        <Label fx:id="labelEntri" styleClass="judul-panel"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Jenis kontak" styleClass="label-kolom"/>
+            <ComboBox fx:id="pilihJenisKontak" prefWidth="160"/>
+            <Label text="Hasil upaya" styleClass="label-kolom"/>
+            <ComboBox fx:id="pilihHasilUpaya" prefWidth="160"/>
+            <Label text="Status kedatangan" styleClass="label-kolom"/>
+            <ComboBox fx:id="pilihStatusKedatangan" prefWidth="170"/>
+        </HBox>
+        <HBox spacing="10">
+            <Button fx:id="tombolSimpan" text="Simpan  (Ctrl+S)" styleClass="tombol-utama"
+                    onAction="#kirimTindakLanjut"/>
+            <Button text="Batal  (Esc)" styleClass="tombol-kedua" onAction="#tutupFormulir"/>
+        </HBox>
+    </VBox>
+</VBox>

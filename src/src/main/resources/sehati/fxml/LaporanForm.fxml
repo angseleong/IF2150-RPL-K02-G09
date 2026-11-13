@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import sehati.presentation.PanelPeringatan?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:id="akar" fx:controller="sehati.presentation.LaporanForm" styleClass="halaman" spacing="12">
+    <Label text="Laporan Periodik" styleClass="judul-panel"/>
+    <VBox styleClass="kartu" spacing="8">
+        <Label text="Rentang Tanggal dan Poli" styleClass="judul-panel"/>
+        <GridPane hgap="12" vgap="8">
+            <Label text="Tanggal mulai" styleClass="label-kolom" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="tanggalMulaiPicker" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <Label text="Tanggal akhir" styleClass="label-kolom" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="tanggalAkhirPicker" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Label text="Poli layanan" styleClass="label-kolom" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="pilihPoli" prefWidth="200" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        </GridPane>
+        <HBox spacing="8">
+            <Button text="Hitung Rekapitulasi" onAction="#kirimRentang" styleClass="tombol-utama"/>
+            <Button text="Kembali" onAction="#kembali" styleClass="tombol-kedua"/>
+        </HBox>
+    </VBox>
+    <PanelPeringatan fx:id="panelPenolakan"/>
+    <Label fx:id="bilahPesan" styleClass="notifikasi-hijau" wrapText="true"/>
+    <VBox styleClass="kartu" spacing="8" VBox.vgrow="ALWAYS">
+        <Label text="Pratinjau Rekapitulasi" styleClass="judul-panel"/>
+        <Label fx:id="labelTotal" styleClass="label-kolom"/>
+        <Label fx:id="pesanKosong" styleClass="pesan-kolom" wrapText="true"/>
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+            <VBox spacing="12">
+                <VBox spacing="4">
+                    <Label text="Kunjungan per Poli" styleClass="subjudul"/>
+                    <VBox fx:id="daftarPoli" spacing="2"/>
+                </VBox>
+                <VBox spacing="4">
+                    <Label text="Kunjungan per Status" styleClass="subjudul"/>
+                    <VBox fx:id="daftarStatus" spacing="2"/>
+                </VBox>
+                <VBox spacing="4">
+                    <Label text="10 Diagnosis Terbanyak" styleClass="subjudul"/>
+                    <VBox fx:id="daftarDiagnosis" spacing="2"/>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+        <HBox spacing="8">
+            <Button fx:id="tombolPdf" text="Ekspor PDF" onAction="#eksporPdf" styleClass="tombol-utama"/>
+            <Button fx:id="tombolCsv" text="Ekspor CSV" onAction="#eksporCsv" styleClass="tombol-kedua"/>
+        </HBox>
+    </VBox>
+</VBox>

@@ -4,8 +4,8 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Hari\]* |
-| **Tanggal** | *\[DD/MM/YYYY\]* |
+| **Hari** | Senin |
+| **Tanggal** | 02/11/2026 |
 | **Kelas** | K02 |
 | **Nomor Kelompok** | G09|
 | **Nama Kelompok** | Cumlaude|
@@ -27,13 +27,13 @@
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
-
-**Notes for this section:**  
-*Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
+| 1. Asistensi akbar berlangsung pada pukul 19.10 sampai 19.45 WIB. Laporan implementasi berfungsi sekaligus sebagai spesifikasi dan harus memuat perubahan dari DPPL, bukti penerapan *best practice* Git, profiling, kendala yang perlu diketahui asisten, kontribusi anggota, serta *traceability* kelas perancangan ke implementasi. |
+| 2. Seluruh kode diletakkan pada repositori yang sama di folder `src/`. Kelompok membuat `README.md` sendiri di dalam folder tersebut, dan `README.md` repositori dari asisten tidak diganti. Isinya minimal deskripsi, versi dan instalasi, konfigurasi, cara menjalankan program, akun atau data uji, pembagian tugas, dan skema basis data. Berkas `.env.example` hanya memuat nama variabel, dan paket dependensi tidak di-*commit* tetapi diabaikan lewat `.gitignore`. |
+| 3. Platform, bahasa, kerangka kerja, dan arsitektur bebas selama sesuai dengan rancangan. Basis data disarankan lokal (SQLite, Docker Compose, atau PostgreSQL), dan data tiruan dalam CSV atau JSON juga diperbolehkan. Pengujian unit pada tiap modul, fungsi, atau kelas dianjurkan sebagai praktik yang baik. |
+| 4. Alur kerja mengikuti Git Flow: `main` hanya untuk rilis, `develop` untuk integrasi, dan cabang fitur dibuat dari `develop`, lalu di-*pull* dari `develop` sebelum membuat *pull request*. *Pull request* harus ditinjau anggota lain dan tidak boleh ditinjau atau digabung sendiri. Pesan *commit* memakai format semantik `tipe(lingkup): deskripsi` dengan tipe `feat`, `fix`, `docs`, `style`, `refactor`, `test`, dan `chore`. |
+| 5. *Issue* dipakai untuk pembagian tugas dengan judul dan kriteria penerimaan yang jelas, diberi label, dan ditautkan ke *pull request* lewat `Closes #n`. Cabang dapat dibuat langsung dari halaman *issue*. Peninjauan kode memeriksa kesesuaian dengan kebutuhan, kesalahan logika, penamaan, dan kualitas kode. Hasilnya berupa *approve*, *request changes*, atau *comment*. |
+| 6. Praktik yang perlu dihindari: *god class*, nilai yang ditulis langsung di kode (gunakan berkas konfigurasi atau variabel lingkungan), penanganan galat tanpa pesan yang informatif, pencampuran tanggung jawab antarlapisan, dan gaya penulisan kode yang tidak konsisten. Optimasi dilakukan setelah fitur berjalan dan ditemukan bagian yang lambat. |
+| 7. Implementasi harus berlandaskan kebutuhan fungsional yang sudah dibuat. Batas minimal kebutuhan non-fungsional akan disampaikan asisten kemudian, dan demo akan dinilai dari kedua jenis kebutuhan itu. Tenggat pengumpulan adalah Rabu, 11 November 2026. Kendala mendekati tenggat dikomunikasikan kepada asisten, dan asistensi mandiri bersifat opsional. |
 
 ## Dokumentasi
 

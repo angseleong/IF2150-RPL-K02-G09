@@ -236,12 +236,50 @@
 ---
 
 ### Milestone 9
-**Periode:** 03-11-2026 - 11-11-2026
+**Periode:** 03-11-2026 - 13-11-2026
 
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| *08-11-2026* | *Axeleon Justin Algianto* | *Mengerjakan UC12 Konfigurasi dan Basis Data (#21): KonfigurasiManager (Algo-C29-01 sampai C29-03), layar I-15 tiga tab termasuk tambah obat dan poli, DataPencadanganBoundary dengan pg_dump dan verifikasi pg_restore, jadwal pencadangan harian lewat .env, peringatan pencadangan di dasbor admin, serta unit test* | *3,5* | *Review* | *pg_dump belum terpasang di laptop, sehingga uji otomatis memakai skrip pengganti dan format arsip asli diperiksa di kontainer postgres:15* |
+| *08-11-2026* | *Axeleon Justin Algianto* | *Mengerjakan UC01 Masuk ke Aplikasi (#10): AutentikasiManager (Algo-C17-01, C17-02), layar masuk dan dasbor per peran, cek hak akses di setiap pembukaan layar, Keluar dan batas diam 15 menit, serta unit test dengan PostgreSQL lokal* | *3* | *Review* | *-* |
+| *04-11-2026* | *Axeleon Justin Algianto* | *Menyusun cangkang aplikasi JavaFX (#28): navigasi antarlayar, tema, pintasan global, dan bilah aplikasi* | *3* | *Done* | *-* |
+| *06-11-2026* | *Axeleon Justin Algianto* | *Mengisi DataAkunBoundary, sesi, dan jejak audit (#36)* | *3* | *Done* | *-* |
+| *10-11-2026* | *Axeleon Justin Algianto* | *Memperbaiki temuan uji alur utama dan konkurensi (#55): penutupan kunjungan tanpa resep, bundel FHIR, dan jejak audit seluruh modul* | *2* | *Done* | *-* |
+| *13-11-2026* | *Axeleon Justin Algianto* | *Memperbaiki temuan uji mandiri UC03, UC08, UC12, dan layar pasien (#61)* | *2* | *Done* | *-* |
+| *04-11-2026* | *Ahmad Humam Isma* | *Mengisi entity C38 s.d. C41 dan tujuh metode DataKlinisBoundary bagian skrining dan risiko (#6)* | *2* | *Done* | *Kueri belum teruji ke PostgreSQL karena skema (#2) belum tersedia* |
+| *04-11-2026* | *Ahmad Humam Isma* | *Mengimplementasikan UC04 (#13): SkriningManager, RisikoManager, layar antrean skrining dan formulir skrining, serta unit test validasi rentang dan evaluasi risiko* | *4* | *In Progress* | *Alur penuh menunggu DataKunjunganBoundary (#5) dan skema (#2)* |
+| *04-11-2026* | *Ahmad Humam Isma* | *Mengimplementasikan UC09 (#18): DataPantauBoundary, PantauManager, entity C51 dan C52, layar daftar pantau, serta unit test penyaringan dan pencatatan tindak lanjut* | *3* | *In Progress* | *Alur penuh menunggu DataPasienBoundary (#5) dan skema (#2)* |
+| *04-11-2026* | *Ahmad Humam Isma* | *Mengisi baris Tabel B.5 untuk 14 kelas milik sendiri dan Tabel B.1 untuk perubahan dari DPPL pada modul skrining dan pemantauan* | *1,5* | *Done* | *-* |
+| *07-11-2026* | *Ahmad Humam Isma* | *Mengimplementasikan DataPasienBoundary dan DataKunjunganBoundary (#5) menggantikan Steven, beserta penampung entri baru pada RekamMedisEntity dan unit test dengan pengganti JDBC* | *3,5* | *Done* | *Kueri belum teruji ke PostgreSQL karena skema (#2) belum merge dan basis data belum tersedia di perangkat* |
+| *09-11-2026* | *Ahmad Humam Isma* | *Memperbaiki PR #31 dan #32 sesuai review Adnan: mengisi AntreanEntity.ambilTerdepan dan pindahkanKeBelakang, urutan antrean skrining, batas tombol Lewati, pengeluaran kunjungan dari antrean setelah skrining, serta saringan pada daftar pantau, lalu menyelesaikan konflik dengan develop (#42)* | *2,5* | *Done* | *Penulisan berkas sempat gagal karena kuota penyimpanan penuh, sehingga uji dijalankan dengan direktori sementara lain* |
+| *10-11-2026* | *Ahmad Humam Isma* | *Menggabungkan laporan implementasi (#25): memasukkan perubahan dari DPPL seluruh PR ke Tabel B.1, mengisi Tabel B.2, B.3, B.4, dan tujuh baris B.5 milik Fachry* | *3* | *Review* | *Persentase kontribusi (B.4) dan Form Asistensi menunggu kesepakatan anggota* |
+| *07-11-2026* | *Malik Arsyafiandra Madani* | *Mengisi DataFarmasiBoundary (#8): 15 kueri C61, penguncian FOR UPDATE untuk resep, obat, dan bets, Algo-C61-01 untuk bets ganda, serta pola transaksiSendiri; menambah daftarItem pada ResepEntity dan uji JUnit dengan basis data opsional* | *4* | *Review* | *Uji basis data belum dijalankan karena PostgreSQL belum dapat diakses di laptop pengerjaan* |
+| *05-11-2026* | *Malik Arsyafiandra Madani* | *Menyusun skema PostgreSQL 15 dari 78 kueri DPPL (28 tabel beserta foreign key, UNIQUE, CHECK, indeks GIN pg_trgm, dan peran sehati_app), seed fiktif untuk tiap tahap pelayanan, docker-compose, serta skrip uji PREPARE 78 kueri (#2)* | *4* | *Review* | *Docker belum terpasang di laptop pengerjaan, sehingga skema diperiksa dulu dengan parser PostgreSQL sebelum diuji pada kontainer postgres:15* |
+| *08-11-2026* | *Malik Arsyafiandra Madani* | *Mengimplementasikan UC08 Mengelola Persediaan Obat (#41): PersediaanManager, layar persediaan, dan peringatan stok serta kedaluwarsa* | *3* | *Done* | *-* |
+| *08-11-2026* | *Malik Arsyafiandra Madani* | *Mengimplementasikan UC07 Melayani Resep Obat (#42): ApotekManager, antrean resep, penyerahan obat FEFO, dan pengembalian ke dokter* | *4* | *Done* | *-* |
+| *08-11-2026* | *Malik Arsyafiandra Madani* | *Menindaklanjuti saran review skema basis data #33 (#43)* | *1* | *Done* | *-* |
+| *08-11-2026* | *Steven Vanako* | *Mengimplementasikan UC02 (#11): Algo-C33-01 pada PasienEntity, PasienManager (validasi NIK, pencarian parsial, pendaftaran, pembaruan, audit), layar I-02 dengan pintasan papan ketik Ctrl+S/F/N, beserta unit test* | *4* | *Review* | *`mvn test` belum dapat dijalankan di perangkat pengerjaan; uji basis data di-gate `DB_UJI_URL`; CI menjalankan `mvn -B test` pada PR* |
+| *10-11-2026* | *Steven Vanako* | *Mengimplementasikan UC03 (#51): penerbitan nomor antrean per poli dan penolakan kunjungan ganda* | *3* | *Done* | *-* |
+| *10-11-2026* | *Steven Vanako* | *Menyusun uji alur utama dan uji konkurensi lima komputer (#53, issue #22)* | *3* | *Done* | *-* |
+| *10-11-2026* | *Steven Vanako* | *Menyusun README aplikasi di src/ (#54, issue #24)* | *1* | *Done* | *-* |
+| *08-11-2026* | *Fachry Azriel Fajdwani* | *Mengisi DataSinkronisasiBoundary (C63) dan BundelFHIREntity (C54) (#47)* | *3* | *Done* | *-* |
+| *08-11-2026* | *Fachry Azriel Fajdwani* | *Mengimplementasikan UC10 rekapitulasi dan ekspor laporan PDF dan CSV (#48)* | *3* | *Done* | *-* |
+| *08-11-2026* | *Fachry Azriel Fajdwani* | *Mengimplementasikan UC11 sinkronisasi SATUSEHAT dengan mode simulasi dan ekspor bundel terenkripsi (#49)* | *3* | *Done* | *-* |
+| *09-11-2026* | *Fachry Azriel Fajdwani* | *Menyusun seed 50.000 rekam medis dan profiling kueri laporan serta pencarian pasien (#50, B.2.1)* | *2* | *Done* | *-* |
+| *03-11-2026* | *Muhammad Adnan Kurniawan* | *Menyusun kerangka proyek Maven, stub 64 kelas DPPL, dan CI GitHub Actions (#27)* | *3* | *Done* | *-* |
+| *05-11-2026* | *Muhammad Adnan Kurniawan* | *Memperbaiki pembacaan .env dan mengunci versi compiler (#34)* | *1* | *Done* | *-* |
+| *06-11-2026* | *Muhammad Adnan Kurniawan* | *Mengisi DataKlinisBoundary bagian pemeriksaan (#35)* | *3* | *Done* | *-* |
+| *07-11-2026* | *Muhammad Adnan Kurniawan* | *Mengimplementasikan UC05 Melakukan Pemeriksaan Medis (#39): ringkasan rekam medis, grafik tren, formulir pemeriksaan, dan jadwal kontrol* | *4* | *Done* | *-* |
+| *07-11-2026* | *Muhammad Adnan Kurniawan* | *Mengimplementasikan UC06 Menyusun Resep Elektronik (#40): ResepManager, layar resep, dan pemeriksaan stok per obat* | *3* | *Done* | *-* |
+| *09-11-2026* | *Muhammad Adnan Kurniawan* | *Meninjau PR Humam #29, #31, dan #32 dengan menjalankan kueri ke PostgreSQL, lalu meminta perubahan* | *2* | *Done* | *-* |
+| *10-11-2026* | *Muhammad Adnan Kurniawan* | *Melengkapi AI Usage Milestone 9 (#52)* | *1* | *Done* | *-* |
+| *10-11-2026* | *Muhammad Adnan Kurniawan* | *Memperbarui tema, logo, dan tombol Kembali, lalu merapikan tampilan seluruh layar (#56, #57)* | *4* | *Done* | *-* |
+| *13-11-2026* | *Muhammad Adnan Kurniawan* | *Mengaudit seluruh use case terhadap SKPL dan DPPL, menguji ke-15 layar dengan empat akun, lalu memperbaiki temuan (Tabel B.1 nomor 82 sampai 91)* | *4* | *Done* | *Rilis v9.0 diundur ke 13-11-2026 pukul 21.00* |
 
 **Catatan/Evaluasi Milestone 9:**
+* *Seluruh 12 use case SKPL terimplementasi pada aplikasi desktop JavaFX dengan PostgreSQL. Setiap perbedaan dari DPPL dicatat pada Tabel B.1 laporan implementasi.*
+* *328 test JUnit lulus, termasuk uji alur utama dan uji konkurensi lima komputer pada PostgreSQL.*
+* *Evaluasi proses: sebagian PR digabung tanpa tinjauan tercatat karena dikejar tenggat. Untuk rilis, PR ke main ditinjau anggota lain lebih dulu.*
 
 ---
 
