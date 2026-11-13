@@ -92,7 +92,7 @@ public class SinkronisasiForm {
 
         jalankan(sinkronisasiManager::kirimSemua, this::tampilkanHasil, galat -> {
             if (galat instanceof IllegalStateException) {
-                tampilkanPesan(galat.getMessage());
+                tampilkanPesanGagal(galat.getMessage());
                 tampilkanTombolEkspor();
             } else {
                 tampilkanPenolakan(galat);
@@ -152,6 +152,17 @@ public class SinkronisasiForm {
     }
 
     public void tampilkanPesan(String pesan) {
+        aturPesan(pesan, false);
+    }
+
+    // Peringatan seperti "bundel ditahan" tampil merah, bukan hijau seperti pesan berhasil
+    private void tampilkanPesanGagal(String pesan) {
+        aturPesan(pesan, true);
+    }
+
+    private void aturPesan(String pesan, boolean gagal) {
+        bilahPesan.getStyleClass().removeAll("notifikasi-hijau", "pesan-kolom");
+        bilahPesan.getStyleClass().add(gagal ? "pesan-kolom" : "notifikasi-hijau");
         bilahPesan.setText(pesan == null ? "" : pesan);
     }
 

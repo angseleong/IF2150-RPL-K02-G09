@@ -40,6 +40,7 @@ public class DaftarPantauForm {
     private String penyaring = "";
     private List<DaftarPantauEntity> daftarTampil = new ArrayList<>();
     private DaftarPantauEntity entriTerpilih;
+    private String pesanTersimpan;
 
     @FXML private Parent akar;
     @FXML private ComboBox<String> pilihJenisRisiko;
@@ -65,8 +66,9 @@ public class DaftarPantauForm {
     private void initialize() {
         pilihJenisRisiko.getItems().setAll(SEMUA, "hipertensi", "obesitas", "indikasi diabetes", "kunjungan ulang");
         pilihJenisRisiko.getSelectionModel().selectFirst();
-        // Entri yang sudah selesai tidak dimuat Q-C60-01, jadi hanya dua status terbuka yang dapat dipilih (KF18).
-        pilihStatus.getItems().setAll(SEMUA, DaftarPantauEntity.STATUS_BELUM, DaftarPantauEntity.STATUS_ULANG);
+        // "Semua" berarti semua entri terbuka. Entri selesai hanya tampil bila statusnya dipilih (KF18).
+        pilihStatus.getItems().setAll(SEMUA, DaftarPantauEntity.STATUS_BELUM, DaftarPantauEntity.STATUS_ULANG,
+                DaftarPantauEntity.STATUS_SELESAI);
         pilihStatus.getSelectionModel().selectFirst();
         pilihJenisKontak.getItems().setAll("telepon", "pesan singkat", "kunjungan rumah");
         pilihHasilUpaya.getItems().setAll(TindakLanjutEntity.HASIL_TERHUBUNG,
@@ -101,7 +103,11 @@ public class DaftarPantauForm {
             @Override
             protected void updateItem(Void item, boolean kosong) {
                 super.updateItem(item, kosong);
-                setGraphic(kosong ? null : tombol);
+                DaftarPantauEntity entri = kosong ? null : getTableRow().getItem();
+                // Entri yang sudah selesai tidak bisa ditindaklanjuti lagi
+                boolean selesai = entri != null
+                        && DaftarPantauEntity.STATUS_SELESAI.equals(entri.getStatusTindakLanjut());
+                setGraphic(kosong || entri == null || selesai ? null : tombol);
             }
         });
         tabelPantau.setPlaceholder(new Label("Tidak ada entri daftar pantau"));
@@ -145,10 +151,12 @@ public class DaftarPantauForm {
             daftarTampil = hasil;
             tabelPantau.getItems().setAll(daftarTampil);
             penyaring = ringkasan(jenis, mulai, akhir, status);
+            String awalan = pesanTersimpan == null ? "" : pesanTersimpan + " ";
+            pesanTersimpan = null;
             if (daftarTampil.isEmpty()) {
-                tampilkanKeterangan("Tidak ada pasien yang cocok dengan kriteria saringan (" + penyaring + ")");
+                tampilkanKeterangan(awalan + "Tidak ada pasien yang cocok dengan kriteria saringan (" + penyaring + ")");
             } else {
-                tampilkanKeterangan("Menampilkan " + daftarTampil.size() + " entri aktif (" + penyaring + ")");
+                tampilkanKeterangan(awalan + "Menampilkan " + daftarTampil.size() + " entri (" + penyaring + ")");
             }
         }, this::tampilkanGalat);
     }
@@ -181,12 +189,17 @@ public class DaftarPantauForm {
         TindakLanjutEntity t = new TindakLanjutEntity(0, pilihJenisKontak.getValue(), pilihHasilUpaya.getValue(),
                 pilihStatusKedatangan.getValue());
         int idEntri = entriTerpilih.getIdEntri();
+        String nama = nilai(entriTerpilih.getNamaPasien());
+        String statusBaru = t.terhubung() ? DaftarPantauEntity.STATUS_SELESAI : DaftarPantauEntity.STATUS_ULANG;
         tombolSimpan.setDisable(true);
         LatarBelakang.jalankan(() -> {
             pantauManager.catatTindakLanjut(idEntri, t);
             return null;
         }, hasil -> {
             tutupFormulir();
+            // Konfirmasi ditahan sampai tabel dimuat ulang, supaya tidak tertimpa keterangan saringan
+            pesanTersimpan = "Tindak lanjut " + nama + " tersimpan, status: " + statusBaru + "."
+                    + (t.terhubung() ? " Lihat lewat penyaring status \"" + statusBaru + "\"." : "");
             terapkanPenyaring();
         }, e -> {
             tombolSimpan.setDisable(false);

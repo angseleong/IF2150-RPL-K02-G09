@@ -172,6 +172,13 @@ public class LoginForm {
         sasaran.setVisible(true);
     }
 
+    // Dipanggil Navigasi setiap dasbor tampil lagi
+    void segarkanDasbor() {
+        if (panelDasbor.isVisible()) {
+            tampilkanPeringatanPencadangan();
+        }
+    }
+
     // I-01-08: hanya untuk Petugas Administrasi, hilang setelah pencadangan berikutnya berhasil
     private void tampilkanPeringatanPencadangan() {
         boolean tampil = false;

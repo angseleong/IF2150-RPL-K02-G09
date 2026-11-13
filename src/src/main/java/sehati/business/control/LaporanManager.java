@@ -22,8 +22,9 @@ public class LaporanManager {
     private static final Logger LOG = Logger.getLogger(LaporanManager.class.getName());
 
     public LaporanEntity hitungRekapitulasi(LocalDate mulai, LocalDate akhir, Integer idPoli) {
-        if (!validasiRentang(mulai, akhir)) {
-            throw new IllegalArgumentException("Rentang tanggal tidak valid");
+        String galat = validasiRentang(mulai, akhir);
+        if (galat != null) {
+            throw new IllegalArgumentException(galat);
         }
         try (Connection koneksi = KoneksiBasisData.buka()) {
             return hitungRekapitulasi(mulai, akhir, idPoli, new DataLaporanBoundary(koneksi));
@@ -37,8 +38,18 @@ public class LaporanManager {
         return data.agregasiKunjungan(mulai, akhir, idPoli);
     }
 
-    private boolean validasiRentang(LocalDate mulai, LocalDate akhir) {
-        return mulai != null && akhir != null && !mulai.isAfter(akhir) && !akhir.isAfter(LocalDate.now());
+    // Pesan menyebut apa yang harus diperbaiki (UC10 alternatif 2), null bila rentang sah
+    public static String validasiRentang(LocalDate mulai, LocalDate akhir) {
+        if (mulai == null || akhir == null) {
+            return "Isi tanggal mulai dan tanggal akhir.";
+        }
+        if (mulai.isAfter(akhir)) {
+            return "Tanggal akhir lebih awal dari tanggal mulai. Perbaiki urutan tanggalnya.";
+        }
+        if (akhir.isAfter(LocalDate.now())) {
+            return "Tanggal akhir tidak boleh melewati hari ini.";
+        }
+        return null;
     }
 
     public String ekspor(LaporanEntity laporan, String format, String direktori) {
