@@ -2,6 +2,7 @@ package sehati.business.control;
 
 import sehati.business.entity.AuditEntity;
 import sehati.business.entity.BundelFHIREntity;
+import sehati.business.entity.DaftarPantauEntity;
 import sehati.business.entity.DiagnosisEntity;
 import sehati.business.entity.JadwalKontrolEntity;
 import sehati.business.entity.KodeICD10Entity;
@@ -17,6 +18,7 @@ import sehati.dataaccess.DataAkunBoundary;
 import sehati.dataaccess.DataKlinisBoundary;
 import sehati.dataaccess.DataKunjunganBoundary;
 import sehati.dataaccess.DataFarmasiBoundary;
+import sehati.dataaccess.DataPantauBoundary;
 import sehati.dataaccess.DataPasienBoundary;
 import sehati.dataaccess.DataSinkronisasiBoundary;
 
@@ -230,6 +232,7 @@ public class PemeriksaanManager {
                             new BundelFHIREntity(0, idKunjungan, isi, "tertunda", null));
                 }
                 dataKunjungan.simpanKunjungan(kunjungan);
+                selesaikanJadwalKontrol(dataKlinis, new DataPantauBoundary(koneksi), kunjungan.getIdPasien());
                 new DataAkunBoundary(koneksi).simpanAudit(
                         AuditEntity.buat(idPengguna, "Pemeriksaan kunjungan " + idKunjungan + " dikunci"));
                 koneksi.commit();
@@ -239,6 +242,26 @@ public class PemeriksaanManager {
             }
         } catch (SQLException e) {
             throw galatTeknis("Rekam medis gagal dikunci", e);
+        }
+    }
+
+    // Pasien yang sudah diperiksa dokter pada atau setelah tanggal kontrolnya dianggap sudah kontrol (Subbab 5.45,
+    // KF12), sehingga jadwalnya selesai dan entri "kunjungan ulang" miliknya tidak lagi meminta perawat menghubungi.
+    // Dijalankan saat rekam medis dikunci, bukan saat loket membuka kunjungan, agar pasien yang akhirnya tidak hadir
+    // di skrining tetap ada di daftar pantau.
+    private static void selesaikanJadwalKontrol(DataKlinisBoundary dataKlinis, DataPantauBoundary dataPantau,
+            int idPasien) {
+        LocalDate hariIni = LocalDate.now();
+        for (JadwalKontrolEntity j : dataKlinis.jadwalJatuhTempo(idPasien, hariIni)) {
+            j.tandaiSelesai();
+            dataKlinis.simpanJadwalKontrol(j);
+        }
+        for (DaftarPantauEntity e : dataPantau.ambilEntri()) {
+            if (e.getIdPasien() == idPasien && RisikoManager.JENIS_KUNJUNGAN_ULANG.equals(e.getJenisRisiko())
+                    && e.getTanggalPemicu() != null && !e.getTanggalPemicu().isAfter(hariIni)) {
+                e.perbaruiStatus(DaftarPantauEntity.STATUS_SELESAI);
+                dataPantau.simpanEntri(e);
+            }
         }
     }
 

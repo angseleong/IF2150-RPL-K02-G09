@@ -116,6 +116,8 @@ public class SinkronisasiForm {
             tampilkanPesan("Sinkronisasi selesai. " + hasil.size() + " bundel diproses.");
         }
         tampilkanTombolEkspor();
+        // Tabel dimuat ulang agar riwayat 10 pengiriman terakhir tetap tampil setelah sinkronisasi (UC11 langkah 1).
+        tampilkanStatus();
     }
 
     /**

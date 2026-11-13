@@ -131,7 +131,17 @@ class AlurUtamaTest {
         }
 
         masuk("admin");
-        new KunjunganManager().bukaKunjungan(idPasien, poli);
+        int id = new KunjunganManager().bukaKunjungan(idPasien, poli).getIdKunjungan();
+        // Baru dibuka di loket: pasien bisa saja tidak hadir di skrining, jadi jadwal belum selesai.
+        assertEquals("terjadwal", teks("SELECT status FROM jadwal_kontrol WHERE id_jadwal = ?", idJadwal));
+
+        masuk("perawat");
+        new SkriningManager().simpanSkrining(id, "Kontrol", new TandaVitalEntity(120, 80, 60, 165, 36.5, 80, null));
+        masuk("dokter");
+        PemeriksaanManager pemeriksaan = new PemeriksaanManager();
+        pemeriksaan.simpanPemeriksaan(id, new PemeriksaanEntity(0, id, "Kontrol rutin", "Edukasi", false),
+                new DiagnosisEntity(0, "I10", "Hipertensi esensial"));
+        pemeriksaan.kunciRekamMedis(id);
 
         assertEquals("selesai", teks("SELECT status FROM jadwal_kontrol WHERE id_jadwal = ?", idJadwal));
         assertEquals("selesai ditindaklanjuti",
