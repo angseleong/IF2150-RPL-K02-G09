@@ -33,153 +33,9 @@ Dipersiapkan oleh:
 ---
 
 
-**Deadline:** Rabu, 11 November 2026, 21.50 WIB
+**Deadline:** Jumat, 13 November 2026, 21.00 WIB (diundur dari Rabu, 11 November 2026, 21.50 WIB)
 
 **Asistensi akbar:** Senin, 2 November 2026, 19.10-19.45 WIB
-
-
----
-
-# BAGIAN A: Ketentuan Implementasi
-
-## A.1 Deskripsi Tugas
-
-Pada tugas ini, kalian mengimplementasikan perangkat lunak yang telah dirancang pada tugas-tugas sebelumnya (SKPL, APL, DPPL) menjadi aplikasi yang **dapat dijalankan**. Platform bebas (web, desktop, atau mobile) selama aplikasi dapat dijalankan ulang oleh asisten mengikuti petunjuk kalian.
-
-Ketentuan umum:
-- Setiap anggota bertanggung jawab atas **minimal satu fitur atau modul** dan harus terlihat jelas di riwayat commit/PR.
-- Implementasi harus **mengacu pada DPPL**. Jika ada yang berubah (kelas, layar, basis data, dsb.), catat di Bagian B.1. Perubahan itu wajar, tetapi harus tercatat dan beralasan.
-- Implementasi **tidak harus berupa kelas** (misalnya fungsi, komponen, *route/handler*, *stored procedure*, atau skrip). Namun, setiap kelas perancangan pada DPPL **wajib dapat ditelusuri** ke implementasinya, dan penelusuran ini dicatat di Bagian B.5.
-- Seluruh use case pada SKPL **diprioritaskan** untuk diimplementasikan. Status tiap use case akan dilaporkan pada HIUPL (Tugas 10).
-- Seluruh mahasiswa **wajib** mengikuti asistensi akbar.
-
-## A.2 Platform, Bahasa, dan Teknologi
-
-Kalian **bebas** memilih bahasa, framework, library, dan basis data, dengan syarat:
-
-1. **Dapat dijalankan ulang** oleh asisten pada mesin biasa dengan mengikuti README. Versi bahasa/runtime dan seluruh dependensi harus tertulis jelas.
-2. **Dependensi dikelola lewat file standar**, misalnya `package.json` + lockfile, `requirements.txt`/`pyproject.toml`, `pom.xml`/`build.gradle`, `composer.json`, `pubspec.yaml`, dan sejenisnya. Jangan meng-commit folder hasil instalasi (`node_modules/`, `venv/`, `build/`, dll.).
-3. **Jika memakai layanan eksternal** (basis data cloud, API pihak ketiga, auth, dll.), sediakan cara menjalankan tanpa akun pribadi kalian, atau sediakan data/akun uji pada README. Basis data **sangat disarankan** dapat dijalankan lokal (SQLite, atau Docker Compose untuk PostgreSQL/MySQL/MongoDB).
-4. **Arsitektur sesuai DPPL.** Pola arsitektur yang kalian pilih di APL/DPPL (MVC, layered, client-server, dll.) harus terlihat pada struktur kode.
-
-Ketentuan tambahan per platform:
-
-| Platform | Ketentuan |
-| :--- | :--- |
-| **Web** | Berjalan lokal lewat satu-dua perintah yang terdokumentasi. Boleh juga di-*deploy*; jika ya, cantumkan URL, tetapi **tetap wajib bisa dijalankan lokal** (URL deploy bisa mati). |
-| **Desktop** | Berjalan dari source lewat perintah yang terdokumentasi. Build/installer opsional. |
-| **Mobile** | Berjalan di emulator/simulator atau perangkat. Sertakan langkah menjalankan, dan **sangat disarankan** melampirkan APK/build di Release. |
-
-## A.3 Keamanan Repository
-
-Repo fork kelompok bersifat **public**, sehingga:
-
-- **Dilarang** meng-commit password, API key, token, `.env` asli, sertifikat/private key, atau data pribadi. Hal ini dapat mengurangi nilai.
-- Sediakan `.env.example` berisi nama variabel tanpa nilai rahasia, dan masukkan `.env` ke `.gitignore`.
-- Jika sudah terlanjur ter-commit, **cabut/ganti** kredensial tersebut. Menghapus commit saja tidak cukup.
-- Data uji/seed harus berupa data fiktif.
-
-## A.4 Struktur Folder
-
-Seluruh kode ditempatkan di `src/` pada repo fork. Jangan mengubah folder milestone lama.
-
-```
-src/                              # SELURUH kode implementasi
-	README.md                     # dokumentasi utama aplikasi (lihat A.5)
-	.env.example                  # jika memakai environment variable
-	<struktur kode kalian>        # bebas, mengikuti pola arsitektur DPPL
-	tests/                        # test case (jika ada)
-docs/
-	M9/
-		KXX_GYY_Implementasi.md   # laporan ini (Bagian B)
-		KXX_GYY_Form-Asistensi.md
-```
-
-Catatan:
-- `README.md` aplikasi diletakkan di **`src/README.md`**, bukan di root repo.
-- Jika kerangka kerja kalian mewajibkan struktur tertentu (misalnya Maven `src/main/java`, Flutter `lib/`, monorepo `frontend/` dan `backend/`), letakkan semuanya **di dalam `src/`**.
-- Nama file dan folder pada `docs/M9/` mengikuti aturan penamaan milestone sebelumnya (`KXX_GYY_...`).
-
-## A.5 Isi Minimal `src/README.md`
-
-README harus cukup bagi orang yang belum pernah melihat proyek kalian untuk menjalankan aplikasi dari nol. Minimal berisi:
-
-1. **Deskripsi singkat** aplikasi.
-2. **Teknologi yang digunakan** beserta versi (bahasa, framework, basis data).
-3. **Prasyarat dan instalasi** (software yang harus ada, perintah instalasi dependensi).
-4. **Konfigurasi** (environment variable, setup basis data, migrasi/seed) dan langkah demi langkah menjalankannya.
-5. **Cara menjalankan aplikasi** (dan cara menjalankan test, jika ada).
-6. **Akun/data uji** untuk mencoba tiap peran pengguna (jika ada login).
-7. **Daftar modul/fitur yang diimplementasi** beserta pembagian anggota.
-8. **Daftar tabel/koleksi basis data** beserta atributnya (atau tautan ke skema/ERD).
-
-## A.6 Best Practices
-
-Kalian dianjurkan menerapkan praktik berikut. Bukti penerapannya dirangkum pada Bagian B.2.
-
-### 1. Branching
-Sesuai aturan umum di README repository, `main` fork kelompok dijaga agar tetap bisa menerima sync dari asisten. Pada tugas ini **sangat disarankan** memakai branch per fitur dengan format `<tipe>/<nama-fitur>` (contoh: `feat/login-page`, `fix/null-cart`), lalu digabungkan ke `main` melalui Pull Request. Skema Gitflow penuh (dengan `develop`) boleh dipakai, tetapi tidak diwajibkan.
-
-### 2. Semantic Commit
-Gunakan format `<tipe>(<scope>): <deskripsi>`, misalnya `feat(auth): tambah validasi email`.
-
-| Tipe | Kegunaan |
-| :--- | :--- |
-| `feat` | Menambahkan fitur baru |
-| `fix` | Memperbaiki bug |
-| `docs` | Mengubah dokumentasi |
-| `style` | Perubahan format/spasi, tanpa mengubah logika |
-| `refactor` | Perubahan kode yang tidak menambah fitur atau memperbaiki bug |
-| `test` | Menambah/memperbaiki pengujian |
-| `chore` | Tugas rutin (build, dependensi, konfigurasi) |
-
-### 3. Track Tasks
-Gunakan **GitHub Issues** (dan opsional GitHub Projects) untuk membagi tugas dan melacak progres.
-- Pecah fitur besar menjadi issue yang lebih kecil dan tetapkan penanggung jawabnya.
-- Hubungkan PR dengan issue (`Closes #12`) dan tutup issue ketika selesai.
-
-### 4. Pull Request dan Code Review
-- Setiap PR berisi penjelasan deskriptif tentang apa yang dikerjakan, beserta bukti (tangkapan layar/rekaman/hasil test).
-- Setiap PR di-*review* minimal **1 anggota lain**, dengan komentar konstruktif atau approval.
-
-### 5. Pengujian dan Optimasi Performa
-- Tulis pengujian untuk logika inti (unit test dan/atau pengujian alur utama). Cakupan penuh tidak diwajibkan, tetapi pengujian pada logika utama dinilai.
-- Lakukan **profiling** pada setidaknya satu fitur yang berat (query besar, proses pengolahan data, render list panjang, dsb.), lalu catat temuan dan perbaikannya. Contoh alat:
-
-| Platform | Contoh alat |
-| :--- | :--- |
-| Web (frontend) | Chrome DevTools (Performance/Network), Lighthouse |
-| Web (backend) | Profiler bawaan bahasa, `EXPLAIN` pada query basis data, logging waktu respons |
-| Python | `cProfile`, `PyInstrument` |
-| Java | VisualVM, JProfiler |
-| Mobile | Android Studio Profiler, Flutter DevTools, Xcode Instruments |
-
-### 6. Penggunaan AI
-Penggunaan AI **tetap harus dicatat** pada `docs/KXX_GYY_AI-Usage.md` sesuai ketentuan yang sudah berlaku.
-
-## A.7 Pengumpulan
-
-Pengumpulan dinilai dari **tag release**, bukan commit terakhir.
-
-1. Pastikan seluruh pekerjaan sudah di-*commit* dan di-*push* ke `main` fork kelompok.
-2. Buat release dengan tag **`v9.0`** (revisi berikutnya `v9.1`, `v9.2`, dst.) dengan target branch `main`.
-3. Yang dinilai adalah **tag terakhir yang dibuat sebelum deadline**.
-
-## A.8 Aturan Tanya Jawab
-
-Agar semua kelompok mendapat jawaban yang sama, pertanyaan dibagi menjadi dua jalur:
-
-| Jenis Pertanyaan | Jalur |
-| :--- | :--- |
-| **Ketentuan tugas**, misalnya teknologi yang diperbolehkan, struktur folder, format pengumpulan, dan penilaian | **Sheets QnA:** *[tautan sheets QnA]* |
-| **Kendala teknis kelompok sendiri**, misalnya error, setup, dan penggunaan git | Grup kelompok bersama asisten masing-masing |
-
-Ketentuan:
-1. Pertanyaan tentang ketentuan tugas **wajib** diajukan melalui Sheets QnA. Periksa terlebih dahulu apakah pertanyaan serupa sudah dijawab.
-2. Jika pertanyaan tentang ketentuan tugas tetap diajukan langsung kepada asisten kelompok, asisten **berhak menolak menjawab** dan meminta kelompok memasukkan pertanyaannya ke Sheets QnA.
-3. Jika pertanyaan di Sheets QnA **belum dijawab dalam 24 jam**, kelompok boleh menghubungi asisten kelompok masing-masing. Cantumkan pertanyaan yang sudah diajukan di sheets tersebut.
-4. Jawaban pada Sheets QnA berlaku untuk **seluruh kelompok** dan menjadi acuan jika terjadi perbedaan pemahaman.
-
 
 
 ---
@@ -275,6 +131,16 @@ Tabel B.1. Perubahan dari DPPL
 | 79 | I-11-08, Algo-C25-02 | Tanggal kedaluwarsa harus setelah tanggal terima | Juga harus setelah hari ini | SKPL UC08 alternatif 2 menolak tanggal kedaluwarsa yang sudah lewat, termasuk bila tanggal terima dimundurkan |
 | 80 | C17 AutentikasiManager, C56 (Q-C56-10) | Menonaktifkan akun hanya menutup baris sesi di basis data | Ditambah `AutentikasiManager.sesiDiputus()` dan `DataAkunBoundary.sesiMasihAktif()`. `Navigasi` memeriksanya tiap menit dan mengakhiri sesi yang sudah ditutup | SKPL UC12 alternatif 3 meminta sesi aktif pengguna yang dinonaktifkan ikut terputus |
 | 81 | I-02, C18 PasienManager, C57 (Q-C57-12) | Tabel hasil kosong sampai kata kunci minimal 3 karakter | Saat kata kunci kurang dari 3 karakter, tabel menampilkan 50 pasien terakhir didaftarkan lewat `PasienManager.pasienTerbaru()` | Petugas langsung melihat pasien yang baru didaftarkan. Dibatasi 50 baris agar KNF01 tetap terpenuhi |
+| 82 | C12 DaftarPantauForm, C26 `saringDaftar()` | `tampilkanDaftar()` menyebut penyaring status tindak lanjut, tetapi `saringDaftar(jenis, mulai, akhir)` tidak menerimanya | Ditambah `pilihStatus` pada I-12 dan parameter `statusTindakLanjut` pada `saringDaftar()` | KF18 meminta penyaring status tindak lanjut. Pilihannya hanya dua status terbuka karena Q-C60-01 tidak memuat entri yang sudah selesai |
+| 83 | C21 `evaluasiRisiko()` | Setiap risiko yang terpenuhi selalu menyisipkan entri daftar pantau | Penanda tetap terbit per kunjungan, tetapi entri tidak disisipkan bila pasien masih punya entri terbuka untuk risiko yang sama (`sudahDipantau()`) | Pasien yang berisiko pada beberapa kunjungan muncul berkali-kali dan dihubungi lebih dari sekali |
+| 84 | C19 `bukaKunjungan()`, C45 `tandaiSelesai()`, C59 | `tandaiSelesai()` (Subbab 5.45) tidak punya pemanggil | `bukaKunjungan()` menandai selesai jadwal kontrol pasien yang tanggalnya sudah tiba (kueri baru Q-C59-19 `jadwalJatuhTempo()`) dan menutup entri "kunjungan ulang" miliknya dalam transaksi yang sama | Pasien yang sudah datang kontrol tidak lagi tampil di daftar pantau sebagai belum ditindaklanjuti |
+| 85 | Algo-C29-01 `simpanAkun()` | Peran akun mana pun dapat diubah | Perubahan peran akun yang sedang dipakai ditolak | Petugas Administrasi dapat menurunkan perannya sendiri sehingga tidak ada lagi yang dapat membuka I-15, sama dengan alasan larangan menonaktifkan akun sendiri |
+| 86 | C13 LaporanForm, C27 `hitungRekapitulasi()`, C62 Q-C62-01 sampai Q-C62-03 | Rekapitulasi hanya menurut rentang tanggal | Ditambah pilihan poli layanan pada I-13 dan parameter `idPoli` (null berarti semua poli) pada `hitungRekapitulasi()` dan `agregasiKunjungan()`. Ketiga kueri ditambah `AND (CAST(? AS INTEGER) IS NULL OR k.id_poli = ?)` | SKPL UC10 langkah 1 meminta penyaring poli layanan, tetapi DPPL belum memuatnya |
+| 87 | C14 SinkronisasiForm, C28 `muatStatus()`, C63 | Tabel I-14 hanya memuat bundel tertunda dan gagal kirim | `muatStatus()` menambahkan 10 bundel terkirim terbaru lewat kueri baru Q-C63-04 `ambilTerkirimTerakhir()`. Jumlah tertunda tidak ikut menghitung bundel terkirim | SKPL UC11 langkah 1 meminta riwayat pengiriman terakhir |
+| 88 | Kesepakatan BAB 5, KNF05 | Hak akses hanya diperiksa saat layar dibuka (`Navigasi.buka()`) | Ditambah `SesiAktif.wajibPeran()` yang dipanggil setiap operasi tulis `Manager` sebelum menyentuh basis data. Pencadangan terjadwal tidak diperiksa karena berjalan tanpa sesi | KNF05 meminta otorisasi berbasis peran pada setiap akses data, bukan hanya pada menu |
+| 89 | C01 LoginForm (I-01-08) | Dasbor administrasi hanya menampilkan peringatan bila pencadangan gagal | Dasbor administrasi selalu menampilkan waktu, status, dan lokasi pencadangan terakhir, dan peringatan tetap muncul bila gagal | KF21 meminta informasi pencadangan terakhir tampil di dasbor administrasi |
+| 90 | C09 AntreanResepForm, C24 ApotekManager, C61 | Antrean resep memuat waktu, pasien, obat, dan status | Ditambah kolom "Poli / Antrean" dari kueri baru Q-C61-19 `ambilAsalResep()` lewat `ApotekManager.muatAsalResep()` | SKPL UC07 langkah 1 meminta nomor antrean dan poli asal pada antrean resep |
+| 91 | C07 PemeriksaanForm `kirimPemeriksaan()`, Algo-C22-02 `kunciRekamMedis()` | Teks diagnosis yang diketik bebas dibuang diam-diam, dan rekam medis dapat dikunci tanpa diagnosis | Simpan ditolak dengan pesan "Pilih kode ICD-10 dari daftar saran" selama kolom diagnosis berisi teks yang bukan kode terpilih. `kunciRekamMedis()` menolak dengan "Diagnosis ICD-10 belum diisi" bila pemeriksaan belum punya diagnosis | SKPL UC05 alternatif 2 dan KF10 meminta diagnosis disimpan sebagai kode ICD-10 standar. Temuan uji mandiri anggota |
 
 ## B.2 Bukti Penerapan Best Practices
 
@@ -282,11 +148,11 @@ Tabel B.2. Bukti Best Practices
 
 | Praktik | Bukti | Keterangan |
 | :--- | :--- | :--- |
-| Branching | [Daftar branch](https://github.com/angseleong/IF2150-RPL-K02-G09/branches), [graph commit](https://github.com/angseleong/IF2150-RPL-K02-G09/network) | Satu branch fitur per issue (`feat/…`, `fix/…`, `test/…`, `docs/…`, `chore/…`) yang dibuat dari `develop` dan digabung lewat PR dengan *merge commit*. `main` hanya menerima rilis dan diberi tag `v9.0`. Terdapat 32 branch di remote. |
-| Semantic commit | [Riwayat commit `develop`](https://github.com/angseleong/IF2150-RPL-K02-G09/commits/develop) | Sejak "init M9" (28-10-2026) ada 185 commit non-merge dengan awalan `docs` 100, `feat` 47, `fix` 20, `chore` 9, dan `test` 7. Dua commit tidak berawalan. Contoh: `feat(pasien): isi DataPasienBoundary`, `fix(skrining): isi AntreanEntity, urutan antrean, batas Lewati, dan keluarkan setelah skrining`. |
+| Branching | [Daftar branch](https://github.com/angseleong/IF2150-RPL-K02-G09/branches), [graph commit](https://github.com/angseleong/IF2150-RPL-K02-G09/network) | Satu branch fitur per issue (`feat/…`, `fix/…`, `test/…`, `docs/…`, `chore/…`) yang dibuat dari `develop` dan digabung lewat PR dengan *merge commit*. `main` hanya menerima rilis dan diberi tag `v9.0`. Terdapat 37 branch di remote. |
+| Semantic commit | [Riwayat commit `develop`](https://github.com/angseleong/IF2150-RPL-K02-G09/commits/develop) | Sejak "init M9" (28-10-2026) sampai 13-11-2026 ada 192 commit non-merge dengan awalan `docs` 105, `feat` 47, `fix` 21, `chore` 9, dan `test` 7. Tiga commit tidak berawalan (`add ui`, `upadate laporan akhir`, dan satu commit lama dari M1 yang ikut terbawa). Contoh: `feat(pasien): isi DataPasienBoundary`, `fix(skrining): isi AntreanEntity, urutan antrean, batas Lewati, dan keluarkan setelah skrining`. |
 | Track tasks | [Issues](https://github.com/angseleong/IF2150-RPL-K02-G09/issues?q=is%3Aissue) | 26 issue (#1 sampai #26): 3 *chore* (kerangka, skema, rilis), 7 fondasi dan boundary, 12 use case, 2 uji, dan 2 dokumen. Pembagian per anggota: Axeleon 5, Steven 5, Humam 4, Adnan 4, Malik 4, Fachry 4. Label `status: in-progress`, `status: review`, dan `status: done` dipakai pada PR, dan PR menutup issue lewat `Closes #n`. |
-| Pull request dan review | [PR #29](https://github.com/angseleong/IF2150-RPL-K02-G09/pull/29), [PR #39](https://github.com/angseleong/IF2150-RPL-K02-G09/pull/39), [PR #46](https://github.com/angseleong/IF2150-RPL-K02-G09/pull/46) | Total 31 PR (#27 sampai #57), seluruhnya sudah digabung ke `develop`. Pasangan tinjauan: Axeleon ditinjau Steven, Steven ditinjau Humam, Humam ditinjau Adnan, Adnan ditinjau Malik, Malik ditinjau Fachry, dan Fachry ditinjau Axeleon. #29: Adnan meminta perubahan (atribut `waktu`, galat `simpanPenanda`, pesan galat), lalu diperbaiki. #39: ditinjau Malik. #46: ditinjau Steven. |
-| Pengujian | [`src/tests/`](https://github.com/angseleong/IF2150-RPL-K02-G09/tree/develop/src/tests), [Actions](https://github.com/angseleong/IF2150-RPL-K02-G09/actions) | JUnit 5, 57 kelas uji. Terakhir dijalankan pada `develop`: 315 test, 0 gagal, 0 galat, 79 dilewati (uji basis data tanpa `DB_UJI_URL`). Yang diuji: entity (Algo-Cxx), validasi dan transaksi Manager, kueri boundary lewat JDBC pengganti, serta alur utama dan konkurensi dengan PostgreSQL (`AlurUtamaTest`, `KonkurensiTest`). Jalankan `cd src && mvn test`. CI GitHub Actions menjalankan `mvn -B test` pada setiap PR. |
+| Pull request dan review | [PR #29](https://github.com/angseleong/IF2150-RPL-K02-G09/pull/29), [PR #39](https://github.com/angseleong/IF2150-RPL-K02-G09/pull/39), [PR #46](https://github.com/angseleong/IF2150-RPL-K02-G09/pull/46) | Sampai 13-11-2026 ada 34 PR (#27 sampai #61) yang digabung ke `develop`, ditambah PR perbaikan hasil audit dan PR rilis ke `main`. Pasangan tinjauan yang disepakati: Axeleon ditinjau Steven, Steven ditinjau Humam, Humam ditinjau Adnan, Adnan ditinjau Malik, Malik ditinjau Fachry, dan Fachry ditinjau Axeleon. Dari 34 PR itu, 15 PR memiliki tinjauan tercatat di GitHub, misalnya #29 (Adnan meminta perubahan atribut `waktu`, galat `simpanPenanda`, dan pesan galat, lalu diperbaiki), #39 (ditinjau Malik), dan #46 (ditinjau Steven). 19 PR lainnya digabung tanpa tinjauan tercatat, dan 8 di antaranya digabung oleh pembuatnya sendiri tanpa tinjauan (#36, #52, #56, #57, #58, #59, #60, #61), sebagian besar karena dikejar tenggat. Ini menyimpang dari catatan asistensi butir 4, sehingga PR rilis ke `main` wajib ditinjau anggota lain sebelum digabung. |
+| Pengujian | [`src/tests/`](https://github.com/angseleong/IF2150-RPL-K02-G09/tree/develop/src/tests), [Actions](https://github.com/angseleong/IF2150-RPL-K02-G09/actions) | JUnit 5, 58 kelas uji (termasuk kelas bersarang). Terakhir dijalankan 13-11-2026 setelah perbaikan audit: 328 test, 0 gagal, 0 galat. Tanpa `DB_UJI_URL` (seperti di CI) 86 uji basis data dilewati, dan dengan PostgreSQL uji seluruhnya berjalan tanpa ada yang dilewati. Yang diuji: entity (Algo-Cxx), validasi dan transaksi Manager, kueri boundary lewat JDBC pengganti, serta alur utama dan konkurensi dengan PostgreSQL (`AlurUtamaTest`, `KonkurensiTest`). Jalankan `cd src && mvn test`. CI GitHub Actions menjalankan `mvn -B test` pada setiap PR. |
 
 ### B.2.1 Profiling dan Optimasi
 
@@ -308,14 +174,19 @@ Tuliskan kendala yang ditemui, fitur yang belum sempurna (*known issues*), serta
 
 **Menjalankan dan menilai aplikasi (seluruh anggota):**
 - Urutan menjalankan, isi `.env`, dan basis data ada di `src/README.md`: `docker compose up -d` dari folder `src/`, lalu `mvn javafx:run`. Akun uji `admin`, `perawat`, `dokter`, dan `farmasi` memakai kata sandi `sehati123`. Akun `perawat.nonaktif` dipakai untuk menguji penolakan akun nonaktif.
-- Uji berbasis data (79 dari 315 test) dilewati bila `DB_UJI_URL` kosong. Variabel ini harus memakai akun pemilik basis data, karena uji membersihkan tabel yang tidak boleh diubah akun aplikasi.
+- Uji berbasis data (86 dari 328 test) dilewati bila `DB_UJI_URL` kosong. Variabel ini harus memakai akun pemilik basis data, karena uji membersihkan tabel yang tidak boleh diubah akun aplikasi.
 - Tanpa `SATUSEHAT_URL`, sinkronisasi berjalan dalam mode simulasi dan tidak mengirim ke sandbox SATUSEHAT. Pengiriman nyata belum diuji karena tidak ada kredensial OAuth client.
 - Arsip pencadangan `pg_dump` hanya terkompresi dan tidak terenkripsi (Tabel B.1). Ekspor bundel saat luring terenkripsi dengan `EKSPOR_FRASA_SANDI`.
 - Pada profiling, seluruh operasi terukur di bawah batas 2 detik KNF01 pada 50.000 rekam medis (B.2.1).
 
+**Audit dan uji menyeluruh (13-11-2026, Adnan):**
+- Seluruh use case diperiksa ulang terhadap SKPL dan DPPL. Hasilnya diperbaiki dan dicatat pada Tabel B.1 nomor 82 sampai 91: penyaring status daftar pantau (KF18), entri daftar pantau ganda, jadwal kontrol yang tidak pernah selesai (KF12), larangan mengubah peran akun sendiri, penyaring poli laporan (UC10), riwayat pengiriman (UC11), pemeriksaan peran di setiap operasi tulis `Manager` (KNF05), informasi pencadangan di dasbor (KF21), kolom poli serta antrean pada antrean resep (UC07), dan penolakan diagnosis yang bukan kode ICD-10 (UC05 alternatif 2).
+- Ke-15 layar dibuka dengan keempat akun uji pada basis data berisi seed, termasuk alur skrining, pemeriksaan, resep, dan penyerahan obat. Tangkapan layarnya diperiksa satu per satu. Tidak ada dialog galat, dan tampilan yang terpotong sudah dirapikan.
+- Belum diuji: pengiriman nyata ke sandbox SATUSEHAT (tidak ada kredensial OAuth client), pemasangan di Windows (KNF10, pengujian dilakukan di Linux), dan pemulihan dari arsip `pg_dump` di komputer lain.
+
 **Modul skrining dan pemantauan (Humam):**
 - Kueri C59 dan C60 sudah dijalankan ke PostgreSQL oleh reviewer (Adnan) pada review #29, #31, dan #32. Alur UC04 dan UC09 dijalankan pada basis data yang sama, dan layar I-04, I-05, dan I-12 sudah dibuka tanpa galat.
-- Dua komputer yang membuka daftar pantau bersamaan dapat bertabrakan pada `UNIQUE id_jadwal` saat membuat entri "kunjungan ulang" untuk jadwal yang sama, sehingga satu komputer menerima dialog galat. Data tetap konsisten dan perilaku ini belum ditangani maupun diuji konkurensi.
+- Dua komputer yang membuka daftar pantau bersamaan sebelumnya dapat bertabrakan pada `UNIQUE id_jadwal`. Sejak perbaikan audit, Q-C60-02 memakai `ON CONFLICT DO NOTHING`, dan `KonkurensiTest` menguji lima komputer yang membuka daftar pantau serentak. Komputer yang kalah cepat melihat entri tersebut pada penyegaran berikutnya.
 - Entri antrean skrining hanya dibaca untuk kunjungan hari ini. Pasien "tidak hadir" dari hari sebelumnya tidak ikut ditampilkan.
 - JDK yang tersedia di perangkat Humam adalah 17, sehingga pengujian lokal memakai `-Dmaven.compiler.release=17`. Pada JDK 21 tidak ada perbedaan perilaku.
 
@@ -395,14 +266,14 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C53 | LaporanEntity | Kelas Java | `src/src/main/java/sehati/business/entity/LaporanEntity.java` - `LaporanEntity` | Atribut sesuai Tabel 4.1 dengan getter dan setter. `kosong()` menandai rekapitulasi tanpa data pada rentang itu. |
 | C54 | BundelFHIREntity | Kelas Java | `src/src/main/java/sehati/business/entity/BundelFHIREntity.java` - `BundelFHIREntity` | Algo-C54-01: `tandaiTerkirim()` dan `tandaiGagal()` menolak bundel yang sudah terkirim |
 | C55 | PencadanganEntity | Kelas Java | `src/src/main/java/sehati/business/entity/PencadanganEntity.java` - `PencadanganEntity` | `berhasil()` hanya untuk status "berhasil" |
-| C56 | DataAkunBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataAkunBoundary.java` - `DataAkunBoundary` | Q-C56-01 sampai Q-C56-08 sebagai konstanta `Q_C56_xx`, ditambah Q-C56-09 `semuaPengguna()` untuk daftar akun I-15 (Tabel B.1) |
-| C57 | DataPasienBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataPasienBoundary.java` | Q-C57-01 s.d. Q-C57-11 sebagai konstanta `Q_C57_xx`, Algo-C57-01 pada `polaPencarian()`. Pengerjaan Humam menggantikan Steven (#5). |
-| C58 | DataKunjunganBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataKunjunganBoundary.java` | Q-C58-01 s.d. Q-C58-12 sebagai konstanta `Q_C58_xx`, Algo-C58-01 pada `ambilAntrean()` dan `simpanAntrean()`. Pengerjaan Humam menggantikan Steven (#5). |
-| C59 | DataKlinisBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataKlinisBoundary.java` - `DataKlinisBoundary` | Atribut `koneksi` diterima lewat konstruktor dari `Manager`. Bagian pemeriksaan: `cariKodeICD10`, `simpanPemeriksaan`, `ambilPemeriksaan`, `simpanJadwalKontrol`, dan `ambilJadwalKontrol` menjalankan konstanta `Q_C59_11` sampai `Q_C59_17` lewat `PreparedStatement`. `simpanPemeriksaan` mewujudkan Algo-C59-02 dan melempar `IllegalStateException` bila baris lama sudah terkunci. Tambahan: `ambilDiagnosis()` dengan kueri Q-C59-18 untuk memuat draf (B.1). |
-| C60 | DataPantauBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataPantauBoundary.java` | Q-C60-01 s.d. Q-C60-06 sebagai konstanta `Q_C60_xx`, Algo-C60-01. |
-| C61 | DataFarmasiBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataFarmasiBoundary.java` - `DataFarmasiBoundary` | Atribut `koneksi` diterima lewat konstruktor dari `Manager`. Sepuluh operasi publik menjalankan konstanta `Q_C61_01` sampai `Q_C61_15` lewat `PreparedStatement`. `ambilObat`, `ambilBets`, dan `kunciResep` memakai `FOR UPDATE` (KF23, KNF11). `simpanPenerimaan` mewujudkan Algo-C61-01 dan melempar `IllegalArgumentException("nomorBets")` untuk bets ganda. `simpanStok`, `simpanPenerimaan`, dan `simpanResep` memakai pola `transaksiSendiri` (aturan 1 Subbab 5.56). Item resep dibaca ke `ResepEntity.daftarItem`. Tambahan UC07: `ambilPasienResep()` menjalankan `Q_C61_16` agar identitas pasien seluruh antrean diambil dalam satu kueri (B.1). Ditambah Q-C61-17 `tambahObat()` untuk data master I-15 (Tabel B.1) |
-| C62 | DataLaporanBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataLaporanBoundary.java` - `DataLaporanBoundary` | Q-C62-01 sampai Q-C62-04 sebagai konstanta `Q_C62_xx`. Algo-C62-01 membaca ketiga agregasi dalam satu transaksi hanya-baca REPEATABLE READ. Algo-C62-02 menulis CSV atau PDF (Apache PDFBox) secara atomik. |
-| C63 | DataSinkronisasiBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataSinkronisasiBoundary.java` - `DataSinkronisasiBoundary` | Q-C63-01 s.d. Q-C63-03 sebagai konstanta `Q_C63_xx`; `simpanBundel`, `ambilTertunda`, `perbaruiBundel` lewat `PreparedStatement`; `tulisArsipTerenkripsi` mewujudkan Algo-C63-01 (PBKDF2 600k + AES-GCM) |
+| C56 | DataAkunBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataAkunBoundary.java` - `DataAkunBoundary` | Q-C56-01 sampai Q-C56-08 sebagai konstanta `Q_C56_xx`, ditambah Q-C56-09 `semuaPengguna()` untuk daftar akun I-15 dan Q-C56-10 `sesiMasihAktif()` untuk memutus sesi akun yang dinonaktifkan (Tabel B.1) |
+| C57 | DataPasienBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataPasienBoundary.java` | Q-C57-01 s.d. Q-C57-11 sebagai konstanta `Q_C57_xx`, ditambah Q-C57-12 `pasienTerbaru()` (Tabel B.1). Algo-C57-01 pada `polaPencarian()`. Pengerjaan Humam menggantikan Steven (#5). |
+| C58 | DataKunjunganBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataKunjunganBoundary.java` | Q-C58-01 s.d. Q-C58-12 sebagai konstanta `Q_C58_xx`, ditambah Q-C58-13 `kunjunganSiapPeriksa()` (Tabel B.1). Algo-C58-01 pada `ambilAntrean()` dan `simpanAntrean()`. Pengerjaan Humam menggantikan Steven (#5). |
+| C59 | DataKlinisBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataKlinisBoundary.java` - `DataKlinisBoundary` | Atribut `koneksi` diterima lewat konstruktor dari `Manager`. Bagian pemeriksaan: `cariKodeICD10`, `simpanPemeriksaan`, `ambilPemeriksaan`, `simpanJadwalKontrol`, dan `ambilJadwalKontrol` menjalankan konstanta `Q_C59_11` sampai `Q_C59_17` lewat `PreparedStatement`. `simpanPemeriksaan` mewujudkan Algo-C59-02 dan melempar `IllegalStateException` bila baris lama sudah terkunci. Tambahan: `ambilDiagnosis()` dengan kueri Q-C59-18 untuk memuat draf dan `jadwalJatuhTempo()` dengan kueri Q-C59-19 untuk menyelesaikan jadwal kontrol (B.1). |
+| C60 | DataPantauBoundary | Kelas | `src/src/main/java/sehati/dataaccess/DataPantauBoundary.java` | Q-C60-01 s.d. Q-C60-06 sebagai konstanta `Q_C60_xx`, Algo-C60-01. Q-C60-02 memakai `ON CONFLICT (id_jadwal) DO NOTHING` agar dua komputer tidak membuat entri jadwal yang sama (B.3). |
+| C61 | DataFarmasiBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataFarmasiBoundary.java` - `DataFarmasiBoundary` | Atribut `koneksi` diterima lewat konstruktor dari `Manager`. Sepuluh operasi publik menjalankan konstanta `Q_C61_01` sampai `Q_C61_15` lewat `PreparedStatement`. `ambilObat`, `ambilBets`, dan `kunciResep` memakai `FOR UPDATE` (KF23, KNF11). `simpanPenerimaan` mewujudkan Algo-C61-01 dan melempar `IllegalArgumentException("nomorBets")` untuk bets ganda. `simpanStok`, `simpanPenerimaan`, dan `simpanResep` memakai pola `transaksiSendiri` (aturan 1 Subbab 5.56). Item resep dibaca ke `ResepEntity.daftarItem`. Tambahan UC07: `ambilPasienResep()` menjalankan `Q_C61_16` agar identitas pasien seluruh antrean diambil dalam satu kueri (B.1). Ditambah Q-C61-17 `tambahObat()` untuk data master I-15, Q-C61-18 `ambilResepKunjungan()`, dan Q-C61-19 `ambilAsalResep()` untuk kolom poli dan antrean I-09 (Tabel B.1) |
+| C62 | DataLaporanBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataLaporanBoundary.java` - `DataLaporanBoundary` | Q-C62-01 sampai Q-C62-04 sebagai konstanta `Q_C62_xx`, dengan penyaring poli opsional pada Q-C62-01 sampai Q-C62-03 (Tabel B.1). Algo-C62-01 membaca ketiga agregasi dalam satu transaksi hanya-baca REPEATABLE READ. Algo-C62-02 menulis CSV atau PDF (Apache PDFBox) secara atomik. |
+| C63 | DataSinkronisasiBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataSinkronisasiBoundary.java` - `DataSinkronisasiBoundary` | Q-C63-01 s.d. Q-C63-03 sebagai konstanta `Q_C63_xx`, ditambah Q-C63-04 `ambilTerkirimTerakhir()` (Tabel B.1); `simpanBundel`, `ambilTertunda`, `perbaruiBundel` lewat `PreparedStatement`; `tulisArsipTerenkripsi` mewujudkan Algo-C63-01 (PBKDF2 600k + AES-GCM) |
 | C64 | DataPencadanganBoundary | Kelas Java | `src/src/main/java/sehati/dataaccess/DataPencadanganBoundary.java` - `DataPencadanganBoundary` | Q-C64-01, Q-C64-02, Algo-C64-01, Algo-C64-02. Lokasi `pg_dump`, `pg_restore`, dan media diatur lewat `.env` |
 
 Catatan:
