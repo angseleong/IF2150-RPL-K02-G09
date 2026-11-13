@@ -39,6 +39,15 @@ public class KunjunganManager {
         }
     }
 
+    // Kunjungan pasien yang masih berjalan hari ini, atau null. Dipakai I-03 untuk UC03 alternatif 1.
+    public KunjunganEntity kunjunganAktif(int idPasien) {
+        try (Connection koneksi = KoneksiBasisData.buka()) {
+            return cegahKunjunganGanda(new DataKunjunganBoundary(koneksi), idPasien);
+        } catch (SQLException e) {
+            throw galatTeknis("Pemeriksaan kunjungan aktif gagal", e);
+        }
+    }
+
     /**
      * Membuka kunjungan pasien ke satu poli (Algo-C19-01). Kunjungan aktif hari ini dikembalikan apa adanya tanpa
      * nomor antrean baru, sehingga pasien tidak pernah memegang dua nomor (skenario alternatif 1 UC03).

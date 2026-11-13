@@ -162,6 +162,11 @@ public final class Navigasi {
     }
 
     private static void akhiriSesi(boolean habisWaktu) {
+        akhiriSesi(habisWaktu, habisWaktu ? "Anda tidak aktif selama " + AutentikasiManager.BATAS_DIAM_MENIT
+                + " menit. Masuk lagi untuk melanjutkan." : null);
+    }
+
+    private static void akhiriSesi(boolean habisWaktu, String pesan) {
         String galat = null;
         try {
             AUTENTIKASI.tutupSesi(habisWaktu);
@@ -174,9 +179,8 @@ public final class Navigasi {
         LoginForm masuk = buka(LAYAR_MASUK);
         if (galat != null) {
             masuk.tampilkanPesanGagal(galat);
-        } else if (habisWaktu) {
-            masuk.tampilkanPesanGagal("Anda tidak aktif selama " + AutentikasiManager.BATAS_DIAM_MENIT
-                    + " menit. Masuk lagi untuk melanjutkan.");
+        } else if (pesan != null) {
+            masuk.tampilkanPesanGagal(pesan);
         }
     }
 
@@ -206,6 +210,13 @@ public final class Navigasi {
             SesiEntity sesi = SesiAktif.ambil();
             if (sesiAktif && sesi != null && sesi.habisWaktu(AutentikasiManager.BATAS_DIAM_MENIT)) {
                 akhiriSesi(true);
+            } else if (sesiAktif) {
+                // Akun yang dinonaktifkan admin di komputer lain keluar paling lambat satu menit kemudian (UC12 alt. 3)
+                LatarBelakang.jalankan(AUTENTIKASI::sesiDiputus, diputus -> {
+                    if (diputus && sesiAktif) {
+                        akhiriSesi(false, "Sesi diakhiri karena akun Anda dinonaktifkan. Hubungi Petugas Administrasi.");
+                    }
+                }, galat -> { });
             }
         }));
         pewaktu.setCycleCount(Timeline.INDEFINITE);

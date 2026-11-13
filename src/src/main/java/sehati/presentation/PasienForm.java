@@ -147,9 +147,8 @@ public class PasienForm {
     }
 
     public void tampilkan() {
-        kataKunci = "";
         kolomPencarian.requestFocus();
-        tampilkanHasilCari(List.of());
+        kirimPencarian("");
     }
 
     /**
@@ -159,7 +158,12 @@ public class PasienForm {
     public void kirimPencarian(String kataKunci) {
         this.kataKunci = kataKunci == null ? "" : kataKunci.strip();
         if (this.kataKunci.length() < 3) {
-            tampilkanHasilCari(List.of());
+            // Belum ada kata kunci yang cukup, jadi tampilkan pasien terbaru
+            jalankan(pasienManager::pasienTerbaru, hasil -> {
+                if (this.kataKunci.length() < 3) {
+                    tampilkanHasilCari(hasil);
+                }
+            }, "Daftar pasien", false);
             return;
         }
         String dikirim = this.kataKunci;

@@ -23,6 +23,15 @@ public class PasienManager {
 
     private static final Logger LOG = Logger.getLogger(PasienManager.class.getName());
 
+    // Daftar awal I-02 sebelum ada kata kunci
+    public List<PasienEntity> pasienTerbaru() {
+        try (Connection koneksi = KoneksiBasisData.buka()) {
+            return new DataPasienBoundary(koneksi).pasienTerbaru();
+        } catch (SQLException e) {
+            throw galatTeknis("Daftar pasien gagal dimuat", e);
+        }
+    }
+
     public List<PasienEntity> cariPasien(String kataKunci) {
         String teks = kataKunci == null ? "" : kataKunci.strip();
         if (teks.isEmpty()) {

@@ -116,6 +116,18 @@ class DataAkunBoundaryTest {
     }
 
     @Test
+    void sesiMasihAktif_mengikutiStatusDanFalseBilaTidakTercatat() throws SQLException {
+        PenggunaEntity p = simpanBaru("uji_status_sesi");
+        SesiEntity s = new SesiEntity(UUID.randomUUID(), p.getIdPengguna(), LocalDateTime.now(), true);
+        dataAkun.simpanSesi(s);
+        assertTrue(dataAkun.sesiMasihAktif(s.getIdSesi()));
+
+        dataAkun.tutupSesiAktif(p.getIdPengguna());
+        assertFalse(dataAkun.sesiMasihAktif(s.getIdSesi()));
+        assertFalse(dataAkun.sesiMasihAktif(UUID.randomUUID()));
+    }
+
+    @Test
     void simpanAudit_menambahCatatanTermasukPelakuTidakDikenal() throws SQLException {
         String deskripsi = "Uji audit " + UUID.randomUUID();
         dataAkun.simpanAudit(AuditEntity.buat(0, deskripsi));

@@ -87,7 +87,7 @@ public class PersediaanForm {
                         "Nomor bets wajib diisi dan belum pernah tercatat untuk obat ini"),
                 "jumlah", new Kolom(kolomJumlah, pesanJumlah, "Jumlah harus lebih dari nol"),
                 "tanggalKedaluwarsa", new Kolom(kolomKedaluwarsa, pesanKedaluwarsa,
-                        "Tanggal kedaluwarsa harus setelah tanggal terima"));
+                        "Tanggal kedaluwarsa harus setelah tanggal terima dan hari ini"));
         kolomObat.setConverter(new StringConverter<>() {
             @Override
             public String toString(ObatEntity o) {

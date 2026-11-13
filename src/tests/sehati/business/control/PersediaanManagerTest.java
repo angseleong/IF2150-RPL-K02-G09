@@ -76,6 +76,14 @@ class PersediaanManagerTest {
     }
 
     @Test
+    void validasiPenerimaan_kedaluwarsaSudahLewatDitolakWalauTanggalTerimaDimundurkan() {
+        assertEquals("tanggalKedaluwarsa", kolomDitolak(penerimaan("FK-1", HARI_INI.minusDays(30),
+                bets(6, "B-1", 5, HARI_INI.minusDays(10)))));
+        assertEquals("tanggalKedaluwarsa", kolomDitolak(penerimaan("FK-1", HARI_INI.minusDays(30),
+                bets(6, "B-1", 5, HARI_INI))));
+    }
+
+    @Test
     void terbitkanPeringatan_stokDiBawahAmbangDanBetsMenjelangKedaluwarsa() {
         LocalDate dekat = HARI_INI.plusDays(48);
         DataFarmasiPalsu dataFarmasi = new DataFarmasiPalsu(
