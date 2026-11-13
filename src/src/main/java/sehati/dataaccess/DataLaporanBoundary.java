@@ -43,7 +43,8 @@ public class DataLaporanBoundary {
             + "JOIN poli p ON p.id_poli = k.id_poli WHERE k.tanggal BETWEEN ? AND ? "
             + "AND (CAST(? AS INTEGER) IS NULL OR k.id_poli = ?) GROUP BY p.nama_poli ORDER BY p.nama_poli";
     private static final String Q_C62_02 = "SELECT k.status, COUNT(*) AS jumlah FROM kunjungan k "
-            + "WHERE k.tanggal BETWEEN ? AND ? AND (CAST(? AS INTEGER) IS NULL OR k.id_poli = ?) GROUP BY k.status ORDER BY k.status";
+            + "WHERE k.tanggal BETWEEN ? AND ? AND (CAST(? AS INTEGER) IS NULL OR k.id_poli = ?) "
+            + "GROUP BY k.status ORDER BY k.status";
     private static final String Q_C62_03 = "SELECT d.kode_icd10, i.deskripsi, COUNT(*) AS jumlah FROM diagnosis d "
             + "JOIN pemeriksaan pm ON pm.id_pemeriksaan = d.id_pemeriksaan "
             + "JOIN kunjungan k ON k.id_kunjungan = pm.id_kunjungan "
@@ -99,7 +100,12 @@ public class DataLaporanBoundary {
             for (Baris b : diagnosis) {
                 ringkasan.append('\n').append("diagnosis;").append(label(b.label())).append(';').append(b.jumlah());
             }
-            return new LaporanEntity(0, mulai, akhir, null, ringkasan.toString());
+            LaporanEntity laporan = new LaporanEntity(0, mulai, akhir, null, ringkasan.toString());
+            // Saat disaring, Q-C62-01 hanya mengembalikan baris poli tersebut.
+            if (idPoli != null && !poli.isEmpty()) {
+                laporan.setNamaPoli(poli.get(0).label());
+            }
+            return laporan;
         } catch (SQLException e) {
             batalkan();
             throw galat("Gagal menghitung rekapitulasi kunjungan", e);
@@ -133,7 +139,10 @@ public class DataLaporanBoundary {
         if (!"PDF".equals(format) && !"CSV".equals(format)) {
             throw new IllegalArgumentException("Format laporan harus PDF atau CSV");
         }
-        String nama = "laporan-sehati_" + l.getTanggalMulai() + "_" + l.getTanggalAkhir() + "."
+        // Nama poli ikut dalam nama berkas agar laporan poli lain pada rentang yang sama tidak tertimpa.
+        String akhiranPoli = l.getNamaPoli() == null ? ""
+                : "_" + l.getNamaPoli().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "-");
+        String nama = "laporan-sehati_" + l.getTanggalMulai() + "_" + l.getTanggalAkhir() + akhiranPoli + "."
                 + format.toLowerCase(Locale.ROOT);
         Path folder = Path.of(direktori);
         Path sementara = null;
@@ -219,6 +228,7 @@ public class DataLaporanBoundary {
         List<String> baris = new ArrayList<>();
         baris.add("Laporan Pelayanan SEHATI");
         baris.add("Rentang: " + l.getTanggalMulai() + " s.d. " + l.getTanggalAkhir());
+        baris.add("Poli: " + (l.getNamaPoli() == null ? "Semua poli" : l.getNamaPoli()));
         baris.add("");
         String ringkasan = l.getRingkasan() == null ? "" : l.getRingkasan();
         for (String b : ringkasan.split("\\R")) {

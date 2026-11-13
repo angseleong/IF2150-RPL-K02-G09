@@ -278,7 +278,7 @@
 
 **Catatan/Evaluasi Milestone 9:**
 * *Seluruh 12 use case SKPL terimplementasi pada aplikasi desktop JavaFX dengan PostgreSQL. Setiap perbedaan dari DPPL dicatat pada Tabel B.1 laporan implementasi.*
-* *328 test JUnit lulus, termasuk uji alur utama dan uji konkurensi lima komputer pada PostgreSQL.*
+* *329 test JUnit lulus, termasuk uji alur utama dan uji konkurensi lima komputer pada PostgreSQL.*
 * *Evaluasi proses: sebagian PR digabung tanpa tinjauan tercatat karena dikejar tenggat. Untuk rilis, PR ke main ditinjau anggota lain lebih dulu.*
 
 ---

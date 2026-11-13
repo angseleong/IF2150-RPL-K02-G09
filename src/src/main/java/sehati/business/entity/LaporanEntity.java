@@ -14,6 +14,8 @@ public class LaporanEntity {
     private LocalDate tanggalAkhir;
     private String format;
     private String ringkasan;
+    // Tambahan implementasi (B.1): nama poli yang disaring, null berarti semua poli (UC10 langkah 1).
+    private String namaPoli;
 
     public LaporanEntity() {
     }
@@ -86,5 +88,13 @@ public class LaporanEntity {
 
     public void setRingkasan(String ringkasan) {
         this.ringkasan = ringkasan;
+    }
+
+    public String getNamaPoli() {
+        return namaPoli;
+    }
+
+    public void setNamaPoli(String namaPoli) {
+        this.namaPoli = namaPoli;
     }
 }

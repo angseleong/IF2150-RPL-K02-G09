@@ -1,5 +1,7 @@
 package sehati.common;
 
+import java.util.List;
+
 import sehati.business.entity.SesiEntity;
 
 /**
@@ -57,7 +59,7 @@ public final class SesiAktif {
         if (ambil() == null) {
             throw new IllegalStateException("Sesi sudah berakhir, silakan masuk kembali");
         }
-        if (!java.util.List.of(peranSah).contains(peran)) {
+        if (!List.of(peranSah).contains(peran)) {
             throw new IllegalStateException("Peran " + peran + " tidak berwenang menjalankan tindakan ini");
         }
     }

@@ -64,10 +64,6 @@ public class ApotekManager {
         }
     }
 
-    /**
-     * Seluruh obat data master untuk menampilkan nama sediaan pada antrean dan rincian resep (tambahan implementasi,
-     * B.1).
-     */
     // Poli asal dan nomor antrean tiap resep pada I-09 (UC07 langkah 1)
     public Map<Integer, String> muatAsalResep(List<Integer> daftarIdResep) {
         try (Connection koneksi = KoneksiBasisData.buka()) {
@@ -77,6 +73,10 @@ public class ApotekManager {
         }
     }
 
+    /**
+     * Seluruh obat data master untuk menampilkan nama sediaan pada antrean dan rincian resep (tambahan implementasi,
+     * B.1).
+     */
     public List<ObatEntity> muatDataObat() {
         try (Connection koneksi = KoneksiBasisData.buka()) {
             return new DataFarmasiBoundary(koneksi).ambilSemuaObat();

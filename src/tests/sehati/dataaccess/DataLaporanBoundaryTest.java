@@ -66,7 +66,9 @@ class DataLaporanBoundaryTest {
                 .hasil("SELECT k.status", List.of(JdbcPalsu.baris("status", "selesai", "jumlah", 2)))
                 .hasil("SELECT d.kode_icd10", List.of());
 
-        new DataLaporanBoundary(jdbc.koneksi()).agregasiKunjungan(MULAI, AKHIR, 7);
+        LaporanEntity laporan = new DataLaporanBoundary(jdbc.koneksi()).agregasiKunjungan(MULAI, AKHIR, 7);
+
+        assertEquals("Gigi", laporan.getNamaPoli());
 
         for (String kueri : List.of("SELECT p.nama_poli", "SELECT k.status", "SELECT d.kode_icd10")) {
             JdbcPalsu.Jalan jalan = jdbc.dijalankanMemuat(kueri).get(0);
@@ -130,6 +132,26 @@ class DataLaporanBoundaryTest {
             assertEquals("bagian;label;jumlah", baris.get(0));
             assertEquals("total;semua kunjungan;5", baris.get(1));
             assertEquals(5, baris.size());
+        } finally {
+            hapus(folder);
+        }
+    }
+
+    @Test
+    void tulisBerkas_namaPoliMasukNamaBerkasAgarTidakSalingMenimpa() throws IOException {
+        Path folder = Files.createTempDirectory("laporan-poli");
+        try {
+            LaporanEntity umum = new LaporanEntity(0, MULAI, AKHIR, null, "total;semua kunjungan;3\npoli;Poli Umum;3");
+            umum.setNamaPoli("Poli Umum");
+            LaporanEntity gigi = new LaporanEntity(0, MULAI, AKHIR, null, "total;semua kunjungan;2\npoli;Poli Gigi;2");
+            gigi.setNamaPoli("Poli Gigi");
+
+            String lokasiUmum = new DataLaporanBoundary(null).tulisBerkas(umum, "CSV", folder.toString());
+            String lokasiGigi = new DataLaporanBoundary(null).tulisBerkas(gigi, "CSV", folder.toString());
+
+            assertTrue(lokasiUmum.endsWith("laporan-sehati_2026-11-01_2026-11-08_poli-umum.csv"));
+            assertTrue(lokasiGigi.endsWith("laporan-sehati_2026-11-01_2026-11-08_poli-gigi.csv"));
+            assertTrue(Files.exists(Path.of(lokasiUmum)));
         } finally {
             hapus(folder);
         }
