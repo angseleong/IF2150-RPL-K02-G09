@@ -31,13 +31,21 @@ class LaporanManagerTest {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> new LaporanManager().hitungRekapitulasi(AKHIR, MULAI, null));
 
-        assertEquals("Rentang tanggal tidak valid", e.getMessage());
+        assertEquals("Tanggal akhir lebih awal dari tanggal mulai. Perbaiki urutan tanggalnya.", e.getMessage());
+    }
+
+    @Test
+    void validasiRentang_pesanMenyebutYangHarusDiperbaiki() {
+        assertEquals("Isi tanggal mulai dan tanggal akhir.", LaporanManager.validasiRentang(null, HARI_INI));
+        assertEquals(null, LaporanManager.validasiRentang(HARI_INI, HARI_INI));
     }
 
     @Test
     void hitungRekapitulasi_menolakTanggalMasaDepan() {
-        assertThrows(IllegalArgumentException.class,
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> new LaporanManager().hitungRekapitulasi(HARI_INI, HARI_INI.plusDays(1), null));
+
+        assertEquals("Tanggal akhir tidak boleh melewati hari ini.", e.getMessage());
     }
 
     @Test

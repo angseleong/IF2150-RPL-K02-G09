@@ -24,12 +24,17 @@ public class DataPantauBoundary {
 
     private static final Logger LOG = Logger.getLogger(DataPantauBoundary.class.getName());
 
-    private static final String Q_C60_01 = "SELECT dp.id_entri, dp.id_pasien, dp.jenis_risiko, "
+    private static final String KOLOM_ENTRI = "SELECT dp.id_entri, dp.id_pasien, dp.jenis_risiko, "
             + "dp.status_tindak_lanjut, COALESCE(pr.tanggal, jk.tanggal_rencana) AS tanggal_pemicu "
             + "FROM daftar_pantau dp "
             + "LEFT JOIN penanda_risiko pr ON pr.id_penanda = dp.id_penanda "
-            + "LEFT JOIN jadwal_kontrol jk ON jk.id_jadwal = dp.id_jadwal "
+            + "LEFT JOIN jadwal_kontrol jk ON jk.id_jadwal = dp.id_jadwal ";
+    private static final String Q_C60_01 = KOLOM_ENTRI
             + "WHERE dp.status_tindak_lanjut <> 'selesai ditindaklanjuti' ORDER BY tanggal_pemicu, dp.id_entri";
+    // Tambahan (B.1): entri yang sudah selesai untuk penyaring status "selesai ditindaklanjuti" di I-12 (UC09).
+    // shortcut: dibatasi 100 entri terbaru, tambah penyaring tanggal di kueri bila daftar selesai sudah ribuan.
+    private static final String Q_C60_07 = KOLOM_ENTRI
+            + "WHERE dp.status_tindak_lanjut = 'selesai ditindaklanjuti' ORDER BY dp.id_entri DESC LIMIT 100";
     private static final String Q_C60_02 = "INSERT INTO daftar_pantau (id_pasien, jenis_risiko, "
             + "status_tindak_lanjut, id_penanda, id_jadwal) VALUES (?, ?, ?, ?, ?) "
             // Dua komputer yang membuka daftar pantau bersamaan tidak lagi gagal pada UNIQUE id_jadwal.
@@ -55,7 +60,16 @@ public class DataPantauBoundary {
      * Entri yang belum selesai ditindaklanjuti beserta tanggal pemicunya (Q-C60-01, KF18).
      */
     public List<DaftarPantauEntity> ambilEntri() {
-        try (PreparedStatement ps = koneksi.prepareStatement(Q_C60_01); ResultSet rs = ps.executeQuery()) {
+        return bacaEntri(Q_C60_01);
+    }
+
+    // Q-C60-07: 100 entri terakhir yang sudah selesai ditindaklanjuti
+    public List<DaftarPantauEntity> ambilEntriSelesai() {
+        return bacaEntri(Q_C60_07);
+    }
+
+    private List<DaftarPantauEntity> bacaEntri(String sql) {
+        try (PreparedStatement ps = koneksi.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             List<DaftarPantauEntity> hasil = new ArrayList<>();
             while (rs.next()) {
                 DaftarPantauEntity e = new DaftarPantauEntity(rs.getInt("id_entri"), rs.getInt("id_pasien"),

@@ -134,8 +134,11 @@ public class LaporanForm {
     private void kirimRentang() {
         LocalDate mulai = bacaTanggal(tanggalMulaiPicker);
         LocalDate akhir = bacaTanggal(tanggalAkhirPicker);
-        if (mulai == null || akhir == null) {
-            tampilkanPesan("Isi tanggal mulai dan tanggal akhir.");
+        // Ditolak di sini juga supaya pratinjau lama tidak tertinggal seolah hasil rentang baru (UC10 alternatif 2)
+        String galat = LaporanManager.validasiRentang(mulai, akhir);
+        if (galat != null) {
+            bersihkanPratinjau();
+            tampilkanPesanGagal(galat);
             return;
         }
         tanggalMulai = mulai;
@@ -191,7 +194,7 @@ public class LaporanForm {
      */
     public void kirimPermintaanEkspor(String format, String direktori) {
         if (laporanTerakhir == null) {
-            tampilkanPesan("Hitung rekapitulasi terlebih dahulu.");
+            tampilkanPesanGagal("Hitung rekapitulasi terlebih dahulu.");
             return;
         }
         String folder = direktori;
@@ -209,7 +212,7 @@ public class LaporanForm {
         tampilkanPesan("");
         jalankan(() -> laporanManager.ekspor(laporanTerakhir, format, tujuan),
                 lokasi -> tampilkanPesan("Berkas berhasil dibuat di " + lokasi),
-                e -> tampilkanPesan(pesanKesalahan(e)));
+                e -> tampilkanPesanGagal(pesanKesalahan(e)));
     }
 
     public void kunciTombolEkspor() {
@@ -218,6 +221,17 @@ public class LaporanForm {
     }
 
     public void tampilkanPesan(String pesan) {
+        aturPesan(pesan, false);
+    }
+
+    // Penolakan tampil merah, sama dengan PemeriksaanForm
+    private void tampilkanPesanGagal(String pesan) {
+        aturPesan(pesan, true);
+    }
+
+    private void aturPesan(String pesan, boolean gagal) {
+        bilahPesan.getStyleClass().removeAll("notifikasi-hijau", "pesan-kolom");
+        bilahPesan.getStyleClass().add(gagal ? "pesan-kolom" : "notifikasi-hijau");
         bilahPesan.setText(pesan == null ? "" : pesan);
     }
 
@@ -261,6 +275,7 @@ public class LaporanForm {
     }
 
     private void tampilkanPenolakan(Throwable e) {
+        bersihkanPratinjau();
         if (e instanceof IllegalArgumentException || e instanceof IllegalStateException) {
             panelPenolakan.setPesan(e.getMessage());
             panelPenolakan.setVisible(true);

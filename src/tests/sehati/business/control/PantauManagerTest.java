@@ -129,6 +129,14 @@ class PantauManagerTest {
     }
 
     @Test
+    void saring_statusSelesaiHanyaEntriSelesai() {
+        DaftarPantauEntity selesai = entri(1, "hipertensi", LocalDate.of(2026, 11, 1));
+        selesai.perbaruiStatus(DaftarPantauEntity.STATUS_SELESAI);
+        List<DaftarPantauEntity> semua = List.of(selesai, entri(2, "hipertensi", LocalDate.of(2026, 11, 2)));
+        assertEquals(List.of(1), ids(PantauManager.saring(semua, null, null, null, DaftarPantauEntity.STATUS_SELESAI)));
+    }
+
+    @Test
     void saring_menurutJenisRisiko() {
         List<DaftarPantauEntity> semua = List.of(entri(1, "hipertensi", LocalDate.of(2026, 11, 1)),
                 entri(2, "obesitas", LocalDate.of(2026, 11, 2)));

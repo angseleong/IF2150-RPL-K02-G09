@@ -39,9 +39,14 @@ public class PantauManager {
         if (mulai != null && akhir != null && mulai.isAfter(akhir)) {
             throw new IllegalArgumentException("Tanggal mulai tidak boleh setelah tanggal akhir");
         }
-        List<DaftarPantauEntity> semua = new RisikoManager().muatEntriAktif();
-        List<DaftarPantauEntity> lolos = saring(semua, jenisRisiko, mulai, akhir, statusTindakLanjut);
+        // Entri aktif dimuat lewat RisikoManager supaya jadwal kontrol baru ikut menjadi entri. Entri selesai dimuat
+        // terpisah karena Q-C60-01 tidak memuatnya.
+        boolean selesai = DaftarPantauEntity.STATUS_SELESAI.equals(statusTindakLanjut);
+        List<DaftarPantauEntity> aktif = selesai ? null : new RisikoManager().muatEntriAktif();
+        List<DaftarPantauEntity> lolos;
         try (Connection koneksi = KoneksiBasisData.buka()) {
+            List<DaftarPantauEntity> semua = selesai ? new DataPantauBoundary(koneksi).ambilEntriSelesai() : aktif;
+            lolos = saring(semua, jenisRisiko, mulai, akhir, statusTindakLanjut);
             DataPasienBoundary dataPasien = new DataPasienBoundary(koneksi);
             for (DaftarPantauEntity e : lolos) {
                 PasienEntity pasien = dataPasien.ambilPasien(e.getIdPasien());

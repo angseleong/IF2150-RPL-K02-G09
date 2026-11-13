@@ -52,7 +52,7 @@ public final class Navigasi {
             Map.entry("SinkronisasiForm", "Sinkronisasi SATUSEHAT"),
             Map.entry("KonfigurasiForm", "Konfigurasi dan Basis Data"));
 
-    private record Layar(String nama, Parent isi) {
+    private record Layar(String nama, Parent isi, Object kontrol) {
     }
 
     // Puncak tumpukan adalah layar yang sedang tampil, dasarnya selalu LoginForm.
@@ -105,7 +105,7 @@ public final class Navigasi {
         } catch (IOException e) {
             throw new IllegalStateException("Layar " + JUDUL.get(layar) + " gagal dimuat", e);
         }
-        RIWAYAT.push(new Layar(layar, isi));
+        RIWAYAT.push(new Layar(layar, isi, loader.getController()));
         tampilkan(RIWAYAT.peek());
         return loader.getController();
     }
@@ -192,6 +192,10 @@ public final class Navigasi {
     }
 
     private static void tampilkan(Layar layar) {
+        // Dasbor diambil dari tumpukan saat Kembali atau Ctrl+D, jadi info pencadangannya dimuat ulang (KF21)
+        if (sesiAktif && layar.kontrol() instanceof LoginForm dasbor) {
+            dasbor.segarkanDasbor();
+        }
         bilah.setJudul(JUDUL.get(layar.nama()));
         bilah.setBisaKembali(RIWAYAT.size() > 1);
         // Dasbor berbagi I-01 dengan layar masuk, jadi bilah mengikuti sesi agar Keluar tetap terlihat di dasbor.
