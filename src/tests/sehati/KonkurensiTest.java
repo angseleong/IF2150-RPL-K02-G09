@@ -7,6 +7,7 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import sehati.business.control.ApotekManager;
 import sehati.business.control.KunjunganManager;
+import sehati.business.control.PantauManager;
 import sehati.business.control.PasienManager;
 import sehati.business.control.PemeriksaanManager;
 import sehati.business.control.PersediaanManager;
@@ -136,6 +137,23 @@ class KonkurensiTest {
         assertEquals(List.of("ok", "ok", "ok", "ok", "ok"), hasil);
         assertEquals(85, angka("SELECT stok FROM obat WHERE id_obat = ?", obat));
         assertEquals(85, angka("SELECT sum(jumlah) FROM bets_obat WHERE id_obat = ?", obat));
+    }
+
+    @Test
+    void daftarPantau_limaKomputerMembukaBersamaanHanyaSatuEntriJadwal() throws Exception {
+        masuk("admin");
+        PasienEntity p = new PasienManager().daftarkanPasien(new PasienEntity(0, data.nik(9), null, "Pasien Pantau",
+                LocalDate.of(1970, 1, 1), "Laki-laki", "Jl. Serentak", null));
+        data.pasien.add(p.getIdPasien());
+        masuk("dokter");
+        int jadwal = new PemeriksaanManager().jadwalkanKontrol(p.getIdPasien(), LocalDate.now().plusDays(3))
+                .getIdJadwal();
+        masuk("perawat");
+
+        List<Object> hasil = serentak(i -> new PantauManager().saringDaftar(null, null, null, null));
+
+        hasil.forEach(h -> assertInstanceOf(List.class, h, String.valueOf(h)));
+        assertEquals(1, angka("SELECT count(*) FROM daftar_pantau WHERE id_jadwal = ?", jadwal));
     }
 
     @Test

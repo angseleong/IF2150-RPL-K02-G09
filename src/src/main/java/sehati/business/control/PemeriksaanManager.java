@@ -121,6 +121,7 @@ public class PemeriksaanManager {
             throw new IllegalArgumentException("Diagnosis harus dipilih dari kode ICD-10");
         }
         p.setIdKunjungan(idKunjungan);
+        SesiAktif.wajibPeran("Dokter");
         try (Connection koneksi = KoneksiBasisData.buka()) {
             DataKlinisBoundary dataKlinis = new DataKlinisBoundary(koneksi);
             PemeriksaanEntity lama = dataKlinis.ambilPemeriksaan(idKunjungan);
@@ -174,6 +175,7 @@ public class PemeriksaanManager {
      */
     public JadwalKontrolEntity jadwalkanKontrol(int idPasien, LocalDate tanggal) {
         validasiTanggalKontrol(tanggal);
+        SesiAktif.wajibPeran("Dokter");
         try (Connection koneksi = KoneksiBasisData.buka()) {
             DataKlinisBoundary dataKlinis = new DataKlinisBoundary(koneksi);
             for (JadwalKontrolEntity ada : dataKlinis.ambilJadwalKontrol()) {
@@ -195,6 +197,7 @@ public class PemeriksaanManager {
      * (Algo-C22-02, KNF05).
      */
     public void kunciRekamMedis(int idKunjungan) {
+        SesiAktif.wajibPeran("Dokter");
         int idPengguna = SesiAktif.idPenggunaSesi();
         try (Connection koneksi = KoneksiBasisData.buka()) {
             DataKlinisBoundary dataKlinis = new DataKlinisBoundary(koneksi);
@@ -204,6 +207,10 @@ public class PemeriksaanManager {
                 PemeriksaanEntity p = dataKlinis.ambilPemeriksaan(idKunjungan);
                 if (p == null) {
                     throw new IllegalStateException("Pemeriksaan belum disimpan");
+                }
+                // KF10: rekam medis tidak boleh dikunci tanpa diagnosis berkode ICD-10.
+                if (dataKlinis.ambilDiagnosis(idKunjungan) == null) {
+                    throw new IllegalStateException("Diagnosis ICD-10 belum diisi");
                 }
                 p.kunci();
                 dataKlinis.simpanPemeriksaan(p, null);

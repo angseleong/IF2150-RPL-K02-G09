@@ -151,7 +151,7 @@ class PersediaanManagerTest {
             stokAwal = hitung("SELECT stok FROM obat WHERE id_obat = " + KAPTOPRIL);
             penerimaanTerakhir = hitung("SELECT coalesce(max(id_penerimaan), 0) FROM penerimaan_obat");
             auditTerakhir = hitung("SELECT coalesce(max(id_audit), 0) FROM audit");
-            SesiAktif.pasang(new SesiEntity(UUID.randomUUID(), 1, LocalDateTime.now(), true));
+            SesiAktif.pasang(new SesiEntity(UUID.randomUUID(), 1, LocalDateTime.now(), true), "Petugas Farmasi");
         }
 
         @AfterEach

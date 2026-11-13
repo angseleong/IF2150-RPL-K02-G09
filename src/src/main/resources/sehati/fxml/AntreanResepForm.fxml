@@ -12,8 +12,9 @@
     <TableView fx:id="tabelAntrean" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="kolomWaktu" text="Waktu masuk" prefWidth="110"/>
-            <TableColumn fx:id="kolomPasien" text="Pasien" prefWidth="220"/>
-            <TableColumn fx:id="kolomObat" text="Obat, dosis, dan jumlah" prefWidth="460"/>
+            <TableColumn fx:id="kolomPasien" text="Pasien" prefWidth="200"/>
+            <TableColumn fx:id="kolomAsal" text="Poli / Antrean" prefWidth="170"/>
+            <TableColumn fx:id="kolomObat" text="Obat, dosis, dan jumlah" prefWidth="420"/>
             <TableColumn fx:id="kolomStatus" text="Status" prefWidth="120"/>
             <TableColumn fx:id="kolomAksi" text="" prefWidth="110" sortable="false"/>
         </columns>

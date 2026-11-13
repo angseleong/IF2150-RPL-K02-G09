@@ -1,5 +1,6 @@
 package sehati.presentation;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,8 @@ import sehati.common.SesiAktif;
  * Menampilkan layar masuk, menerima nama pengguna dan kata sandi, lalu meneruskannya ke AutentikasiManager.
  */
 public class LoginForm {
+
+    private static final DateTimeFormatter WAKTU_CADANGAN = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     // Algo-C01-01. Kunjungan, Skrining, Pemeriksaan, Resep, dan PenyerahanObat dibuka dari layar induknya, bukan
     // dasbor. Kunjungan butuh pasien terpilih dari PasienForm (UC03 include UC02).
@@ -60,6 +63,7 @@ public class LoginForm {
     @FXML private FlowPane kartuMenu;
     @FXML private Label labelAksesDitolak;
     @FXML private PanelPeringatan panelPencadangan;
+    @FXML private Label labelPencadangan;
 
     @FXML
     private void initialize() {
@@ -70,6 +74,7 @@ public class LoginForm {
         kartuMasuk.managedProperty().bind(kartuMasuk.visibleProperty());
         panelDasbor.managedProperty().bind(panelDasbor.visibleProperty());
         panelPencadangan.managedProperty().bind(panelPencadangan.visibleProperty());
+        labelPencadangan.managedProperty().bind(labelPencadangan.textProperty().isNotEmpty());
         merekMasuk.getChildren().add(0, LogoSehati.tanda(48));
         tampilkan();
     }
@@ -170,16 +175,23 @@ public class LoginForm {
     // I-01-08: hanya untuk Petugas Administrasi, hilang setelah pencadangan berikutnya berhasil
     private void tampilkanPeringatanPencadangan() {
         boolean tampil = false;
+        String info = "";
         if ("Petugas Administrasi".equals(Navigasi.peranSesi())) {
             try {
                 PencadanganEntity p = new KonfigurasiManager().muatStatusPencadangan();
                 tampil = p == null || !p.berhasil();
+                // KF21: informasi pencadangan terakhir selalu tampil di dasbor administrasi
+                info = p == null ? "Belum pernah ada pencadangan."
+                        : "Pencadangan terakhir: " + WAKTU_CADANGAN.format(p.getWaktu()) + " (" + p.getStatus()
+                                + ") di " + p.getLokasiMedia();
             } catch (IllegalStateException e) {
                 // status tidak terbaca bukan berarti gagal, jadi peringatan tidak dipaksa muncul
                 tampil = false;
+                info = "Status pencadangan tidak dapat dibaca.";
             }
         }
         panelPencadangan.setVisible(tampil);
+        labelPencadangan.setText(info);
     }
 
     // Subbab 5.1: sandi dikosongkan setelah autentikasi, berhasil maupun gagal

@@ -49,7 +49,7 @@
             <HBox spacing="20" styleClass="halaman">
                 <VBox styleClass="kartu" spacing="8" minWidth="300" maxWidth="300">
                     <Label text="Ambang Risiko" styleClass="judul-panel"/>
-                    <TableView fx:id="tabelAmbang" prefHeight="140">
+                    <TableView fx:id="tabelAmbang" prefHeight="152">
                         <columnResizePolicy>
                             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
                         </columnResizePolicy>

@@ -6,23 +6,35 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import sehati.business.entity.BundelFHIREntity;
+import sehati.business.entity.SesiEntity;
+import sehati.common.SesiAktif;
 import sehati.dataaccess.DataSinkronisasiBoundary;
 import sehati.dataaccess.ResponsKirim;
 import sehati.dataaccess.SATUSEHATGateway;
 
 class SinkronisasiManagerTest {
 
+    @AfterEach
+    void lepasSesi() {
+        SesiAktif.lepas();
+    }
+
+
     @Test
     void kirimSemua_menolakSaatLuring() {
         GatewayPalsu gateway = new GatewayPalsu();
         gateway.daring = false;
         SinkronisasiManager manager = new SinkronisasiManager(() -> gateway);
+        SesiAktif.pasang(new SesiEntity(UUID.randomUUID(), 1, LocalDateTime.now(), true), "Petugas Administrasi");
 
         IllegalStateException galat = assertThrows(IllegalStateException.class, manager::kirimSemua);
 
@@ -58,11 +70,16 @@ class SinkronisasiManagerTest {
         GatewayPalsu gateway = new GatewayPalsu();
         DataPalsu data = new DataPalsu();
         data.daftar = List.of(bundel(1), bundel(2));
+        BundelFHIREntity terkirim = bundel(3);
+        terkirim.tandaiTerkirim("kode-3");
+        data.riwayat = List.of(terkirim);
         SinkronisasiManager manager = new SinkronisasiManager(() -> gateway);
 
         List<BundelFHIREntity> hasil = manager.muatStatus(data, true);
 
-        assertEquals(2, hasil.size());
+        // Bundel terkirim ikut tampil sebagai riwayat, tetapi tidak dihitung tertunda.
+        assertEquals(3, hasil.size());
+        assertEquals("terkirim", hasil.get(2).getStatus());
         assertTrue(manager.isDaring());
         assertEquals(2, manager.getJumlahTertunda());
     }
@@ -133,6 +150,7 @@ class SinkronisasiManagerTest {
 
     private static final class DataPalsu extends DataSinkronisasiBoundary {
         private List<BundelFHIREntity> daftar = new ArrayList<>();
+        private List<BundelFHIREntity> riwayat = new ArrayList<>();
         private final List<BundelFHIREntity> diperbarui = new ArrayList<>();
 
         DataPalsu() {
@@ -142,6 +160,11 @@ class SinkronisasiManagerTest {
         @Override
         public List<BundelFHIREntity> ambilTertunda() {
             return daftar;
+        }
+
+        @Override
+        public List<BundelFHIREntity> ambilTerkirimTerakhir(int batas) {
+            return riwayat;
         }
 
         @Override

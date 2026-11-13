@@ -166,7 +166,7 @@ public class PemeriksaanForm {
         daftarSaran.getItems().setAll(daftar);
         tampilkan(daftarSaran, !daftar.isEmpty());
         if (daftar.isEmpty()) {
-            tampilkanPesan("Kode diagnosis ICD-10 tidak ditemukan");
+            tampilkanPesanGagal("Kode diagnosis ICD-10 tidak ditemukan");
         }
     }
 
@@ -179,7 +179,7 @@ public class PemeriksaanForm {
         }
         isianAnamnesis = kolomAnamnesis.getText() == null ? "" : kolomAnamnesis.getText().strip();
         if (isianAnamnesis.isEmpty()) {
-            tampilkanPesan("Anamnesis wajib diisi");
+            tampilkanPesanGagal("Anamnesis wajib diisi");
             kolomAnamnesis.requestFocus();
             return;
         }
@@ -187,8 +187,16 @@ public class PemeriksaanForm {
         try {
             kontrol = bacaTanggalKontrol();
         } catch (IllegalArgumentException e) {
-            tampilkanPesan(e.getMessage());
+            tampilkanPesanGagal(e.getMessage());
             kolomKontrol.requestFocus();
+            return;
+        }
+        // UC05 alternatif 2: teks yang diketik bebas tidak boleh lolos sebagai diagnosis (KF10).
+        String teksDiagnosis = kolomDiagnosis.getText() == null ? "" : kolomDiagnosis.getText().strip();
+        if (!teksDiagnosis.isEmpty() && diagnosisTerpilih == null
+                && (diagnosisTersimpan == null || !teksDiagnosis.equals(diagnosisTersimpan.ringkas()))) {
+            tampilkanPesanGagal("Pilih kode ICD-10 dari daftar saran");
+            kolomDiagnosis.requestFocus();
             return;
         }
         String tindakan = kolomTindakan.getText() == null ? "" : kolomTindakan.getText().strip();
@@ -251,6 +259,17 @@ public class PemeriksaanForm {
     }
 
     public void tampilkanPesan(String pesan) {
+        aturPesan(pesan, false);
+    }
+
+    // Penolakan tampil merah, bukan dengan gaya notifikasi berhasil (sama dengan PasienForm).
+    private void tampilkanPesanGagal(String pesan) {
+        aturPesan(pesan, true);
+    }
+
+    private void aturPesan(String pesan, boolean gagal) {
+        bilahPesan.getStyleClass().removeAll("notifikasi-hijau", "pesan-kolom");
+        bilahPesan.getStyleClass().add(gagal ? "pesan-kolom" : "notifikasi-hijau");
         bilahPesan.setText(pesan);
     }
 
@@ -301,7 +320,7 @@ public class PemeriksaanForm {
                     tampilkanPesan("Kontrol dijadwalkan " + jadwal.getTanggalRencana().format(TANGGAL));
                 }, e -> {
                     tombolSimpan.setDisable(false);
-                    tampilkanPesan("Pemeriksaan tersimpan, tetapi jadwal kontrol gagal: " + e.getMessage());
+                    tampilkanPesanGagal("Pemeriksaan tersimpan, tetapi jadwal kontrol gagal: " + e.getMessage());
                 });
     }
 
@@ -367,7 +386,7 @@ public class PemeriksaanForm {
     // Penolakan aturan (misalnya sudah dikunci) tampil di bilah pesan; galat teknis memakai dialog.
     private void tampilkanPenolakan(Throwable e) {
         if (e instanceof IllegalArgumentException || e instanceof IllegalStateException) {
-            tampilkanPesan(e.getMessage());
+            tampilkanPesanGagal(e.getMessage());
         } else {
             tampilkanGalat(e);
         }

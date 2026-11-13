@@ -43,13 +43,15 @@ public class AntreanResepForm {
 
     private List<ResepEntity> daftarTampil = List.of();
     private final Map<Integer, PasienEntity> pasienPerResep = new HashMap<>();
+    private final Map<Integer, String> asalPerResep = new HashMap<>();
     private final Map<Integer, ObatEntity> obatPerId = new HashMap<>();
     // Satu detak per detik: memperbarui label "terakhir n detik lalu" dan memuat ulang antrean tiap 10 detik.
     private final Timeline penyegar = new Timeline(new KeyFrame(Duration.seconds(1), e -> detak()));
     private int detikSejakMuat;
     private boolean sedangMemuat;
 
-    private record Antrean(List<ResepEntity> resep, Map<Integer, PasienEntity> pasien, List<ObatEntity> obat) {
+    private record Antrean(List<ResepEntity> resep, Map<Integer, PasienEntity> pasien, Map<Integer, String> asal,
+            List<ObatEntity> obat) {
     }
 
     private record Rincian(ResepEntity resep, List<BetsObatEntity> bets) {
@@ -60,6 +62,7 @@ public class AntreanResepForm {
     @FXML private TableView<ResepEntity> tabelAntrean;
     @FXML private TableColumn<ResepEntity, String> kolomWaktu;
     @FXML private TableColumn<ResepEntity, String> kolomPasien;
+    @FXML private TableColumn<ResepEntity, String> kolomAsal;
     @FXML private TableColumn<ResepEntity, String> kolomObat;
     @FXML private TableColumn<ResepEntity, String> kolomStatus;
     @FXML private TableColumn<ResepEntity, ResepEntity> kolomAksi;
@@ -71,6 +74,8 @@ public class AntreanResepForm {
     private void initialize() {
         kolomWaktu.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getWaktuMasuk().format(JAM)));
         kolomPasien.setCellValueFactory(c -> new SimpleStringProperty(namaPasien(c.getValue())));
+        kolomAsal.setCellValueFactory(c -> new SimpleStringProperty(
+                asalPerResep.getOrDefault(c.getValue().getIdResep(), "")));
         kolomObat.setCellValueFactory(c -> new SimpleStringProperty(ringkasItem(c.getValue())));
         // Satu baris per obat, jadi tinggi sel mengikuti jumlah item agar baris berikutnya tidak terpotong.
         kolomObat.setCellFactory(k -> new TableCell<>() {
@@ -150,12 +155,15 @@ public class AntreanResepForm {
         LatarBelakang.jalankan(() -> {
             List<ResepEntity> resep = apotekManager.muatAntreanResep();
             List<Integer> daftarId = resep.stream().map(ResepEntity::getIdResep).toList();
-            return new Antrean(resep, apotekManager.muatPasienResep(daftarId), apotekManager.muatDataObat());
+            return new Antrean(resep, apotekManager.muatPasienResep(daftarId), apotekManager.muatAsalResep(daftarId),
+                    apotekManager.muatDataObat());
         }, antrean -> {
             sedangMemuat = false;
             detikSejakMuat = 0;
             pasienPerResep.clear();
             pasienPerResep.putAll(antrean.pasien());
+            asalPerResep.clear();
+            asalPerResep.putAll(antrean.asal());
             obatPerId.clear();
             antrean.obat().forEach(o -> obatPerId.put(o.getIdObat(), o));
             daftarTampil = antrean.resep();

@@ -34,12 +34,13 @@ public class PantauManager {
      * Entri aktif yang lolos penyaring, dilengkapi identitas dan kontak pasien. Parameter null berarti penyaring itu
      * tidak dipakai; tanggal yang disaring adalah tanggal pemicu entri (KF18). Entri berisiko tampil lebih dulu.
      */
-    public List<DaftarPantauEntity> saringDaftar(String jenisRisiko, LocalDate mulai, LocalDate akhir) {
+    public List<DaftarPantauEntity> saringDaftar(String jenisRisiko, LocalDate mulai, LocalDate akhir,
+            String statusTindakLanjut) {
         if (mulai != null && akhir != null && mulai.isAfter(akhir)) {
             throw new IllegalArgumentException("Tanggal mulai tidak boleh setelah tanggal akhir");
         }
         List<DaftarPantauEntity> semua = new RisikoManager().muatEntriAktif();
-        List<DaftarPantauEntity> lolos = saring(semua, jenisRisiko, mulai, akhir);
+        List<DaftarPantauEntity> lolos = saring(semua, jenisRisiko, mulai, akhir, statusTindakLanjut);
         try (Connection koneksi = KoneksiBasisData.buka()) {
             DataPasienBoundary dataPasien = new DataPasienBoundary(koneksi);
             for (DaftarPantauEntity e : lolos) {
@@ -57,14 +58,16 @@ public class PantauManager {
      * Penyaringan murni tanpa akses data: jenis, rentang tanggal pemicu (batas ikut), lalu urutan.
      */
     static List<DaftarPantauEntity> saring(
-            List<DaftarPantauEntity> entri, String jenisRisiko, LocalDate mulai, LocalDate akhir) {
+            List<DaftarPantauEntity> entri, String jenisRisiko, LocalDate mulai, LocalDate akhir,
+            String statusTindakLanjut) {
         List<DaftarPantauEntity> hasil = new ArrayList<>();
         for (DaftarPantauEntity e : entri) {
             LocalDate tanggal = e.getTanggalPemicu();
-            boolean jenisCocok = jenisRisiko == null || jenisRisiko.equals(e.getJenisRisiko());
+            boolean isianCocok = (jenisRisiko == null || jenisRisiko.equals(e.getJenisRisiko()))
+                    && (statusTindakLanjut == null || statusTindakLanjut.equals(e.getStatusTindakLanjut()));
             boolean sesudahMulai = mulai == null || (tanggal != null && !tanggal.isBefore(mulai));
             boolean sebelumAkhir = akhir == null || (tanggal != null && !tanggal.isAfter(akhir));
-            if (jenisCocok && sesudahMulai && sebelumAkhir) {
+            if (isianCocok && sesudahMulai && sebelumAkhir) {
                 hasil.add(e);
             }
         }
@@ -80,6 +83,7 @@ public class PantauManager {
      */
     public void catatTindakLanjut(int idEntri, TindakLanjutEntity t) {
         periksaIsian(t);
+        SesiAktif.wajibPeran("Perawat", "Dokter");
         try (Connection koneksi = KoneksiBasisData.buka()) {
             SkriningManager.dalamTransaksi(koneksi, () -> {
                 catat(new DataPantauBoundary(koneksi), new DataPasienBoundary(koneksi), idEntri, t);

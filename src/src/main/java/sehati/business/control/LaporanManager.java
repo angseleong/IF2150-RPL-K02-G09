@@ -2,6 +2,7 @@ package sehati.business.control;
 
 import sehati.business.entity.LaporanEntity;
 import sehati.common.KoneksiBasisData;
+import sehati.common.SesiAktif;
 import sehati.dataaccess.DataLaporanBoundary;
 
 import java.sql.Connection;
@@ -20,19 +21,20 @@ public class LaporanManager {
 
     private static final Logger LOG = Logger.getLogger(LaporanManager.class.getName());
 
-    public LaporanEntity hitungRekapitulasi(LocalDate mulai, LocalDate akhir) {
+    public LaporanEntity hitungRekapitulasi(LocalDate mulai, LocalDate akhir, Integer idPoli) {
         if (!validasiRentang(mulai, akhir)) {
             throw new IllegalArgumentException("Rentang tanggal tidak valid");
         }
         try (Connection koneksi = KoneksiBasisData.buka()) {
-            return hitungRekapitulasi(mulai, akhir, new DataLaporanBoundary(koneksi));
+            return hitungRekapitulasi(mulai, akhir, idPoli, new DataLaporanBoundary(koneksi));
         } catch (SQLException e) {
             throw galatTeknis("Gagal menghitung rekapitulasi laporan", e);
         }
     }
 
-    static LaporanEntity hitungRekapitulasi(LocalDate mulai, LocalDate akhir, DataLaporanBoundary data) {
-        return data.agregasiKunjungan(mulai, akhir);
+    static LaporanEntity hitungRekapitulasi(LocalDate mulai, LocalDate akhir, Integer idPoli,
+            DataLaporanBoundary data) {
+        return data.agregasiKunjungan(mulai, akhir, idPoli);
     }
 
     private boolean validasiRentang(LocalDate mulai, LocalDate akhir) {
@@ -46,6 +48,7 @@ public class LaporanManager {
         if (laporan.kosong()) {
             throw new IllegalStateException("Tidak ada data pada rentang ini untuk diekspor");
         }
+        SesiAktif.wajibPeran("Petugas Administrasi");
         try (Connection koneksi = KoneksiBasisData.buka()) {
             return ekspor(laporan, format, direktori, new DataLaporanBoundary(koneksi));
         } catch (SQLException e) {

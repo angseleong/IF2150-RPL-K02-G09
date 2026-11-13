@@ -7,6 +7,7 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import sehati.business.control.ApotekManager;
 import sehati.business.control.KunjunganManager;
+import sehati.business.control.PantauManager;
 import sehati.business.control.PasienManager;
 import sehati.business.control.PemeriksaanManager;
 import sehati.business.control.ResepManager;
@@ -89,6 +90,59 @@ class AlurUtamaTest {
         String sumber = teks("SELECT string_agg(DISTINCT e -> 'resource' ->> 'resourceType', ',') FROM bundel_fhir b, "
                 + "jsonb_array_elements(b.isi_bundel -> 'entry') e WHERE b.id_kunjungan = ?", id);
         assertEquals("Condition,Encounter,MedicationRequest,Observation,Patient", sumber);
+    }
+
+    @Test
+    void kunjunganBerisikoBerulangHanyaSatuEntriPantau() throws SQLException {
+        int poli = data.poliBaru();
+        masuk("admin");
+        int idPasien = pasienBaru(2);
+        for (int i = 0; i < 2; i++) {
+            masuk("admin");
+            int id = new KunjunganManager().bukaKunjungan(idPasien, poli).getIdKunjungan();
+            masuk("perawat");
+            new SkriningManager().simpanSkrining(id, "Pusing", new TandaVitalEntity(170, 95, 70, 165, 36.8, 80, null));
+            masuk("dokter");
+            PemeriksaanManager pemeriksaan = new PemeriksaanManager();
+            pemeriksaan.simpanPemeriksaan(id, new PemeriksaanEntity(0, id, "Pusing", "Edukasi", false),
+                    new DiagnosisEntity(0, "I10", "Hipertensi esensial"));
+            pemeriksaan.kunciRekamMedis(id);
+        }
+        assertEquals(2, angka("SELECT count(*) FROM penanda_risiko pr JOIN kunjungan k USING (id_kunjungan) "
+                + "WHERE k.id_pasien = ? AND pr.jenis_risiko = 'hipertensi'", idPasien));
+        assertEquals(1, angka("SELECT count(*) FROM daftar_pantau WHERE id_pasien = ? AND jenis_risiko = 'hipertensi'",
+                idPasien));
+    }
+
+    @Test
+    void pasienDatangKontrolMenyelesaikanJadwalDanEntriPantau() throws SQLException {
+        int poli = data.poliBaru();
+        masuk("admin");
+        int idPasien = pasienBaru(3);
+        masuk("dokter");
+        int idJadwal = new PemeriksaanManager().jadwalkanKontrol(idPasien, LocalDate.now().plusDays(7)).getIdJadwal();
+        // Perawat membuka daftar pantau sehingga entri "kunjungan ulang" terbentuk, lalu tanggal kontrol tiba.
+        masuk("perawat");
+        new PantauManager().saringDaftar(null, null, null, null);
+        try (var c = DataUjiAlur.pemilik(); var st = c.prepareStatement(
+                "UPDATE jadwal_kontrol SET tanggal_rencana = CURRENT_DATE WHERE id_jadwal = ?")) {
+            st.setInt(1, idJadwal);
+            st.executeUpdate();
+        }
+
+        masuk("admin");
+        new KunjunganManager().bukaKunjungan(idPasien, poli);
+
+        assertEquals("selesai", teks("SELECT status FROM jadwal_kontrol WHERE id_jadwal = ?", idJadwal));
+        assertEquals("selesai ditindaklanjuti",
+                teks("SELECT status_tindak_lanjut FROM daftar_pantau WHERE id_jadwal = ?", idJadwal));
+    }
+
+    private int pasienBaru(int urutan) {
+        PasienEntity pasien = new PasienManager().daftarkanPasien(new PasienEntity(0, data.nik(urutan), null,
+                "Pasien Alur " + urutan, LocalDate.of(1970, 1, 1), "Laki-laki", "Jl. Uji Alur", "081200000002"));
+        data.pasien.add(pasien.getIdPasien());
+        return pasien.getIdPasien();
     }
 
     private static String status(int idKunjungan) throws SQLException {

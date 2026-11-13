@@ -45,6 +45,7 @@ public class DaftarPantauForm {
     @FXML private ComboBox<String> pilihJenisRisiko;
     @FXML private DatePicker pilihMulai;
     @FXML private DatePicker pilihAkhir;
+    @FXML private ComboBox<String> pilihStatus;
     @FXML private Label labelKeterangan;
     @FXML private TableView<DaftarPantauEntity> tabelPantau;
     @FXML private TableColumn<DaftarPantauEntity, String> kolomPasien;
@@ -64,6 +65,9 @@ public class DaftarPantauForm {
     private void initialize() {
         pilihJenisRisiko.getItems().setAll(SEMUA, "hipertensi", "obesitas", "indikasi diabetes", "kunjungan ulang");
         pilihJenisRisiko.getSelectionModel().selectFirst();
+        // Entri yang sudah selesai tidak dimuat Q-C60-01, jadi hanya dua status terbuka yang dapat dipilih (KF18).
+        pilihStatus.getItems().setAll(SEMUA, DaftarPantauEntity.STATUS_BELUM, DaftarPantauEntity.STATUS_ULANG);
+        pilihStatus.getSelectionModel().selectFirst();
         pilihJenisKontak.getItems().setAll("telepon", "pesan singkat", "kunjungan rumah");
         pilihHasilUpaya.getItems().setAll(TindakLanjutEntity.HASIL_TERHUBUNG,
                 TindakLanjutEntity.HASIL_TIDAK_TERHUBUNG);
@@ -121,24 +125,26 @@ public class DaftarPantauForm {
     }
 
     public void tampilkanDaftar() {
-        kirimPenyaring(null, null, null);
+        kirimPenyaring(null, null, null, null);
     }
 
     @FXML
     private void terapkanPenyaring() {
-        kirimPenyaring(pilihJenisRisiko.getValue(), pilihMulai.getValue(), pilihAkhir.getValue());
+        kirimPenyaring(pilihJenisRisiko.getValue(), pilihMulai.getValue(), pilihAkhir.getValue(),
+                pilihStatus.getValue());
     }
 
-    public void kirimPenyaring(String jenisRisiko, LocalDate mulai, LocalDate akhir) {
+    public void kirimPenyaring(String jenisRisiko, LocalDate mulai, LocalDate akhir, String statusTindakLanjut) {
         if (mulai != null && akhir != null && mulai.isAfter(akhir)) {
             tampilkanKeterangan("Tanggal mulai tidak boleh setelah tanggal akhir");
             return;
         }
         String jenis = jenisRisiko == null || SEMUA.equals(jenisRisiko) ? null : jenisRisiko;
-        LatarBelakang.jalankan(() -> pantauManager.saringDaftar(jenis, mulai, akhir), hasil -> {
+        String status = statusTindakLanjut == null || SEMUA.equals(statusTindakLanjut) ? null : statusTindakLanjut;
+        LatarBelakang.jalankan(() -> pantauManager.saringDaftar(jenis, mulai, akhir, status), hasil -> {
             daftarTampil = hasil;
             tabelPantau.getItems().setAll(daftarTampil);
-            penyaring = ringkasan(jenis, mulai, akhir);
+            penyaring = ringkasan(jenis, mulai, akhir, status);
             if (daftarTampil.isEmpty()) {
                 tampilkanKeterangan("Tidak ada pasien yang cocok dengan kriteria saringan (" + penyaring + ")");
             } else {
@@ -199,12 +205,15 @@ public class DaftarPantauForm {
         panelTindakLanjut.setManaged(false);
     }
 
-    private String ringkasan(String jenis, LocalDate mulai, LocalDate akhir) {
+    private String ringkasan(String jenis, LocalDate mulai, LocalDate akhir, String status) {
         List<String> bagian = new ArrayList<>();
         bagian.add(jenis == null ? SEMUA : jenis);
         if (mulai != null || akhir != null) {
             bagian.add((mulai == null ? "awal" : TANGGAL.format(mulai)) + " sampai "
                     + (akhir == null ? "akhir" : TANGGAL.format(akhir)));
+        }
+        if (status != null) {
+            bagian.add(status);
         }
         return String.join(", ", bagian);
     }

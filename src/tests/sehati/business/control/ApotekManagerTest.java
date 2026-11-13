@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -33,6 +34,8 @@ import sehati.business.entity.ItemResepEntity;
 import sehati.business.entity.ObatEntity;
 import sehati.business.entity.PemeriksaanEntity;
 import sehati.business.entity.ResepEntity;
+import sehati.business.entity.SesiEntity;
+import sehati.common.SesiAktif;
 import sehati.dataaccess.DataFarmasiBoundary;
 
 class ApotekManagerTest {
@@ -196,6 +199,7 @@ class ApotekManagerTest {
 
         @BeforeEach
         void buka() throws SQLException {
+            SesiAktif.pasang(new SesiEntity(UUID.randomUUID(), 1, LocalDateTime.now(), true), "Petugas Farmasi");
             koneksi = DriverManager.getConnection(System.getenv("DB_UJI_URL"));
             idResep = hitung("SELECT min(id_resep) FROM resep WHERE status = 'menunggu'");
             idKunjungan = hitung("SELECT id_kunjungan FROM resep WHERE id_resep = " + idResep);
@@ -224,6 +228,7 @@ class ApotekManagerTest {
 
         @AfterEach
         void pulihkan() throws SQLException {
+            SesiAktif.lepas();
             try (Statement st = koneksi.createStatement()) {
                 st.executeUpdate("DELETE FROM bundel_fhir WHERE id_kunjungan = " + idKunjungan);
                 st.executeUpdate("UPDATE resep SET status = 'menunggu', catatan = NULL WHERE id_resep = " + idResep);

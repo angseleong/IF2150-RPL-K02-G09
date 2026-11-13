@@ -57,6 +57,7 @@ public class PasienManager {
             if (dataPasien.nikTerdaftar(data.getNik())) {
                 throw new IllegalArgumentException("NIK sudah terdaftar");
             }
+            SesiAktif.wajibPeran("Petugas Administrasi");
             int idPengguna = SesiAktif.idPenggunaSesi();
             koneksi.setAutoCommit(false);
             try {
@@ -93,6 +94,7 @@ public class PasienManager {
             if (!data.getNik().equals(pasien.getNik()) && dataPasien.nikTerdaftar(data.getNik())) {
                 throw new IllegalArgumentException("NIK sudah terdaftar");
             }
+            SesiAktif.wajibPeran("Petugas Administrasi");
             int idPengguna = SesiAktif.idPenggunaSesi();
             koneksi.setAutoCommit(false);
             try {

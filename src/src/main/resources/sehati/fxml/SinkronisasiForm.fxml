@@ -38,7 +38,7 @@
     <Label fx:id="bilahPesan" styleClass="notifikasi-hijau" wrapText="true"/>
 
     <VBox styleClass="kartu" spacing="8" VBox.vgrow="ALWAYS">
-        <Label text="Status Bundel" styleClass="judul-panel"/>
+        <Label text="Status Bundel (tertunda dan 10 pengiriman terakhir)" styleClass="judul-panel"/>
         <TableView fx:id="tabelStatus" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="kolomId" text="ID" prefWidth="80"/>

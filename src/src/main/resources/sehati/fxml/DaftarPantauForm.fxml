@@ -18,6 +18,8 @@
         <DatePicker fx:id="pilihMulai" prefWidth="140"/>
         <Label text="Akhir" styleClass="label-kolom"/>
         <DatePicker fx:id="pilihAkhir" prefWidth="140"/>
+        <Label text="Status" styleClass="label-kolom"/>
+        <ComboBox fx:id="pilihStatus" prefWidth="190"/>
         <Button text="Terapkan" styleClass="tombol-utama" onAction="#terapkanPenyaring"/>
     </HBox>
     <Label fx:id="labelKeterangan" styleClass="judul-panel"/>

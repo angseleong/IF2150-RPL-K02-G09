@@ -45,11 +45,19 @@ public class RisikoManager {
         List<String> jenis = jenisRisikoTerpenuhi(dataKlinis.ambilAmbang(),
                 dataKlinis.riwayatTandaVital(kunjungan.getIdPasien(), JUMLAH_RIWAYAT), tv);
         List<PenandaRisikoEntity> penanda = new ArrayList<>();
+        List<DaftarPantauEntity> terbuka = jenis.isEmpty() ? List.of() : dataPantau.ambilEntri();
         for (String j : jenis) {
             penanda.add(terbitkanPenanda(dataKlinis, kunjungan.getIdKunjungan(), j));
-            masukkanKeDaftarPantau(dataPantau, kunjungan.getIdPasien(), j);
+            // Pasien yang masih punya entri terbuka untuk risiko yang sama tidak dimasukkan dua kali.
+            if (!sudahDipantau(terbuka, kunjungan.getIdPasien(), j)) {
+                masukkanKeDaftarPantau(dataPantau, kunjungan.getIdPasien(), j);
+            }
         }
         return penanda;
+    }
+
+    static boolean sudahDipantau(List<DaftarPantauEntity> terbuka, int idPasien, String jenis) {
+        return terbuka.stream().anyMatch(e -> e.getIdPasien() == idPasien && jenis.equals(e.getJenisRisiko()));
     }
 
     /**
@@ -125,6 +133,10 @@ public class RisikoManager {
                     DaftarPantauEntity.STATUS_BELUM);
             // Disimpan agar punya idEntri untuk tindak lanjut.
             dataPantau.simpanEntri(e);
+            if (e.getIdEntri() == 0) {
+                // Sudah dibuat komputer lain pada saat yang sama, tampil pada penyegaran berikutnya.
+                continue;
+            }
             e.setTanggalPemicu(j.getTanggalRencana());
             entri.add(e);
         }

@@ -163,6 +163,21 @@ class KonfigurasiManagerTest {
         }
 
         @Test
+        void simpanAkun_menolakMengubahPeranAkunSendiri() throws SQLException {
+            PenggunaEntity p = new PenggunaEntity(NAMA, null, "Petugas Administrasi");
+            manager.simpanAkun(p, "rahasia123");
+            masukSebagai(p.getIdPengguna());
+
+            assertThrows(IllegalArgumentException.class, () -> manager.simpanAkun(
+                    new PenggunaEntity(p.getIdPengguna(), NAMA, null, "Perawat", "aktif"), ""));
+            assertEquals(1, hitung("SELECT count(*) FROM pengguna WHERE peran = 'Petugas Administrasi'"
+                    + " AND id_pengguna = " + p.getIdPengguna()));
+            // Mengganti sandi sendiri dengan peran yang sama tetap boleh
+            manager.simpanAkun(new PenggunaEntity(p.getIdPengguna(), NAMA, null, "Petugas Administrasi", "aktif"),
+                    "rahasia456");
+        }
+
+        @Test
         void nonaktifkanAkun_menutupSesiAktifDanMencatatAudit() throws SQLException {
             PenggunaEntity p = new PenggunaEntity(NAMA, null, "Perawat");
             manager.simpanAkun(p, "rahasia123");

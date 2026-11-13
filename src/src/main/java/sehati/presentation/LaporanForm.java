@@ -4,14 +4,17 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
+import sehati.business.control.KunjunganManager;
 import sehati.business.control.LaporanManager;
 import sehati.business.entity.LaporanEntity;
+import sehati.business.entity.PoliEntity;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -31,6 +34,8 @@ public class LaporanForm {
     private static final DateTimeFormatter TANGGAL = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     private final LaporanManager laporanManager = new LaporanManager();
+    // Pilihan pertama pada penyaring poli, id 0 berarti semua poli (UC10 langkah 1).
+    private static final PoliEntity SEMUA_POLI = new PoliEntity(0, "Semua poli", 0, null);
 
     private LocalDate tanggalMulai;
     private LocalDate tanggalAkhir;
@@ -42,6 +47,8 @@ public class LaporanForm {
     private DatePicker tanggalMulaiPicker;
     @FXML
     private DatePicker tanggalAkhirPicker;
+    @FXML
+    private ComboBox<PoliEntity> pilihPoli;
     @FXML
     private PanelPeringatan panelPenolakan;
     @FXML
@@ -83,6 +90,21 @@ public class LaporanForm {
         };
         tanggalMulaiPicker.setConverter(konverter);
         tanggalAkhirPicker.setConverter(konverter);
+        pilihPoli.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(PoliEntity poli) {
+                return poli == null ? "" : poli.getNamaPoli();
+            }
+
+            @Override
+            public PoliEntity fromString(String teks) {
+                return null;
+            }
+        });
+        pilihPoli.getItems().setAll(SEMUA_POLI);
+        pilihPoli.getSelectionModel().selectFirst();
+        jalankan(() -> new KunjunganManager().daftarPoli(), poli -> pilihPoli.getItems().addAll(poli),
+                this::tampilkanPenolakan);
 
         panelPenolakan.setVisible(false);
         bilahPesan.setText("");
@@ -120,7 +142,9 @@ public class LaporanForm {
         tanggalAkhir = akhir;
         tampilkanPesan("");
         panelPenolakan.setVisible(false);
-        jalankan(() -> laporanManager.hitungRekapitulasi(mulai, akhir),
+        PoliEntity poli = pilihPoli.getValue();
+        Integer idPoli = poli == null || poli.getIdPoli() == 0 ? null : poli.getIdPoli();
+        jalankan(() -> laporanManager.hitungRekapitulasi(mulai, akhir, idPoli),
                 this::tampilkanRekapitulasi,
                 this::tampilkanPenolakan);
     }

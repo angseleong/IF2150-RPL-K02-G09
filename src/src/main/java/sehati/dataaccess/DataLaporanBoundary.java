@@ -21,6 +21,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +41,15 @@ public class DataLaporanBoundary {
 
     private static final String Q_C62_01 = "SELECT p.nama_poli, COUNT(*) AS jumlah FROM kunjungan k "
             + "JOIN poli p ON p.id_poli = k.id_poli WHERE k.tanggal BETWEEN ? AND ? "
-            + "GROUP BY p.nama_poli ORDER BY p.nama_poli";
+            + "AND (CAST(? AS INTEGER) IS NULL OR k.id_poli = ?) GROUP BY p.nama_poli ORDER BY p.nama_poli";
     private static final String Q_C62_02 = "SELECT k.status, COUNT(*) AS jumlah FROM kunjungan k "
-            + "WHERE k.tanggal BETWEEN ? AND ? GROUP BY k.status ORDER BY k.status";
+            + "WHERE k.tanggal BETWEEN ? AND ? AND (CAST(? AS INTEGER) IS NULL OR k.id_poli = ?) "
+            + "GROUP BY k.status ORDER BY k.status";
     private static final String Q_C62_03 = "SELECT d.kode_icd10, i.deskripsi, COUNT(*) AS jumlah FROM diagnosis d "
             + "JOIN pemeriksaan pm ON pm.id_pemeriksaan = d.id_pemeriksaan "
             + "JOIN kunjungan k ON k.id_kunjungan = pm.id_kunjungan "
             + "JOIN kode_icd10 i ON i.kode = d.kode_icd10 "
-            + "WHERE k.tanggal BETWEEN ? AND ? AND pm.terkunci "
+            + "WHERE k.tanggal BETWEEN ? AND ? AND pm.terkunci AND (CAST(? AS INTEGER) IS NULL OR k.id_poli = ?) "
             + "GROUP BY d.kode_icd10, i.deskripsi ORDER BY jumlah DESC, d.kode_icd10 LIMIT 10";
     private static final String Q_C62_04 = "INSERT INTO laporan (tanggal_mulai, tanggal_akhir, format, ringkasan) "
             + "VALUES (?, ?, ?, ?) RETURNING id_laporan";
@@ -60,9 +62,10 @@ public class DataLaporanBoundary {
 
     /**
      * Algo-C62-01: membaca agregasi kunjungan per poli, per status, dan sepuluh diagnosis terbanyak dalam satu
-     * transaksi hanya-baca REPEATABLE READ, lalu menyusun ringkasan berformat bagian;label;jumlah.
+     * transaksi hanya-baca REPEATABLE READ, lalu menyusun ringkasan berformat bagian;label;jumlah. {@code idPoli}
+     * null berarti semua poli (UC10 langkah 1).
      */
-    public LaporanEntity agregasiKunjungan(LocalDate mulai, LocalDate akhir) {
+    public LaporanEntity agregasiKunjungan(LocalDate mulai, LocalDate akhir, Integer idPoli) {
         boolean autoCommit = true;
         int isolasi = Connection.TRANSACTION_READ_COMMITTED;
         boolean bacaSaja = false;
@@ -75,9 +78,9 @@ public class DataLaporanBoundary {
             koneksi.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             koneksi.setReadOnly(true);
 
-            List<Baris> poli = bacaSatuKolom(Q_C62_01, mulai, akhir);
-            List<Baris> status = bacaSatuKolom(Q_C62_02, mulai, akhir);
-            List<Baris> diagnosis = bacaDiagnosis(mulai, akhir);
+            List<Baris> poli = bacaSatuKolom(Q_C62_01, mulai, akhir, idPoli);
+            List<Baris> status = bacaSatuKolom(Q_C62_02, mulai, akhir, idPoli);
+            List<Baris> diagnosis = bacaDiagnosis(mulai, akhir, idPoli);
 
             koneksi.commit();
 
@@ -97,7 +100,12 @@ public class DataLaporanBoundary {
             for (Baris b : diagnosis) {
                 ringkasan.append('\n').append("diagnosis;").append(label(b.label())).append(';').append(b.jumlah());
             }
-            return new LaporanEntity(0, mulai, akhir, null, ringkasan.toString());
+            LaporanEntity laporan = new LaporanEntity(0, mulai, akhir, null, ringkasan.toString());
+            // Saat disaring, Q-C62-01 hanya mengembalikan baris poli tersebut.
+            if (idPoli != null && !poli.isEmpty()) {
+                laporan.setNamaPoli(poli.get(0).label());
+            }
+            return laporan;
         } catch (SQLException e) {
             batalkan();
             throw galat("Gagal menghitung rekapitulasi kunjungan", e);
@@ -131,7 +139,10 @@ public class DataLaporanBoundary {
         if (!"PDF".equals(format) && !"CSV".equals(format)) {
             throw new IllegalArgumentException("Format laporan harus PDF atau CSV");
         }
-        String nama = "laporan-sehati_" + l.getTanggalMulai() + "_" + l.getTanggalAkhir() + "."
+        // Nama poli ikut dalam nama berkas agar laporan poli lain pada rentang yang sama tidak tertimpa.
+        String akhiranPoli = l.getNamaPoli() == null ? ""
+                : "_" + l.getNamaPoli().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "-");
+        String nama = "laporan-sehati_" + l.getTanggalMulai() + "_" + l.getTanggalAkhir() + akhiranPoli + "."
                 + format.toLowerCase(Locale.ROOT);
         Path folder = Path.of(direktori);
         Path sementara = null;
@@ -160,10 +171,10 @@ public class DataLaporanBoundary {
         }
     }
 
-    private List<Baris> bacaSatuKolom(String sql, LocalDate mulai, LocalDate akhir) throws SQLException {
+    private List<Baris> bacaSatuKolom(String sql, LocalDate mulai, LocalDate akhir, Integer idPoli)
+            throws SQLException {
         try (PreparedStatement ps = koneksi.prepareStatement(sql)) {
-            ps.setDate(1, Date.valueOf(mulai));
-            ps.setDate(2, Date.valueOf(akhir));
+            aturParameter(ps, mulai, akhir, idPoli);
             try (ResultSet rs = ps.executeQuery()) {
                 List<Baris> hasil = new ArrayList<>();
                 while (rs.next()) {
@@ -174,10 +185,9 @@ public class DataLaporanBoundary {
         }
     }
 
-    private List<Baris> bacaDiagnosis(LocalDate mulai, LocalDate akhir) throws SQLException {
+    private List<Baris> bacaDiagnosis(LocalDate mulai, LocalDate akhir, Integer idPoli) throws SQLException {
         try (PreparedStatement ps = koneksi.prepareStatement(Q_C62_03)) {
-            ps.setDate(1, Date.valueOf(mulai));
-            ps.setDate(2, Date.valueOf(akhir));
+            aturParameter(ps, mulai, akhir, idPoli);
             try (ResultSet rs = ps.executeQuery()) {
                 List<Baris> hasil = new ArrayList<>();
                 while (rs.next()) {
@@ -186,6 +196,14 @@ public class DataLaporanBoundary {
                 return hasil;
             }
         }
+    }
+
+    private static void aturParameter(PreparedStatement ps, LocalDate mulai, LocalDate akhir, Integer idPoli)
+            throws SQLException {
+        ps.setDate(1, Date.valueOf(mulai));
+        ps.setDate(2, Date.valueOf(akhir));
+        ps.setObject(3, idPoli, Types.INTEGER);
+        ps.setObject(4, idPoli, Types.INTEGER);
     }
 
     private static String label(String teks) {
@@ -210,6 +228,7 @@ public class DataLaporanBoundary {
         List<String> baris = new ArrayList<>();
         baris.add("Laporan Pelayanan SEHATI");
         baris.add("Rentang: " + l.getTanggalMulai() + " s.d. " + l.getTanggalAkhir());
+        baris.add("Poli: " + (l.getNamaPoli() == null ? "Semua poli" : l.getNamaPoli()));
         baris.add("");
         String ringkasan = l.getRingkasan() == null ? "" : l.getRingkasan();
         for (String b : ringkasan.split("\\R")) {

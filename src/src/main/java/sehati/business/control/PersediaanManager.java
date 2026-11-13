@@ -54,6 +54,7 @@ public class PersediaanManager {
         if (!galat.isEmpty()) {
             throw new IllegalArgumentException(String.join(",", galat));
         }
+        SesiAktif.wajibPeran("Petugas Farmasi");
         int idPengguna = SesiAktif.idPenggunaSesi();
         try (Connection koneksi = KoneksiBasisData.buka()) {
             DataFarmasiBoundary dataFarmasi = new DataFarmasiBoundary(koneksi);

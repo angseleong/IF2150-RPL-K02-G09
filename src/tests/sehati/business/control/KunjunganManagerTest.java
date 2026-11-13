@@ -42,7 +42,7 @@ class KunjunganManagerTest {
         @BeforeEach
         void pasang() throws SQLException {
             koneksi = DriverManager.getConnection(System.getenv("DB_UJI_URL"));
-            SesiAktif.pasang(new SesiEntity(UUID.randomUUID(), 1, LocalDateTime.now(), true));
+            SesiAktif.pasang(new SesiEntity(UUID.randomUUID(), 1, LocalDateTime.now(), true), "Petugas Administrasi");
             try (PreparedStatement ps = koneksi.prepareStatement("SELECT COALESCE(MAX(id_audit), 0) FROM audit");
                     ResultSet rs = ps.executeQuery()) {
                 rs.next();

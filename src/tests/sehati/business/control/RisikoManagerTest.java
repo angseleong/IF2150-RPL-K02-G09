@@ -2,11 +2,13 @@ package sehati.business.control;
 
 import org.junit.jupiter.api.Test;
 import sehati.business.entity.AmbangRisikoEntity;
+import sehati.business.entity.DaftarPantauEntity;
 import sehati.business.entity.TandaVitalEntity;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RisikoManagerTest {
@@ -65,5 +67,14 @@ class RisikoManagerTest {
     void beberapaRisikoSekaligus_semuanyaDilaporkan() {
         assertEquals(List.of("hipertensi", "obesitas", "indikasi diabetes"),
                 RisikoManager.jenisRisikoTerpenuhi(AMBANG, List.of(), tv(160, 95, 300)));
+    }
+
+    @Test
+    void entriTerbukaUntukPasienDanRisikoSama_tidakDimasukkanLagi() {
+        List<DaftarPantauEntity> terbuka = List.of(
+                new DaftarPantauEntity(1, 7, "hipertensi", DaftarPantauEntity.STATUS_ULANG));
+        assertTrue(RisikoManager.sudahDipantau(terbuka, 7, "hipertensi"));
+        assertFalse(RisikoManager.sudahDipantau(terbuka, 7, "obesitas"));
+        assertFalse(RisikoManager.sudahDipantau(terbuka, 8, "hipertensi"));
     }
 }

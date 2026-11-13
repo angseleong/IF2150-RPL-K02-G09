@@ -75,6 +75,10 @@ public class DataFarmasiBoundary {
             + "p.tanggal_lahir, p.jenis_kelamin, p.alamat, p.nomor_telepon FROM resep r "
             + "JOIN kunjungan k ON k.id_kunjungan = r.id_kunjungan JOIN pasien p ON p.id_pasien = k.id_pasien "
             + "WHERE r.id_resep = ANY (?)";
+    // Tambahan implementasi (B.1): poli asal dan nomor antrean tiap resep untuk I-09 (UC07 langkah 1).
+    private static final String Q_C61_19 = "SELECT r.id_resep, po.nama_poli, k.nomor_antrean FROM resep r "
+            + "JOIN kunjungan k ON k.id_kunjungan = r.id_kunjungan JOIN poli po ON po.id_poli = k.id_poli "
+            + "WHERE r.id_resep = ANY (?)";
 
     private static final String UNIQUE_VIOLATION = "23505";
     private static final String CHECK_VIOLATION = "23514";
@@ -367,6 +371,33 @@ public class DataFarmasiBoundary {
             return hasil;
         } catch (SQLException e) {
             throw galat("Gagal mengambil pasien pemilik resep", e);
+        }
+    }
+
+    /**
+     * Mengembalikan "nama poli / Antrean n" per id resep (Q-C61-19).
+     */
+    public Map<Integer, String> ambilAsalResep(List<Integer> daftarIdResep) {
+        Map<Integer, String> hasil = new HashMap<>();
+        if (daftarIdResep == null || daftarIdResep.isEmpty()) {
+            return hasil;
+        }
+        try {
+            Array larikId = koneksi.createArrayOf("integer", daftarIdResep.toArray(new Integer[0]));
+            try (PreparedStatement ps = koneksi.prepareStatement(Q_C61_19)) {
+                ps.setArray(1, larikId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        hasil.put(rs.getInt("id_resep"),
+                                rs.getString("nama_poli") + " / Antrean " + rs.getInt("nomor_antrean"));
+                    }
+                }
+            } finally {
+                larikId.free();
+            }
+            return hasil;
+        } catch (SQLException e) {
+            throw galat("Gagal mengambil poli asal resep", e);
         }
     }
 

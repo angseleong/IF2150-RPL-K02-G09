@@ -73,6 +73,7 @@ public class KonfigurasiManager {
         if ((p.getIdPengguna() == 0 || adaSandi) && (sandi == null || sandi.length() < PANJANG_SANDI_MINIMUM)) {
             throw new IllegalArgumentException("Kata sandi minimal " + PANJANG_SANDI_MINIMUM + " karakter");
         }
+        SesiAktif.wajibPeran("Petugas Administrasi");
         int pelaku = SesiAktif.idPenggunaSesi();
         transaksi("Akun gagal disimpan", koneksi -> {
             DataAkunBoundary dataAkun = new DataAkunBoundary(koneksi);
@@ -90,6 +91,10 @@ public class KonfigurasiManager {
                 if (pengguna == null) {
                     throw new IllegalArgumentException("Akun tidak ditemukan");
                 }
+                // Sama dengan nonaktifkanAkun(): admin tidak boleh mengunci dirinya sendiri dari layar ini.
+                if (pengguna.getIdPengguna() == pelaku && !pengguna.getPeran().equals(p.getPeran())) {
+                    throw new IllegalArgumentException("Peran akun yang sedang dipakai tidak dapat diubah");
+                }
                 pengguna.setPeran(p.getPeran());
                 if (adaSandi) {
                     pengguna.setKataSandiHash(BCrypt.hashpw(sandi, BCrypt.gensalt(12)));
@@ -104,6 +109,7 @@ public class KonfigurasiManager {
 
     // Algo-C29-02. Dinonaktifkan, bukan dihapus, supaya audit yang menunjuk akun ini tetap utuh.
     public void nonaktifkanAkun(int idPengguna) {
+        SesiAktif.wajibPeran("Petugas Administrasi");
         int pelaku = SesiAktif.idPenggunaSesi();
         if (idPengguna == pelaku) {
             throw new IllegalStateException("Akun yang sedang dipakai tidak dapat dinonaktifkan");
@@ -126,6 +132,7 @@ public class KonfigurasiManager {
         if (!(a.getNilaiBatas() > 0)) {
             throw new IllegalArgumentException("Nilai ambang harus lebih dari nol");
         }
+        SesiAktif.wajibPeran("Petugas Administrasi");
         int pelaku = SesiAktif.idPenggunaSesi();
         transaksi("Ambang risiko gagal disimpan", koneksi -> {
             new DataKlinisBoundary(koneksi).simpanAmbang(a);
@@ -141,6 +148,7 @@ public class KonfigurasiManager {
         if (nama.isEmpty()) {
             throw new IllegalArgumentException("Nama poli wajib diisi");
         }
+        SesiAktif.wajibPeran("Petugas Administrasi");
         int pelaku = SesiAktif.idPenggunaSesi();
         transaksi("Poli gagal disimpan", koneksi -> {
             DataKunjunganBoundary dataKunjungan = new DataKunjunganBoundary(koneksi);
@@ -174,6 +182,7 @@ public class KonfigurasiManager {
         }
         o.setNamaObat(nama);
         o.setSediaan(sediaan);
+        SesiAktif.wajibPeran("Petugas Administrasi");
         int pelaku = SesiAktif.idPenggunaSesi();
         transaksi("Obat gagal ditambahkan", koneksi -> {
             DataFarmasiBoundary dataFarmasi = new DataFarmasiBoundary(koneksi);

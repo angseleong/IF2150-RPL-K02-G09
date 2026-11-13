@@ -2,12 +2,14 @@ package sehati.business.control;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import sehati.common.KoneksiBasisData;
+import sehati.common.SesiAktif;
 import sehati.business.entity.BundelFHIREntity;
 import sehati.dataaccess.DataSinkronisasiBoundary;
 import sehati.dataaccess.ResponsKirim;
@@ -24,6 +26,8 @@ public class SinkronisasiManager {
     private static final Logger LOG = Logger.getLogger(SinkronisasiManager.class.getName());
 
     private final Supplier<SATUSEHATGateway> gatewaySupplier;
+    static final int RIWAYAT_TERKIRIM = 10;
+
     private int jumlahTertunda;
     private boolean daring;
 
@@ -50,8 +54,10 @@ public class SinkronisasiManager {
 
     List<BundelFHIREntity> muatStatus(DataSinkronisasiBoundary data, boolean online) {
         daring = online;
-        List<BundelFHIREntity> daftar = data.ambilTertunda();
+        List<BundelFHIREntity> daftar = new ArrayList<>(data.ambilTertunda());
         jumlahTertunda = daftar.size();
+        // Riwayat pengiriman terakhir ikut ditampilkan di bawah bundel tertunda (UC11 langkah 1).
+        daftar.addAll(data.ambilTerkirimTerakhir(RIWAYAT_TERKIRIM));
         return daftar;
     }
 
@@ -59,6 +65,7 @@ public class SinkronisasiManager {
      * Algo-C28-01: kirim semua bundel tertunda. Saat luring, bundel ditahan dan pengguna diarahkan ke ekspor.
      */
     public List<BundelFHIREntity> kirimSemua() {
+        SesiAktif.wajibPeran("Petugas Administrasi");
         SATUSEHATGateway gateway = gatewaySupplier.get();
         if (!gateway.periksaKoneksi()) {
             daring = false;
@@ -92,6 +99,7 @@ public class SinkronisasiManager {
      * Algo-C28-02: ekspor semua bundel tertunda ke satu arsip terenkripsi.
      */
     public String eksporBundel(String lokasi) {
+        SesiAktif.wajibPeran("Petugas Administrasi");
         try (Connection koneksi = KoneksiBasisData.buka()) {
             return eksporBundel(lokasi, new DataSinkronisasiBoundary(koneksi));
         } catch (SQLException e) {
