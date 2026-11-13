@@ -17,7 +17,7 @@ class LoginFormTest {
     void susunMenu_hanyaLayarPeranDenganUrutanDasbor() {
         assertEquals(List.of("AntreanSkriningForm", "RekamMedisForm", "DaftarPantauForm"),
                 LoginForm.susunMenu(autentikasi, "Dokter"));
-        assertEquals(List.of("PasienForm", "KunjunganForm", "LaporanForm", "SinkronisasiForm", "KonfigurasiForm"),
+        assertEquals(List.of("PasienForm", "LaporanForm", "SinkronisasiForm", "KonfigurasiForm"),
                 LoginForm.susunMenu(autentikasi, "Petugas Administrasi"));
     }
 

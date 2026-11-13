@@ -26,14 +26,14 @@ import sehati.common.SesiAktif;
  */
 public class LoginForm {
 
-    // Algo-C01-01. Skrining, Pemeriksaan, Resep, dan PenyerahanObat dibuka dari layar induknya, bukan dasbor.
-    static final List<String> DAFTAR_MENU = List.of("PasienForm", "KunjunganForm", "AntreanSkriningForm",
+    // Algo-C01-01. Kunjungan, Skrining, Pemeriksaan, Resep, dan PenyerahanObat dibuka dari layar induknya, bukan
+    // dasbor. Kunjungan butuh pasien terpilih dari PasienForm (UC03 include UC02).
+    static final List<String> DAFTAR_MENU = List.of("PasienForm", "AntreanSkriningForm",
             "RekamMedisForm", "AntreanResepForm", "PersediaanForm", "DaftarPantauForm", "LaporanForm",
             "SinkronisasiForm", "KonfigurasiForm");
 
     static final Map<String, String> DESKRIPSI = Map.of(
             "PasienForm", "Cari, daftarkan, dan perbarui data pasien.",
-            "KunjunganForm", "Buka kunjungan dan terbitkan nomor antrean.",
             "AntreanSkriningForm", "Panggil pasien dan catat tanda vital.",
             "RekamMedisForm", "Lihat riwayat pasien, lalu mulai pemeriksaan.",
             "AntreanResepForm", "Siapkan resep yang dikirim dokter.",

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class KunjunganManagerTest {
@@ -122,6 +123,18 @@ class KunjunganManagerTest {
             assertEquals(1, ulang.getNomorAntrean());
             assertEquals(1, jumlahKunjunganRows(idPasien, idPoli),
                     "permintaan ulang tidak menerbitkan kunjungan maupun nomor baru (Algo-C19-01)");
+        }
+
+        @Test
+        void kunjunganAktif_nullSebelumDibukaLaluKunjunganYangSama() throws SQLException {
+            int idPasien = buatPasienDenganRekamMedis();
+            int idPoli = buatPoli();
+            assertNull(manager.kunjunganAktif(idPasien));
+
+            KunjunganEntity dibuka = manager.bukaKunjungan(idPasien, idPoli);
+            idKunjunganUji.add(dibuka.getIdKunjungan());
+
+            assertEquals(dibuka.getIdKunjungan(), manager.kunjunganAktif(idPasien).getIdKunjungan());
         }
 
         @Test

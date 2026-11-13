@@ -30,6 +30,20 @@ class DataPasienBoundaryTest {
     }
 
     @Test
+    void pasienTerbaruUrutBaruKeLamaDanDibatasi50() {
+        JdbcPalsu palsu = new JdbcPalsu().hasil("FROM pasien ORDER BY id_pasien DESC", List.of(
+                baris("id_pasien", 9, "nik", "9999010101990009", "nomor_rekam_medis", "RM-000009",
+                        "nama", "Pasien Baru", "tanggal_lahir", Date.valueOf("1999-08-15"),
+                        "jenis_kelamin", "Perempuan", "alamat", "Jl. Uji", "nomor_telepon", null)));
+
+        List<PasienEntity> hasil = new DataPasienBoundary(palsu.koneksi()).pasienTerbaru();
+
+        assertEquals(1, hasil.size());
+        assertEquals("RM-000009", hasil.get(0).getNomorRekamMedis());
+        assertTrue(palsu.dijalankan.get(0).sql().endsWith("ORDER BY id_pasien DESC LIMIT 50"));
+    }
+
+    @Test
     void cariParsialMengikatPolaYangSamaKeTigaParameter() {
         JdbcPalsu palsu = new JdbcPalsu().hasil("FROM pasien WHERE nik LIKE", List.of(
                 baris("id_pasien", 1, "nik", "9999010101680001", "nomor_rekam_medis", "RM-000001",

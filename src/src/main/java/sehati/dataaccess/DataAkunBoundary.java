@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,6 +41,8 @@ public class DataAkunBoundary {
     // Tambahan untuk tabel akun I-15-03, tidak ada di Tabel 5.56.3
     private static final String Q_C56_09 = "SELECT id_pengguna, nama_pengguna, kata_sandi_hash, peran, status "
             + "FROM pengguna ORDER BY nama_pengguna";
+    // Tambahan agar sesi akun yang dinonaktifkan ikut terputus di komputer lain (UC12 alternatif 3)
+    private static final String Q_C56_10 = "SELECT status_aktif FROM sesi WHERE id_sesi = ?";
 
     private Connection koneksi;
 
@@ -155,6 +158,18 @@ public class DataAkunBoundary {
             ps.executeUpdate();
         } catch (SQLException e) {
             throw galat("Gagal menutup sesi aktif", e);
+        }
+    }
+
+    // Q-C56-10: false bila sesi sudah ditutup atau tidak tercatat
+    public boolean sesiMasihAktif(UUID idSesi) {
+        try (PreparedStatement ps = koneksi.prepareStatement(Q_C56_10)) {
+            ps.setObject(1, idSesi);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() && rs.getBoolean(1);
+            }
+        } catch (SQLException e) {
+            throw galat("Gagal membaca status sesi", e);
         }
     }
 

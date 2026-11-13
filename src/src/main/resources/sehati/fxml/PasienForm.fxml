@@ -44,7 +44,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS"/>
         </columnResizePolicy>
         <placeholder>
-            <Label text="Ketik sedikitnya 3 karakter untuk mencari, atau daftar kosong berarti data belum ada."
+            <Label text="Belum ada pasien terdaftar."
                    styleClass="label-kolom"/>
         </placeholder>
     </TableView>

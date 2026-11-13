@@ -52,6 +52,8 @@ public class DataPasienBoundary {
             + "WHERE k.id_pasien = ? AND r.status = 'selesai dilayani' ORDER BY k.tanggal DESC, o.nama_obat";
     private static final String Q_C57_11 = "INSERT INTO catatan_rekam_medis (id_rekam_medis, waktu, isi) "
             + "VALUES (?, ?, ?)";
+    // Tambahan: daftar pasien terbaru di I-02 sebelum petugas mengetik kata kunci, dibatasi 50 baris (KNF01)
+    private static final String Q_C57_12 = KOLOM_PASIEN + " ORDER BY id_pasien DESC LIMIT 50";
 
     private Connection koneksi;
 
@@ -78,6 +80,19 @@ public class DataPasienBoundary {
             }
         } catch (SQLException e) {
             throw galat("Gagal mencari pasien", e);
+        }
+    }
+
+    // Q-C57-12: 50 pasien yang terakhir didaftarkan
+    public List<PasienEntity> pasienTerbaru() {
+        try (PreparedStatement ps = koneksi.prepareStatement(Q_C57_12); ResultSet rs = ps.executeQuery()) {
+            List<PasienEntity> hasil = new ArrayList<>();
+            while (rs.next()) {
+                hasil.add(petakanPasien(rs));
+            }
+            return hasil;
+        } catch (SQLException e) {
+            throw galat("Gagal memuat daftar pasien", e);
         }
     }
 

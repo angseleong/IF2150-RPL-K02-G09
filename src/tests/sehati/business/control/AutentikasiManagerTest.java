@@ -52,6 +52,7 @@ class AutentikasiManagerTest {
         SesiAktif.lepas();
         manager.tutupSesi(false);
         assertNull(SesiAktif.ambil());
+        assertFalse(manager.sesiDiputus());
     }
 
     // Manager buka koneksi sendiri lewat KoneksiBasisData, jadi DB_* di .env harus ke DB yang sama dengan
@@ -124,6 +125,18 @@ class AutentikasiManagerTest {
             IllegalStateException e = assertThrows(IllegalStateException.class,
                     () -> manager.autentikasi(NAMA, SANDI));
             assertEquals("Akun nonaktif, hubungi Petugas Administrasi", e.getMessage());
+        }
+
+        @Test
+        void sesiDiputus_setelahAkunDinonaktifkanDiKomputerLain() throws SQLException {
+            manager.autentikasi(NAMA, SANDI);
+            assertFalse(manager.sesiDiputus());
+
+            try (Statement st = koneksi.createStatement()) {
+                st.executeUpdate("UPDATE sesi SET status_aktif = FALSE WHERE id_pengguna = " + idPengguna);
+            }
+            assertTrue(manager.sesiDiputus());
+            manager.tutupSesi(false);
         }
 
         @Test

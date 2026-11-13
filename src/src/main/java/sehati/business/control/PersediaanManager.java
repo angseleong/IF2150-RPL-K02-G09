@@ -105,7 +105,9 @@ public class PersediaanManager {
             }
             LocalDate kedaluwarsa = bets.getTanggalKedaluwarsa();
             // Tanggal terima yang kosong sudah ditandai di atas, jadi kedaluwarsa hanya dibandingkan bila ada.
-            if (kedaluwarsa == null || (tanggalTerima != null && !kedaluwarsa.isAfter(tanggalTerima))) {
+            // Obat yang sudah kedaluwarsa ditolak walau tanggal terimanya dimundurkan (UC08 alternatif 2).
+            if (kedaluwarsa == null || !kedaluwarsa.isAfter(LocalDate.now())
+                    || (tanggalTerima != null && !kedaluwarsa.isAfter(tanggalTerima))) {
                 galat.add("tanggalKedaluwarsa");
             }
             if (bets.getIdObat() <= 0 || bets.getIdObat() != idObatPertama) {

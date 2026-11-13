@@ -84,6 +84,21 @@ public class AutentikasiManager {
         return layarPeran != null && layarPeran.contains(layar);
     }
 
+    // true bila sesi di komputer ini sudah ditutup dari luar, misalnya akunnya dinonaktifkan admin (UC12 alternatif 3).
+    // Galat basis data tidak dihitung sebagai diputus, supaya pengguna tidak keluar hanya karena jaringan putus.
+    public boolean sesiDiputus() {
+        SesiEntity sesi = SesiAktif.ambil();
+        if (sesi == null) {
+            return false;
+        }
+        try (Connection koneksi = KoneksiBasisData.buka()) {
+            return !new DataAkunBoundary(koneksi).sesiMasihAktif(sesi.getIdSesi());
+        } catch (SQLException | RuntimeException e) {
+            LOG.log(Level.WARNING, "Status sesi tidak terbaca", e);
+            return false;
+        }
+    }
+
     // Dipanggil saat tombol Keluar ditekan atau sesi diam lewat batas (Algo-C31-01).
     public void tutupSesi(boolean habisWaktu) {
         SesiEntity sesi = SesiAktif.ambil();

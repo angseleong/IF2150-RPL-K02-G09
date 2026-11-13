@@ -18,6 +18,7 @@ import sehati.business.entity.PoliEntity;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -125,12 +126,17 @@ public class KunjunganForm {
         tombolBukaKunjungan.setDisable(true);
         int idPasien = pasienTerpilih.getIdPasien();
         PoliEntity poli = poliTerpilih;
-        String namaPoli = poli.getNamaPoli();
-        jalankan(() -> kunjunganManager.bukaKunjungan(idPasien, poli.getIdPoli()),
-                kunjungan -> {
-                    if (STATUS_AWAL.equals(kunjungan.getStatus())) {
-                        tampilkanTiket(kunjungan, namaPoli, "Tiket Antrean",
-                                "Tunjukkan nomor ini kepada petugas skrining.", false);
+        // Kunjungan yang sudah ada dicek dulu, karena kunjungan aktif yang belum diskrining juga berstatus
+        // "menunggu skrining" dan tidak bisa dibedakan dari kunjungan baru lewat statusnya (UC03 alternatif 1)
+        jalankan(() -> {
+                    KunjunganEntity aktif = kunjunganManager.kunjunganAktif(idPasien);
+                    return aktif != null ? Map.entry(true, aktif)
+                            : Map.entry(false, kunjunganManager.bukaKunjungan(idPasien, poli.getIdPoli()));
+                },
+                hasil -> {
+                    KunjunganEntity kunjungan = hasil.getValue();
+                    if (!hasil.getKey() && STATUS_AWAL.equals(kunjungan.getStatus())) {
+                        tampilkanTiketAntrean(kunjungan);
                     } else {
                         tampilkanKunjunganAktif(kunjungan);
                     }
