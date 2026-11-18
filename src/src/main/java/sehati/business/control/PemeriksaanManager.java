@@ -180,10 +180,10 @@ public class PemeriksaanManager {
         SesiAktif.wajibPeran("Dokter");
         try (Connection koneksi = KoneksiBasisData.buka()) {
             DataKlinisBoundary dataKlinis = new DataKlinisBoundary(koneksi);
-            for (JadwalKontrolEntity ada : dataKlinis.ambilJadwalKontrol()) {
-                if (ada.getIdPasien() == idPasien && tanggal.equals(ada.getTanggalRencana())) {
-                    return ada;
-                }
+            // Q-C59-17 melewatkan jadwal yang sudah masuk daftar pantau, jadi dicari per pasien dan tanggal (C22-UT37).
+            List<JadwalKontrolEntity> ada = dataKlinis.jadwalPadaTanggal(idPasien, tanggal);
+            if (!ada.isEmpty()) {
+                return ada.get(0);
             }
             JadwalKontrolEntity j = new JadwalKontrolEntity(0, idPasien, tanggal,
                     JadwalKontrolEntity.STATUS_TERJADWAL);
