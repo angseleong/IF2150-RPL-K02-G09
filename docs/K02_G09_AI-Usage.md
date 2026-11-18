@@ -32,6 +32,7 @@
 * [Milestone 7](#milestone-7)
 * [Milestone 8](#milestone-8)
 * [Milestone 9](#milestone-9)
+* [Milestone 10](#milestone-10)
 
 ---
 
@@ -126,6 +127,12 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 
 | *Claude (Claude Code)* | *Memperbarui tema, logo kelompok, dan tombol Kembali, lalu merapikan tampilan seluruh layar (#56, #57)* | *Meminta tema baru yang tetap memakai warna teal DPPL, logo SEHATI, tombol Kembali pada bilah aplikasi, lalu pemeriksaan ulang setiap layar dengan tangkapan layar* | *Adnan menjalankan aplikasi dan memeriksa tangkapan layar ke-15 layar. Tujuh masalah tampilan diperbaiki pada PR #57, dan `mvn test` lulus sebelum digabung.* |
 | *Claude (Claude Code)* | *Mengaudit seluruh use case terhadap SKPL dan DPPL, menguji semua fitur, lalu memperbaiki temuannya (Tabel B.1 nomor 82 sampai 91)* | *"oke sekarang gua mau lu buat review ulang semuanya karena seharusnya itu udah kelar di develop. gua pengen lu review dan test semua fiitur, pahamin lagi doc yang ada pokonya lu audit se detail detail nya terkait dengan apa yang masih kurang"* | *Setiap temuan dibuktikan dulu dengan uji ke PostgreSQL. Satu dugaan (resep yang sudah diserahkan dapat dikembalikan) ternyata sudah ditolak entity, sehingga tidak diubah. Adnan memeriksa tangkapan layar ke-15 layar untuk empat peran. 328 test lulus dengan basis data.* |
+
+---
+### Milestone 10
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| *Claude (Claude Code)* | *Menyusun pembagian tugas M10 dari slide dan transkrip asistensi akbar, kerangka HIUPL (BAB 1 sampai BAB 3, Tabel 4.1.1, dan BAB 5), serta pengujian modul pemeriksaan dan resep: test unit ber-ID, test integrasi, dan skrip yang menjalankan UC05 dan UC06 di aplikasi untuk mengambil tangkapan layar* | *"tolong buat pembagian tugasnya dulu buat tiap orang. abis itu bagian gua tolong di kerjain dengan baik tanpa ada commit lu"* | *Seluruh test dijalankan pada basis data uji dari schema.sql dan seed.sql, dan isi basis data setelah pengujian UI diperiksa lewat psql. Dua temuan Fail dicatat pada v9.0, lalu atas permintaan Adnan diperbaiki (Q-C59-20 dan panel skrining I-06) dan diuji ulang lewat mvn test serta aplikasi. [Adnan: tambahkan pemeriksaan yang kamu lakukan sebelum commit]* |
 
 ---
 
