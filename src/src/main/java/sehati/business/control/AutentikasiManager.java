@@ -81,7 +81,8 @@ public class AutentikasiManager {
 
     public boolean periksaHakAkses(String peran, String layar) {
         Set<String> layarPeran = peran == null ? null : HAK_AKSES.get(peran);
-        return layarPeran != null && layarPeran.contains(layar);
+        // Set.of() melempar NullPointerException untuk contains(null)
+        return layarPeran != null && layar != null && layarPeran.contains(layar);
     }
 
     // true bila sesi di komputer ini sudah ditutup dari luar, misalnya akunnya dinonaktifkan admin (UC12 alternatif 3).
