@@ -63,7 +63,7 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| A | Versi pertama HIUPL. BAB 1 dan BAB 2 disusun dari DPPL Tugas 8 dan SKPL Tugas 5, ditambah istilah dan pola ID pengujian. BAB 3 merangkum implementasi pada tag `v9.0` (Tugas 9) beserta dua perbaikan kode hasil pengujian (Tabel 3.5). BAB 4 dan BAB 5 berisi hasil pengujian dan matriks kerunutan yang baru disusun pada dokumen ini. |
+| A | Versi pertama HIUPL. BAB 1 dan BAB 2 disusun dari DPPL Tugas 8 dan SKPL Tugas 5, ditambah istilah dan pola ID pengujian. BAB 3 merangkum implementasi pada tag `v9.0` (Tugas 9) beserta perbaikan kode hasil pengujian (Tabel 3.5). BAB 4 dan BAB 5 berisi hasil pengujian dan matriks kerunutan yang baru disusun pada dokumen ini. |
 
 ---
 
@@ -176,7 +176,7 @@ Gambar 2.2 memodelkan dua belas *use case* SEHATI dengan tiga aktor manusia: Pet
 
 # BAB 3: Implementasi
 
-Bab ini mencatat elemen SEHATI yang dibangun pada Tugas 9: lingkungan, kelas, layar, dan berkas pendukung. Seluruhnya mengacu pada tag `v9.0` (commit `4777977`). Perbedaan implementasi dari rancangan DPPL sudah dicatat lengkap pada Tabel B.1 Laporan Implementasi Tugas 9 (95 baris), sehingga tidak diulang di sini. Setelah `v9.0` ada dua jenis perubahan. Pertama, berkas pengujian dan `pom.xml` (JaCoCo dan pelapor test berbasis ID) untuk BAB 4. Kedua, dua perbaikan kode atas temuan `Fail` pada BAB 4, yang dicatat pada Tabel 3.5 karena salah satunya menambah objek pada rancangan antarmuka I-06.
+Bab ini mencatat elemen SEHATI yang dibangun pada Tugas 9: lingkungan, kelas, layar, dan berkas pendukung. Seluruhnya mengacu pada tag `v9.0` (commit `4777977`). Perbedaan implementasi dari rancangan DPPL sudah dicatat lengkap pada Tabel B.1 Laporan Implementasi Tugas 9 (95 baris), sehingga tidak diulang di sini. Setelah `v9.0` ada dua jenis perubahan. Pertama, berkas pengujian dan `pom.xml` (JaCoCo dan pelapor test berbasis ID) untuk BAB 4. Kedua, perbaikan kode atas temuan `Fail` pada BAB 4, yang dicatat pada Tabel 3.5 karena salah satunya menambah objek pada rancangan antarmuka I-06.
 
 ## 3.1 Lingkungan Implementasi
 
@@ -323,6 +323,7 @@ Tabel 3.5. Perubahan Implementasi setelah `v9.0` dari Hasil Pengujian
 | :--- | :--- | :--- | :--- | :--- |
 | 1 | C22 `jadwalkanKontrol()`, C59 (kueri baru Q-C59-20) | Jadwal pasien pada tanggal yang sama dicari lewat `ambilJadwalKontrol()` (Q-C59-17), yang hanya memuat jadwal yang belum memicu entri daftar pantau | Dicari lewat `DataKlinisBoundary.jadwalPadaTanggal()` dengan kueri baru Q-C59-20: jadwal "terjadwal" berdasarkan `id_pasien` dan `tanggal_rencana`, tanpa syarat daftar pantau | Temuan C22-UT37 dan UC05-TC08: jadwal kontrol dan entri daftar pantau dapat ganda (KF12) |
 | 2 | C06 RekamMedisForm, I-06 (DPPL Subbab 6.6) | I-06 hanya memuat panel data diri, penanda risiko, diagnosis lampau, dan riwayat obat | Panel "Skrining hari ini" ditambahkan di bawah data diri, berisi keluhan awal dan tanda vital dari `RekamMedisEntity.getSkriningHariIni()` | Temuan UC05-TC01: SKPL UC05 langkah 1 meminta hasil skrining hari itu tampil pada ringkasan (KF09) |
+| 3 | C17 `periksaHakAkses()` (Algo-C17-02) | `layarPeran.contains(layar)` langsung dipanggil pada himpunan `Set.of()`, yang melempar `NullPointerException` bila `layar` bernilai `null` | Layar `null` langsung menghasilkan `false` sebelum `contains()` dipanggil | Temuan C17-UT17: DPPL Subbab 5.17 menyatakan operasi mengembalikan `true` hanya bila peran boleh membuka layar, jadi masukan tidak sah harus `false`, bukan pengecualian (KF16) |
 
 <br>
 
@@ -348,7 +349,7 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 
 | ID Kelas | Nama Kelas | Tingkat | Alasan | Test Case Terkait |
 | :--- | :--- | :--- | :--- | :--- |
-| C01 | LoginForm | Tidak perlu | Kelas tampilan layar I-01, meneruskan kredensial ke AutentikasiManager | - (teruji lewat UC01) |
+| C01 | LoginForm | Tidak perlu | Kelas tampilan layar I-01, meneruskan kredensial ke AutentikasiManager | - (teruji lewat UC01-TC01 s.d. UC01-TC04) |
 | C02 | PasienForm | Tidak perlu | Kelas tampilan layar I-02, meneruskan pencarian dan isian ke PasienManager | - (teruji lewat UC02) |
 | C03 | KunjunganForm | Tidak perlu | Kelas tampilan layar I-03, meneruskan pilihan poli ke KunjunganManager | - (teruji lewat UC03) |
 | C04 | AntreanSkriningForm | Tidak perlu | Kelas tampilan layar I-04, menampilkan antrean dari SkriningManager | - (teruji lewat UC04) |
@@ -363,8 +364,8 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C13 | LaporanForm | Tidak perlu | Kelas tampilan layar I-13, meneruskan rentang dan ekspor ke LaporanManager | - (teruji lewat UC10) |
 | C14 | SinkronisasiForm | Tidak perlu | Kelas tampilan layar I-14, meneruskan perintah ke SinkronisasiManager | - (teruji lewat UC11) |
 | C15 | SATUSEHATGateway | Mendalam | Integrasi eksternal ke REST API SATUSEHAT, termasuk mode simulasi dan penanganan galat jaringan (Algo-C15-01, Algo-C15-02) | *[C15-UT01 s.d. C15-UT.., diisi Fachry]* |
-| C16 | KonfigurasiForm | Tidak perlu | Kelas tampilan layar I-15, meneruskan perubahan ke KonfigurasiManager | - (teruji lewat UC12) |
-| C17 | AutentikasiManager | Mendalam | Keamanan: verifikasi kredensial bcrypt, sesi, batas diam 15 menit, dan hak akses peran (Algo-C17-01, Algo-C17-02) | *[C17-UT01 s.d. C17-UT.., diisi Axeleon]* |
+| C16 | KonfigurasiForm | Tidak perlu | Kelas tampilan layar I-15, meneruskan perubahan ke KonfigurasiManager | - (teruji lewat UC12-TC01 s.d. UC12-TC05) |
+| C17 | AutentikasiManager | Mendalam | Keamanan: verifikasi kredensial bcrypt, sesi, batas diam 15 menit, dan hak akses peran (Algo-C17-01, Algo-C17-02) | C17-UT01 s.d. C17-UT17, INT-TC01, INT-TC02 |
 | C18 | PasienManager | Mendalam | Validasi NIK 16 digit dan keunikannya serta penerbitan nomor rekam medis (Algo-C18-01, Algo-C18-02) | *[C18-UT01 s.d. C18-UT.., diisi Steven]* |
 | C19 | KunjunganManager | Mendalam | Penolakan kunjungan ganda dan penerbitan nomor antrean per poli per hari dalam transaksi (Algo-C19-01, Algo-C19-02) | *[C19-UT01 s.d. C19-UT.., diisi Steven]* |
 | C20 | SkriningManager | Mendalam | Validasi rentang fisiologis tanpa jalan pintas dan alur antrean skrining (Algo-C20-01 s.d. Algo-C20-03) | *[C20-UT01 s.d. C20-UT.., diisi Humam]* |
@@ -376,10 +377,10 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C26 | PantauManager | Mendalam | Penyaringan daftar pantau dan perubahan status tindak lanjut (Algo-C26-01) | *[C26-UT01 s.d. C26-UT.., diisi Humam]* |
 | C27 | LaporanManager | Mendalam | Perhitungan rekapitulasi dan validasi rentang tanggal (Algo-C27-01, Algo-C27-02) | *[C27-UT01 s.d. C27-UT.., diisi Fachry]* |
 | C28 | SinkronisasiManager | Mendalam | Aturan kirim saat daring serta tahan dan ekspor saat luring (Algo-C28-01, Algo-C28-02) | *[C28-UT01 s.d. C28-UT.., diisi Fachry]* |
-| C29 | KonfigurasiManager | Mendalam | Validasi akun (nama unik, sandi minimal 8 karakter, peran), data master, dan pencadangan (Algo-C29-01 s.d. Algo-C29-03) | *[C29-UT01 s.d. C29-UT.., diisi Axeleon]* |
-| C30 | PenggunaEntity | Mendalam | Keamanan: pencocokan kata sandi bcrypt dan status aktif akun (Algo-C30-01) | *[C30-UT01 s.d. C30-UT.., diisi Axeleon]* |
-| C31 | SesiEntity | Mendalam | Keamanan: batas diam sesi pada habisWaktu() (Algo-C31-01) | *[C31-UT01 s.d. C31-UT.., diisi Axeleon]* |
-| C32 | AuditEntity | Sedang | buat() hanya menolak deskripsi kosong lalu membentuk catatan (Algo-C32-01) | *[C32-UT.. atau INT-TC.., diisi Axeleon]* |
+| C29 | KonfigurasiManager | Mendalam | Validasi akun (nama unik, sandi minimal 8 karakter, peran), data master, dan pencadangan (Algo-C29-01 s.d. Algo-C29-03) | C29-UT01 s.d. C29-UT37, INT-TC03 s.d. INT-TC06 |
+| C30 | PenggunaEntity | Mendalam | Keamanan: pencocokan kata sandi bcrypt dan status aktif akun (Algo-C30-01) | C30-UT01 s.d. C30-UT11 |
+| C31 | SesiEntity | Mendalam | Keamanan: batas diam sesi pada habisWaktu() (Algo-C31-01) | C31-UT01 s.d. C31-UT07 |
+| C32 | AuditEntity | Sedang | buat() hanya menolak deskripsi kosong lalu membentuk catatan (Algo-C32-01) | C32-UT01 s.d. C32-UT03 |
 | C33 | PasienEntity | Sedang | perbarui() hanya menolak data kosong lalu menyalin atribut (Algo-C33-01) | *[C33-UT.. atau INT-TC.., diisi Steven]* |
 | C34 | RekamMedisEntity | Sedang | tambahEntri() hanya menolak catatan kosong (Algo-C34-01) | *[C34-UT.. atau INT-TC.., diisi Steven]* |
 | C35 | KunjunganEntity | Mendalam | Aturan transisi status kunjungan dan penguncian status selesai (Algo-C35-01) | *[C35-UT01 s.d. C35-UT.., diisi Steven]* |
@@ -402,8 +403,8 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C52 | TindakLanjutEntity | Tidak perlu | Hanya menyimpan data tindak lanjut; terhubung() membandingkan satu atribut | - (teruji lewat UC09) |
 | C53 | LaporanEntity | Mendalam | kosong() mengurai ringkasan rekapitulasi dengan beberapa cabang (Algo-C53-01) | *[C53-UT01 s.d. C53-UT.., diisi Fachry]* |
 | C54 | BundelFHIREntity | Mendalam | Aturan status kirim: bundel terkirim tidak dapat ditandai ulang (Algo-C54-01) | *[C54-UT01 s.d. C54-UT.., diisi Fachry]* |
-| C55 | PencadanganEntity | Tidak perlu | Hanya menyimpan catatan pencadangan; berhasil() membaca satu status | - (teruji lewat UC12) |
-| C56 | DataAkunBoundary | Sedang | Kueri akun, sesi, dan audit (Q-C56-01 s.d. Q-C56-10) | *[C56-UT.. atau INT-TC.., diisi Axeleon]* |
+| C55 | PencadanganEntity | Tidak perlu | Hanya menyimpan catatan pencadangan; berhasil() membaca satu status | - (teruji lewat UC12-TC02, UC12-TC05) |
+| C56 | DataAkunBoundary | Sedang | Kueri akun, sesi, dan audit (Q-C56-01 s.d. Q-C56-10) | C56-UT01 s.d. C56-UT10, INT-TC01 s.d. INT-TC03 |
 | C57 | DataPasienBoundary | Sedang | Kueri pasien dan pencarian parsial (Q-C57-01 s.d. Q-C57-12, Algo-C57-01) | *[C57-UT.. atau INT-TC.., diisi Steven]* |
 | C58 | DataKunjunganBoundary | Sedang | Kueri kunjungan, poli, dan antrean dengan penguncian baris (Q-C58-01 s.d. Q-C58-13) | *[C58-UT.. atau INT-TC.., diisi Steven]* |
 | C59 | DataKlinisBoundary | Sedang | Kueri skrining, risiko, pemeriksaan, ICD-10, dan jadwal kontrol (Q-C59-01 s.d. Q-C59-20) | C59-UT21 s.d. C59-UT32, INT-TC17 s.d. INT-TC20 (bagian pemeriksaan); *[C59-UT01 s.d. C59-UT20 bagian skrining, diisi Humam]* |
@@ -411,7 +412,7 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C61 | DataFarmasiBoundary | Sedang | Kueri obat, bets, dan resep dengan penguncian stok (Q-C61-01 s.d. Q-C61-19) | *[C61-UT.. atau INT-TC.., diisi Malik]* |
 | C62 | DataLaporanBoundary | Sedang | Kueri agregasi dan penulisan berkas PDF/CSV (Q-C62-01 s.d. Q-C62-04); logika rekapitulasi diuji pada C27 | *[C62-UT.. atau INT-TC.., diisi Fachry]* |
 | C63 | DataSinkronisasiBoundary | Mendalam | Keamanan: enkripsi arsip ekspor bundel (Algo-C63-01) di samping penyimpanan bundel | *[C63-UT01 s.d. C63-UT.., diisi Fachry]* |
-| C64 | DataPencadanganBoundary | Mendalam | Integrasi proses eksternal pg_dump dan verifikasi arsip (Algo-C64-01, Algo-C64-02) | *[C64-UT01 s.d. C64-UT.., diisi Axeleon]* |
+| C64 | DataPencadanganBoundary | Mendalam | Integrasi proses eksternal pg_dump dan verifikasi arsip (Algo-C64-01, Algo-C64-02) | C64-UT01 s.d. C64-UT16, INT-TC05, INT-TC06 |
 
 ## 4.2 Pengujian Unit Kelas
 
@@ -445,7 +446,40 @@ Lokasi file test: `src/tests/`, dengan paket yang sama dengan kelas yang diuji (
 **Nama Kelas:** AutentikasiManager  
 **Tingkat:** Mendalam
 
-*[Diisi Axeleon: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/control/AutentikasiManagerTest.java`. Test yang membutuhkan basis data membuat akun uji `uji.autentikasi` (Perawat, aktif, sandi `rahasia123`) sebelum setiap test, lalu menghapus akun, sesi, dan audit miliknya setelah test.
+
+Tabel 4.2.2. Hasil Pengujian Unit Kelas C17
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C17-UT01 | `autentikasi(nama: String, sandi: String): SesiEntity` | Normal | `uji.autentikasi`, `rahasia123` | Sesi aktif dikembalikan, `SesiAktif` berisi pengguna dan peran Perawat, satu baris `sesi` aktif dan audit "Masuk ke aplikasi" | Sesi aktif, `SesiAktif.peran()` = "Perawat", baris `sesi` dan audit ada | Pass |
+| C17-UT02 | `autentikasi(nama: String, sandi: String): SesiEntity` | Batas | Sandi salah, lalu sandi benar, lalu sandi salah lagi | Masuk berhasil mengatur ulang hitungan percobaan, sehingga kegagalan setelahnya dicatat lagi sebagai "percobaan ke-1" | Dua audit "Masuk gagal, percobaan ke-1" dan tidak ada "percobaan ke-2" | Pass |
+| C17-UT03 | `autentikasi(nama: String, sandi: String): SesiEntity` | Negatif | `uji.autentikasi`, sandi "salah" | `null`, tanpa sesi, audit "Masuk gagal, percobaan ke-1" berpelaku akun itu | `null`, tidak ada baris `sesi`, satu audit sesuai | Pass |
+| C17-UT04 | `autentikasi(nama: String, sandi: String): SesiEntity` | Negatif | Sandi salah, lalu nama `uji.tidak.ada` | `null`, audit berpelaku 0 "Masuk gagal: nama 'uji.tidak.ada' tidak dikenal, percobaan ke-2" | `null` dan audit sesuai | Pass |
+| C17-UT05 | `autentikasi(nama: String, sandi: String): SesiEntity` | Negatif | Akun uji diubah menjadi nonaktif, sandi benar | `IllegalStateException` "Akun nonaktif, hubungi Petugas Administrasi", tanpa sesi | Pengecualian dan pesan sesuai, tidak ada baris `sesi` | Pass |
+| C17-UT06 | `autentikasi(nama: String, sandi: String): SesiEntity` | Batas | Sandi "" dan `null` | `null` tanpa pengecualian dan tanpa sesi | `null` untuk keduanya, tidak ada baris `sesi` | Pass |
+| C17-UT07 | `periksaHakAkses(peran: String, layar: String): boolean` | Normal | Admin-PasienForm, Admin-KonfigurasiForm, Perawat-SkriningForm, Dokter-ResepForm, Farmasi-PersediaanForm | `true` untuk kelimanya | `true` | Pass |
+| C17-UT08 | `periksaHakAkses(peran: String, layar: String): boolean` | Batas | RekamMedisForm untuk Perawat dan Dokter, PemeriksaanForm untuk Dokter dan Perawat | Layar bersama boleh untuk keduanya, PemeriksaanForm hanya Dokter | `true`, `true`, `true`, `false` | Pass |
+| C17-UT09 | `periksaHakAkses(peran: String, layar: String): boolean` | Negatif | Perawat-ResepForm, Farmasi-PasienForm, Dokter-KonfigurasiForm, Admin-PemeriksaanForm | `false` untuk keempatnya | `false` | Pass |
+| C17-UT10 | `periksaHakAkses(peran: String, layar: String): boolean` | Negatif | Peran `null`, "Pemilik Layar", "dokter" (huruf kecil), dan Admin-LoginForm | `false` untuk semuanya | `false` | Pass |
+| C17-UT17 | `periksaHakAkses(peran: String, layar: String): boolean` | Negatif | Dokter dengan layar `null`, serta peran dan layar `null` | `false` (DPPL 5.17: `true` hanya bila peran boleh membuka layar) | Pada `v9.0`: `NullPointerException` dari `ImmutableCollections$SetN.contains()`. Setelah perbaikan: `false` untuk keduanya | Fail pada `v9.0`, Pass setelah perbaikan. Penyebab: daftar layar per peran dibuat dengan `Set.of()`, yang melempar `NullPointerException` untuk `contains(null)`. Seluruh pemanggil saat ini (`LoginForm`, `Navigasi`, `RekamMedisForm`) selalu mengirim nama layar, jadi cacat ini tidak terlihat di aplikasi, tetapi operasi melanggar kontraknya. Perbaikan: layar `null` langsung ditolak sebelum `contains()` (Tabel 3.5 nomor 3). Bukti sebelum dan sesudah pada Subbab 4.6 |
+| C17-UT11 | `tutupSesi(habisWaktu: boolean): void` | Normal | Masuk, lalu `tutupSesi(false)` (tombol Keluar) | Sesi di memori dan basis data tidak aktif, audit "Keluar dari aplikasi" | `SesiAktif.ambil()` `null`, `status_aktif` false, audit ada | Pass |
+| C17-UT12 | `tutupSesi(habisWaktu: boolean): void` | Batas | Masuk, lalu `tutupSesi(true)` (batas diam 15 menit) | Sesi ditutup dengan audit "Sesi berakhir setelah diam 15 menit" | Sesi ditutup dan audit sesuai | Pass |
+| C17-UT13 | `tutupSesi(habisWaktu: boolean): void` | Negatif | Tanpa sesi (tanpa basis data) | Tidak terjadi apa pun dan tidak ada pengecualian | Tidak ada pengecualian, `SesiAktif.ambil()` tetap `null` | Pass |
+| C17-UT14 | `sesiDiputus(): boolean` | Normal | Masuk, lalu `status_aktif` sesi diubah menjadi false dari koneksi lain (akun dinonaktifkan di komputer lain) | `true` | `true` | Pass |
+| C17-UT15 | `sesiDiputus(): boolean` | Batas | Masuk, sesi masih aktif di basis data | `false` | `false` | Pass |
+| C17-UT16 | `sesiDiputus(): boolean` | Negatif | Tanpa sesi (tanpa basis data) | `false` tanpa membuka koneksi | `false` | Pass |
+
+C17-UT17 ditambahkan setelah nomor C17-UT16, sehingga barisnya diletakkan bersama operasi yang sama. `tutupSesi()` dan `sesiDiputus()` adalah operasi public tambahan implementasi (Tabel B.1 nomor 23 dan 80). Operasi private `bukaSesi()` teruji lewat C17-UT01.
+
+Tabel 4.2.2b. Ringkasan Cakupan Kelas C17
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `autentikasi()`, `periksaHakAkses()` (ditambah `bukaSesi()` yang private) |
+| Operasi yang diuji | Kedua operasi public DPPL (2 dari 2) dengan kasus normal, batas, dan negatif, ditambah operasi tambahan `tutupSesi()` dan `sesiDiputus()` dengan ketiga jenis kasus |
+| ID Algoritma yang tercakup | Algo-C17-01 (autentikasi: C17-UT01 s.d. C17-UT06), Algo-C17-02 (hak akses peran: C17-UT07 s.d. C17-UT10, C17-UT17), Algo-C31-01 bagian penutupan sesi (C17-UT11 s.d. C17-UT13) |
+| Coverage (wajib ≥ 70%) | 85,7% baris (48 dari 56) dan 92,3% cabang (24 dari 26), diukur setelah perbaikan Tabel 3.5 dengan JaCoCo 0.8.14 dari seluruh `mvn test`. Baris yang tidak tercakup adalah penanganan `SQLException` saat basis data tidak dapat dihubungi. Bukti pada Subbab 4.6 |
 
 ### 4.2.3 Kelas PasienManager
 
@@ -635,7 +669,60 @@ Tabel 4.2.8b. Ringkasan Cakupan Kelas C23
 **Nama Kelas:** KonfigurasiManager  
 **Tingkat:** Mendalam
 
-*[Diisi Axeleon: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/control/KonfigurasiManagerTest.java`. Test memakai sesi Petugas Administrasi (pengguna 1) kecuali bila disebut lain. Akun `uji.konfigurasi`, poli "Poli Uji...", obat "Obat Uji", catatan pencadangan, arsip pencadangan, dan audit yang dibuat dihapus setelah setiap test, dan ambang hipertensi dikembalikan ke 140. Test pencadangan memakai `pg_dump` dan `pg_restore` asli sesuai `PG_DUMP`, `PG_RESTORE`, dan `LOKASI_MEDIA_CADANGAN` pada `.env`.
+
+Tabel 4.2.14. Hasil Pengujian Unit Kelas C29
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C29-UT01 | `muatDataMaster(): DataMaster` | Normal | Panggil tanpa masukan | Jumlah akun, poli, obat, dan ambang sama dengan isi tabelnya | Keempat jumlah sama dengan `count(*)` tabel `pengguna`, `poli`, `obat`, dan `ambang_risiko` | Pass |
+| C29-UT02 | `muatDataMaster(): DataMaster` | Batas | Akun seed `perawat.nonaktif` | Akun nonaktif tetap dimuat agar terlihat admin | Dimuat dengan `aktif()` false | Pass |
+| C29-UT03 | `muatDataMaster(): DataMaster` | Negatif | Hak baca tabel `pengguna` untuk `sehati_app` dicabut sementara, lalu dipulihkan | `IllegalStateException` "Basis data tidak dapat dihubungi". Setelah dipulihkan, data kembali termuat | Pengecualian dan pesan sesuai, lalu daftar akun termuat lagi | Pass |
+| C29-UT04 | `simpanAkun(p: PenggunaEntity, sandi: String): void` | Normal | Akun baru `uji.konfigurasi`, Perawat, sandi `rahasia123` | ID terisi, status "aktif", hash bcrypt `$2a$12$` yang cocok dengan sandi, audit "Akun baru uji.konfigurasi (Perawat)" | Seluruhnya sesuai | Pass |
+| C29-UT05 | `simpanAkun(p: PenggunaEntity, sandi: String): void` | Batas | Sandi tepat 8 karakter `12345678` | Diterima | Satu akun tersimpan | Pass |
+| C29-UT06 | `simpanAkun(p: PenggunaEntity, sandi: String): void` | Batas | Akun yang sudah ada disunting menjadi Dokter dengan sandi kosong | Peran berubah, sandi lama tetap berlaku, audit "Perubahan akun uji.konfigurasi" | Peran "Dokter", `rahasia123` masih cocok, audit ada | Pass |
+| C29-UT07 | `simpanAkun(p: PenggunaEntity, sandi: String): void` | Negatif | Akun baru dengan nama yang sudah dipakai (UC12 alternatif 2) | `IllegalArgumentException` "Nama pengguna sudah dipakai", tidak ada akun maupun audit kedua | Pengecualian dan pesan sesuai, tetap satu akun dan satu audit | Pass |
+| C29-UT08 | `simpanAkun(p: PenggunaEntity, sandi: String): void` | Negatif | Nama " " dan peran "Satpam" (tanpa basis data) | `IllegalArgumentException` "Nama pengguna wajib diisi" dan "Peran tidak dikenal" | Kedua pesan sesuai | Pass |
+| C29-UT09 | `simpanAkun(p: PenggunaEntity, sandi: String): void` | Negatif | Sandi 7 karakter, "" dan `null` untuk akun baru, serta "pendek" untuk akun lama (tanpa basis data) | `IllegalArgumentException` "Kata sandi minimal 8 karakter" untuk keempatnya | Keempatnya ditolak | Pass |
+| C29-UT10 | `simpanAkun(p: PenggunaEntity, sandi: String): void` | Negatif | Tanpa sesi, lalu sesi berperan Perawat (tanpa basis data) | `IllegalStateException` "Sesi sudah berakhir, silakan masuk kembali" dan "Peran Perawat tidak berwenang menjalankan tindakan ini" | Kedua pesan sesuai | Pass |
+| C29-UT11 | `simpanAkun(p: PenggunaEntity, sandi: String): void` | Negatif | Admin uji yang sedang masuk mengubah perannya sendiri menjadi Perawat | `IllegalArgumentException` "Peran akun yang sedang dipakai tidak dapat diubah", peran tetap. Mengganti sandi sendiri dengan peran sama tetap boleh | Pengecualian dan pesan sesuai, peran tetap, ganti sandi berhasil | Pass |
+| C29-UT12 | `simpanAkun(p: PenggunaEntity, sandi: String): void` | Negatif | Menyunting akun ID 999999 | `IllegalArgumentException` "Akun tidak ditemukan" | Pengecualian dan pesan sesuai | Pass |
+| C29-UT13 | `nonaktifkanAkun(idPengguna: int): void` | Normal | Akun uji dengan satu sesi aktif (UC12 alternatif 3) | Status "nonaktif", sesi aktif ditutup, audit "Akun uji.konfigurasi dinonaktifkan" | Seluruhnya sesuai | Pass |
+| C29-UT14 | `nonaktifkanAkun(idPengguna: int): void` | Batas | Akun yang sama dinonaktifkan dua kali | Panggilan kedua ditolak `IllegalStateException` "Akun sudah nonaktif" tanpa audit kedua | Ditolak, tetap satu audit | Pass |
+| C29-UT15 | `nonaktifkanAkun(idPengguna: int): void` | Negatif | Admin (pengguna 7) menonaktifkan akunnya sendiri (tanpa basis data) | `IllegalStateException` "Akun yang sedang dipakai tidak dapat dinonaktifkan" | Pengecualian dan pesan sesuai | Pass |
+| C29-UT16 | `nonaktifkanAkun(idPengguna: int): void` | Negatif | ID 999999 | `IllegalArgumentException` "Akun tidak ditemukan" | Pengecualian dan pesan sesuai | Pass |
+| C29-UT17 | `simpanDataMaster(a: AmbangRisikoEntity): void` | Normal | Ambang hipertensi diubah menjadi 150 | Nilai tersimpan dan audit "Ambang hipertensi diubah menjadi 150.0" | Nilai 150 dan audit ada | Pass |
+| C29-UT18 | `simpanDataMaster(a: AmbangRisikoEntity): void` | Batas | Nilai 0,1 (positif terkecil yang diuji) | Diterima | Tersimpan 0,1 | Pass |
+| C29-UT19 | `simpanDataMaster(a: AmbangRisikoEntity): void` | Negatif | Nilai 0, -5, dan NaN (tanpa basis data) | `IllegalArgumentException` "Nilai ambang harus lebih dari nol" | Ketiganya ditolak | Pass |
+| C29-UT20 | `simpanPoli(idPoli: int, namaPoli: String): void` | Normal | Poli baru "  Poli Uji  " | Tersimpan sebagai "Poli Uji" dengan audit "Poli baru Poli Uji" | Sesuai | Pass |
+| C29-UT21 | `simpanPoli(idPoli: int, namaPoli: String): void` | Batas | Poli uji diberi `urutan_terakhir` 7, lalu diganti nama menjadi "Poli Uji KIA" | Nomor antrean terakhir tidak tertimpa, audit penggantian nama | `urutan_terakhir` tetap 7, audit ada | Pass |
+| C29-UT22 | `simpanPoli(idPoli: int, namaPoli: String): void` | Negatif | Nama "  " dan `null` (tanpa basis data) | `IllegalArgumentException` "Nama poli wajib diisi" | Keduanya ditolak | Pass |
+| C29-UT23 | `simpanPoli(idPoli: int, namaPoli: String): void` | Negatif | Nama yang sama dua kali, lalu poli ID 999999 | Nama ganda ditolak constraint UNIQUE, poli tidak ada ditolak "Poli tidak ditemukan". Hanya satu poli dan satu audit | Keduanya ditolak, satu poli, satu audit | Pass |
+| C29-UT24 | `tambahObat(o: ObatEntity): void` | Normal | "Obat Uji", "tablet 5 mg", stok 99, minimum 20 | Tersimpan dengan stok 0 (stok hanya lewat UC08) dan minimum 20, audit "Obat baru Obat Uji (tablet 5 mg)" | Stok 0, minimum 20, audit ada | Pass |
+| C29-UT25 | `tambahObat(o: ObatEntity): void` | Batas | Minimum 0, nama dan sediaan berspasi tepi | Diterima, spasi tepi dibuang | Tersimpan "Obat Uji", "sirup 60 ml", minimum 0 | Pass |
+| C29-UT26 | `tambahObat(o: ObatEntity): void` | Negatif | Sediaan " ", nama `null`, dan minimum -1 (tanpa basis data) | `IllegalArgumentException` "Nama obat dan sediaan wajib diisi" dan "Stok minimum tidak boleh negatif" | Ketiganya ditolak dengan pesan sesuai | Pass |
+| C29-UT27 | `tambahObat(o: ObatEntity): void` | Negatif | "obat uji" "Tablet 5 mg" setelah "Obat Uji" "tablet 5 mg" ada | Ditolak tanpa membedakan huruf: "Obat obat uji Tablet 5 mg sudah terdaftar" | Ditolak dengan pesan sesuai, tetap satu obat | Pass |
+| C29-UT28 | `muatStatusPencadangan(): PencadanganEntity` | Normal | Catatan "berhasil" terbaru | Catatan itu dikembalikan | ID sama, `berhasil()` true | Pass |
+| C29-UT29 | `muatStatusPencadangan(): PencadanganEntity` | Batas | Catatan "berhasil" lalu "gagal" yang lebih baru | Catatan gagal dikembalikan agar peringatan tampil (UC12 alternatif 4) | ID catatan gagal, `berhasil()` false | Pass |
+| C29-UT30 | `muatStatusPencadangan(): PencadanganEntity` | Negatif | Tabel `pencadangan` dikosongkan sementara, lalu dipulihkan | `null` | `null` | Pass |
+| C29-UT31 | `jalankanPencadangan(): PencadanganEntity` | Normal | `pg_dump` asli ke `LOKASI_MEDIA_CADANGAN` | Status "berhasil", arsip ada dan berukuran lebih dari 0, catatan tersimpan | Sesuai | Pass |
+| C29-UT32 | `jalankanPencadangan(): PencadanganEntity` | Batas | Koneksi lain sedang memegang transaksi terbuka yang mengubah ambang hipertensi | Pencadangan tidak menunggu kunci baris dan tetap berhasil | "berhasil" dalam kurang dari 1 detik | Pass |
+| C29-UT33 | `jalankanPencadangan(): PencadanganEntity` | Negatif | Hak baca tabel `pasien` untuk `sehati_app` dicabut sementara sehingga `pg_dump` gagal | Status "gagal", arsip setengah jadi dihapus, catatan "gagal" tetap disimpan | Sesuai | Pass |
+| C29-UT34 | `jedaSampai(jam: int, sekarang: LocalDateTime): long` | Normal | Jam 21, sekarang 20.30 | 30 menit | 30 | Pass |
+| C29-UT35 | `jedaSampai(jam: int, sekarang: LocalDateTime): long` | Batas | Jam 20 tepat pukul 20.00, jam 20 pukul 20.30, dan jam 0 pukul 20.30 | Jam yang sudah tiba atau lewat dijadwalkan besok: 1440, 1410, dan 210 menit | 1440, 1410, 210 | Pass |
+| C29-UT36 | `jedaSampai(jam: int, sekarang: LocalDateTime): long` | Negatif | Jam 24 dan -1 | `DateTimeException` | Keduanya ditolak | Pass |
+| C29-UT37 | `jadwalkanPencadangan(): void` | Negatif | `PENCADANGAN_JAM` kosong pada `.env` | Tidak ada penjadwal (thread "pencadangan") yang dibuat | Tidak ada thread "pencadangan" | Pass |
+
+`simpanPoli()`, `tambahObat()`, dan `jadwalkanPencadangan()` adalah operasi public tambahan implementasi (Tabel B.1 nomor 27 dan 28). `jedaSampai()` bervisibilitas package-private dan diuji langsung karena menentukan waktu pencadangan terjadwal. Penjadwal yang benar-benar berjalan diuji lewat UC12-TC05.
+
+Tabel 4.2.14b. Ringkasan Cakupan Kelas C29
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `muatDataMaster()`, `simpanAkun()`, `nonaktifkanAkun()`, `simpanDataMaster()`, `muatStatusPencadangan()`, `jalankanPencadangan()` |
+| Operasi yang diuji | Keenam operasi public DPPL (6 dari 6) dengan kasus normal, batas, dan negatif, ditambah `simpanPoli()`, `tambahObat()`, `jedaSampai()`, dan `jadwalkanPencadangan()` |
+| ID Algoritma yang tercakup | Algo-C29-01 (penyimpanan akun: C29-UT04 s.d. C29-UT12), Algo-C29-02 (penonaktifan akun: C29-UT13 s.d. C29-UT16), Algo-C29-03 (pencadangan: C29-UT28 s.d. C29-UT37) |
+| Coverage (wajib ≥ 70%) | 81,1% baris (129 dari 159) dan 87,5% cabang (63 dari 72), JaCoCo 0.8.14 dari seluruh `mvn test`. Baris yang tidak tercakup adalah isi penjadwal harian (`jadwalkanPencadangan()` saat `PENCADANGAN_JAM` diisi, diuji lewat UC12-TC05) dan penanganan `SQLException` saat basis data tidak dapat dihubungi. Bukti pada Subbab 4.6 |
 
 ### 4.2.15 Kelas PenggunaEntity
 
@@ -643,7 +730,32 @@ Tabel 4.2.8b. Ringkasan Cakupan Kelas C23
 **Nama Kelas:** PenggunaEntity  
 **Tingkat:** Mendalam
 
-*[Diisi Axeleon: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/entity/PenggunaEntityTest.java`, tanpa basis data. Hash uji dibuat dari sandi `rahasia123` dengan faktor biaya 4 agar test cepat (`checkpw()` membaca faktor dari hash).
+
+Tabel 4.2.15. Hasil Pengujian Unit Kelas C30
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C30-UT01 | `cocokkanSandi(sandi: String): boolean` | Normal | `rahasia123` | `true` | `true` | Pass |
+| C30-UT02 | `cocokkanSandi(sandi: String): boolean` | Batas | `Rahasia123` (satu huruf kapital), `rahasia12` (kurang satu), `rahasia1234` (lebih satu) | `false` untuk ketiganya | `false` | Pass |
+| C30-UT03 | `cocokkanSandi(sandi: String): boolean` | Negatif | "salah", "", dan `null` | `false` | `false` | Pass |
+| C30-UT04 | `cocokkanSandi(sandi: String): boolean` | Negatif | Hash kosong dan `null` | `false` | `false` | Pass |
+| C30-UT05 | `cocokkanSandi(sandi: String): boolean` | Negatif | Hash rusak: "x", `$2a$xx$bukanhash`, dan awalan `$9a$` | `false` tanpa pengecualian | `false` | Pass |
+| C30-UT06 | `aktif(): boolean` | Normal | Status "aktif" | `true` | `true` | Pass |
+| C30-UT07 | `aktif(): boolean` | Batas | Status "Aktif" (huruf kapital) dan `null` | `false` | `false` | Pass |
+| C30-UT08 | `aktif(): boolean` | Negatif | Status "nonaktif" | `false` | `false` | Pass |
+| C30-UT09 | `nonaktifkan(): void` | Normal | Akun aktif | Status menjadi "nonaktif" | "nonaktif" | Pass |
+| C30-UT10 | `nonaktifkan(): void` | Batas | Akun baru dari konstruktor `PenggunaEntity(nama, hash, peran)` (ID 0, status "aktif") | Dapat dinonaktifkan | ID 0, aktif, lalu "nonaktif" | Pass |
+| C30-UT11 | `nonaktifkan(): void` | Negatif | Akun yang sudah nonaktif | `IllegalStateException` "Akun sudah nonaktif", status tetap | Pengecualian dan pesan sesuai | Pass |
+
+Tabel 4.2.15b. Ringkasan Cakupan Kelas C30
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `cocokkanSandi()`, `aktif()`, `nonaktifkan()` |
+| Operasi yang diuji | Ketiga operasi (3 dari 3) dengan kasus normal, batas, dan negatif |
+| ID Algoritma yang tercakup | Algo-C30-01 (C30-UT01 s.d. C30-UT11) |
+| Coverage (wajib ≥ 70%) | 83,3% baris (30 dari 36) dan 100% cabang (10 dari 10), JaCoCo 0.8.14 dari seluruh `mvn test`. Baris yang tidak tercakup adalah konstruktor kosong dan *setter* yang tidak dipakai aplikasi. Bukti pada Subbab 4.6 |
 
 ### 4.2.16 Kelas SesiEntity
 
@@ -651,7 +763,30 @@ Tabel 4.2.8b. Ringkasan Cakupan Kelas C23
 **Nama Kelas:** SesiEntity  
 **Tingkat:** Mendalam
 
-*[Diisi Axeleon: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/entity/SesiEntityTest.java`, tanpa basis data. Waktu mulai sesi uji diatur mundur dari waktu saat test berjalan.
+
+Tabel 4.2.16. Hasil Pengujian Unit Kelas C31
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C31-UT01 | `habisWaktu(menit: int): boolean` | Normal | Sesi mulai 30 menit lalu dan baru mulai, batas 15 | `true` dan `false` | `true` dan `false` | Pass |
+| C31-UT02 | `habisWaktu(menit: int): boolean` | Batas | Mulai tepat 15 menit lalu, 14 menit 59 detik lalu (batas 15), dan 1 menit lalu (batas 1) | `true`, `false`, `true` | `true`, `false`, `true` | Pass |
+| C31-UT03 | `habisWaktu(menit: int): boolean` | Negatif | Batas 0 dan -1 | `IllegalArgumentException` "Batas waktu harus lebih dari nol" | Keduanya ditolak dengan pesan sesuai | Pass |
+| C31-UT04 | `tutup(): void` | Normal | Sesi aktif | `statusAktif` false | false | Pass |
+| C31-UT05 | `tutup(): void` | Batas | `tutup()` dua kali | Tetap false tanpa pengecualian | false | Pass |
+| C31-UT06 | `tutup(): void` | Negatif | Sesi kosong dari konstruktor tanpa argumen | Tidak ada pengecualian, status false | Sesuai | Pass |
+| C31-UT07 | Atribut (*setter* dan *getter*) | Normal | Sesi kosong diisi lewat *setter*, seperti saat dibaca dari basis data | Seluruh nilai terbaca kembali | Sesuai | Pass |
+
+C31-UT07 ditambahkan karena pada pengukuran 18 November 2026 *coverage* baris C31 baru 60,0%: *setter* dan konstruktor kosong belum tersentuh test.
+
+Tabel 4.2.16b. Ringkasan Cakupan Kelas C31
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `habisWaktu()`, `tutup()` |
+| Operasi yang diuji | Kedua operasi (2 dari 2) dengan kasus normal, batas, dan negatif |
+| ID Algoritma yang tercakup | Algo-C31-01 (C31-UT01 s.d. C31-UT03; pemanggilannya oleh pewaktu diam diuji lewat KNF04-TC01) |
+| Coverage (wajib ≥ 70%) | 100% baris (25 dari 25) dan 100% cabang (4 dari 4), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
 ### 4.2.17 Kelas AuditEntity
 
@@ -659,7 +794,15 @@ Tabel 4.2.8b. Ringkasan Cakupan Kelas C23
 **Nama Kelas:** AuditEntity  
 **Tingkat:** Sedang
 
-*[Diisi Axeleon: tabel hasil pengujian unit, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/entity/AuditEntityTest.java`, tanpa basis data. Penyimpanan audit ke basis data diuji pada C56-UT07 dan C56-UT08.
+
+Tabel 4.2.17. Hasil Pengujian Unit Kelas C32
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C32-UT01 | `buat(idPengguna: int, deskripsi: String)$: AuditEntity` | Normal | Pengguna 7, "Masuk ke aplikasi" | `idAudit` 0, pelaku 7, deskripsi sama, waktu di antara sebelum dan sesudah pemanggilan | Seluruhnya sesuai | Pass |
+| C32-UT02 | `buat(idPengguna: int, deskripsi: String)$: AuditEntity` | Batas | Pelaku 0 (nama tidak dikenal, Algo-C17-01) dan deskripsi satu karakter | Diterima | Catatan terbentuk | Pass |
+| C32-UT03 | `buat(idPengguna: int, deskripsi: String)$: AuditEntity` | Negatif | Deskripsi `null`, "", dan "  " | `IllegalArgumentException` "Deskripsi audit wajib diisi" | Ketiganya ditolak dengan pesan sesuai | Pass |
 
 ### 4.2.18 Kelas PasienEntity
 
@@ -906,7 +1049,24 @@ Tabel 4.2.31. Hasil Pengujian Unit Kelas C47
 **Nama Kelas:** DataAkunBoundary  
 **Tingkat:** Sedang
 
-*[Diisi Axeleon: tabel hasil pengujian unit, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/dataaccess/DataAkunBoundaryTest.java`. Setiap test berjalan dalam transaksi yang di-*rollback*. Pemakaiannya oleh `AutentikasiManager` dan `KonfigurasiManager` juga diuji lewat INT-TC01 sampai INT-TC03.
+
+Tabel 4.2.38. Hasil Pengujian Unit Kelas C56
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C56-UT01 | `simpanPengguna(p: PenggunaEntity): void`, `cariPengguna(nama: String): PenggunaEntity`, `ambilPengguna(idPengguna: int): PenggunaEntity` (Q-C56-01, 02, 04, 05) | Normal | Akun baru `uji_akun` disimpan, lalu peran diubah menjadi Dokter dan dinonaktifkan | ID terisi, nama terpakai, akun terbaca dengan peran Dokter dan nonaktif | Sesuai | Pass |
+| C56-UT02 | `cariPengguna()`, `ambilPengguna()`, `namaPenggunaDipakai(nama: String): boolean` (Q-C56-01 s.d. 03) | Negatif | Nama acak, ID -1, dan "ADMIN" (huruf kapital) | `null`, `null`, `false`, dan `null` (nama dicocokkan persis) | Sesuai | Pass |
+| C56-UT03 | `simpanPengguna(p: PenggunaEntity): void` | Negatif | Nama `uji_ganda` dua kali, lalu peran "Satpam" | `IllegalArgumentException` "Nama pengguna sudah dipakai" (SQLState 23505) dan "Peran atau status akun tidak valid" (23514) | Kedua pesan sesuai | Pass |
+| C56-UT04 | `simpanSesi(s: SesiEntity): void` (Q-C56-06) | Normal | Sesi baru disimpan, lalu ditutup dan disimpan lagi | `status_aktif` true lalu false pada baris yang sama | Sesuai | Pass |
+| C56-UT05 | `tutupSesiAktif(idPengguna: int): void` (Q-C56-07) | Normal | Dua sesi aktif satu akun | Keduanya tidak aktif | Sesuai | Pass |
+| C56-UT06 | `sesiMasihAktif(idSesi: UUID): boolean` (Q-C56-10) | Normal dan negatif | Sesi aktif, sesi yang sudah ditutup, dan UUID acak | `true`, `false`, `false` | Sesuai | Pass |
+| C56-UT07 | `simpanAudit(a: AuditEntity): void` (Q-C56-08) | Normal | Audit berpelaku 0 dengan deskripsi unik | Baris audit bertambah dengan pelaku 0 | Sesuai | Pass |
+| C56-UT08 | Hak akses tabel `audit` | Negatif | `SET LOCAL ROLE sehati_app`, lalu `UPDATE` dan `DELETE` pada `audit` (KNF05) | Keduanya ditolak SQLState 42501 (*insufficient_privilege*) | Keduanya 42501 | Pass |
+| C56-UT09 | `semuaPengguna(): List<PenggunaEntity>` (Q-C56-09) | Normal | Akun `aaa_uji_urut` ditambahkan | Seluruh akun termasuk yang nonaktif, terurut nama, `aaa_uji_urut` pertama | Sesuai | Pass |
+| C56-UT10 | Seluruh operasi | Negatif | Koneksi ditutup sebelum sembilan operasi dipanggil | Setiap operasi melempar `IllegalStateException` "Basis data tidak dapat dihubungi" | Kesembilannya sesuai | Pass |
+
+*Coverage* (bukan syarat kelas Sedang): 100% baris (93 dari 93) dan 93,8% cabang (15 dari 16).
 
 ### 4.2.39 Kelas DataPasienBoundary
 
@@ -991,7 +1151,37 @@ Tabel 4.2.41. Hasil Pengujian Unit Kelas C59 (Bagian Pemeriksaan)
 **Nama Kelas:** DataPencadanganBoundary  
 **Tingkat:** Mendalam
 
-*[Diisi Axeleon: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/dataaccess/DataPencadanganBoundaryTest.java`. Pada C64-UT01 sampai C64-UT12, `pg_dump` dan `pg_restore` diganti skrip *shell* palsu di folder sementara agar setiap cabang (berhasil, kode keluar bukan nol, arsip tidak terbentuk, isi arsip tidak lengkap) dapat dipicu. `pg_dump` dan `pg_restore` asli diuji pada C29-UT31 sampai C29-UT33 serta INT-TC05 dan INT-TC06. C64-UT13 sampai C64-UT16 memakai basis data uji dalam transaksi yang di-*rollback*.
+
+Tabel 4.2.46. Hasil Pengujian Unit Kelas C64
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C64-UT01 | `jalankanPgDump(lokasi: String): PencadanganEntity` | Normal | Media ada, `pg_dump` palsu menulis 5 bait, `lokasi` `null` | Status "berhasil", ukuran 5, lokasi `<media>/sehati_yyyyMMdd-HHmmss.dump`, berkas ada | Sesuai | Pass |
+| C64-UT02 | `jalankanPgDump(lokasi: String): PencadanganEntity` | Batas | `lokasi` diisi folder lain dari `LOKASI_MEDIA_CADANGAN` | Arsip ditulis ke folder argumen | Lokasi berawalan folder argumen | Pass |
+| C64-UT03 | `jalankanPgDump(lokasi: String): PencadanganEntity` | Negatif | Folder media tidak ada (HDD belum dicolok, UC12 alternatif 4) | "gagal", ukuran 0, `pg_dump` tidak dijalankan | Sesuai, berkas penanda tidak dibuat | Pass |
+| C64-UT04 | `jalankanPgDump(lokasi: String): PencadanganEntity` | Negatif | `pg_dump` menulis arsip lalu keluar dengan kode 1 | "gagal" dan arsip setengah jadi dihapus | Sesuai | Pass |
+| C64-UT05 | `jalankanPgDump(lokasi: String): PencadanganEntity` | Negatif | `LOKASI_MEDIA_CADANGAN` kosong dan `lokasi` `null` | "gagal" dengan lokasi kosong | Sesuai | Pass |
+| C64-UT06 | `jalankanPgDump(lokasi: String): PencadanganEntity` | Negatif | `PG_DUMP` menunjuk berkas yang tidak ada | "gagal" tanpa pengecualian | Sesuai | Pass |
+| C64-UT07 | `jalankanPgDump(lokasi: String): PencadanganEntity` | Batas | `pg_dump` keluar dengan kode 0 tetapi tidak membuat arsip | "gagal", ukuran 0 | Sesuai | Pass |
+| C64-UT08 | `verifikasiArsip(p: PencadanganEntity): boolean` | Normal | `pg_restore --list` memuat "TABLE DATA public pasien" dan pembacaan penuh berhasil | `true` | `true` | Pass |
+| C64-UT09 | `verifikasiArsip(p: PencadanganEntity): boolean` | Negatif | Daftar isi tanpa data pasien | `false` | `false` | Pass |
+| C64-UT10 | `verifikasiArsip(p: PencadanganEntity): boolean` | Negatif | Daftar isi lengkap tetapi pembacaan penuh gagal (arsip terpotong) | `false` | `false` | Pass |
+| C64-UT11 | `verifikasiArsip(p: PencadanganEntity): boolean` | Batas | Arsip 0 bait dan arsip yang tidak ada | `false` tanpa menjalankan `pg_restore` | `false` | Pass |
+| C64-UT12 | `verifikasiArsip(p: PencadanganEntity): boolean` | Negatif | `pg_restore --list` keluar dengan kode 1 | `false` | `false` | Pass |
+| C64-UT13 | `simpanCatatan(p: PencadanganEntity): void`, `ambilTerakhir(): PencadanganEntity` | Normal | Catatan "gagal verifikasi" bertanggal 50 tahun ke depan | ID terisi, catatan itu menjadi yang terakhir dengan lokasi dan ukuran yang sama | Sesuai | Pass |
+| C64-UT14 | `ambilTerakhir(): PencadanganEntity` | Batas | Tabel `pencadangan` dikosongkan dalam transaksi | `null` | `null` | Pass |
+| C64-UT15 | `simpanCatatan()`, `ambilTerakhir()` | Negatif | Koneksi ditutup | `IllegalStateException` "Basis data tidak dapat dihubungi" | Sesuai | Pass |
+| C64-UT16 | `simpanCatatan(p: PencadanganEntity): void` | Negatif | Status "selesai" (di luar CHECK tabel) | `IllegalStateException` | Ditolak | Pass |
+
+Tabel 4.2.46b. Ringkasan Cakupan Kelas C64
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `ambilTerakhir()`, `jalankanPgDump()`, `verifikasiArsip()`, `simpanCatatan()` |
+| Operasi yang diuji | Keempat operasi (4 dari 4). `jalankanPgDump()` dan `verifikasiArsip()` dengan kasus normal, batas, dan negatif. `ambilTerakhir()` dan `simpanCatatan()` dengan kasus normal, batas, dan negatif melalui C64-UT13 sampai C64-UT16 |
+| ID Algoritma yang tercakup | Algo-C64-01 (C64-UT01 s.d. C64-UT07), Algo-C64-02 (C64-UT08 s.d. C64-UT12), Q-C64-01 dan Q-C64-02 (C64-UT13 s.d. C64-UT16) |
+| Coverage (wajib ≥ 70%) | 85,7% baris (84 dari 98) dan 85,7% cabang (36 dari 42), JaCoCo 0.8.14 dari seluruh `mvn test`. Pada pengukuran 18 November 2026 cabangnya baru 69,0%, lalu C64-UT02, C64-UT05 sampai C64-UT07, C64-UT12, C64-UT14 sampai C64-UT16 ditambahkan. Baris yang tidak tercakup adalah batas waktu 30 menit, interupsi *thread*, dan galat baca ukuran arsip. Bukti pada Subbab 4.6 |
 
 <br>
 
@@ -1028,12 +1218,12 @@ Tabel 4.3.2. Hasil Pengujian Integrasi
 
 | ID Pengujian | ID Antarmuka | Skenario | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| INT-TC01 | IK-01 | *[Diisi Axeleon]* | | | | |
-| INT-TC02 | IK-01 | *[Diisi Axeleon]* | | | | |
-| INT-TC03 | IK-02 | *[Diisi Axeleon]* | | | | |
-| INT-TC04 | IK-02 | *[Diisi Axeleon]* | | | | |
-| INT-TC05 | IK-03 | *[Diisi Axeleon]* | | | | |
-| INT-TC06 | IK-03 | *[Diisi Axeleon]* | | | | |
+| INT-TC01 | IK-01 | Normal: masuk dan keluar dengan akun seed | `AutentikasiManager.autentikasi("admin", "sehati123")`, lalu `tutupSesi(false)`. Baris `sesi` dan `audit` dibaca ulang lewat koneksi terpisah | Baris `sesi` berpemilik pengguna 1 dan aktif, `SesiAktif` berperan Petugas Administrasi, audit pertama "Masuk ke aplikasi". Setelah keluar, sesi yang sama tidak aktif dan audit terakhir "Keluar dari aplikasi" | Sesi `1\|true`, lalu `false`. Audit `1\|Masuk ke aplikasi` dan `1\|Keluar dari aplikasi` | Pass |
+| INT-TC02 | IK-01 | Gagal: sandi salah dan akun nonaktif | `autentikasi("admin", "sandiSalah")`, lalu `autentikasi("perawat.nonaktif", "sehati123")` | `null` untuk yang pertama, `IllegalStateException` "Akun nonaktif, hubungi Petugas Administrasi" untuk yang kedua. Jumlah baris `sesi` tidak bertambah dan audit "Masuk gagal, percobaan ke-1" berpelaku pengguna 1 tersimpan | `null` dan pengecualian dengan pesan sesuai. Jumlah `sesi` tetap, audit `1\|Masuk gagal, percobaan ke-1` | Pass |
+| INT-TC03 | IK-02 | Normal: data master lintas empat `DataBoundary` | Sesi admin. `muatDataMaster()`, lalu `simpanAkun(uji.integrasi, Dokter, "integrasi123")`, `simpanPoli(0, "Poli Uji Integrasi")`, `tambahObat("Obat Uji Integrasi", "tablet 10 mg", minimum 15)`, dan ambang obesitas menjadi 31 | Nama akun, poli, obat, dan jenis ambang yang dimuat sama dengan isi tabel `pengguna`, `poli`, `obat`, dan `ambang_risiko`. Keempat perubahan sampai ke tabelnya masing-masing, masing-masing dengan satu audit berpelaku admin | Keempat himpunan nama sama. Hash akun cocok dengan sandi, `Dokter\|aktif`, poli ada, obat `0\|15`, obesitas 31, dan 4 audit baru berpelaku 1 | Pass |
+| INT-TC04 | IK-02 | Gagal: penolakan dari `DataBoundary` membatalkan transaksi | Sesi admin. `simpanDataMaster(ambang ID 9999)`, lalu `simpanPoli(0, "Poli Umum")` (nama seed) | `DataKlinisBoundary` menolak "Ambang risiko tidak ditemukan: 9999" dan constraint UNIQUE menolak nama poli. Kedua transaksi di-*rollback*: jumlah poli tetap dan tidak ada audit baru | Kedua `IllegalArgumentException` dilempar, jumlah poli tetap, 0 audit baru | Pass |
+| INT-TC05 | IK-03 | Normal: `pg_dump` ke media dan verifikasi `pg_restore` | `KonfigurasiManager.jalankanPencadangan()` dengan `pg_dump` 18.6 ke `LOKASI_MEDIA_CADANGAN`, lalu `pg_restore --list` dijalankan terpisah pada arsipnya | Status "berhasil", arsip berada di folder media dengan ukuran sama dengan catatan, daftar isi memuat data tabel `pasien` dan `audit`, catatan tersimpan dan dibaca `muatStatusPencadangan()` | Seluruhnya sesuai | Pass |
+| INT-TC06 | IK-03 | Gagal: `pg_dump` ditolak basis data | Hak baca `pasien` untuk `sehati_app` dicabut sementara, lalu `jalankanPencadangan()` | Status "gagal" dengan ukuran 0, jumlah arsip `sehati_*.dump` di folder media tidak bertambah, dan catatan gagal itulah yang dibaca dasbor (`muatStatusPencadangan()`) | Sesuai, jumlah arsip tetap dan `berhasil()` false pada catatan terakhir | Pass |
 | INT-TC07 | IK-04 | *[Diisi Steven]* | | | | |
 | INT-TC08 | IK-04 | *[Diisi Steven]* | | | | |
 | INT-TC09 | IK-05 | *[Diisi Steven]* | | | | |
@@ -1076,7 +1266,16 @@ Pengujian *use case* dilakukan pada seluruh skenario normal dan alternatif Subba
 **ID Use Case:** UC01  
 **Nama Use Case:** Masuk ke Aplikasi
 
-*[Diisi Axeleon: UC01-TC01 sampai UC01-TC04 untuk skenario normal dan alternatif 1 sampai 3.]*
+UC01 dan UC12 diuji pada 19 November 2026 di aplikasi yang dijalankan dari kode setelah perbaikan Tabel 3.5. Pengujian memakai skrip yang membuka `Navigasi` dan layar FXML asli, mengisi kolom dan menekan tombol lewat kontrol JavaFX, lalu menyimpan *snapshot* jendela 1280 × 800 piksel. Isi basis data setelah pengujian diperiksa lewat `psql`.
+
+Tabel 4.4.1. Hasil Pengujian Use Case UC01
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC01-TC01 | KF16 | Normal | 1. Jalankan aplikasi.<br>2. Isi nama pengguna dan kata sandi, tekan "Masuk".<br>3. Tekan "Keluar", lalu masuk sebagai perawat. | `admin` / `sehati123`, lalu `perawat` / `sehati123` | Layar autentikasi berisi kolom nama pengguna dan kata sandi. Setelah masuk, sesi dibuka, peristiwa masuk tercatat di jejak audit, dan dasbor hanya memuat menu peran akun tersebut | Layar "Masuk" tampil dengan kolom "Nama pengguna" dan "Kata sandi". Dasbor admin menampilkan "Selamat datang, admin", "Masuk sebagai Petugas Administrasi", informasi pencadangan terakhir, dan empat kartu: Pendaftaran Pasien, Laporan Periodik, Sinkronisasi SATUSEHAT, serta Konfigurasi dan Basis Data. Dasbor perawat hanya memuat Antrean Skrining, Rekam Medis Pasien, dan Daftar Pantau Pasien. Basis data: baris `sesi` pengguna 1 dan 2, audit 379 dan 381 "Masuk ke aplikasi" | Pass |
+| UC01-TC02 | KF16 | Alternatif 1: kredensial tidak cocok | 1. Isi kata sandi yang salah, tekan "Masuk".<br>2. Isi ulang kredensial yang benar. | `admin` / `salah123`, lalu `admin` / `sehati123` | Pesan "Nama pengguna atau kata sandi salah", kolom kata sandi dikosongkan, percobaan gagal tercatat di jejak audit, lalu kembali ke langkah 2 skenario normal | Pesan merah "Nama pengguna atau kata sandi salah." tampil di bawah kolom kata sandi dan kolom kata sandi kosong (isinya terbaca ""). Basis data: audit 383 "Masuk gagal, percobaan ke-1" berpelaku pengguna 1 tanpa baris `sesi` baru. Kredensial benar membuka dasbor admin (audit 384) | Pass |
+| UC01-TC03 | KF16 | Alternatif 2: akun nonaktif | Masuk dengan akun seed yang berstatus nonaktif | `perawat.nonaktif` / `sehati123` | Permintaan masuk ditolak, pengguna diberi tahu akunnya nonaktif dan diminta menghubungi Petugas Administrasi | Pesan merah "Akun nonaktif, hubungi Petugas Administrasi" tampil, layar tetap di "Masuk", kolom kata sandi kosong, dan tidak ada baris `sesi` untuk akun itu | Pass |
+| UC01-TC04 | KF16 | Alternatif 3: membuka modul di luar hak akses | 1. Masuk sebagai perawat dan periksa menu dasbor.<br>2. Kirim perintah buka layar Formulir Pemeriksaan (milik dokter). Karena dasbor perawat tidak punya menunya, perintah ini dikirim skrip uji lewat `LoginForm.bukaLayar("PemeriksaanForm")`, yaitu penangan yang sama dengan kartu menu. | Akun `perawat`; layar `PemeriksaanForm` | Menu di luar wewenang tidak tampil, dan perintah akses langsung ditolak dengan keterangan bahwa peran itu tidak berwenang | Dasbor perawat tidak memuat Formulir Pemeriksaan maupun Konfigurasi. Perintah buka ditolak dengan pesan merah "Akses ditolak: Peran Perawat tidak berwenang membuka layar ini" dan layar tetap di dasbor | Pass |
 
 ### 4.4.2 Use Case Mengelola Data Pasien
 
@@ -1173,7 +1372,17 @@ Tabel 4.4.6. Hasil Pengujian Use Case UC06
 **ID Use Case:** UC12  
 **Nama Use Case:** Mengelola Konfigurasi & Basis Data Sistem
 
-*[Diisi Axeleon: UC12-TC01 sampai UC12-TC05 untuk skenario normal dan alternatif 1 sampai 4.]*
+Seluruh *test case* dijalankan dengan akun `admin` dengan cara yang sama seperti UC01. Nama tombol mengikuti rancangan I-15 (DPPL Subbab 6.15): "Akun Baru (Ctrl+N)" untuk "Tambah Pengguna Baru", "Simpan (Ctrl+S)" untuk "Simpan" dan "Simpan Pengaturan", "Nonaktifkan" untuk "Nonaktifkan Akun", dan "Jalankan Pencadangan" untuk "Cadangkan Basis Data Sekarang". Formulir akun I-15 juga tidak memiliki kolom nama lengkap.
+
+Tabel 4.4.12. Hasil Pengujian Use Case UC12
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC12-TC01 | KF15 | Normal: akun baru dan ambang risiko | 1. Pilih kartu "Konfigurasi dan Basis Data".<br>2. Tekan "Akun Baru (Ctrl+N)", isi formulir, tekan "Simpan (Ctrl+S)".<br>3. Buka tab "Data Master", pilih ambang hipertensi, isi nilai baru, tekan "Simpan (Ctrl+S)". | Akun `perawat.baru`, peran Perawat, sandi `perawatbaru1`; ambang hipertensi 145 | Tab Akun Pengguna, Data Master, dan Pemeliharaan Basis Data tampil. Akun tersimpan dengan sandi ber-*hash*, tercatat di jejak audit, dan daftar akun termutakhirkan. Ambang baru tersimpan dan tercatat di jejak audit | Ketiga tab tampil. Setelah simpan, bilah pesan "Akun disimpan" tampil dan tabel akun memuat `perawat.baru` (Perawat, aktif). Setelah ambang disimpan, "Ambang risiko disimpan" tampil dan tabel ambang memuat hipertensi 145.0. Basis data: akun 134 ber-*hash* `$2a$12$`, ambang hipertensi 145, audit 387 "Akun baru perawat.baru (Perawat)" dan 388 "Ambang hipertensi diubah menjadi 145.0" | Pass |
+| UC12-TC02 | KF21 | Alternatif 1: memantau dan menjalankan pencadangan | 1. Buka tab "Pemeliharaan Basis Data".<br>2. Tekan "Jalankan Pencadangan". | `LOKASI_MEDIA_CADANGAN=/tmp` | Pencadangan terakhir tampil dengan tanggal, ukuran, status, dan lokasi media. Basis data disalin ke media terpisah (arsip `pg_dump --format=custom` yang terkompresi tanpa enkripsi, Tabel B.1 nomor 34), keutuhannya diperiksa, lalu catatan terakhir termutakhirkan | Sebelum: 12-11-2026 21:00, 1,0 MB, berhasil, `/media/cadangan/sehati_20261112-2100.dump`. Setelah tombol ditekan: "Pencadangan berhasil", 19-11-2026 14:46, 88,2 KB, berhasil, `/tmp/sehati_20261119-144615.dump`. Basis data: catatan 34 "berhasil" berukuran 90291 bait | Pass |
+| UC12-TC03 | KF15 | Alternatif 2: nama pengguna sudah dipakai | 1. Tekan "Akun Baru (Ctrl+N)", isi nama yang sudah ada, tekan "Simpan (Ctrl+S)".<br>2. Ganti nama, isi ulang sandi, simpan lagi. | `perawat`, lalu `perawat.dua`; peran Perawat, sandi `perawat2026` | Pendaftaran ditolak, kolom nama pengguna ditandai, dan petugas diminta memakai nama yang belum terdaftar. Setelah diganti, kembali ke langkah 3 skenario normal | Kolom nama pengguna berbingkai merah dengan keterangan "Nama pengguna sudah terdaftar" dan bilah pesan "Nama pengguna sudah dipakai". Setelah diganti, "Akun disimpan" tampil dan `perawat.dua` masuk tabel (audit 389) | Pass |
+| UC12-TC04 | KF15, KF16 | Alternatif 3: menonaktifkan akun yang sedang dipakai | 1. Komputer B: masuk sebagai `perawat.baru`.<br>2. Komputer A (admin): pilih `perawat.baru` pada tabel, tekan "Nonaktifkan", pilih OK.<br>3. Amati komputer B.<br>4. Komputer A: keluar, lalu coba masuk sebagai `perawat.baru`. | Akun `perawat.baru` / `perawatbaru1`; dua proses aplikasi di komputer yang sama | Status akun menjadi nonaktif, sesi aktif pengguna itu terputus, percobaan masuk berikutnya ditolak, dan jejak audit tercatat | Dialog "Nonaktifkan akun perawat.baru? Sesi akun itu akan langsung ditutup." tampil. Setelah OK, "Akun dinonaktifkan" tampil dan status di tabel menjadi nonaktif (14:46:47). Komputer B kembali ke layar "Masuk" dengan pesan "Sesi diakhiri karena akun Anda dinonaktifkan. Hubungi Petugas Administrasi." pada 14:47:35, 48 detik kemudian (pewaktu memeriksa setiap menit). Percobaan masuk berikutnya ditolak "Akun nonaktif, hubungi Petugas Administrasi". Basis data: sesi akun 134 tidak aktif, audit 392 "Akun perawat.baru dinonaktifkan" | Pass |
+| UC12-TC05 | KF21 | Alternatif 4: pencadangan terjadwal gagal | 1. Jalankan aplikasi dengan `PENCADANGAN_JAM=15` dan `LOKASI_MEDIA_CADANGAN=/Volumes/SEHATI-CADANGAN` (HDD tidak terpasang), lalu biarkan penjadwal berjalan.<br>2. Masuk sebagai admin dan buka dasbor serta tab Pemeliharaan.<br>3. Jalankan ulang aplikasi dengan media yang terpasang (`/tmp`), tekan "Jalankan Pencadangan", lalu kembali ke dasbor. | Jadwal pukul 15.00; media tidak terpasang, lalu terpasang | Dasbor menampilkan peringatan kegagalan pencadangan dan mempertahankannya sampai pencadangan berikutnya berhasil. Setelah media disambungkan, kembali ke langkah 2 alternatif 1 | Penjadwal berjalan pukul 14:59:08 dan mencatat "gagal" (catatan 40). Dasbor admin menampilkan peringatan merah "Pencadangan terakhir gagal. Jalankan ulang dari layar Konfigurasi dan Basis Data." dan informasi "19-11-2026 14:59 (gagal) di /Volumes/SEHATI-CADANGAN/...". Peringatan masih tampil setelah aplikasi dibuka ulang. Setelah "Jalankan Pencadangan" dengan media terpasang, "Pencadangan berhasil" (catatan 41) dan peringatan dasbor hilang | Pass. Catatan: penjadwal berjalan 52 detik lebih awal dari pukul 15.00 karena `KonfigurasiManager.jedaSampai()` menghitung jeda dalam menit penuh dan membuang detiknya. Tidak melanggar SKPL, tetapi disarankan memakai jeda dalam detik |
 
 <br>
 
@@ -1188,9 +1397,9 @@ Tabel 4.5. Hasil Pengujian KNF
 | KNF01-TC01 | KNF01 | Response time | *[Diisi Steven]* | | | |
 | KNF02-TC01 | KNF02 | Reliability | *[Diisi Humam]* | | | |
 | KNF03-TC01 | KNF03 | Reliability | *[Diisi Malik]* | | | |
-| KNF04-TC01 | KNF04 | Security | *[Diisi Axeleon]* | | | |
-| KNF05-TC01 | KNF05 | Security | *[Diisi Axeleon]* | | | |
-| KNF06-TC01 | KNF06 | Reliability | *[Diisi Axeleon]* | | | |
+| KNF04-TC01 | KNF04 | Security | (1) 100% kata sandi tersimpan sebagai *hash* bcrypt dan 0 berupa teks polos. (2) 0 layar terbuka tanpa autentikasi. (3) Sesi diam berakhir paling cepat 15 menit dan paling lambat 16 menit setelah aktivitas terakhir (pewaktu memeriksa setiap menit) | (1) Inspeksi kolom `kata_sandi_hash` seluruh akun lewat `psql` (pola `^\$2a\$[0-9]{2}\$.{53}$`). (2) Aplikasi dibuka tanpa sesi, lalu masuk dengan kredensial salah dan akun nonaktif (UC01-TC02, UC01-TC03); `periksaHakAkses()` dengan peran `null` (C17-UT10). (3) Masuk sebagai `perawat` lalu dibiarkan tanpa ketukan atau klik, waktu dibaca dari audit. Pengulangan: (1) 7 akun, (2) 3 kasus, (3) 1 kali selama 16 menit | (1) 7 dari 7 akun ber-*hash* bcrypt (`$2a$10$` untuk akun seed, `$2a$12$` untuk akun dari UC12), 0 teks polos. (2) Aplikasi selalu dibuka di layar Masuk dan seluruh layar lain ditolak tanpa peran. (3) Masuk 14:44:40 (audit 378), sesi berakhir 15:00:38 (audit 479 "Sesi berakhir setelah diam 15 menit"), yaitu 15 menit 58 detik, dan layar Masuk menampilkan "Anda tidak aktif selama 15 menit. Masuk lagi untuk melanjutkan." | Pass. Batas: pengukuran sesi diam hanya satu kali karena satu pengulangan butuh 16 menit; ketelitian pewaktu dibatasi pemeriksaan per menit |
+| KNF05-TC01 | KNF05 | Security | (1) 0 layar di luar peran yang dapat dibuka. (2) Operasi tulis tanpa sesi atau dengan peran lain ditolak di `Manager`. (3) 0 dari 3 perintah ubah/hapus jejak audit berhasil dengan akun aplikasi `sehati_app` | (1) Dasbor tiap peran dan perintah buka langsung (UC01-TC01, UC01-TC04), matriks `periksaHakAkses()` (C17-UT07 s.d. C17-UT10). (2) Inspeksi kode: pemanggilan `SesiAktif.wajibPeran()` pada `Manager`, diuji lewat C29-UT10, C22-UT15, dan C23-UT21. (3) `psql` sebagai `sehati_app`: `DELETE`, `UPDATE`, dan `TRUNCATE` pada `audit`, masing-masing sekali | (1) Dasbor perawat hanya memuat 3 layar perawat, dan perintah buka Formulir Pemeriksaan ditolak "Akses ditolak: Peran Perawat tidak berwenang membuka layar ini". (2) 22 pemanggilan `wajibPeran()` pada 11 `Manager`. Ketiga test menolak sesi berperan lain dan sesi kosong. (3) Ketiga perintah ditolak "permission denied for table audit", jumlah audit tetap 231 | Pass. Catatan: `KonfigurasiManager.jalankanPencadangan()` sengaja tidak memanggil `wajibPeran()` karena juga dijalankan penjadwal tanpa sesi. Tombolnya hanya ada pada I-15 yang terbatas untuk Petugas Administrasi |
+| KNF06-TC01 | KNF06 | Reliability | (1) 5 dari 5 pencadangan berhasil dan lolos verifikasi arsip selagi aplikasi dipakai. (2) 0 operasi pengguna gagal dan waktu tanggap maksimum di bawah 1 detik selama pencadangan. (3) Arsip berupa *snapshot* konsisten: perubahan yang belum di-*commit* tidak ikut tersalin | Program uji `UjiKnf06` (di luar repo) menjalankan `KonfigurasiManager.jalankanPencadangan()` 5 kali dengan `pg_dump` 18.6, sementara *thread* lain terus-menerus masuk, memuat data master, dan keluar lewat `AutentikasiManager` dan `KonfigurasiManager`. Pada pengulangan pertama, koneksi lain memegang transaksi belum di-*commit* yang mengubah ambang hipertensi menjadi 999. Setiap arsip diperiksa dengan `pg_restore --list` dan `pg_restore --data-only --table=ambang_risiko` | (1) 5 dari 5 "berhasil", 136 sampai 247 ms per pencadangan, setiap arsip memuat 28 data tabel. (2) 42 operasi pengguna, 0 gagal, rata-rata 107,1 ms, maksimum 311 ms. (3) Kelima arsip memuat ambang hipertensi 145 (nilai ter-*commit*), bukan 999 | Pass. Temuan: nama arsip hanya sampai detik (Tabel B.1 nomor 33), sehingga dua pencadangan pada detik yang sama menulis ke berkas yang sama dan arsip pertama tertimpa (catatan 35 dan 36, 38 dan 39). Pada aplikasi, tombol pencadangan nonaktif selama proses berjalan, tetapi penjadwal dan tombol masih dapat bertabrakan. Disarankan menambah milidetik atau penanda unik pada nama berkas |
 | KNF07-TC01 | KNF07 | Portability | *[Diisi Fachry]* | | | |
 | KNF08-TC01 | KNF08 | Ergonomy | *[Diisi Humam]* | | | |
 | KNF09-TC01 | KNF09 | Availability | *[Diisi Fachry]* | | | |
@@ -1232,7 +1441,32 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC05-TC08 | `v9.0`: sebelum, simpan jadwal 02-12-2026, lalu dua entri 2 Des 2026 (Fail). Isi tabel `jadwal_kontrol` dan `daftar_pantau` `v9.0` ada pada bukti basis data UC05-TC03<br><img src="./assets/uc05/uc05-tc08-v9-1-pantau-sebelum.png" width="100%"><br><img src="./assets/uc05/uc05-tc08-v9-2-simpan-tanggal-sama.png" width="100%"><br><img src="./assets/uc05/uc05-tc08-v9-3-daftar-pantau.png" width="100%"><br>Uji ulang setelah perbaikan: langkah yang sama, daftar pantau tetap satu entri 2 Des 2026, dan isi basis data (Pass)<br><img src="./assets/uc05/uc05-tc08-ulang-1-pantau-sebelum.png" width="100%"><br><img src="./assets/uc05/uc05-tc08-ulang-2-simpan-tanggal-sama.png" width="100%"><br><img src="./assets/uc05/uc05-tc08-ulang-3-daftar-pantau.png" width="100%"><br><img src="./assets/uc05/uc05-tc08-ulang-hasil-basis-data.png" width="100%"> |
 | UC06-TC01 | Dua item "Tersedia", resep terkirim, dan isi `resep`, `item_resep`, serta antrean apotek<br><img src="./assets/uc06/uc06-tc01-1-tersedia.png" width="100%"><br><img src="./assets/uc06/uc06-tc01-2-terkirim.png" width="100%"><br><img src="./assets/uc06/uc06-hasil-basis-data.png" width="100%"> |
 | UC06-TC02 | Stok kurang dengan tombol kirim nonaktif, lalu setelah jumlah diperbaiki<br><img src="./assets/uc06/uc06-tc02-1-stok-kurang.png" width="100%"><br><img src="./assets/uc06/uc06-tc02-2-diperbaiki.png" width="100%"> |
-| *[ID pengujian milik Axeleon]* | *[Diisi Axeleon: keluaran test runner per kelas, coverage kelas Mendalam, integrasi, use case, dan KNF]* |
+| C17-UT01 – C17-UT17 | Keluaran `mvn test -Dtest=AutentikasiManagerTest` setelah perbaikan: 17 test `[OK]`<br><img src="./assets/akses/c17-unit.png" width="100%"> |
+| C17-UT17 (`v9.0`, Fail) | Test yang sama pada kode `v9.0`: C17-UT17 `[XX]`, `NullPointer`<br><img src="./assets/akses/c17-ut17-fail-v9.png" width="100%"> |
+| C17 (coverage) | Total 8 dari 56 baris dan 2 dari 26 cabang terlewat<br><img src="./assets/akses/c17-coverage.png" width="100%"> |
+| C29-UT01 – C29-UT37 | Keluaran `mvn test -Dtest=KonfigurasiManagerTest`: 37 test `[OK]`<br><img src="./assets/akses/c29-unit.png" width="100%"> |
+| C29 (coverage) | Total 30 dari 159 baris dan 9 dari 72 cabang terlewat<br><img src="./assets/akses/c29-coverage.png" width="100%"> |
+| C30-UT01 – C30-UT11, C31-UT01 – C31-UT07, C32-UT01 – C32-UT03 | Keluaran `mvn test -Dtest=PenggunaEntityTest,SesiEntityTest,AuditEntityTest`: 21 test `[OK]`<br><img src="./assets/akses/c30-c31-c32-unit.png" width="100%"> |
+| C30 (coverage) | Total 6 dari 36 baris terlewat, cabang 100%<br><img src="./assets/akses/c30-coverage.png" width="100%"> |
+| C31 (coverage) | Seluruh baris dan cabang tercakup<br><img src="./assets/akses/c31-coverage.png" width="100%"> |
+| C56-UT01 – C56-UT10 | Keluaran `mvn test -Dtest=DataAkunBoundaryTest`: 10 test `[OK]`<br><img src="./assets/akses/c56-unit.png" width="100%"> |
+| C64-UT01 – C64-UT16 | Keluaran `mvn test -Dtest=DataPencadanganBoundaryTest`: 16 test `[OK]`<br><img src="./assets/akses/c64-unit.png" width="100%"> |
+| C64 (coverage) | Total 14 dari 98 baris dan 6 dari 42 cabang terlewat<br><img src="./assets/akses/c64-coverage.png" width="100%"> |
+| INT-TC01 – INT-TC06 | Keluaran `mvn test -Dtest=AksesIntegrasiTest`: 6 test `[OK]`<br><img src="./assets/akses/int-tc01-tc06.png" width="100%"> |
+| UC01-TC01 | Layar masuk, dasbor admin, dan dasbor perawat<br><img src="./assets/uc01/uc01-tc01-1-layar-masuk.png" width="100%"><br><img src="./assets/uc01/uc01-tc01-2-dasbor-admin.png" width="100%"><br><img src="./assets/uc01/uc01-tc01-3-dasbor-perawat.png" width="100%"> |
+| UC01-TC02 | Pesan kredensial salah dengan kolom sandi kosong, lalu dasbor setelah masuk ulang<br><img src="./assets/uc01/uc01-tc02-1-sandi-salah.png" width="100%"><br><img src="./assets/uc01/uc01-tc02-2-masuk-ulang.png" width="100%"> |
+| UC01-TC03 | Pesan akun nonaktif<br><img src="./assets/uc01/uc01-tc03-akun-nonaktif.png" width="100%"> |
+| UC01-TC04 | Dasbor perawat dan pesan akses ditolak<br><img src="./assets/uc01/uc01-tc04-akses-ditolak.png" width="100%"> |
+| UC01 (basis data) | Audit dan sesi UC01-TC01 sampai UC01-TC03<br><img src="./assets/uc01/uc01-hasil-basis-data.png" width="100%"> |
+| UC12-TC01 | Tab Akun Pengguna, isian akun, akun tersimpan, isian ambang, dan ambang tersimpan<br><img src="./assets/uc12/uc12-tc01-1-tab-akun.png" width="100%"><br><img src="./assets/uc12/uc12-tc01-2-isian-akun.png" width="100%"><br><img src="./assets/uc12/uc12-tc01-3-akun-tersimpan.png" width="100%"><br><img src="./assets/uc12/uc12-tc01-4-isian-ambang.png" width="100%"><br><img src="./assets/uc12/uc12-tc01-5-ambang-tersimpan.png" width="100%"> |
+| UC12-TC02 | Status pencadangan sebelum dan sesudah "Jalankan Pencadangan"<br><img src="./assets/uc12/uc12-tc02-1-status-pencadangan.png" width="100%"><br><img src="./assets/uc12/uc12-tc02-2-pencadangan-berhasil.png" width="100%"> |
+| UC12-TC03 | Nama pengguna yang sudah dipakai ditandai, lalu nama baru tersimpan<br><img src="./assets/uc12/uc12-tc03-1-nama-dipakai.png" width="100%"><br><img src="./assets/uc12/uc12-tc03-2-nama-baru.png" width="100%"> |
+| UC12-TC04 | Berurutan: komputer B masuk sebagai `perawat.baru`, dialog konfirmasi di komputer A, akun nonaktif, komputer B terputus, dan percobaan masuk ditolak<br><img src="./assets/uc12/uc12-tc04-0-sesi-perawat-baru.png" width="100%"><br><img src="./assets/uc12/uc12-tc04-1-konfirmasi.png" width="100%"><br><img src="./assets/uc12/uc12-tc04-2-akun-nonaktif.png" width="100%"><br><img src="./assets/uc12/uc12-tc04-3-sesi-terputus.png" width="100%"><br><img src="./assets/uc12/uc12-tc04-4-masuk-ditolak.png" width="100%"> |
+| UC12-TC05 | Berurutan: dasbor dan tab Pemeliharaan setelah jadwal gagal, dasbor setelah aplikasi dibuka ulang, pencadangan ulang berhasil, dan dasbor tanpa peringatan<br><img src="./assets/uc12/uc12-tc05-1-dasbor.png" width="100%"><br><img src="./assets/uc12/uc12-tc05-2-pemeliharaan.png" width="100%"><br><img src="./assets/uc12/uc12-tc05-3-ulang-1-dasbor.png" width="100%"><br><img src="./assets/uc12/uc12-tc05-3-ulang-3-hasil.png" width="100%"><br><img src="./assets/uc12/uc12-tc05-3-ulang-4-dasbor.png" width="100%"><br><img src="./assets/uc12/uc12-tc05-hasil-basis-data.png" width="100%"> |
+| UC12 (basis data) | Akun, ambang, audit, sesi, dan catatan pencadangan setelah UC12-TC01 sampai UC12-TC04<br><img src="./assets/uc12/uc12-hasil-basis-data.png" width="100%"> |
+| KNF04-TC01 | *Hash* seluruh akun, masuk sebagai perawat, layar setelah 15 menit diam, dan audit masuk serta sesi berakhir<br><img src="./assets/akses/knf04-hash-bcrypt.png" width="100%"><br><img src="./assets/akses/knf04-1-masuk.png" width="100%"><br><img src="./assets/akses/knf04-2-sesi-berakhir.png" width="100%"><br><img src="./assets/akses/knf04-3-audit-sesi-diam.png" width="100%"> |
+| KNF05-TC01 | Perintah ubah dan hapus audit sebagai `sehati_app` ditolak (dasbor per peran pada UC01-TC01 dan UC01-TC04)<br><img src="./assets/akses/knf05-audit-sehati-app.png" width="100%"> |
+| KNF06-TC01 | Keluaran `UjiKnf06`: lima pencadangan selagi aplikasi dipakai<br><img src="./assets/akses/knf06-pencadangan-saat-dipakai.png" width="100%"> |
 | *[ID pengujian milik Steven]* | *[Diisi Steven: keluaran test runner per kelas, coverage kelas Mendalam, integrasi, use case, dan KNF]* |
 | *[ID pengujian milik Humam]* | *[Diisi Humam: keluaran test runner per kelas, coverage kelas Mendalam, integrasi, use case, dan KNF]* |
 | *[ID pengujian milik Malik]* | *[Diisi Malik: keluaran test runner per kelas, coverage kelas Mendalam, integrasi, use case, dan KNF]* |
@@ -1264,23 +1498,24 @@ Tabel 5.1. Matriks Kerunutan KF terhadap Implementasi dan Pengujian
 | KF12 | - | UC05<br>UC09 | C07 - PemeriksaanForm<br>C22 - PemeriksaanManager<br>C45 - JadwalKontrolEntity<br>C21 - RisikoManager<br>C26 - PantauManager<br>C51 - DaftarPantauEntity<br>C59 - DataKlinisBoundary<br>C60 - DataPantauBoundary | `presentation/PemeriksaanForm.java`<br>`business/control/PemeriksaanManager.java`<br>`business/control/RisikoManager.java`<br>`dataaccess/DataKlinisBoundary.java` | UC05-TC03, UC05-TC08 (Fail pada `v9.0`, Pass setelah perbaikan); *[UC09-TC.., diisi Humam]* | C22-UT16 s.d. C22-UT19, C22-UT23, C22-UT28 s.d. C22-UT30, C22-UT37 (Fail pada `v9.0`, Pass setelah perbaikan), C45-UT01 s.d. C45-UT03, C59-UT28 s.d. C59-UT32, INT-TC19; *[C21-UT.., C26-UT.., INT-TC15, INT-TC16; diisi Humam]* |
 | KF13 | - | UC07 | C09 - AntreanResepForm<br>C10 - PenyerahanObatForm<br>C24 - ApotekManager<br>C46 - ResepEntity<br>C61 - DataFarmasiBoundary | `presentation/AntreanResepForm.java`<br>`presentation/PenyerahanObatForm.java`<br>`business/control/ApotekManager.java` | *[UC07-TC.., diisi Malik]* | C46-UT01 s.d. C46-UT04; *[C24-UT.., INT-TC23, INT-TC24; diisi Malik]* |
 | KF14 | KNF03<br>KNF07 | UC07 | C10 - PenyerahanObatForm<br>C24 - ApotekManager<br>C48 - ObatEntity<br>C49 - BetsObatEntity<br>C54 - BundelFHIREntity<br>C61 - DataFarmasiBoundary<br>C63 - DataSinkronisasiBoundary | `business/control/ApotekManager.java`<br>`business/control/PenyusunBundelFHIR.java`<br>`dataaccess/DataFarmasiBoundary.java` | *[UC07-TC.., diisi Malik]* | C22-UT20, INT-TC19 (bundel kunjungan tanpa resep); *[C24-UT.., C48-UT.., C49-UT.., INT-TC23, INT-TC24, KNF03-TC01, KNF07-TC01; diisi Malik dan Fachry]* |
-| KF15 | - | UC12 | C16 - KonfigurasiForm<br>C29 - KonfigurasiManager<br>C30 - PenggunaEntity<br>C36 - PoliEntity<br>C40 - AmbangRisikoEntity<br>C48 - ObatEntity<br>C56 - DataAkunBoundary | `presentation/KonfigurasiForm.java`<br>`business/control/KonfigurasiManager.java`<br>`dataaccess/DataAkunBoundary.java` | *[UC12-TC.., diisi Axeleon]* | *[C29-UT.., C30-UT.., INT-TC03, INT-TC04; diisi Axeleon]* |
-| KF16 | KNF04<br>KNF05 | UC01 | C01 - LoginForm<br>C17 - AutentikasiManager<br>C30 - PenggunaEntity<br>C31 - SesiEntity<br>C32 - AuditEntity<br>C56 - DataAkunBoundary | `presentation/LoginForm.java`<br>`presentation/Navigasi.java`<br>`business/control/AutentikasiManager.java`<br>`common/SesiAktif.java` | *[UC01-TC.., diisi Axeleon]* | C22-UT15, C22-UT27, C23-UT21 (pembatasan peran pada operasi tulis); *[C17-UT.., C30-UT.., C31-UT.., INT-TC01, INT-TC02, KNF04-TC01, KNF05-TC01; diisi Axeleon]* |
+| KF15 | - | UC12 | C16 - KonfigurasiForm<br>C29 - KonfigurasiManager<br>C30 - PenggunaEntity<br>C36 - PoliEntity<br>C40 - AmbangRisikoEntity<br>C48 - ObatEntity<br>C56 - DataAkunBoundary | `presentation/KonfigurasiForm.java`<br>`business/control/KonfigurasiManager.java`<br>`dataaccess/DataAkunBoundary.java` | UC12-TC01, UC12-TC03, UC12-TC04 | C29-UT01 s.d. C29-UT27, C30-UT01 s.d. C30-UT11, C56-UT01 s.d. C56-UT03, C56-UT09, INT-TC03, INT-TC04 |
+| KF16 | KNF04<br>KNF05 | UC01 | C01 - LoginForm<br>C17 - AutentikasiManager<br>C30 - PenggunaEntity<br>C31 - SesiEntity<br>C32 - AuditEntity<br>C56 - DataAkunBoundary | `presentation/LoginForm.java`<br>`presentation/Navigasi.java`<br>`business/control/AutentikasiManager.java`<br>`common/SesiAktif.java` | UC01-TC01 s.d. UC01-TC04, UC12-TC04 | C17-UT01 s.d. C17-UT17 (C17-UT17 Fail pada `v9.0`, Pass setelah perbaikan), C30-UT01 s.d. C30-UT05, C31-UT01 s.d. C31-UT07, C32-UT01 s.d. C32-UT03, C56-UT04 s.d. C56-UT08, C22-UT15, C22-UT27, C23-UT21, C29-UT10 (pembatasan peran pada operasi tulis), INT-TC01, INT-TC02, KNF04-TC01, KNF05-TC01 |
 | KF17 | - | UC08 | C11 - PersediaanForm<br>C25 - PersediaanManager<br>C48 - ObatEntity<br>C49 - BetsObatEntity<br>C50 - PenerimaanObatEntity<br>C61 - DataFarmasiBoundary | `presentation/PersediaanForm.java`<br>`business/control/PersediaanManager.java`<br>`dataaccess/DataFarmasiBoundary.java` | *[UC08-TC.., diisi Malik]* | *[C25-UT.., C48-UT.., C49-UT.., C50-UT.., INT-TC25, INT-TC26; diisi Malik]* |
 | KF18 | - | UC09 | C12 - DaftarPantauForm<br>C26 - PantauManager<br>C21 - RisikoManager<br>C51 - DaftarPantauEntity<br>C52 - TindakLanjutEntity<br>C60 - DataPantauBoundary | `presentation/DaftarPantauForm.java`<br>`business/control/PantauManager.java`<br>`dataaccess/DataPantauBoundary.java` | *[UC09-TC.., diisi Humam]* | *[C26-UT.., C51-UT.., INT-TC15, INT-TC16; diisi Humam]* |
 | KF19 | - | UC10 | C13 - LaporanForm<br>C27 - LaporanManager<br>C53 - LaporanEntity<br>C62 - DataLaporanBoundary | `presentation/LaporanForm.java`<br>`business/control/LaporanManager.java`<br>`dataaccess/DataLaporanBoundary.java` | *[UC10-TC.., diisi Fachry]* | *[C27-UT.., C53-UT.., INT-TC27, INT-TC28; diisi Fachry]* |
 | KF20 | KNF07 | UC11 | C14 - SinkronisasiForm<br>C15 - SATUSEHATGateway<br>C28 - SinkronisasiManager<br>C54 - BundelFHIREntity<br>C63 - DataSinkronisasiBoundary | `presentation/SinkronisasiForm.java`<br>`business/control/SinkronisasiManager.java`<br>`dataaccess/SATUSEHATGateway.java`<br>`dataaccess/DataSinkronisasiBoundary.java` | *[UC11-TC.., diisi Fachry]* | *[C15-UT.., C28-UT.., C54-UT.., C63-UT.., INT-TC29 s.d. INT-TC32, KNF07-TC01; diisi Fachry]* |
-| KF21 | KNF06 | UC12 | C16 - KonfigurasiForm<br>C29 - KonfigurasiManager<br>C55 - PencadanganEntity<br>C64 - DataPencadanganBoundary | `presentation/KonfigurasiForm.java`<br>`business/control/KonfigurasiManager.java`<br>`dataaccess/DataPencadanganBoundary.java` | *[UC12-TC.., diisi Axeleon]* | *[C29-UT.., C64-UT.., INT-TC05, INT-TC06, KNF06-TC01; diisi Axeleon]* |
+| KF21 | KNF06 | UC12 | C16 - KonfigurasiForm<br>C29 - KonfigurasiManager<br>C55 - PencadanganEntity<br>C64 - DataPencadanganBoundary | `presentation/KonfigurasiForm.java`<br>`business/control/KonfigurasiManager.java`<br>`dataaccess/DataPencadanganBoundary.java` | UC12-TC02, UC12-TC05 | C29-UT28 s.d. C29-UT37, C64-UT01 s.d. C64-UT16, INT-TC05, INT-TC06, KNF06-TC01 |
 | KF22 | KNF09<br>KNF10<br>KNF13 | UC05<br>UC11 | C14 - SinkronisasiForm<br>C15 - SATUSEHATGateway<br>C28 - SinkronisasiManager | `presentation/BilahAplikasi.java`<br>`presentation/Navigasi.java`<br>`business/control/SinkronisasiManager.java`<br>`dataaccess/SATUSEHATGateway.java` | UC05-TC06; *[UC11-TC.., diisi Fachry]* | *[C15-UT.., C28-UT.., KNF09-TC01, KNF10-TC01, KNF13-TC01; diisi Fachry, Steven, dan Malik]* |
 | KF23 | KNF11 | UC03<br>UC07 | C19 - KunjunganManager<br>C24 - ApotekManager<br>C36 - PoliEntity<br>C58 - DataKunjunganBoundary<br>C61 - DataFarmasiBoundary | `business/control/KunjunganManager.java`<br>`business/control/ApotekManager.java`<br>`dataaccess/DataKunjunganBoundary.java`<br>`dataaccess/DataFarmasiBoundary.java` | *[UC03-TC.., UC07-TC.., diisi Steven dan Malik]* | INT-TC22 (penguncian antrean apotek); *[INT-TC33, INT-TC34, KNF11-TC01; diisi Steven]* |
 | KF24 | KNF12 | UC04<br>UC05 | C05 - SkriningForm<br>C07 - PemeriksaanForm | `presentation/SkriningForm.java`<br>`presentation/PemeriksaanForm.java`<br>`presentation/Navigasi.java`<br>`presentation/TabelPintasan.java` | UC05-TC03 (Ctrl+S); *[UC04-TC.., diisi Humam]* | *[KNF12-TC01; diisi Humam]* |
 
-Pada `v9.0`, dua KF belum terpenuhi karena memiliki *test case* `Fail`:
+Pada `v9.0`, tiga KF belum terpenuhi karena memiliki *test case* `Fail`:
 
 - **KF09** (UC05-TC01): hasil skrining hari itu belum tampil pada ringkasan rekam medis I-06.
 - **KF12** (UC05-TC08, C22-UT37): jadwal kontrol pada tanggal yang sama dapat dibuat dua kali setelah jadwal pertama masuk daftar pantau.
+- **KF16** (C17-UT17): `periksaHakAkses()` melempar `NullPointerException` untuk nama layar `null` alih-alih menolak akses.
 
-Keduanya sudah diperbaiki (Tabel 3.5) dan diuji ulang dengan hasil `Pass`. Bagian KF12 milik UC09 masih menunggu hasil pengujian Humam. KF lain menunggu hasil pengujian setiap modul.
+Ketiganya sudah diperbaiki (Tabel 3.5) dan diuji ulang dengan hasil `Pass`. Bagian KF12 milik UC09 masih menunggu hasil pengujian Humam. KF lain menunggu hasil pengujian setiap modul.
 
 Tabel 5.2. Matriks Kerunutan KNF terhadap Pengujian
 
