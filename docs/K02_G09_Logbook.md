@@ -292,7 +292,7 @@
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | *17-11-2026* | *[Seluruh Anggota]* | *Asistensi akbar Milestone 10: isi HIUPL, tingkat kedalaman pengujian kelas (Mendalam, Sedang, Tidak perlu), coverage minimal 70% untuk kelas Mendalam, pengujian integrasi tanpa mock, pengujian use case dan KNF, serta bukti pengujian* | *1* | *Done* | *-* |
 | *18-11-2026* | *Muhammad Adnan Kurniawan* | *Menyusun pembagian tugas M10, kerangka HIUPL (BAB 1 sampai BAB 3, Tabel 4.1.1, daftar antarmuka integrasi, dan BAB 5), serta memasang JaCoCo dan pelapor test berbasis ID pada pom.xml* | *3* | *Done* | *-* |
-| *18-11-2026* | *Muhammad Adnan Kurniawan* | *Menguji modul pemeriksaan dan resep: 89 test unit ber-ID untuk C22, C23, C42, C44 sampai C47, dan C59 bagian pemeriksaan, integrasi INT-TC17 sampai INT-TC22, serta UC05 dan UC06 beserta tangkapan layar* | *4* | *Done* | *Dua temuan Fail di modul sendiri: hasil skrining hari ini tidak tampil di I-06 (UC05-TC01) dan jadwal kontrol dapat dibuat ganda (C22-UT37, UC05-TC08)* |
+| *18-11-2026* | *Muhammad Adnan Kurniawan* | *Menguji modul pemeriksaan dan resep: 92 test unit ber-ID untuk C22, C23, C42, C44 sampai C47, dan C59 bagian pemeriksaan, integrasi INT-TC17 sampai INT-TC22, serta UC05 dan UC06 beserta tangkapan layar* | *4* | *Done* | *Dua temuan Fail di modul sendiri: hasil skrining hari ini tidak tampil di I-06 (UC05-TC01) dan jadwal kontrol dapat dibuat ganda (C22-UT37, UC05-TC08)* |
 | *18-11-2026* | *Muhammad Adnan Kurniawan* | *Memperbaiki dua temuan pengujian: kueri Q-C59-20 agar jadwal kontrol tidak ganda dan panel skrining hari ini pada I-06, lalu menguji ulang C22-UT37, UC05-TC01, dan UC05-TC08* | *2* | *Done* | *-* |
 
 **Catatan/Evaluasi Milestone 10:**
