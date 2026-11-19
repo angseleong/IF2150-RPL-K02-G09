@@ -161,10 +161,10 @@ Gambar 2.1 memperlihatkan batas sistem SEHATI. Bagian di dalam batas adalah tiga
 <i>Gambar 2.1. System Overview SEHATI: komputer client, server basis data, dan sistem eksternal (Physical View DPPL)</i>
 </p>
 
-Gambar 2.2 memodelkan dua belas *use case* SEHATI dengan tiga aktor manusia: Petugas Administrasi (A01), Tenaga Klinis yang mencakup perawat dan dokter (A02), serta Petugas Farmasi (A03). SATUSEHAT tampil sebagai aktor sistem eksternal pada UC11. UC03 Mengelola Kunjungan Pasien selalu menjalankan UC02 Mengelola Data Pasien («include») karena kunjungan tidak dapat dibuka tanpa pasiennya. UC06 Menyusun Resep Elektronik memperluas UC05 Melakukan Pemeriksaan Medis («extend») karena resep hanya disusun bila pasien butuh obat. Kotak sistem membatasi *use case* yang dijalankan SEHATI dari aktor di luarnya.
+Gambar 2.2 memodelkan dua belas *use case* SEHATI dengan tiga aktor manusia: Petugas Administrasi (A01), Tenaga Klinis yang mencakup perawat dan dokter (A02), serta Petugas Farmasi (A03). Diagram ini digambar ulang dari Gambar 3 SKPL tanpa mengubah aktor maupun *use case*-nya, lalu ditambah SATUSEHAT sebagai sistem eksternal («system», kotak putus-putus) di luar batas SEHATI. SATUSEHAT hanya terhubung ke UC11 karena hanya sinkronisasi yang mengirim data ke luar. UC03 Mengelola Kunjungan Pasien selalu menjalankan UC02 Mengelola Data Pasien («include») karena kunjungan tidak dapat dibuka tanpa pasiennya. UC06 Menyusun Resep Elektronik memperluas UC05 Melakukan Pemeriksaan Medis («extend») karena resep hanya disusun bila pasien butuh obat. Kotak sistem membatasi *use case* yang dijalankan SEHATI dari aktor di luarnya.
 
 <p align="center">
-<img alt="Use Case Diagram SEHATI" src="../M5/assets/diagram/diagram-uc.svg" width="80%">
+<img alt="Use Case Diagram SEHATI" src="./assets/diagram-uc-hiupl.svg" width="80%">
 </p>
 <p align="center">
 <i>Gambar 2.2. Use Case Diagram SEHATI</i>
@@ -312,7 +312,7 @@ Tabel 3.4. File Lain
 | 12 | `src/src/main/java/sehati/presentation/Navigasi.java`, `BilahAplikasi.java`, `LatarBelakang.java`, `LogoSehati.java`, `PanelPeringatan.java`, `PenandaKolom.java`, `TabelPintasan.java` | Pendukung lapisan presentasi: perpindahan layar dan cek hak akses, bilah aplikasi, tugas latar, logo, panel peringatan merah, penanda kolom bermasalah, dan layar bantuan pintasan |
 | 13 | `src/src/main/java/sehati/business/control/PenyusunBundelFHIR.java` | Penyusun isi bundel HL7 FHIR R4 yang dipakai `ApotekManager` dan `PemeriksaanManager` (Tabel B.1 nomor 47) |
 | 14 | `src/src/main/java/sehati/dataaccess/ResponsKirim.java` | Record hasil pengiriman bundel dari `SATUSEHATGateway` |
-| 15 | `src/tests/sehati/**/*Test.java` (47 kelas test) | Test JUnit per kelas pada paket yang sama dengan kelas yang diuji, test integrasi pada `src/tests/sehati/integrasi/`, serta `AlurUtamaTest` dan `KonkurensiTest` |
+| 15 | `src/tests/sehati/**/*Test.java` (48 kelas test) | Test JUnit per kelas pada paket yang sama dengan kelas yang diuji, test integrasi pada `src/tests/sehati/integrasi/`, serta `AlurUtamaTest` dan `KonkurensiTest` |
 | 16 | `src/tests/sehati/dataaccess/JdbcPalsu.java`, `src/tests/sehati/DataUjiAlur.java`, `src/tests/sehati/PratinjauLayar.java` | Pendukung test: pengganti JDBC untuk uji tanpa basis data, penyiap data alur, dan pembuka satu layar tanpa masuk |
 | 17 | `src/README.md` | Cara memasang, menjalankan aplikasi, dan menjalankan test |
 | 18 | `.github/workflows/` | CI GitHub Actions yang menjalankan `mvn test` pada setiap PR |
