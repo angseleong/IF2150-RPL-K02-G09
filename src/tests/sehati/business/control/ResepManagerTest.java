@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,11 +28,12 @@ import sehati.business.entity.ItemResepEntity;
 import sehati.business.entity.ObatEntity;
 import sehati.business.entity.ResepEntity;
 import sehati.business.entity.SesiEntity;
+import sehati.common.PengaturanAplikasi;
 import sehati.common.SesiAktif;
 import sehati.dataaccess.DataFarmasiBoundary;
 
 /**
- * Pengujian unit C23 ResepManager (HIUPL Subbab 4.2, C23-UT01 sampai C23-UT24). Setiap test diberi
+ * Pengujian unit C23 ResepManager (HIUPL Subbab 4.2, C23-UT01 sampai C23-UT25). Setiap test diberi
  * {@code @DisplayName} berawalan ID test case.
  */
 @DisplayName("C23 ResepManager")
@@ -309,6 +311,26 @@ class ResepManagerTest {
             sisipResep("menunggu", "Bukan pengembalian");
 
             assertNull(manager.alasanDikembalikan(idKunjungan));
+        }
+
+        @Test
+        @DisplayName("C23-UT25 muatDataObat negatif: basis data menolak akses ke tabel obat")
+        void muatDataObat_aksesDitolak() throws SQLException {
+            // Aplikasi masuk sebagai sehati_app (DPPL aturan 5), jadi hak bacanya dapat dicabut sementara oleh pemilik.
+            assumeTrue("sehati_app".equals(PengaturanAplikasi.muat().ambil("DB_USER")));
+            try (Statement st = koneksi.createStatement()) {
+                st.executeUpdate("REVOKE SELECT ON obat FROM sehati_app");
+            }
+            try {
+                IllegalStateException e = assertThrows(IllegalStateException.class, manager::muatDataObat);
+                // DataFarmasiBoundary mengubah SQLException kueri menjadi IllegalStateException dengan pesannya sendiri.
+                assertEquals("Gagal mengambil data obat", e.getMessage());
+            } finally {
+                try (Statement st = koneksi.createStatement()) {
+                    st.executeUpdate("GRANT SELECT ON obat TO sehati_app");
+                }
+            }
+            assertFalse(manager.muatDataObat().isEmpty());
         }
 
         private void sisipResep(String status, String catatan) throws SQLException {
