@@ -31,6 +31,10 @@
                             <Label fx:id="labelDataDiri" wrapText="true"/>
                         </VBox>
                         <VBox styleClass="kartu" spacing="6">
+                            <Label text="Skrining hari ini" styleClass="judul-panel"/>
+                            <Label fx:id="labelSkrining" wrapText="true"/>
+                        </VBox>
+                        <VBox styleClass="kartu" spacing="6">
                             <Label text="Penanda risiko aktif" styleClass="judul-panel"/>
                             <VBox fx:id="panelPenanda" spacing="6"/>
                         </VBox>

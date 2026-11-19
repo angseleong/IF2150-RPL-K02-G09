@@ -27,6 +27,7 @@ import sehati.business.entity.KunjunganEntity;
 import sehati.business.entity.PasienEntity;
 import sehati.business.entity.PenandaRisikoEntity;
 import sehati.business.entity.RekamMedisEntity;
+import sehati.business.entity.SkriningEntity;
 import sehati.business.entity.TandaVitalEntity;
 
 /**
@@ -51,6 +52,7 @@ public class RekamMedisForm {
     @FXML private Label keteranganDaftar;
     @FXML private VBox panelRingkasan;
     @FXML private Label labelDataDiri;
+    @FXML private Label labelSkrining;
     @FXML private VBox panelPenanda;
     @FXML private VBox panelDiagnosis;
     @FXML private VBox panelObat;
@@ -226,6 +228,8 @@ public class RekamMedisForm {
     private void isiRingkasan(RekamMedisEntity rm) {
         pasien = rm.getPasien();
         labelDataDiri.setText(pasien == null ? "Data pasien tidak ditemukan" : dataDiri(pasien));
+        // SKPL UC05 langkah 1 meminta hasil skrining hari itu ikut tampil pada ringkasan (HIUPL UC05-TC01).
+        labelSkrining.setText(teksSkrining(rm.getSkriningHariIni()));
         panelPenanda.getChildren().clear();
         for (PenandaRisikoEntity p : rm.getPenandaAktif()) {
             PanelPeringatan peringatan = new PanelPeringatan();
@@ -244,6 +248,22 @@ public class RekamMedisForm {
         int umur = Period.between(p.getTanggalLahir(), LocalDate.now()).getYears();
         return p.getNama() + ", " + umur + " tahun, " + p.getJenisKelamin() + "\n"
                 + "NIK " + p.getNik() + "  |  " + p.getNomorRekamMedis() + "\n" + p.getAlamat();
+    }
+
+    static String teksSkrining(SkriningEntity s) {
+        if (s == null) {
+            return "Pasien belum diskrining pada kunjungan ini";
+        }
+        String teks = "Keluhan awal: " + s.getKeluhanAwal();
+        TandaVitalEntity tv = s.getTandaVital();
+        if (tv == null) {
+            return teks;
+        }
+        String gula = tv.getGulaDarah() == null ? "-" : tv.getGulaDarah() + " mg/dL";
+        return teks + "\nTekanan darah " + tv.getSistolik() + "/" + tv.getDiastolik() + " mmHg  |  Berat "
+                + tv.getBeratBadan() + " kg  |  Tinggi " + tv.getTinggiBadan() + " cm  |  IMT "
+                + String.format("%.1f", tv.hitungIMT()) + "\nSuhu " + tv.getSuhu() + " °C  |  Nadi " + tv.getNadi()
+                + " bpm  |  Gula darah " + gula;
     }
 
     private String labelDaftar(KunjunganEntity k) {

@@ -80,6 +80,9 @@ public class DataKlinisBoundary {
     // Tambahan implementasi (B.1): jadwal seorang pasien yang sudah jatuh tempo, ditandai selesai saat ia datang.
     private static final String Q_C59_19 = "SELECT id_jadwal, id_pasien, tanggal_rencana, status FROM jadwal_kontrol "
             + "WHERE id_pasien = ? AND status = 'terjadwal' AND tanggal_rencana <= ? ORDER BY id_jadwal";
+    // Tambahan HIUPL (C22-UT37): jadwal terjadwal pasien pada satu tanggal, termasuk yang sudah masuk daftar pantau.
+    private static final String Q_C59_20 = "SELECT id_jadwal, id_pasien, tanggal_rencana, status FROM jadwal_kontrol "
+            + "WHERE id_pasien = ? AND status = 'terjadwal' AND tanggal_rencana = ? ORDER BY id_jadwal";
 
     private Connection koneksi;
 
@@ -404,7 +407,19 @@ public class DataKlinisBoundary {
      * Mengambil jadwal "terjadwal" milik satu pasien dengan tanggal rencana sampai {@code tanggal} (Q-C59-19).
      */
     public List<JadwalKontrolEntity> jadwalJatuhTempo(int idPasien, LocalDate tanggal) {
-        try (PreparedStatement ps = koneksi.prepareStatement(Q_C59_19)) {
+        return ambilJadwalPasien(Q_C59_19, idPasien, tanggal);
+    }
+
+    /**
+     * Mengambil jadwal "terjadwal" milik satu pasien tepat pada {@code tanggal}, baik yang sudah maupun yang belum
+     * memicu entri daftar pantau, agar jadwal yang sama tidak dibuat dua kali (Q-C59-20).
+     */
+    public List<JadwalKontrolEntity> jadwalPadaTanggal(int idPasien, LocalDate tanggal) {
+        return ambilJadwalPasien(Q_C59_20, idPasien, tanggal);
+    }
+
+    private List<JadwalKontrolEntity> ambilJadwalPasien(String kueri, int idPasien, LocalDate tanggal) {
+        try (PreparedStatement ps = koneksi.prepareStatement(kueri)) {
             ps.setInt(1, idPasien);
             ps.setDate(2, Date.valueOf(tanggal));
             try (ResultSet rs = ps.executeQuery()) {
