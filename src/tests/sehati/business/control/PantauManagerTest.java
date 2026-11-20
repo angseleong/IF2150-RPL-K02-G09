@@ -32,7 +32,7 @@ import sehati.dataaccess.DataPantauBoundary;
 import sehati.dataaccess.DataPasienBoundary;
 
 /**
- * Pengujian unit C26 PantauManager (HIUPL Subbab 4.2, C26-UT01 sampai C26-UT25). Logika penyaringan dan pencatatan
+ * Pengujian unit C26 PantauManager (HIUPL Subbab 4.2, C26-UT01 sampai C26-UT26). Logika penyaringan dan pencatatan
  * diuji dengan DataBoundary pengganti. Alur yang membuka koneksi sendiri diuji pada kelas bersarang dengan basis data
  * uji dan memulihkan seed sesudahnya.
  */
@@ -258,6 +258,23 @@ class PantauManagerTest {
         IllegalStateException e = assertThrows(IllegalStateException.class, () -> manager.catatTindakLanjut(2,
                 new TindakLanjutEntity(0, "telepon", "terhubung", "akan datang")));
         assertEquals("Peran Petugas Farmasi tidak berwenang menjalankan tindakan ini", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("C26-UT26 catat negatif: pasien tanpa rekam medis ditolak dengan pesan yang jelas")
+    void catat_rekamMedisKosong() {
+        PantauPalsu pantau = new PantauPalsu(entri(1, "hipertensi", LocalDate.of(2026, 11, 1)));
+        DataPasienBoundary tanpaRekamMedis = new DataPasienBoundary(null) {
+            @Override
+            public RekamMedisEntity ambilRekamMedis(int idPasien) {
+                return null;
+            }
+        };
+
+        IllegalStateException e = assertThrows(IllegalStateException.class, () -> manager.catat(pantau,
+                tanpaRekamMedis, 1, new TindakLanjutEntity(0, "telepon", "terhubung", "akan datang")));
+
+        assertEquals("Rekam medis pasien tidak ditemukan: 101", e.getMessage());
     }
 
     @Nested
