@@ -308,7 +308,10 @@
 | *20-11-2026* | *Muhammad Adnan Kurniawan* | *Meninjau dan menggabungkan PR #69 (pelaporan) dan #71 (loket): menyelesaikan konflik dengan main, menghapus salinan lama `AlurUtamaTest` dan `KonkurensiTest` yang membuat 3 test error, serta melengkapi bukti modul loket (gambar test runner, coverage, dan tangkapan layar UC02 dan UC03) dan mengoreksi angka coverage, KNF01, dan KNF10* | *2,5* | *Done* | *Resolusi konflik sebelumnya di branch loket menggandakan baris HIUPL; dirapikan sebelum digabung* |
 
 **Catatan/Evaluasi Milestone 10:**
-* *[Diisi setelah seluruh bagian masuk ke main]*
+* *Seluruh bagian HIUPL keenam modul sudah masuk ke `main` lewat PR #65 sampai #72. Seluruh `mvn test` pada basis data uji yang baru di-reset menghasilkan 701 test tanpa gagal (6 dilewati karena butuh data besar atau lingkungan khusus).*
+* *Tiga temuan Fail selama pengujian (C17-UT17, UC05-TC01, dan C22-UT37/UC05-TC08) diperbaiki dengan jejak Fail tetap dicatat di HIUPL.*
+* *Kendala utama ada pada penggabungan: dokumen HIUPL diisi enam orang secara paralel, sehingga resolusi konflik di branch loket sempat menggandakan baris tabel dan menyisakan placeholder. Hal ini dirapikan saat peninjauan sebelum digabung.*
+* *KNF10 baru diuji di Linux. Pengujian di Windows 10/11 belum dilakukan karena tidak ada perangkat Windows saat pengujian.*
 
 ---
 
