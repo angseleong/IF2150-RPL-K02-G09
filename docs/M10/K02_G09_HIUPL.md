@@ -64,6 +64,7 @@ Dipersiapkan oleh:
 | Revisi | Deskripsi |
 | :--- | :--- |
 | A | Versi pertama HIUPL. BAB 1 dan BAB 2 disusun dari DPPL Tugas 8 dan SKPL Tugas 5, ditambah istilah dan pola ID pengujian. BAB 3 merangkum implementasi pada tag `v9.0` (Tugas 9) beserta perbaikan kode hasil pengujian (Tabel 3.5). BAB 4 dan BAB 5 berisi hasil pengujian dan matriks kerunutan yang baru disusun pada dokumen ini. |
+| B | Versi final setelah draf 17 November 2026. Hasil pengujian keenam modul dilengkapi pada BAB 4 dan BAB 5. Baris ganda dari penggabungan dihapus. ID pengujian, tabel C58, dan baris C35-UT02 sampai C35-UT04 serta C57-UT04 disesuaikan dengan test yang sebenarnya. Angka *coverage* modul loket, hasil KNF01, dan batasan KNF10 (Windows belum diuji) dikoreksi. Bukti modul loket (UC02, UC03, KNF01, KNF10, KNF11) ditambahkan, dan status akhir KF pada BAB 5 diperbarui. |
 
 ---
 
@@ -312,10 +313,12 @@ Tabel 3.4. File Lain
 | 12 | `src/src/main/java/sehati/presentation/Navigasi.java`, `BilahAplikasi.java`, `LatarBelakang.java`, `LogoSehati.java`, `PanelPeringatan.java`, `PenandaKolom.java`, `TabelPintasan.java` | Pendukung lapisan presentasi: perpindahan layar dan cek hak akses, bilah aplikasi, tugas latar, logo, panel peringatan merah, penanda kolom bermasalah, dan layar bantuan pintasan |
 | 13 | `src/src/main/java/sehati/business/control/PenyusunBundelFHIR.java` | Penyusun isi bundel HL7 FHIR R4 yang dipakai `ApotekManager` dan `PemeriksaanManager` (Tabel B.1 nomor 47) |
 | 14 | `src/src/main/java/sehati/dataaccess/ResponsKirim.java` | Record hasil pengiriman bundel dari `SATUSEHATGateway` |
-| 15 | `src/tests/sehati/**/*Test.java` (51 kelas test) | Test JUnit per kelas pada paket yang sama dengan kelas yang diuji, test integrasi pada `src/tests/sehati/integrasi/`, serta `AlurUtamaTest`, `KonkurensiTest`, dan `KnfFarmasiTest` (KNF03 dan KNF13) |
+| 15 | `src/tests/sehati/**/*Test.java` (59 kelas test) | Test JUnit per kelas pada paket yang sama dengan kelas yang diuji, test integrasi pada `src/tests/sehati/integrasi/`, `KnfLoketTest` (KNF01, KNF10, KNF11) pada `src/tests/sehati/kinerja/`, serta `AlurUtamaTest`, `KonkurensiTest`, dan `KnfFarmasiTest` (KNF03 dan KNF13) |
 | 16 | `src/tests/sehati/dataaccess/JdbcPalsu.java`, `src/tests/sehati/DataUjiAlur.java`, `src/tests/sehati/PratinjauLayar.java`, `src/tests/sehati/CadanganFarmasi.java`, `src/tests/sehati/ProsesFarmasiKnf13.java` | Pendukung test: pengganti JDBC untuk uji tanpa basis data, penyiap data alur, pembuka satu layar tanpa masuk, penyimpan dan pemulih keadaan tabel farmasi, serta proses aplikasi terpisah yang dimatikan paksa pada KNF13-TC01 |
 | 17 | `src/README.md` | Cara memasang, menjalankan aplikasi, dan menjalankan test |
 | 18 | `.github/workflows/` | CI GitHub Actions yang menjalankan `mvn test` pada setiap PR |
+| 19 | `src/tests/sehati/TangkapanLayar.java` | Pengambil tangkapan layar form dengan basis data uji untuk bukti use case Subbab 4.6 (UC02, UC03, UC10, UC11). Dijalankan dengan `mvn test-compile exec:java -Dexec.classpathScope=test -Dexec.mainClass=sehati.TangkapanLayar` |
+| 20 | `src/tests/sehati/PemanduLayarSkrining.java`, `src/tests/sehati/FiksturSkrining.java` | Pemandu layar dan data fikstur untuk bukti UC04, UC09, KNF08, dan KNF12 |
 
 Tabel 3.5. Perubahan Implementasi setelah `v9.0` dari Hasil Pengujian
 
@@ -1194,7 +1197,7 @@ Tabel 4.2.19. Hasil Pengujian Unit Kelas C34
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | C34-UT01 | `tambahEntri(catatan: String): void` | Normal | Catatan "Demam berdarah" | Riwayat bertambah satu entri | Sesuai | Pass |
 | C34-UT02 | `tambahEntri(catatan: String): void` | Negatif | Catatan `null`, `""`, dan "  " | `IllegalArgumentException` "Catatan rekam medis wajib diisi" | Ketiganya ditolak | Pass |
-| C34-UT03 | `kosongkanEntriBaru(): void` | Normal | Penampung berisi catatan | Penampung dikosongkan | `List.of()` | Sesuai | Pass |
+| C34-UT03 | `kosongkanEntriBaru(): void` | Normal | Penampung berisi catatan | Penampung dikosongkan menjadi `List.of()`, riwayat tidak tersentuh | Sesuai | Pass |
 
 ### 4.2.20 Kelas KunjunganEntity
 
@@ -1209,9 +1212,9 @@ Tabel 4.2.20. Hasil Pengujian Unit Kelas C35
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | C35-UT01 | `perbaruiStatus(status: String): void` | Normal | Status "menunggu skrining" → "sedang diskrining" | Status berubah | Sesuai | Pass |
-| C35-UT02 | `perbaruiStatus(status: String): void` | Batas | Status "menunggu skrining" → "tidak hadir" | Status berubah | Sesuai | Pass |
-| C35-UT03 | `perbaruiStatus(status: String): void` | Negatif | Status "menunggu skrining" → "menunggu skrining" | `IllegalArgumentException`, status tetap | Ditolak, status tetap | Pass |
-| C35-UT04 | `perbaruiStatus(status: String): void` | Negatif | Status "selesai diperiksa" → "dibatalkan" | `IllegalStateException`, status tetap | Ditolak, status tetap | Pass |
+| C35-UT02 | `perbaruiStatus(status: String): void` | Negatif | Status "menunggu skrining" → "AKTIF" (tidak dikenal) | `IllegalArgumentException` "Status kunjungan tidak dikenal: AKTIF" | Pengecualian dan pesan sesuai | Pass |
+| C35-UT03 | `perbaruiStatus(status: String): void` | Negatif | Status "selesai" → "menunggu skrining" | `IllegalStateException` "Kunjungan sudah selesai dan tidak dapat diubah" | Pengecualian dan pesan sesuai | Pass |
+| C35-UT04 | `perbaruiStatus(status: String): void` | Batas | Status "siap diperiksa dokter" → "selesai" (status terakhir) | Status menjadi "selesai" | Sesuai | Pass |
 | C35-UT05 | `perbaruiStatus(status: String): void` | Negatif | Status `null` | `IllegalArgumentException` | Keduanya ditolak | Pass |
 | C35-UT06 | `aktifHariIni(tanggal: LocalDate): boolean` | Normal | Kunjungan aktif pada hari berjalan | `true` | Sesuai | Pass |
 | C35-UT07 | `aktifHariIni(tanggal: LocalDate): boolean` | Normal | Kunjungan selesai hari ini | `false` | Sesuai | Pass |
@@ -1730,7 +1733,7 @@ Tabel 4.2.39. Hasil Pengujian Unit Kelas C57
 | C57-UT01 | `polaPencarian(kataKunci: String): List<PasienEntity>` | Normal | Pencarian parsial nama | Pasien ditemukan | Sesuai | Pass |
 | C57-UT02 | `pasienTerbaru(): List<PasienEntity>` | Normal | Panggil tanpa masukan | Terurut baru ke lama, batas 50 | Sesuai | Pass |
 | C57-UT03 | `cariParsial(kataKunci: String): List<PasienEntity>` | Normal | Satu pola untuk tiga parameter | Hasil sesuai | Sesuai | Pass |
-| C57-UT04 | `ambilPasien(idPasien: int): PasienEntity` | Normal | ID yang ada | Pasien dimuat | Sesuai | Pass |
+| C57-UT04 | `ambilPasien(idPasien: int): PasienEntity` | Batas | ID pasien yang tidak ada | `null` | `null` | Pass |
 | C57-UT05 | `simpanPasien(p: PasienEntity): void` | Normal | Pasien baru, dua kueri dalam satu transaksi | Terkunci transaksi | Sesuai | Pass |
 | C57-UT06 | `simpanPasien(p: PasienEntity): void` | Normal | Pasien baru tanpa nomor RM | Dari sequence | Sesuai | Pass |
 | C57-UT07 | `simpanPasien(p: PasienEntity): void` | Normal | Manager membuka transaksi | Transaksi tidak tertutup | Sesuai | Pass |
@@ -1761,18 +1764,27 @@ Tabel 4.2.40. Hasil Pengujian Unit Kelas C58
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C58-UT01 | `kunciPoli(idPoli: int): PoliEntity` | Normal | FOR UPDATE untuk dua poli | Baris terkunci | Sesuai | Pass |
-| C58-UT02 | `kunciPoli(idPoli: int): PoliEntity` | Normal | Poli tidak ada | `null` | `null` | Pass |
-| C58-UT03 | `simpanPoli(p: PoliEntity): void` | Normal | Poli baru, id dari basis data | ID terisi | Sesuai | Pass |
-| C58-UT04 | `simpanPoli(p: PoliEntity): void` | Normal | Poli lama diperbarui | Nama dan urutan berubah | Sesuai | Pass |
-| C58-UT05 | `simpanPoli(p: PoliEntity): void` | Negatif | Nama poli ganda | `IllegalArgumentException` "Nama poli sudah digunakan" | Pengecualian dan pesan sesuai | Pass |
-| C58-UT06 | `kunjunganAktif(idPasien: int, tanggal: LocalDate): KunjunganEntity` | Normal | Kunjungan aktif hari ini | Kunjungan dimuat | Sesuai | Pass |
-| C58-UT07 | `kunjunganAktif(idPasien: int, tanggal: LocalDate): KunjunganEntity` | Normal | Hanya kunjungan belum selesai | Hanya aktif yang dimuat | Sesuai | Pass |
-| C58-UT08 | `simpanKunjungan(k: KunjunganEntity): void` | Normal | Kunjungan baru | ID dan nomor antrean terisi | Sesuai | Pass |
-| C58-UT09 | `simpanKunjungan(k: KunjunganEntity): void` | Negatif | Kunjungan aktif ganda | `IllegalArgumentException` "Kunjungan aktif ganda" | Pengecualian dan pesan sesuai | Pass |
-| C58-UT10 | `ambilAntrean(jenis: String): List<KunjunganEntity>` | Normal | Antrean skrining | Urutan nomor antrean | Sesuai | Pass |
-| C58-UT11 | `simpanAntrean(k: KunjunganEntity, jenis: String): void` | Normal | Antrean ditulis ulang | Urutan 1 sampai N | Sesuai | Pass |
-| C58-UT12 | `simpanAntrean(k: KunjunganEntity, jenis: String): void` | Negatif | Antrean gagal | Transaksi dibatalkan | Sesuai | Pass |
+| C58-UT01 | `kunciPoli(idPoli: int): PoliEntity` | Normal | Kunci dua poli seed | Kueri memakai `FOR UPDATE` dan baris dipetakan ke `PoliEntity` | Sesuai | Pass |
+| C58-UT02 | `kunciPoli(idPoli: int): PoliEntity` | Batas | ID poli yang tidak ada | `null` | `null` | Pass |
+| C58-UT03 | `simpanPoli(p: PoliEntity): void` | Normal | Poli baru | ID terisi dari basis data | Sesuai | Pass |
+| C58-UT04 | `simpanPoli(p: PoliEntity): void` | Normal | Poli lama dengan nama dan urutan baru | Nama dan urutan berubah | Sesuai | Pass |
+| C58-UT05 | `simpanPoli(p: PoliEntity): void` | Negatif | Nama poli yang sudah dipakai | `IllegalArgumentException` dengan pesan jelas | Pengecualian dan pesan sesuai | Pass |
+| C58-UT06 | `kunjunganAktif(idPasien: int, tanggal: LocalDate): KunjunganEntity` | Batas | Pasien tanpa kunjungan aktif | `null` | `null` | Pass |
+| C58-UT07 | `kunjunganAktif(idPasien: int, tanggal: LocalDate): KunjunganEntity` | Normal | Pasien dengan kunjungan selesai dan kunjungan aktif pada tanggal itu | Hanya kunjungan yang belum selesai pada tanggal itu | Sesuai | Pass |
+| C58-UT08 | `simpanKunjungan(k: KunjunganEntity): void` | Normal | Kunjungan baru, lalu kunjungan lama dengan status baru | ID terisi; kunjungan lama hanya berubah status | Sesuai | Pass |
+| C58-UT09 | `simpanKunjungan(k: KunjunganEntity): void` | Negatif | Kunjungan aktif kedua untuk pasien yang sama | `IllegalArgumentException` dengan pesan jelas | Pengecualian dan pesan sesuai | Pass |
+| C58-UT10 | `ambilAntrean(jenis: String): AntreanEntity` | Normal | Antrean "skrining" berisi entri | Entri terbaca terurut, baris antrean dikunci | Sesuai | Pass |
+| C58-UT11 | `ambilAntrean(jenis: String): AntreanEntity` | Negatif | Jenis antrean tidak dikenal | `IllegalArgumentException` | Pengecualian sesuai | Pass |
+| C58-UT12 | `simpanAntrean(a: AntreanEntity): void` | Normal | Antrean berisi N entri | Entri ditulis ulang dengan urutan 1 sampai N dalam satu transaksi | Sesuai | Pass |
+| C58-UT13 | `simpanAntrean(a: AntreanEntity): void` | Negatif | Penulisan gagal di tengah | Seluruh perubahan dibatalkan | Sesuai | Pass |
+| C58-UT14 | `ambilSemuaPoli(): List<PoliEntity>` | Normal | Poli seed | Seluruh poli terpetakan, terurut nama | Sesuai | Pass |
+| C58-UT15 | `ambilSemuaPoli(): List<PoliEntity>` | Batas | Tabel poli kosong | Daftar kosong | Sesuai | Pass |
+| C58-UT16 | `ambilKunjungan(idKunjungan: int): KunjunganEntity` | Normal | ID kunjungan yang ada | Baris kunjungan terpetakan | Sesuai | Pass |
+| C58-UT17 | `ambilKunjungan(idKunjungan: int): KunjunganEntity` | Batas | ID kunjungan yang tidak ada | `null` | `null` | Pass |
+| C58-UT18 | `kunjunganSiapPeriksa(tanggal: LocalDate): List<KunjunganEntity>` | Normal | Kunjungan siap diperiksa hari itu | Kunjungan hari itu terurut nomor antrean | Sesuai | Pass |
+| C58-UT19 | `kunjunganSiapPeriksa(tanggal: LocalDate): List<KunjunganEntity>` | Batas | Tanggal tanpa kunjungan siap diperiksa | Daftar kosong | Sesuai | Pass |
+| C58-UT20 | `simpanKunjungan(k: KunjunganEntity): void` | Negatif | Kunjungan lama yang tidak ditemukan | `IllegalArgumentException` | Pengecualian sesuai | Pass |
+| C58-UT21 | `simpanPoli(p: PoliEntity): void` | Negatif | Poli lama yang tidak ditemukan | `IllegalArgumentException` | Pengecualian sesuai | Pass |
 
 *Coverage* (bukan syarat kelas Sedang): 88,8% baris (135 dari 152) dan 88,0% cabang (44 dari 50).
 
@@ -2281,8 +2293,8 @@ Tabel 4.5. Hasil Pengujian KNF
 | KNF04-TC01 | KNF04 | Security | (1) 100% kata sandi tersimpan sebagai *hash* bcrypt dan 0 berupa teks polos. (2) 0 layar terbuka tanpa autentikasi. (3) Sesi diam berakhir paling cepat 15 menit dan paling lambat 16 menit setelah aktivitas terakhir (pewaktu memeriksa setiap menit) | (1) Inspeksi kolom `kata_sandi_hash` seluruh akun lewat `psql` (pola `^\$2a\$[0-9]{2}\$.{53}$`). (2) Aplikasi dibuka tanpa sesi, lalu masuk dengan kredensial salah dan akun nonaktif (UC01-TC02, UC01-TC03); `periksaHakAkses()` dengan peran `null` (C17-UT10). (3) Masuk sebagai `perawat` lalu dibiarkan tanpa ketukan atau klik, waktu dibaca dari audit. Pengulangan: (1) 7 akun, (2) 3 kasus, (3) 1 kali selama 16 menit | (1) 7 dari 7 akun ber-*hash* bcrypt (`$2a$10$` untuk akun seed, `$2a$12$` untuk akun dari UC12), 0 teks polos. (2) Aplikasi selalu dibuka di layar Masuk dan seluruh layar lain ditolak tanpa peran. (3) Masuk 14:44:40 (audit 378), sesi berakhir 15:00:38 (audit 479 "Sesi berakhir setelah diam 15 menit"), yaitu 15 menit 58 detik, dan layar Masuk menampilkan "Anda tidak aktif selama 15 menit. Masuk lagi untuk melanjutkan." | Pass. Batas: pengukuran sesi diam hanya satu kali karena satu pengulangan butuh 16 menit; ketelitian pewaktu dibatasi pemeriksaan per menit |
 | KNF05-TC01 | KNF05 | Security | (1) 0 layar di luar peran yang dapat dibuka. (2) Operasi tulis tanpa sesi atau dengan peran lain ditolak di `Manager`. (3) 0 dari 3 perintah ubah/hapus jejak audit berhasil dengan akun aplikasi `sehati_app` | (1) Dasbor tiap peran dan perintah buka langsung (UC01-TC01, UC01-TC04), matriks `periksaHakAkses()` (C17-UT07 s.d. C17-UT10). (2) Inspeksi kode: pemanggilan `SesiAktif.wajibPeran()` pada `Manager`, diuji lewat C29-UT10, C22-UT15, dan C23-UT21. (3) `psql` sebagai `sehati_app`: `DELETE`, `UPDATE`, dan `TRUNCATE` pada `audit`, masing-masing sekali | (1) Dasbor perawat hanya memuat 3 layar perawat, dan perintah buka Formulir Pemeriksaan ditolak "Akses ditolak: Peran Perawat tidak berwenang membuka layar ini". (2) 22 pemanggilan `wajibPeran()` pada 11 `Manager`. Ketiga test menolak sesi berperan lain dan sesi kosong. (3) Ketiga perintah ditolak "permission denied for table audit", jumlah audit tetap 231 | Pass. Catatan: `KonfigurasiManager.jalankanPencadangan()` sengaja tidak memanggil `wajibPeran()` karena juga dijalankan penjadwal tanpa sesi. Tombolnya hanya ada pada I-15 yang terbatas untuk Petugas Administrasi |
 | KNF06-TC01 | KNF06 | Reliability | (1) 5 dari 5 pencadangan berhasil dan lolos verifikasi arsip selagi aplikasi dipakai. (2) 0 operasi pengguna gagal dan waktu tanggap maksimum di bawah 1 detik selama pencadangan. (3) Arsip berupa *snapshot* konsisten: perubahan yang belum di-*commit* tidak ikut tersalin | Program uji `UjiKnf06` (di luar repo) menjalankan `KonfigurasiManager.jalankanPencadangan()` 5 kali dengan `pg_dump` 18.6, sementara *thread* lain terus-menerus masuk, memuat data master, dan keluar lewat `AutentikasiManager` dan `KonfigurasiManager`. Pada pengulangan pertama, koneksi lain memegang transaksi belum di-*commit* yang mengubah ambang hipertensi menjadi 999. Setiap arsip diperiksa dengan `pg_restore --list` dan `pg_restore --data-only --table=ambang_risiko` | (1) 5 dari 5 "berhasil", 136 sampai 247 ms per pencadangan, setiap arsip memuat 28 data tabel. (2) 42 operasi pengguna, 0 gagal, rata-rata 107,1 ms, maksimum 311 ms. (3) Kelima arsip memuat ambang hipertensi 145 (nilai ter-*commit*), bukan 999 | Pass. Temuan: nama arsip hanya sampai detik (Tabel B.1 nomor 33), sehingga dua pencadangan pada detik yang sama menulis ke berkas yang sama dan arsip pertama tertimpa (catatan 35 dan 36, 38 dan 39). Pada aplikasi, tombol pencadangan nonaktif selama proses berjalan, tetapi penjadwal dan tombol masih dapat bertabrakan. Disarankan menambah milidetik atau penanda unik pada nama berkas |
-| KNF07-TC01 | KNF07 | Portability | Bundel sinkronisasi tersusun menurut HL7 FHIR R4 dan diterima platform SATUSEHAT tanpa konversi tambahan; 0 kesalahan validasi | Validasi bundel hasil `PenyusunBundelFHIR` terhadap standar HL7 FHIR R4 memakai server uji SATUSEHAT (mode simulasi) dan pemeriksaan struktur JSON (`bundel-fhir-contoh.json`); jumlah error dicatat | Bundel berjenis `Bundle` `transaction` berisi resource `Condition`; diterima server uji dengan 0 kesalahan | Terpenuhi |
-| KNF09-TC01 | KNF09 | Availability | 100% fungsi pelayanan rawat jalan (UC02 s.d. UC07) tetap tersedia tanpa koneksi internet; jaringan putus hanya menunda sinkronisasi | Matikan koneksi internet (`SATUSEHAT_URL` diarahkan ke alamat tak terjangkau), jalankan UC02 s.d. UC07, catat persentase fungsi yang berhasil | Seluruh fungsi UC02 s.d. UC07 berjalan penuh (100%) karena hanya memakai basis data lokal; sinkronisasi SATUSEHAT (UC11) mendeteksi luring dan mengalihkan ke ekspor bundel terenkripsi | Terpenuhi |
+| KNF07-TC01 | KNF07 | Portability | Bundel sinkronisasi tersusun menurut HL7 FHIR R4 dan diterima platform SATUSEHAT tanpa konversi tambahan; 0 kesalahan validasi | Validasi bundel hasil `PenyusunBundelFHIR` terhadap standar HL7 FHIR R4 memakai server uji SATUSEHAT (mode simulasi) dan pemeriksaan struktur JSON (`bundel-fhir-contoh.json`); jumlah error dicatat | Bundel berjenis `Bundle` `transaction` berisi resource `Condition`; diterima server uji dengan 0 kesalahan | Pass |
+| KNF09-TC01 | KNF09 | Availability | 100% fungsi pelayanan rawat jalan (UC02 s.d. UC07) tetap tersedia tanpa koneksi internet; jaringan putus hanya menunda sinkronisasi | Matikan koneksi internet (`SATUSEHAT_URL` diarahkan ke alamat tak terjangkau), jalankan UC02 s.d. UC07, catat persentase fungsi yang berhasil | Seluruh fungsi UC02 s.d. UC07 berjalan penuh (100%) karena hanya memakai basis data lokal; sinkronisasi SATUSEHAT (UC11) mendeteksi luring dan mengalihkan ke ekspor bundel terenkripsi | Pass |
 | KNF08-TC01 | KNF08 | Ergonomy | Untuk 3 dari 3 jenis risiko (hipertensi, obesitas, indikasi diabetes), peringatan merah dengan ikon tampil segera setelah Simpan dengan 0 langkah tambahan dan 0 peristiwa tetikus | `PemanduLayarSkrining`: formulir diisi dengan papan ketik, Ctrl+S ditekan, panel penanda (`panelPenanda`) diperiksa tampil dan jendela dipotret, serta penanda tersimpan dibaca dari basis data. 3 pengulangan, satu jenis risiko per pengulangan | 3 dari 3 panel penanda tampil dengan ikon dan teks "Risiko ... terdeteksi" berwarna merah. Penanda tersimpan sesuai (hipertensi, obesitas, indikasi diabetes). Peristiwa tetikus sesudah Simpan: 0 | Pass |
 | KNF10-TC01 | KNF10 | Portability | (1) Aplikasi berjalan pada Windows 10/11 64-bit dan Linux 64-bit dengan RAM minimal 4 GB dan disk bebas minimal 2 GB | (1) `KnfLoketTest` KNF10-TC01 memeriksa arsitektur 64-bit, RAM, dan disk bebas, lalu seluruh `mvn test` dijalankan | (1) Ubuntu 26.04 LTS amd64, JVM 21.0.13, RAM 14,8 GB, disk bebas 32,5 GB: lulus, 701 test tanpa gagal. Windows 10/11 belum diuji karena tidak ada perangkat Windows saat pengujian | Pass untuk Linux; Windows belum diuji |
 | KNF11-TC01 | KNF11 | Reliability | (1) Beberapa loket membuka kunjungan bersamaan pada poli yang sama tanpa nomor ganda atau data hilang | (1) `KnfLoketTest` KNF11-TC01: lima thread membuka kunjungan serentak pada satu poli, ditambah INT-TC33 | (1) Nomor antrean 1 sampai 5 tanpa duplikat, `urutan_terakhir` 5, lima baris kunjungan tersimpan | Pass |
@@ -2479,7 +2491,7 @@ Pada `v9.0`, tiga KF belum terpenuhi karena memiliki *test case* `Fail`:
 - **KF12** (UC05-TC08, C22-UT37): jadwal kontrol pada tanggal yang sama dapat dibuat dua kali setelah jadwal pertama masuk daftar pantau.
 - **KF16** (C17-UT17): `periksaHakAkses()` melempar `NullPointerException` untuk nama layar `null` alih-alih menolak akses.
 
-Ketiganya sudah diperbaiki (Tabel 3.5) dan diuji ulang dengan hasil `Pass`. Bagian KF12 milik UC09 sudah diuji (UC09-TC01) dan berkesimpulan `Pass`. Seluruh *test case* modul farmasi berkesimpulan `Pass`, sehingga KF13 dan KF17 terpenuhi, sedangkan KF14 dan KF23 masih menunggu KNF07-TC01 dan pengujian loket. KF lain menunggu hasil pengujian setiap modul.
+Ketiganya sudah diperbaiki (Tabel 3.5) dan diuji ulang dengan hasil `Pass`. Pada kode akhir, seluruh *test case* unit, integrasi, use case, dan KNF yang dirujuk Tabel 5.1 berkesimpulan `Pass` (701 test otomatis tanpa gagal), sehingga KF01 sampai KF24 terpenuhi. Satu batasan dicatat pada KF22: KNF10-TC01 baru dijalankan di Linux, sedangkan Windows 10/11 belum diuji (Subbab 4.5).
 
 Tabel 5.2. Matriks Kerunutan KNF terhadap Pengujian
 
