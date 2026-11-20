@@ -30,7 +30,7 @@ import sehati.dataaccess.DataSinkronisasiBoundary;
 import sehati.dataaccess.ResponsKirim;
 import sehati.dataaccess.SATUSEHATGateway;
 
-// Pengujian unit C28 SinkronisasiManager (HIUPL Subbab 4.2, C28-UT01 sampai C28-UT09).
+// Pengujian unit C28 SinkronisasiManager (HIUPL Subbab 4.2, C28-UT01 sampai C28-UT11).
 @DisplayName("C28 SinkronisasiManager")
 @TestMethodOrder(MethodOrderer.DisplayName.class)
 class SinkronisasiManagerTest {
@@ -147,6 +147,33 @@ class SinkronisasiManagerTest {
 
     private static BundelFHIREntity bundel(int id) {
         return new BundelFHIREntity(id, id + 19, "{}", "tertunda", null);
+    }
+
+    @Test
+    @DisplayName("C28-UT10 kirimSemua batas: daring tanpa bundel tertunda tidak mengirim apa pun")
+    void kirimSemua_tanpaBundelTertunda() {
+        GatewayPalsu gateway = new GatewayPalsu();
+        DataPalsu data = new DataPalsu();
+        SinkronisasiManager manager = new SinkronisasiManager(() -> gateway);
+
+        List<BundelFHIREntity> hasil = manager.kirimSemua(data, gateway);
+
+        assertTrue(hasil.isEmpty());
+        assertTrue(gateway.dikirim.isEmpty());
+        assertTrue(data.diperbarui.isEmpty());
+        assertEquals(0, manager.getJumlahTertunda());
+    }
+
+    @Test
+    @DisplayName("C28-UT11 muatStatus batas: daring tanpa bundel tertunda maupun riwayat")
+    void muatStatus_daringTanpaBundel() {
+        SinkronisasiManager manager = new SinkronisasiManager(GatewayPalsu::new);
+
+        List<BundelFHIREntity> hasil = manager.muatStatus(new DataPalsu(), true);
+
+        assertTrue(hasil.isEmpty());
+        assertTrue(manager.isDaring());
+        assertEquals(0, manager.getJumlahTertunda());
     }
 
     private static final class GatewayPalsu extends SATUSEHATGateway {

@@ -30,7 +30,7 @@ import sehati.business.entity.SesiEntity;
 import sehati.common.SesiAktif;
 import sehati.dataaccess.DataLaporanBoundary;
 
-// Pengujian unit C27 LaporanManager (HIUPL Subbab 4.2, C27-UT01 sampai C27-UT10).
+// Pengujian unit C27 LaporanManager (HIUPL Subbab 4.2, C27-UT01 sampai C27-UT11).
 @DisplayName("C27 LaporanManager")
 @TestMethodOrder(MethodOrderer.DisplayName.class)
 class LaporanManagerTest {
@@ -46,6 +46,15 @@ class LaporanManagerTest {
         DataLaporanPalsu data = new DataLaporanPalsu(hasil);
 
         assertSame(hasil, LaporanManager.hitungRekapitulasi(MULAI, AKHIR, null, data));
+    }
+
+    @Test
+    @DisplayName("C27-UT11 hitungRekapitulasi batas: rentang satu hari, mulai dan akhir sama dengan hari ini")
+    void hitungRekapitulasi_rentangSatuHari() {
+        LaporanEntity hasil = new LaporanEntity(0, HARI_INI, HARI_INI, null, "total;semua kunjungan;1");
+        DataLaporanPalsu data = new DataLaporanPalsu(hasil);
+
+        assertSame(hasil, LaporanManager.hitungRekapitulasi(HARI_INI, HARI_INI, null, data));
     }
 
     @Test

@@ -267,6 +267,25 @@ class SATUSEHATGatewayTest {
         return new BundelFHIREntity(7, 21, "{\"resourceType\":\"Bundle\"}", "tertunda", null);
     }
 
+    @Test
+    @DisplayName("C15-UT17 kirimBundel batas: 401 berulang hanya memicu satu permintaan token lalu gagal")
+    void kirimBundel_batasSatuKaliPermintaanToken() {
+        AtomicInteger panggilan = new AtomicInteger();
+        server.createContext("/", exchange -> {
+            panggilan.incrementAndGet();
+            exchange.sendResponseHeaders(401, -1);
+            exchange.close();
+        });
+        GatewayUji gateway = new GatewayUji(alamat, "token-lama");
+
+        ResponsKirim respons = gateway.kirimBundel(bundel());
+
+        assertFalse(respons.berhasil());
+        assertEquals("SATUSEHAT menolak bundel (HTTP 401)", respons.alasan());
+        assertEquals(1, gateway.tokenDiminta);
+        assertEquals(2, panggilan.get());
+    }
+
     private static final class GatewayUji extends SATUSEHATGateway {
         private int tokenDiminta;
 

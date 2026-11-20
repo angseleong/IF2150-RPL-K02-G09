@@ -1,6 +1,7 @@
 package sehati.dataaccess;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -39,7 +40,7 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import sehati.business.entity.BundelFHIREntity;
 
-// Pengujian unit C63 DataSinkronisasiBoundary (HIUPL Subbab 4.2, C63-UT01 sampai C63-UT17).
+// Pengujian unit C63 DataSinkronisasiBoundary (HIUPL Subbab 4.2, C63-UT01 sampai C63-UT22).
 @DisplayName("C63 DataSinkronisasiBoundary")
 @TestMethodOrder(MethodOrderer.DisplayName.class)
 class DataSinkronisasiBoundaryTest {
@@ -278,6 +279,61 @@ class DataSinkronisasiBoundaryTest {
      * Uji terhadap basis data berisi src/db/schema.sql dan seed.sql. Aktif bila DB_UJI_URL diisi. Setiap uji
      * di-rollback.
      */
+    @Test
+    @DisplayName("C63-UT18 ambilTertunda batas: tanpa bundel tertunda mengembalikan daftar kosong")
+    void ambilTertunda_tanpaBundelMengembalikanDaftarKosong() {
+        JdbcPalsu jdbc = new JdbcPalsu().hasil("SELECT id_bundel, id_kunjungan", List.of());
+
+        assertTrue(new DataSinkronisasiBoundary(jdbc.koneksi()).ambilTertunda().isEmpty());
+    }
+
+    @Test
+    @DisplayName("C63-UT19 ambilTerkirimTerakhir batas: batas 1 mengirim parameter 1 dan membaca satu bundel")
+    void ambilTerkirimTerakhir_batasSatu() {
+        JdbcPalsu jdbc = new JdbcPalsu().hasil("WHERE status = 'terkirim'", List.of(
+                JdbcPalsu.baris("id_bundel", 9, "id_kunjungan", 30, "isi_bundel", "{}", "status", "terkirim",
+                        "alasan_gagal", null)));
+
+        List<BundelFHIREntity> hasil = new DataSinkronisasiBoundary(jdbc.koneksi()).ambilTerkirimTerakhir(1);
+
+        assertEquals(1, hasil.size());
+        assertEquals(1, jdbc.dijalankanMemuat("WHERE status = 'terkirim'").get(0).parameter().get(1));
+    }
+
+    @Test
+    @DisplayName("C63-UT20 ambilTerkirimTerakhir negatif: galat koneksi menjadi IllegalStateException")
+    void ambilTerkirimTerakhir_galatKoneksi() {
+        JdbcPalsu jdbc = new JdbcPalsu().gagal("WHERE status = 'terkirim'", "08006", "putus");
+
+        IllegalStateException e = assertThrows(IllegalStateException.class,
+                () -> new DataSinkronisasiBoundary(jdbc.koneksi()).ambilTerkirimTerakhir(10));
+
+        assertEquals("Basis data tidak dapat dihubungi", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("C63-UT21 perbaruiBundel batas: tepat satu baris berubah diterima")
+    void perbaruiBundel_tepatSatuBarisBerubah() {
+        JdbcPalsu jdbc = new JdbcPalsu().terubah("UPDATE bundel_fhir", 1);
+        BundelFHIREntity b = new BundelFHIREntity(5, 21, "{}", "gagal kirim", "Ditolak");
+
+        assertDoesNotThrow(() -> new DataSinkronisasiBoundary(jdbc.koneksi()).perbaruiBundel(b));
+        assertEquals("Ditolak", jdbc.dijalankanMemuat("UPDATE bundel_fhir").get(0).parameter().get(2));
+    }
+
+    @Test
+    @DisplayName("C63-UT22 simpanBundel batas: isi bundel JSON minimal tetap disimpan sebagai tertunda")
+    void simpanBundel_isiMinimal() {
+        JdbcPalsu jdbc = new JdbcPalsu().hasil("INSERT INTO bundel_fhir", List.of(JdbcPalsu.baris("id_bundel", 1)));
+        BundelFHIREntity b = new BundelFHIREntity(0, 1, "{}", null, null);
+
+        new DataSinkronisasiBoundary(jdbc.koneksi()).simpanBundel(b);
+
+        assertEquals(1, b.getIdBundel());
+        assertEquals("tertunda", b.getStatus());
+        assertEquals("{}", jdbc.dijalankanMemuat("INSERT INTO bundel_fhir").get(0).parameter().get(2));
+    }
+
     @Nested
     @EnabledIfEnvironmentVariable(named = "DB_UJI_URL", matches = ".+")
     class DenganBasisData {

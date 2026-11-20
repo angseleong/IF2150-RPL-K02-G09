@@ -65,4 +65,15 @@ class BundelFHIREntityTest {
         BundelFHIREntity b = bundel("terkirim");
         assertThrows(IllegalStateException.class, () -> b.tandaiGagal("gagal"));
     }
+
+    @Test
+    @DisplayName("C54-UT06 tandaiTerkirim batas: bundel tertunda tanpa alasan gagal langsung menjadi terkirim")
+    void tandaiTerkirim_bundelTertundaLangsungTerkirim() {
+        BundelFHIREntity b = bundel("tertunda");
+
+        b.tandaiTerkirim("bundle-1");
+
+        assertEquals("terkirim", b.getStatus());
+        assertNull(b.getAlasanGagal());
+    }
 }

@@ -129,4 +129,15 @@ class AntreanEntityTest {
         assertEquals("Entri tidak ada pada antrean apotek", e.getMessage());
         assertEquals(List.of(10), a.getDaftarEntri());
     }
+
+    @Test
+    @DisplayName("C37-UT13 keluarkan batas: mengeluarkan satu-satunya entri membuat antrean kosong")
+    void keluarkan_satuSatunyaEntriMembuatAntreanKosong() {
+        AntreanEntity a = antrean(5);
+
+        a.keluarkan(5);
+
+        assertEquals(List.of(), a.getDaftarEntri());
+        assertNull(a.ambilTerdepan());
+    }
 }
