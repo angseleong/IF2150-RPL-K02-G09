@@ -30,17 +30,24 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import sehati.business.entity.BundelFHIREntity;
 
+// Pengujian unit C63 DataSinkronisasiBoundary (HIUPL Subbab 4.2, C63-UT01 sampai C63-UT17).
+@DisplayName("C63 DataSinkronisasiBoundary")
+@TestMethodOrder(MethodOrderer.DisplayName.class)
 class DataSinkronisasiBoundaryTest {
 
     private static final String FRASA = "frasa-sandi-uji";
 
     @Test
+    @DisplayName("C63-UT01 sqlState normal: diambil dari penyebab batch")
     void sqlState_diambilDariPenyebabBatch() {
         BatchUpdateException batch = new BatchUpdateException("batch gagal", null, 0, new int[0], null);
         batch.setNextException(new SQLException("duplikat", "23505"));
@@ -48,6 +55,7 @@ class DataSinkronisasiBoundaryTest {
     }
 
     @Test
+    @DisplayName("C63-UT02 galat normal: menerjemahkan sqlState sesuai aturan")
     void galat_menerjemahkanSqlStateSesuaiAturan3() {
         assertInstanceOf(IllegalArgumentException.class,
                 DataSinkronisasiBoundary.galat("Uji", new SQLException("unik", "23505")));
@@ -63,12 +71,14 @@ class DataSinkronisasiBoundaryTest {
     }
 
     @Test
+    @DisplayName("C63-UT03 galat batas: meneruskan penolakan apa adanya")
     void galat_meneruskanPenolakanApaAdanya() {
         IllegalArgumentException asli = new IllegalArgumentException("Bundel tidak ditemukan: 5");
         assertSame(asli, DataSinkronisasiBoundary.galat("Uji", asli));
     }
 
     @Test
+    @DisplayName("C63-UT04 simpanBundel normal: menyisipkan bundel tertunda dan mengisi id")
     void simpanBundel_menyisipkanBundelTertundaDanMengisiId() {
         JdbcPalsu jdbc = new JdbcPalsu().hasil("INSERT INTO bundel_fhir", List.of(JdbcPalsu.baris("id_bundel", 7)));
         BundelFHIREntity b = new BundelFHIREntity(0, 21, "{\"resourceType\":\"Bundle\"}", null, "lama");
@@ -84,6 +94,7 @@ class DataSinkronisasiBoundaryTest {
     }
 
     @Test
+    @DisplayName("C63-UT05 simpanBundel negatif: kunjungan sudah punya bundel ditolak")
     void simpanBundel_kunjunganSudahPunyaBundelDitolak() {
         JdbcPalsu jdbc = new JdbcPalsu().gagal("INSERT INTO bundel_fhir", "23505", "duplikat");
         BundelFHIREntity b = new BundelFHIREntity(0, 21, "{}", null, null);
@@ -96,6 +107,7 @@ class DataSinkronisasiBoundaryTest {
     }
 
     @Test
+    @DisplayName("C63-UT06 simpanBundel negatif: bundel bukan JSON ditolak")
     void simpanBundel_bundelBukanJsonDitolak() {
         JdbcPalsu jdbc = new JdbcPalsu().gagal("INSERT INTO bundel_fhir", "22P02", "invalid input syntax");
         BundelFHIREntity b = new BundelFHIREntity(0, 21, "bukan json", null, null);
@@ -107,6 +119,7 @@ class DataSinkronisasiBoundaryTest {
     }
 
     @Test
+    @DisplayName("C63-UT07 ambilTertunda normal: mengembalikan daftar terurut")
     void ambilTertunda_mengembalikanDaftarTerurut() {
         JdbcPalsu jdbc = new JdbcPalsu().hasil("SELECT id_bundel, id_kunjungan", List.of(
                 JdbcPalsu.baris("id_bundel", 1, "id_kunjungan", 20, "isi_bundel", "{\"a\":1}", "status", "gagal kirim",
@@ -126,6 +139,7 @@ class DataSinkronisasiBoundaryTest {
     }
 
     @Test
+    @DisplayName("C63-UT08 ambilTerkirimTerakhir normal: mengirim batas dan membaca bundel")
     void ambilTerkirimTerakhir_mengirimBatasDanMembacaBundel() {
         JdbcPalsu jdbc = new JdbcPalsu().hasil("WHERE status = 'terkirim'", List.of(
                 JdbcPalsu.baris("id_bundel", 9, "id_kunjungan", 30, "isi_bundel", "{}", "status", "terkirim",
@@ -139,6 +153,7 @@ class DataSinkronisasiBoundaryTest {
     }
 
     @Test
+    @DisplayName("C63-UT09 ambilTertunda negatif: galat koneksi menjadi IllegalStateException")
     void ambilTertunda_galatKoneksiMenjadiIllegalStateException() {
         JdbcPalsu jdbc = new JdbcPalsu().gagal("SELECT id_bundel", "08006", "putus");
 
@@ -149,6 +164,7 @@ class DataSinkronisasiBoundaryTest {
     }
 
     @Test
+    @DisplayName("C63-UT10 perbaruiBundel normal: menulis status dan alasan")
     void perbaruiBundel_menulisStatusDanAlasan() {
         JdbcPalsu jdbc = new JdbcPalsu();
         BundelFHIREntity b = new BundelFHIREntity(5, 21, "{}", "terkirim", null);
@@ -162,6 +178,7 @@ class DataSinkronisasiBoundaryTest {
     }
 
     @Test
+    @DisplayName("C63-UT11 perbaruiBundel negatif: bundel tidak ditemukan ditolak")
     void perbaruiBundel_bundelTidakDitemukanDitolak() {
         JdbcPalsu jdbc = new JdbcPalsu().terubah("UPDATE bundel_fhir", 0);
         BundelFHIREntity b = new BundelFHIREntity(5, 21, "{}", "terkirim", null);
@@ -173,6 +190,7 @@ class DataSinkronisasiBoundaryTest {
     }
 
     @Test
+    @DisplayName("C63-UT12 tulisArsipTerenkripsi normal: menulis berkas terenkripsi dan dapat dibuka kembali")
     void tulisArsipTerenkripsi_menulisBerkasTerEnkripsiDanDapatDibukaKembali() throws Exception {
         Path lokasi = Files.createTempDirectory("sehati-arsip");
         try {
@@ -196,6 +214,7 @@ class DataSinkronisasiBoundaryTest {
     }
 
     @Test
+    @DisplayName("C63-UT13 tulisArsipTerenkripsi batas: daftar kosong menjadi larik kosong")
     void tulisArsipTerenkripsi_daftarKosongMenjadiLarikKosong() throws Exception {
         Path lokasi = Files.createTempDirectory("sehati-arsip");
         try {
@@ -207,6 +226,7 @@ class DataSinkronisasiBoundaryTest {
     }
 
     @Test
+    @DisplayName("C63-UT14 bundel contoh normal: berisi bundel transaction")
     void bundelFhirContoh_berisiBundelTransaction() throws IOException {
         String json = bacaContoh();
         assertTrue(json.contains("\"resourceType\": \"Bundle\""));
@@ -279,6 +299,7 @@ class DataSinkronisasiBoundaryTest {
         }
 
         @Test
+        @DisplayName("C63-UT15 ambilTertunda normal: mengambil tertunda dan gagal kirim terurut")
         void ambilTertunda_mengambilTertundaDanGagalKirimTerurut() {
             List<BundelFHIREntity> daftar = data.ambilTertunda();
             assertFalse(daftar.isEmpty());
@@ -292,6 +313,7 @@ class DataSinkronisasiBoundaryTest {
         }
 
         @Test
+        @DisplayName("C63-UT16 simpan lalu perbarui normal: bundel keluar dari antrean")
         void simpanLaluPerbarui_bundelKeluarDariAntrean() throws SQLException {
             int idKunjungan = idKunjunganTanpaBundel();
             BundelFHIREntity b = new BundelFHIREntity(0, idKunjungan, "{\"resourceType\":\"Bundle\"}", null, null);
@@ -309,6 +331,7 @@ class DataSinkronisasiBoundaryTest {
         }
 
         @Test
+        @DisplayName("C63-UT17 simpanBundel negatif: menolak kunjungan yang sudah punya bundel")
         void simpanBundel_menolakKunjunganYangSudahPunyaBundel() throws SQLException {
             int idKunjungan = idKunjunganBermandul();
             BundelFHIREntity b = new BundelFHIREntity(0, idKunjungan, "{}", null, null);
