@@ -65,6 +65,41 @@ class AmbangPenandaEntityTest {
     }
 
     @Test
+    @DisplayName("C40-UT06 pengubah dan pembaca: seluruh atribut ambang dapat diubah lewat konstruktor kosong")
+    void ambang_aksesor() {
+        AmbangRisikoEntity ambang = new AmbangRisikoEntity();
+
+        ambang.setIdAmbang(3);
+        ambang.setJenisRisiko("indikasi diabetes");
+        ambang.setNilaiBatas(200);
+
+        assertEquals(3, ambang.getIdAmbang());
+        assertEquals("indikasi diabetes", ambang.getJenisRisiko());
+        assertEquals(200, ambang.getNilaiBatas());
+        assertTrue(ambang.dilampaui(200));
+    }
+
+    @Test
+    @DisplayName("C41-UT05 pengubah dan pembaca: seluruh atribut penanda dapat diubah lewat konstruktor kosong")
+    void penanda_aksesor() {
+        PenandaRisikoEntity p = new PenandaRisikoEntity();
+        LocalDate tanggal = LocalDate.of(2026, 11, 4);
+
+        p.setIdPenanda(5);
+        p.setIdKunjungan(9);
+        p.setJenisRisiko("obesitas");
+        p.setTanggal(tanggal);
+        p.setStatus(PenandaRisikoEntity.STATUS_AKTIF);
+
+        assertEquals(5, p.getIdPenanda());
+        assertEquals(9, p.getIdKunjungan());
+        assertEquals("obesitas", p.getJenisRisiko());
+        assertEquals(tanggal, p.getTanggal());
+        p.cabut();
+        assertEquals(PenandaRisikoEntity.STATUS_DICABUT, p.getStatus());
+    }
+
+    @Test
     @DisplayName("C41-UT01 cabut normal: penanda aktif menjadi dicabut dan riwayatnya tetap")
     void cabut_normal() {
         PenandaRisikoEntity p = penanda();

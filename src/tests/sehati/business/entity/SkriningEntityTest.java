@@ -42,6 +42,23 @@ class SkriningEntityTest {
     }
 
     @Test
+    @DisplayName("C38-UT04 pengubah dan pembaca: seluruh atribut dapat diubah lewat konstruktor kosong")
+    void aksesor() {
+        SkriningEntity s = new SkriningEntity();
+        LocalDateTime waktu = LocalDateTime.of(2026, 11, 5, 8, 15);
+
+        s.setIdSkrining(4);
+        s.setIdKunjungan(2);
+        s.setKeluhanAwal("Demam");
+        s.setWaktu(waktu);
+
+        assertEquals(4, s.getIdSkrining());
+        assertEquals(2, s.getIdKunjungan());
+        assertEquals("Demam", s.getKeluhanAwal());
+        assertEquals(waktu, s.getWaktu());
+    }
+
+    @Test
     @DisplayName("C38-UT03 konstruktor batas: skrining baru belum memiliki tanda vital")
     void konstruktor_belumAdaTandaVital() {
         LocalDateTime waktu = LocalDateTime.of(2026, 11, 4, 9, 30);
