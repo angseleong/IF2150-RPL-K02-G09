@@ -4,8 +4,8 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Hari\]* |
-| **Tanggal** | *\[DD/MM/YYYY\]* |
+| **Hari** | Jumat |
+| **Tanggal** | 20/11/2026 |
 | **Kelas** | K02 |
 | **Nomor Kelompok** | G09 |
 | **Nama Kelompok** | Cumlaude |
@@ -27,10 +27,10 @@
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
+| 1. Asistensi membahas isi dokumen HIUPL (Tugas 10): struktur BAB 1 sampai BAB 5, tabel pengujian unit, integrasi, use case, KNF, serta bukti pengujian yang wajib dilampirkan pada Tabel 4.6. |
+| 2. Tingkat kedalaman pengujian setiap kelas (Mendalam, Sedang, atau Tidak perlu) ditentukan dari peran kelas pada use case dan jumlah cabang algoritmanya; kelas yang memegang algoritma penting diuji Mendalam. |
+| 3. Kelas dengan tingkat Mendalam wajib mencapai coverage minimal 70% untuk baris dan cabang, diukur dengan JaCoCo; pengujian integrasi dilakukan tanpa mock dengan basis data dan sistem eksternal (mode simulasi). |
+| 4. Setiap use case dan KNF yang menjadi tanggung jawab anggota diuji dengan skenario normal dan alternatif, hasilnya dicatat lengkap dengan tangkapan layar sebagai bukti. |
 
 **Notes for this section:**  
 *Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 

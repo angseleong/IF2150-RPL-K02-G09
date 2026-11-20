@@ -20,18 +20,25 @@ import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import sehati.business.entity.LaporanEntity;
 
+// Pengujian unit C62 DataLaporanBoundary (HIUPL Subbab 4.2, C62-UT01 sampai C62-UT12).
+@DisplayName("C62 DataLaporanBoundary")
+@TestMethodOrder(MethodOrderer.DisplayName.class)
 class DataLaporanBoundaryTest {
 
     private static final LocalDate MULAI = LocalDate.of(2026, 11, 1);
     private static final LocalDate AKHIR = LocalDate.of(2026, 11, 8);
 
     @Test
+    @DisplayName("C62-UT01 agregasi normal: menyusun ringkasan dan memulihkan koneksi")
     void agregasi_menyusunRingkasanDanMemulihkanKoneksi() {
         JdbcPalsu jdbc = new JdbcPalsu()
                 .hasil("SELECT p.nama_poli", List.of(
@@ -60,6 +67,7 @@ class DataLaporanBoundaryTest {
     }
 
     @Test
+    @DisplayName("C62-UT02 agregasi normal: penyaring poli dikirim ke ketiga kueri")
     void agregasi_penyaringPoliDikirimKeKetigaKueri() {
         JdbcPalsu jdbc = new JdbcPalsu()
                 .hasil("SELECT p.nama_poli", List.of(JdbcPalsu.baris("nama_poli", "Gigi", "jumlah", 2)))
@@ -78,6 +86,7 @@ class DataLaporanBoundaryTest {
     }
 
     @Test
+    @DisplayName("C62-UT03 agregasi batas: titik koma pada label diganti")
     void agregasi_menggantiTitikKomaPadaLabel() {
         JdbcPalsu jdbc = new JdbcPalsu()
                 .hasil("SELECT p.nama_poli", List.of(JdbcPalsu.baris("nama_poli", "Umum;Pagi", "jumlah", 1)))
@@ -90,6 +99,7 @@ class DataLaporanBoundaryTest {
     }
 
     @Test
+    @DisplayName("C62-UT04 agregasi negatif: gagal koneksi membatalkan transaksi dan memulihkan koneksi")
     void agregasi_gagalKoneksiMembatalkanTransaksiDanMemulihkanKoneksi() {
         JdbcPalsu jdbc = new JdbcPalsu().gagal("SELECT p.nama_poli", "08006", "putus");
 
@@ -104,6 +114,7 @@ class DataLaporanBoundaryTest {
     }
 
     @Test
+    @DisplayName("C62-UT05 simpanLaporan normal: mengisi id dari RETURNING")
     void simpanLaporan_mengisiIdDariReturning() {
         JdbcPalsu jdbc = new JdbcPalsu().hasil("INSERT INTO laporan", List.of(JdbcPalsu.baris("id_laporan", 9)));
         LaporanEntity laporan = new LaporanEntity(0, MULAI, AKHIR, "CSV", "total;semua kunjungan;0");
@@ -119,6 +130,7 @@ class DataLaporanBoundaryTest {
     }
 
     @Test
+    @DisplayName("C62-UT06 tulisBerkas normal: CSV menulis header dan ringkasan")
     void tulisBerkas_csvMenulisHeaderDanRingkasan() throws IOException {
         Path folder = Files.createTempDirectory("laporan-csv");
         try {
@@ -138,6 +150,7 @@ class DataLaporanBoundaryTest {
     }
 
     @Test
+    @DisplayName("C62-UT07 tulisBerkas batas: nama poli masuk nama berkas agar tidak saling menimpa")
     void tulisBerkas_namaPoliMasukNamaBerkasAgarTidakSalingMenimpa() throws IOException {
         Path folder = Files.createTempDirectory("laporan-poli");
         try {
@@ -158,6 +171,7 @@ class DataLaporanBoundaryTest {
     }
 
     @Test
+    @DisplayName("C62-UT08 tulisBerkas normal: PDF menulis berkas PDF")
     void tulisBerkas_pdfMenulisBerkasPdf() throws IOException {
         Path folder = Files.createTempDirectory("laporan-pdf");
         try {
@@ -179,6 +193,7 @@ class DataLaporanBoundaryTest {
     }
 
     @Test
+    @DisplayName("C62-UT09 tulisBerkas negatif: format tidak dikenal ditolak")
     void tulisBerkas_formatTidakDikenalDitolak() {
         LaporanEntity laporan = new LaporanEntity(0, MULAI, AKHIR, null, "total;semua kunjungan;1");
 
@@ -219,6 +234,7 @@ class DataLaporanBoundaryTest {
         }
 
         @Test
+        @DisplayName("C62-UT10 agregasi normal: mengembalikan ringkasan total dari basis data")
         void agregasi_mengembalikanRingkasanTotal() {
             LaporanEntity laporan = data.agregasiKunjungan(LocalDate.now().minusDays(30), LocalDate.now(), null);
 
@@ -227,6 +243,7 @@ class DataLaporanBoundaryTest {
         }
 
         @Test
+        @DisplayName("C62-UT11 agregasi batas: poli tanpa kunjungan mengembalikan nol")
         void agregasi_poliTanpaKunjunganMengembalikanNol() {
             LaporanEntity laporan = data.agregasiKunjungan(LocalDate.now().minusDays(30), LocalDate.now(), -1);
 
@@ -234,6 +251,7 @@ class DataLaporanBoundaryTest {
         }
 
         @Test
+        @DisplayName("C62-UT12 simpanLaporan normal: mengisi id dari basis data")
         void simpanLaporan_mengisiId() {
             LaporanEntity laporan = new LaporanEntity(0, LocalDate.now().minusDays(1), LocalDate.now(), "CSV",
                     "total;semua kunjungan;1");

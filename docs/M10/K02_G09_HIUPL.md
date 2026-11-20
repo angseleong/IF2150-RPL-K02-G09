@@ -363,7 +363,7 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C12 | DaftarPantauForm | Tidak perlu | Kelas tampilan layar I-12, meneruskan penyaring dan tindak lanjut ke PantauManager | - (teruji lewat UC09) |
 | C13 | LaporanForm | Tidak perlu | Kelas tampilan layar I-13, meneruskan rentang dan ekspor ke LaporanManager | - (teruji lewat UC10) |
 | C14 | SinkronisasiForm | Tidak perlu | Kelas tampilan layar I-14, meneruskan perintah ke SinkronisasiManager | - (teruji lewat UC11) |
-| C15 | SATUSEHATGateway | Mendalam | Integrasi eksternal ke REST API SATUSEHAT, termasuk mode simulasi dan penanganan galat jaringan (Algo-C15-01, Algo-C15-02) | *[C15-UT01 s.d. C15-UT.., diisi Fachry]* |
+| C15 | SATUSEHATGateway | Mendalam | Integrasi eksternal ke REST API SATUSEHAT, termasuk mode simulasi dan penanganan galat jaringan (Algo-C15-01, Algo-C15-02) | C15-UT01 s.d. C15-UT16 |
 | C16 | KonfigurasiForm | Tidak perlu | Kelas tampilan layar I-15, meneruskan perubahan ke KonfigurasiManager | - (teruji lewat UC12-TC01 s.d. UC12-TC05) |
 | C17 | AutentikasiManager | Mendalam | Keamanan: verifikasi kredensial bcrypt, sesi, batas diam 15 menit, dan hak akses peran (Algo-C17-01, Algo-C17-02) | C17-UT01 s.d. C17-UT17, INT-TC01, INT-TC02 |
 | C18 | PasienManager | Mendalam | Validasi NIK 16 digit dan keunikannya serta penerbitan nomor rekam medis (Algo-C18-01, Algo-C18-02) | *[C18-UT01 s.d. C18-UT.., diisi Steven]* |
@@ -375,8 +375,8 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C24 | ApotekManager | Mendalam | Transaksi penyerahan obat: potong stok FEFO, tutup kunjungan, dan susun bundel FHIR (Algo-C24-01, Algo-C24-02) | C24-UT01 s.d. C24-UT37, INT-TC23, INT-TC24, KNF03-TC01, KNF13-TC01 |
 | C25 | PersediaanManager | Mendalam | Validasi penerimaan obat, penambahan stok, dan peringatan stok serta kedaluwarsa (Algo-C25-01 s.d. Algo-C25-03) | C25-UT01 s.d. C25-UT20, INT-TC25, INT-TC26, KNF13-TC01 |
 | C26 | PantauManager | Mendalam | Penyaringan daftar pantau dan perubahan status tindak lanjut (Algo-C26-01) | C26-UT01 s.d. C26-UT26, INT-TC15, INT-TC16 |
-| C27 | LaporanManager | Mendalam | Perhitungan rekapitulasi dan validasi rentang tanggal (Algo-C27-01, Algo-C27-02) | *[C27-UT01 s.d. C27-UT.., diisi Fachry]* |
-| C28 | SinkronisasiManager | Mendalam | Aturan kirim saat daring serta tahan dan ekspor saat luring (Algo-C28-01, Algo-C28-02) | *[C28-UT01 s.d. C28-UT.., diisi Fachry]* |
+| C27 | LaporanManager | Mendalam | Perhitungan rekapitulasi dan validasi rentang tanggal (Algo-C27-01, Algo-C27-02) | C27-UT01 s.d. C27-UT10 |
+| C28 | SinkronisasiManager | Mendalam | Aturan kirim saat daring serta tahan dan ekspor saat luring (Algo-C28-01, Algo-C28-02) | C28-UT01 s.d. C28-UT09 |
 | C29 | KonfigurasiManager | Mendalam | Validasi akun (nama unik, sandi minimal 8 karakter, peran), data master, dan pencadangan (Algo-C29-01 s.d. Algo-C29-03) | C29-UT01 s.d. C29-UT37, INT-TC03 s.d. INT-TC06 |
 | C30 | PenggunaEntity | Mendalam | Keamanan: pencocokan kata sandi bcrypt dan status aktif akun (Algo-C30-01) | C30-UT01 s.d. C30-UT11 |
 | C31 | SesiEntity | Mendalam | Keamanan: batas diam sesi pada habisWaktu() (Algo-C31-01) | C31-UT01 s.d. C31-UT07 |
@@ -401,8 +401,8 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C50 | PenerimaanObatEntity | Mendalam | Perhitungan total jumlah seluruh bets (Algo-C50-01) | C50-UT01 s.d. C50-UT03 |
 | C51 | DaftarPantauEntity | Mendalam | Aturan transisi status tindak lanjut (Algo-C51-01) | C51-UT01 s.d. C51-UT06 |
 | C52 | TindakLanjutEntity | Tidak perlu | Hanya menyimpan data tindak lanjut; terhubung() membandingkan satu atribut | - (teruji lewat UC09) |
-| C53 | LaporanEntity | Mendalam | kosong() mengurai ringkasan rekapitulasi dengan beberapa cabang (Algo-C53-01) | *[C53-UT01 s.d. C53-UT.., diisi Fachry]* |
-| C54 | BundelFHIREntity | Mendalam | Aturan status kirim: bundel terkirim tidak dapat ditandai ulang (Algo-C54-01) | *[C54-UT01 s.d. C54-UT.., diisi Fachry]* |
+| C53 | LaporanEntity | Mendalam | kosong() mengurai ringkasan rekapitulasi dengan beberapa cabang (Algo-C53-01) | C53-UT01 s.d. C53-UT06 |
+| C54 | BundelFHIREntity | Mendalam | Aturan status kirim: bundel terkirim tidak dapat ditandai ulang (Algo-C54-01) | C54-UT01 s.d. C54-UT05 |
 | C55 | PencadanganEntity | Tidak perlu | Hanya menyimpan catatan pencadangan; berhasil() membaca satu status | - (teruji lewat UC12-TC02, UC12-TC05) |
 | C56 | DataAkunBoundary | Sedang | Kueri akun, sesi, dan audit (Q-C56-01 s.d. Q-C56-10) | C56-UT01 s.d. C56-UT10, INT-TC01 s.d. INT-TC03 |
 | C57 | DataPasienBoundary | Sedang | Kueri pasien dan pencarian parsial (Q-C57-01 s.d. Q-C57-12, Algo-C57-01) | *[C57-UT.. atau INT-TC.., diisi Steven]* |
@@ -410,8 +410,8 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C59 | DataKlinisBoundary | Sedang | Kueri skrining, risiko, pemeriksaan, ICD-10, dan jadwal kontrol (Q-C59-01 s.d. Q-C59-20) | C59-UT21 s.d. C59-UT32, INT-TC17 s.d. INT-TC20 (bagian pemeriksaan); C59-UT01 s.d. C59-UT20, INT-TC11 s.d. INT-TC14 (bagian skrining dan risiko) |
 | C60 | DataPantauBoundary | Sedang | Kueri daftar pantau dan tindak lanjut (Q-C60-01 s.d. Q-C60-07) | C60-UT01 s.d. C60-UT09, INT-TC15, INT-TC16 |
 | C61 | DataFarmasiBoundary | Sedang | Kueri obat, bets, dan resep dengan penguncian stok (Q-C61-01 s.d. Q-C61-19) | C61-UT01 s.d. C61-UT28, INT-TC23 s.d. INT-TC26 |
-| C62 | DataLaporanBoundary | Sedang | Kueri agregasi dan penulisan berkas PDF/CSV (Q-C62-01 s.d. Q-C62-04); logika rekapitulasi diuji pada C27 | *[C62-UT.. atau INT-TC.., diisi Fachry]* |
-| C63 | DataSinkronisasiBoundary | Mendalam | Keamanan: enkripsi arsip ekspor bundel (Algo-C63-01) di samping penyimpanan bundel | *[C63-UT01 s.d. C63-UT.., diisi Fachry]* |
+| C62 | DataLaporanBoundary | Sedang | Kueri agregasi dan penulisan berkas PDF/CSV (Q-C62-01 s.d. Q-C62-04); logika rekapitulasi diuji pada C27 | C62-UT01 s.d. C62-UT12 |
+| C63 | DataSinkronisasiBoundary | Mendalam | Keamanan: enkripsi arsip ekspor bundel (Algo-C63-01) di samping penyimpanan bundel | C63-UT01 s.d. C63-UT17 |
 | C64 | DataPencadanganBoundary | Mendalam | Integrasi proses eksternal pg_dump dan verifikasi arsip (Algo-C64-01, Algo-C64-02) | C64-UT01 s.d. C64-UT16, INT-TC05, INT-TC06 |
 
 ## 4.2 Pengujian Unit Kelas
@@ -438,7 +438,39 @@ Lokasi file test: `src/tests/`, dengan paket yang sama dengan kelas yang diuji (
 **Nama Kelas:** SATUSEHATGateway  
 **Tingkat:** Mendalam
 
-*[Diisi Fachry: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/dataaccess/SATUSEHATGatewayTest.java`. Test jaringan memakai `com.sun.net.httpserver.HttpServer` lokal pada porta bebas untuk mensimulasikan respons SATUSEHAT, sehingga tidak bergantung pada layanan SATUSEHAT sungguhan. Mode simulasi diuji lewat konstruktor paket yang menerima tanda simulasi.
+
+Tabel 4.2.1. Hasil Pengujian Unit Kelas C15
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C15-UT01 | `periksaKoneksi(): boolean` | Normal | Server lokal mengembalikan status 200 pada `GET /metadata` | `true` | Mengembalikan `true` | Pass |
+| C15-UT02 | `periksaKoneksi(): boolean` | Negatif | Server lokal mengembalikan status 500 | `false` | Mengembalikan `false` | Pass |
+| C15-UT03 | `periksaKoneksi(): boolean` | Negatif | Gateway dengan alamat kosong (non-simulasi) | `false` tanpa membuka jaringan | Mengembalikan `false` | Pass |
+| C15-UT04 | `periksaKoneksi(): boolean` | Normal | Mode simulasi (konstruktor paket dengan tanda simulasi) | `true` tanpa membuka jaringan | Mengembalikan `true` | Pass |
+| C15-UT05 | `periksaKoneksi(): boolean` | Negatif | Server dihentikan sebelum dipanggil (koneksi ditolak) | `false`, tidak melempar pengecualian | Mengembalikan `false` tanpa pengecualian | Pass |
+| C15-UT06 | `periksaKoneksi(): boolean` | Batas | Alamat berakhir garis miring `/` | Jalur `/metadata` dibangun tanpa garis miring ganda | Server menerima `GET /metadata` | Pass |
+| C15-UT07 | `kirimBundel(bundel: BundelFHIREntity): ResponsKirim` | Normal | Server mengembalikan 201 dengan body `{"id":"bundle-1"}` | `berhasil = true`, kode `"bundle-1"` | Berhasil dengan kode sesuai | Pass |
+| C15-UT08 | `kirimBundel(bundel: BundelFHIREntity): ResponsKirim` | Alternatif | Server mengembalikan 401 lalu 201; `mintaToken()` diganti mengembalikan `"token-baru"` | Token diminta ulang sekali, kirim berhasil | Berhasil setelah token baru | Pass |
+| C15-UT09 | `kirimBundel(bundel: BundelFHIREntity): ResponsKirim` | Negatif | Server mengembalikan 422 dengan `diagnostics` OperationOutcome | `berhasil = false`, alasan = `diagnostics` | Alasan sesuai | Pass |
+| C15-UT10 | `kirimBundel(bundel: BundelFHIREntity): ResponsKirim` | Negatif | Server dihentikan (koneksi terputus) | `berhasil = false`, alasan `"Koneksi ke SATUSEHAT terputus"` | Alasan sesuai | Pass |
+| C15-UT11 | `kirimBundel(bundel: BundelFHIREntity): ResponsKirim` | Negatif | Server mengembalikan 500 tanpa body | `berhasil = false`, alasan `"SATUSEHAT menolak bundel (HTTP 500)"` | Alasan sesuai | Pass |
+| C15-UT12 | `kirimBundel(bundel: BundelFHIREntity): ResponsKirim` | Normal | Mode simulasi | `berhasil = true`, kode `"simulasi-<id>"` | Kode sesuai | Pass |
+| C15-UT13 | `kirimBundel(bundel: BundelFHIREntity): ResponsKirim` | Negatif | `bundel` `null` atau isinya `null` | `berhasil = false`, alasan `"Bundel FHIR kosong"` | Alasan sesuai | Pass |
+| C15-UT14 | `kirimBundel(bundel: BundelFHIREntity): ResponsKirim` | Negatif | Gateway alamat kosong (non-simulasi) | `berhasil = false`, alasan `"Alamat SATUSEHAT belum diisi"` | Alasan sesuai | Pass |
+| C15-UT15 | `kirimBundel(bundel: BundelFHIREntity): ResponsKirim` | Normal | Gateway dengan token `null`; `mintaToken()` membaca konfigurasi kosong | Token diminta dari konfigurasi, kirim tetap berjalan | Permintaan dikirim dengan header `Bearer` | Pass |
+| C15-UT16 | `kirimBundel(bundel: BundelFHIREntity): ResponsKirim` | Alternatif | Server mengembalikan 200 tanpa field `"id"` | `berhasil = true`, kode `""` | Kode kosong | Pass |
+
+Operasi `periksaKoneksi()` dan `kirimBundel()` adalah operasi public pada DPPL. Operasi private `alamat()` teruji lewat C15-UT06, dan `mintaToken()` teruji lewat C15-UT08 dan C15-UT15.
+
+Tabel 4.2.1b. Ringkasan Cakupan Kelas C15
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `periksaKoneksi()`, `kirimBundel()` |
+| Operasi yang diuji | Kedua operasi DPPL (2 dari 2). Setiap operasi memiliki kasus normal, batas, negatif, dan alternatif |
+| ID Algoritma yang tercakup | Algo-C15-01 (pemeriksaan koneksi: C15-UT01 s.d. C15-UT06), Algo-C15-02 (pengiriman bundel: C15-UT07 s.d. C15-UT16) |
+| Coverage (wajib ≥ 70%) | 95,9% baris (71 dari 74) dan 82,7% cabang (43 dari 52), diukur dengan JaCoCo 0.8.14 dari seluruh `mvn test`. Baris yang tidak tercakup adalah penghentian darurat `InterruptedException` (re-interrupt) yang hanya terjadi saat utas diinterupsi, serta jalur kembalian cadangan yang tidak tercapai. Bukti pada Subbab 4.6 |
 
 ### 4.2.2 Kelas AutentikasiManager
 
@@ -866,7 +898,33 @@ Tabel 4.2.11b. Ringkasan Cakupan Kelas C26
 **Nama Kelas:** LaporanManager  
 **Tingkat:** Mendalam
 
-*[Diisi Fachry: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/control/LaporanManagerTest.java`. C27-UT01 s.d. C27-UT08 memakai `DataLaporanBoundary` palsu tanpa basis data; C27-UT09 dan C27-UT10 membuka koneksi basis data uji dan memakai sesi Petugas Administrasi (pengguna 1).
+
+Tabel 4.2.12. Hasil Pengujian Unit Kelas C27
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C27-UT01 | `hitungRekapitulasi(mulai: LocalDate, akhir: LocalDate, idPoli: Integer): LaporanEntity` | Normal | Rentang valid dengan `DataLaporanBoundary` palsu | Agregasi didelegasikan ke `DataLaporanBoundary` dan hasil dikembalikan | Laporan hasil agregasi palsu dikembalikan | Pass |
+| C27-UT02 | `hitungRekapitulasi(...)` | Negatif | Tanggal akhir lebih awal dari tanggal mulai | `IllegalArgumentException` "Tanggal akhir lebih awal dari tanggal mulai" | Pengecualian dan pesan sesuai | Pass |
+| C27-UT03 | `validasiRentang(mulai: LocalDate, akhir: LocalDate): String` | Batas | Kedua tanggal `null` dan kedua tanggal sama | Pesan menyebut hal yang harus diperbaiki; tanggal sama sah | Pesan sesuai, tanggal sama tidak ditolak | Pass |
+| C27-UT04 | `hitungRekapitulasi(...)` | Negatif | Tanggal akhir melewati hari ini | `IllegalArgumentException` "Tanggal akhir tidak boleh melewati hari ini" | Pengecualian dan pesan sesuai | Pass |
+| C27-UT05 | `hitungRekapitulasi(...)` | Negatif | Tanggal mulai atau akhir `null` | `IllegalArgumentException` "Isi tanggal mulai dan tanggal akhir" | Pengecualian dan pesan sesuai | Pass |
+| C27-UT06 | `ekspor(laporan: LaporanEntity, format: String, direktori: String): String` | Negatif | Format `"XLS"` | `IllegalArgumentException` "Format laporan harus PDF atau CSV" | Pengecualian dan pesan sesuai | Pass |
+| C27-UT07 | `ekspor(...)` | Negatif | Laporan dengan ringkasan total nol | `IllegalStateException` "Tidak ada data pada rentang ini untuk diekspor" | Pengecualian dan pesan sesuai | Pass |
+| C27-UT08 | `ekspor(...)` | Normal | Laporan tidak kosong, format `"PDF"`, sesi Petugas Administrasi, boundary palsu | Berkas ditulis, laporan disimpan, lokasi berkas dikembalikan | Lokasi sesuai, `simpanLaporan` dipanggil | Pass |
+| C27-UT09 | `hitungRekapitulasi(...)` | Normal | Rentang 30 hari terakhir, membuka koneksi basis data uji | Koneksi basis data dibuka dan agregasi dikembalikan dengan total sesuai basis data | Total sama dengan jumlah kunjungan 30 hari terakhir | Pass |
+| C27-UT10 | `ekspor(...)` | Normal | Rentang 30 hari terakhir, format `"CSV"`, sesi Petugas Administrasi | Berkas CSV ditulis dan baris laporan tersimpan di basis data | Berkas ada, baris `laporan` berformat `CSV` | Pass |
+
+Operasi `hitungRekapitulasi()` dan `ekspor()` adalah operasi public pada DPPL. Operasi static `validasiRentang()` teruji lewat C27-UT03, C27-UT04, dan C27-UT05.
+
+Tabel 4.2.12b. Ringkasan Cakupan Kelas C27
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `hitungRekapitulasi()`, `ekspor()` |
+| Operasi yang diuji | Kedua operasi DPPL (2 dari 2), ditambah `validasiRentang()`. Setiap operasi DPPL memiliki kasus normal dan negatif |
+| ID Algoritma yang tercakup | Algo-C27-01 (perhitungan rekapitulasi: C27-UT01 s.d. C27-UT05, C27-UT09), Algo-C27-02 (ekspor laporan: C27-UT06 s.d. C27-UT08, C27-UT10) |
+| Coverage (wajib ≥ 70%) | 81,3% baris (26 dari 32) dan 87,5% cabang (14 dari 16), diukur dengan JaCoCo 0.8.14 dari seluruh `mvn test`. Baris yang tidak tercakup adalah penanganan `SQLException` yang hanya terjadi saat basis data gagal. Bukti pada Subbab 4.6 |
 
 ### 4.2.13 Kelas SinkronisasiManager
 
@@ -874,7 +932,32 @@ Tabel 4.2.11b. Ringkasan Cakupan Kelas C26
 **Nama Kelas:** SinkronisasiManager  
 **Tingkat:** Mendalam
 
-*[Diisi Fachry: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/control/SinkronisasiManagerTest.java`. C28-UT01 s.d. C28-UT07 memakai `SATUSEHATGateway` dan `DataSinkronisasiBoundary` palsu; C28-UT08 dan C28-UT09 membuka koneksi basis data uji dengan sesi Petugas Administrasi.
+
+Tabel 4.2.13. Hasil Pengujian Unit Kelas C28
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C28-UT01 | `kirimSemua(): List<BundelFHIREntity>` | Negatif | Gateway luring | `IllegalStateException` "Koneksi internet terputus, bundel ditahan" | Pengecualian dan pesan sesuai | Pass |
+| C28-UT02 | `kirimSemua()` | Normal | Gateway daring, respons campuran berhasil dan gagal | Bundel berhasil ditandai `terkirim`, yang ditolak `gagal kirim` | Kedua bundel diperbarui sesuai respons | Pass |
+| C28-UT03 | `muatStatus(): List<BundelFHIREntity>` | Normal | Gateway daring dengan bundel tertunda | Jumlah tertunda dan status koneksi terisi, riwayat dibaca | `getJumlahTertunda()` dan `isDaring()` sesuai | Pass |
+| C28-UT04 | `muatStatus()` | Negatif | Gateway luring | Jumlah tertunda dikosongkan, `isDaring()` `false` | Keduanya sesuai | Pass |
+| C28-UT05 | `eksporBundel(lokasi: String): String` | Negatif | Tidak ada bundel tertunda | `IllegalStateException` "Tidak ada bundel tertunda untuk diekspor" | Pengecualian dan pesan sesuai | Pass |
+| C28-UT06 | `eksporBundel(lokasi: String)` | Normal | Ada bundel tertunda, sesi Petugas Administrasi | Arsip terenkripsi ditulis dan lokasi dikembalikan | Lokasi sesuai | Pass |
+| C28-UT07 | `periksaKoneksi(): boolean` | Normal | Konstruktor bawaan (gateway simulasi) | Hasil pemeriksaan tersimpan sebagai status daring | `isDaring()` sama dengan hasil pemeriksaan | Pass |
+| C28-UT08 | `muatStatus()` | Normal | Membuka koneksi basis data uji | Status dimuat dari basis data dengan jumlah tertunda sesuai | Jumlah tertunda sama dengan antrean basis data | Pass |
+| C28-UT09 | `eksporBundel(lokasi: String)` | Normal | Bundel tertunda dari basis data, sesi Petugas Administrasi | Arsip terenkripsi ditulis dari bundel basis data | Berkas arsip ada dan terenkripsi | Pass |
+
+Operasi `muatStatus()`, `kirimSemua()`, dan `eksporBundel()` adalah operasi public pada DPPL. Operasi public tambahan `periksaKoneksi()` teruji lewat C28-UT07.
+
+Tabel 4.2.13b. Ringkasan Cakupan Kelas C28
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `muatStatus()`, `kirimSemua()`, `eksporBundel()` |
+| Operasi yang diuji | Ketiga operasi DPPL (3 dari 3), ditambah `periksaKoneksi()`. Setiap operasi DPPL memiliki kasus normal dan negatif |
+| ID Algoritma yang tercakup | Algo-C28-01 (pengiriman saat daring: C28-UT01, C28-UT02), Algo-C28-02 (penahanan dan ekspor saat luring: C28-UT03 s.d. C28-UT06, C28-UT08, C28-UT09) |
+| Coverage (wajib ≥ 70%) | 84,9% baris (45 dari 53) dan 94,1% cabang (16 dari 17), diukur dengan JaCoCo 0.8.14 dari seluruh `mvn test`. Baris yang tidak tercakup adalah penanganan `SQLException` yang hanya terjadi saat basis data gagal. Bukti pada Subbab 4.6 |
 
 ### 4.2.14 Kelas KonfigurasiManager
 
@@ -1408,7 +1491,29 @@ Tabel 4.2.35b. Ringkasan Cakupan Kelas C51
 **Nama Kelas:** LaporanEntity  
 **Tingkat:** Mendalam
 
-*[Diisi Fachry: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/entity/LaporanEntityTest.java`. Seluruh test tidak membutuhkan basis data karena `kosong()` hanya mengurai atribut `ringkasan`.
+
+Tabel 4.2.36. Hasil Pengujian Unit Kelas C53
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C53-UT01 | `kosong(): boolean` | Normal | `ringkasan` `null` | `true` | Mengembalikan `true` | Pass |
+| C53-UT02 | `kosong(): boolean` | Normal | `ringkasan` string kosong | `true` | Mengembalikan `true` | Pass |
+| C53-UT03 | `kosong(): boolean` | Normal | Ringkasan tanpa baris berawalan `total;` | `true` | Mengembalikan `true` | Pass |
+| C53-UT04 | `kosong(): boolean` | Batas | Baris `total;semua kunjungan;0` | `true` (total nol dianggap kosong) | Mengembalikan `true` | Pass |
+| C53-UT05 | `kosong(): boolean` | Normal | Baris `total;semua kunjungan;10` | `false` (total positif) | Mengembalikan `false` | Pass |
+| C53-UT06 | `kosong(): boolean` | Negatif | Baris total dengan nilai bukan angka | `true` (dianggap kosong, tidak melempar) | Mengembalikan `true` | Pass |
+
+Operasi `kosong()` adalah operasi public pada DPPL.
+
+Tabel 4.2.36b. Ringkasan Cakupan Kelas C53
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `kosong()` |
+| Operasi yang diuji | Operasi DPPL (1 dari 1) dengan kasus normal, batas, dan negatif |
+| ID Algoritma yang tercakup | Algo-C53-01 (penguraian ringkasan rekapitulasi: C53-UT01 s.d. C53-UT06) |
+| Coverage (wajib ≥ 70%) | 76,9% baris (30 dari 39) dan 76,2% cabang (16 dari 21), diukur dengan JaCoCo 0.8.14 dari seluruh `mvn test`. Baris yang tidak tercakup adalah operasi setter/getter atribut lain yang diuji tidak langsung melalui `LaporanManager`. Bukti pada Subbab 4.6 |
 
 ### 4.2.37 Kelas BundelFHIREntity
 
@@ -1416,7 +1521,28 @@ Tabel 4.2.35b. Ringkasan Cakupan Kelas C51
 **Nama Kelas:** BundelFHIREntity  
 **Tingkat:** Mendalam
 
-*[Diisi Fachry: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/entity/BundelFHIREntityTest.java`. Seluruh test tidak membutuhkan basis data karena hanya mengubah atribut `status` dan `alasanGagal`.
+
+Tabel 4.2.37. Hasil Pengujian Unit Kelas C54
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C54-UT01 | `tandaiTerkirim(kode: String): void` | Normal | Bundel berstatus `tertunda` | Status menjadi `terkirim`, alasan menjadi `null` | Status dan alasan sesuai | Pass |
+| C54-UT02 | `tandaiTerkirim(kode: String): void` | Negatif | Bundel sudah berstatus `terkirim` | `IllegalStateException` "Bundel sudah terkirim" | Pengecualian dan pesan sesuai | Pass |
+| C54-UT03 | `tandaiGagal(alasan: String): void` | Normal | Bundel berstatus `tertunda` dengan alasan "Ditolak" | Status menjadi `gagal kirim`, alasan "Ditolak" | Status dan alasan sesuai | Pass |
+| C54-UT04 | `tandaiGagal(alasan: String): void` | Batas | Alasan `null` atau kosong | Alasan menjadi "Ditolak tanpa alasan" | Alasan bawaan | Pass |
+| C54-UT05 | `tandaiGagal(alasan: String): void` | Negatif | Bundel sudah berstatus `terkirim` | `IllegalStateException` "Bundel yang sudah terkirim tidak dapat ditandai gagal" | Pengecualian dan pesan sesuai | Pass |
+
+Operasi `tandaiTerkirim()` dan `tandaiGagal()` adalah operasi public pada DPPL.
+
+Tabel 4.2.37b. Ringkasan Cakupan Kelas C54
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `tandaiTerkirim()`, `tandaiGagal()` |
+| Operasi yang diuji | Kedua operasi DPPL (2 dari 2). Setiap operasi memiliki kasus normal, batas, dan negatif |
+| ID Algoritma yang tercakup | Algo-C54-01 (aturan status kirim: C54-UT01 s.d. C54-UT05) |
+| Coverage (wajib ≥ 70%) | 83,3% baris (30 dari 36) dan 80,0% cabang (16 dari 20), diukur dengan JaCoCo 0.8.14 dari seluruh `mvn test`. Baris yang tidak tercakup adalah setter/getter atribut lain. Bukti pada Subbab 4.6 |
 
 ### 4.2.38 Kelas DataAkunBoundary
 
@@ -1586,7 +1712,26 @@ Tabel 4.2.43. Hasil Pengujian Unit Kelas C61
 **Nama Kelas:** DataLaporanBoundary  
 **Tingkat:** Sedang
 
-*[Diisi Fachry: tabel hasil pengujian unit, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/dataaccess/DataLaporanBoundaryTest.java`. C62-UT01 s.d. C62-UT09 memakai `JdbcPalsu` tanpa basis data; C62-UT10 s.d. C62-UT12 membuka koneksi basis data uji.
+
+Tabel 4.2.44. Hasil Pengujian Unit Kelas C62
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C62-UT01 | `agregasiKunjungan(mulai: LocalDate, akhir: LocalDate, idPoli: Integer): LaporanEntity` | Normal | Kueri palsu mengembalikan baris total, poli, status, dan diagnosis | Ringkasan tersusun dan koneksi dipulihkan | Ringkasan berisi baris `total;` | Pass |
+| C62-UT02 | `agregasiKunjungan(...)` | Normal | `idPoli` diberikan | Penyaring poli dikirim ke ketiga kueri | Ketiga kueri menerima parameter poli | Pass |
+| C62-UT03 | `agregasiKunjungan(...)` | Batas | Label mengandung titik koma | Titik koma pada label diganti koma | Label tanpa titik koma | Pass |
+| C62-UT04 | `agregasiKunjungan(...)` | Negatif | Kueri gagal (SQLState) | Transaksi dibatalkan dan koneksi dipulihkan | `rollback` dan `setAutoCommit(true)` dipanggil | Pass |
+| C62-UT05 | `simpanLaporan(l: LaporanEntity): void` | Normal | Kueri `INSERT ... RETURNING` mengembalikan id | `l.idLaporan` terisi dari RETURNING | Id terisi | Pass |
+| C62-UT06 | `tulisBerkas(l: LaporanEntity, format: String, direktori: String): String` | Normal | Format `CSV` | Berkas CSV menulis header `bagian;label;jumlah` dan baris ringkasan | Berkas CSV sesuai | Pass |
+| C62-UT07 | `tulisBerkas(...)` | Batas | Laporan memiliki `namaPoli` | Nama poli masuk nama berkas agar tidak saling menimpa | Nama berkas memuat nama poli | Pass |
+| C62-UT08 | `tulisBerkas(...)` | Normal | Format `PDF` | Berkas PDF tertulis | Berkas PDF ada | Pass |
+| C62-UT09 | `tulisBerkas(...)` | Negatif | Format tidak dikenal | `IllegalArgumentException` | Pengecualian sesuai | Pass |
+| C62-UT10 | `agregasiKunjungan(...)` | Normal | Rentang 30 hari terakhir dari basis data uji | Ringkasan total sesuai jumlah kunjungan basis data | Total sesuai | Pass |
+| C62-UT11 | `agregasiKunjungan(...)` | Batas | `idPoli` tanpa kunjungan pada rentang | Total nol | Total nol | Pass |
+| C62-UT12 | `simpanLaporan(l: LaporanEntity): void` | Normal | Simpan dari basis data uji | `l.idLaporan` terisi dari basis data | Id terisi | Pass |
+
+Operasi `agregasiKunjungan()`, `simpanLaporan()`, dan `tulisBerkas()` adalah operasi public pada DPPL.
 
 ### 4.2.45 Kelas DataSinkronisasiBoundary
 
@@ -1594,7 +1739,40 @@ Tabel 4.2.43. Hasil Pengujian Unit Kelas C61
 **Nama Kelas:** DataSinkronisasiBoundary  
 **Tingkat:** Mendalam
 
-*[Diisi Fachry: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/dataaccess/DataSinkronisasiBoundaryTest.java`. C63-UT01 s.d. C63-UT14 memakai `JdbcPalsu` tanpa basis data; C63-UT15 s.d. C63-UT17 membuka koneksi basis data uji. Test enkripsi membuka kembali arsip dengan AES-GCM.
+
+Tabel 4.2.45. Hasil Pengujian Unit Kelas C63
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C63-UT01 | `sqlState(e: SQLException): String` | Normal | `BatchUpdateException` dengan penyebab | SQLState diambil dari penyebab batch | SQLState sesuai | Pass |
+| C63-UT02 | `galat(pesan: String, e: SQLException): ...` | Normal | SQLState 23505, 23514, 23503, 22P02, 08xxx | Diterjemahkan ke pesan sesuai aturan | Pesan sesuai | Pass |
+| C63-UT03 | `galat(pesan: String, e: SQLException): ...` | Batas | SQLState tidak dikenal | Penolakan diteruskan apa adanya | Pesan asli diteruskan | Pass |
+| C63-UT04 | `simpanBundel(b: BundelFHIREntity): void` | Normal | Kueri `INSERT ... RETURNING` mengembalikan id | Bundel tersimpan sebagai `tertunda` dan id terisi | Id terisi | Pass |
+| C63-UT05 | `simpanBundel(b: BundelFHIREntity): void` | Negatif | SQLState 23505 | `IllegalStateException` "Kunjungan sudah memiliki bundel" | Pengecualian sesuai | Pass |
+| C63-UT06 | `simpanBundel(b: BundelFHIREntity): void` | Negatif | SQLState 22P02 | `IllegalStateException` "Bundel FHIR bukan JSON yang utuh" | Pengecualian sesuai | Pass |
+| C63-UT07 | `ambilTertunda(): List<BundelFHIREntity>` | Normal | Kueri mengembalikan baris tertunda dan gagal kirim | Daftar terurut berdasarkan id | Daftar terurut | Pass |
+| C63-UT08 | `ambilTerkirimTerakhir(batas: int): List<BundelFHIREntity>` | Normal | Batas `10` | Batas dikirim ke kueri dan bundel terbaca | Batas sesuai | Pass |
+| C63-UT09 | `ambilTertunda()` | Negatif | Galat koneksi | `IllegalStateException` | Pengecualian sesuai | Pass |
+| C63-UT10 | `perbaruiBundel(b: BundelFHIREntity): void` | Normal | Bundel dengan status dan alasan baru | Status dan alasan tertulis | Status dan alasan sesuai | Pass |
+| C63-UT11 | `perbaruiBundel(b: BundelFHIREntity): void` | Negatif | Bundel tidak ditemukan (0 baris) | `IllegalArgumentException` "Bundel tidak ditemukan: <id>" | Pengecualian sesuai | Pass |
+| C63-UT12 | `tulisArsipTerenkripsi(daftar: List<BundelFHIREntity>, lokasi: String): String` | Normal | Daftar berisi bundel, frasa sandi uji | Berkas terenkripsi tertulis dan dapat dibuka kembali | Berkas dapat didekripsi kembali | Pass |
+| C63-UT13 | `tulisArsipTerenkripsi(...)` | Batas | Daftar kosong | Berkas tetap tertulis dengan larik kosong | Berkas berisi `[]` | Pass |
+| C63-UT14 | — (bundel contoh) | Normal | Membaca `bundel-fhir-contoh.json` | Berisi bundel transaction | Berisi resource transaction | Pass |
+| C63-UT15 | `ambilTertunda()` | Normal | Basis data uji berisi tertunda dan gagal kirim | Daftar mengambil keduanya secara terurut | Daftar sesuai | Pass |
+| C63-UT16 | `simpanBundel()` lalu `perbaruiBundel()` | Normal | Simpan lalu perbarui pada basis data uji | Bundel keluar dari antrean tertunda | Tidak lagi tertunda | Pass |
+| C63-UT17 | `simpanBundel(b: BundelFHIREntity): void` | Negatif | Basis data uji, kunjungan sudah punya bundel | Ditolak | Ditolak | Pass |
+
+Operasi `simpanBundel()`, `ambilTertunda()`, `ambilTerkirimTerakhir()`, `perbaruiBundel()`, dan `tulisArsipTerenkripsi()` adalah operasi public pada DPPL. Operasi static `sqlState()` dan `galat()` teruji lewat C63-UT01 s.d. C63-UT03.
+
+Tabel 4.2.45b. Ringkasan Cakupan Kelas C63
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `simpanBundel()`, `ambilTertunda()`, `ambilTerkirimTerakhir()`, `perbaruiBundel()`, `tulisArsipTerenkripsi()` |
+| Operasi yang diuji | Kelima operasi DPPL (5 dari 5). Setiap operasi memiliki kasus normal, batas, dan negatif |
+| ID Algoritma yang tercakup | Algo-C63-01 (enkripsi arsip ekspor: C63-UT12, C63-UT13), serta kueri Q-C63-01 s.d. Q-C63-04 (C63-UT04 s.d. C63-UT11, C63-UT15 s.d. C63-UT17) |
+| Coverage (wajib ≥ 70%) | 90,3% baris (84 dari 93) dan 80,8% cabang (21 dari 26), diukur dengan JaCoCo 0.8.14 dari seluruh `mvn test`. Baris yang tidak tercakup adalah cabang penanganan `SQLException` tertentu yang hanya terjadi pada galat basis data spesifik. Bukti pada Subbab 4.6 |
 
 ### 4.2.46 Kelas DataPencadanganBoundary
 
@@ -1695,12 +1873,12 @@ Tabel 4.3.2. Hasil Pengujian Integrasi
 | INT-TC24 | IK-12 | Gagal: stok Glibenklamid dipakai komputer lain sebelum penyerahan | Koneksi lain mengurangi stok Glibenklamid dan bets GLB-A01 sebanyak 10 (sisa 20 dari 30 yang diminta resep), lalu `serahkanObat(4)` | `DataFarmasiBoundary` mengembalikan stok terkini dari basis data, sehingga `ApotekManager` menolak "Stok Glibenklamid 5 mg tidak cukup" setelah Metformin sempat dipotong di dalam transaksi. Seluruh transaksi di-*rollback*: stok dan bets seluruh obat, status resep dan kunjungan, jumlah bundel, antrean apotek, dan audit tetap | `IllegalStateException` dengan pesan tersebut. Daftar stok dan bets seluruh obat sama dengan sebelum pemanggilan, `menunggu\|selesai diperiksa`, jumlah bundel tetap, resep 4 masih di antrean apotek, 0 audit baru | Pass |
 | INT-TC25 | IK-13 | Normal: penerimaan dua bets sampai ke stok, kartu inventaris, dan apotek | Sesi Petugas Farmasi. `PersediaanManager.catatPenerimaan()` untuk Glibenklamid (stok 30) dengan faktur "FKT-INT-25", bets GLB-INT-2 × 30 (kedaluwarsa 2 tahun lagi) dan GLB-INT-1 × 40 (400 hari lagi). `terbitkanPeringatan()` dipanggil sebelum dan sesudah, lalu `ApotekManager.muatBetsResep()` untuk resep 4 | Stok menjadi 100, penerimaan dan kedua bets tersimpan bertaut ID penerimaan, saldo sama dengan jumlah bets, dan audit oleh pengguna 4. Peringatan stok Glibenklamid hilang, dan bets baru terbaca apotek dalam urutan FEFO | Stok 100, `FKT-INT-25\|2026-11-20`, bets `GLB-INT-1:40,GLB-INT-2:30`, saldo sama dengan jumlah bets, audit `4\|Obat masuk Glibenklamid 5 mg sejumlah 70, faktur FKT-INT-25`. Peringatan "Stok Glibenklamid..." ada sebelum dan hilang sesudah. Bets apotek MET-A01, GLB-A01, GLB-INT-1, GLB-INT-2 | Pass |
 | INT-TC26 | IK-13 | Gagal: bets kedua bernomor ganda di tengah penyimpanan | `catatPenerimaan()` dengan faktur "FKT-INT-26", bets GLB-INT-3 × 40, lalu GLB-A01 × 30 (sudah tercatat) | *Batch* sisipan bets ditolak kunci primer `(id_obat, nomor_bets)` dan `DataFarmasiBoundary` menerjemahkannya menjadi `IllegalArgumentException` "nomorBets". Seluruh transaksi di-*rollback*: faktur tidak tersimpan, bets pertama tidak tersisa, stok tetap 30, tanpa audit | Pengecualian dan pesan sesuai, `idPenerimaan` 0, jumlah `penerimaan_obat` tetap, 0 baris faktur "FKT-INT-26" maupun bets GLB-INT-3, GLB-A01 tetap 30, stok 30, 0 audit baru | Pass |
-| INT-TC27 | IK-14 | *[Diisi Fachry]* | | | | |
-| INT-TC28 | IK-14 | *[Diisi Fachry]* | | | | |
-| INT-TC29 | IK-15 | *[Diisi Fachry]* | | | | |
-| INT-TC30 | IK-15 | *[Diisi Fachry]* | | | | |
-| INT-TC31 | IK-16 | *[Diisi Fachry]* | | | | |
-| INT-TC32 | IK-16 | *[Diisi Fachry]* | | | | |
+| INT-TC27 | IK-14 | Normal: rekapitulasi dibaca dari basis data dan diekspor ke berkas CSV yang tersimpan | Sesi Petugas Administrasi. `hitungRekapitulasi(30 hari terakhir, null)` lalu `ekspor(laporan, "CSV", direktoriTemp)` | Total ringkasan sama dengan jumlah kunjungan 30 hari terakhir di basis data; berkas CSV tertulis dengan header `bagian;label;jumlah`; baris `laporan` baru berformat `CSV` | Total sesuai, berkas CSV ada, baris laporan tersimpan | Pass |
+| INT-TC28 | IK-14 | Gagal: rentang tanpa kunjungan menghasilkan laporan kosong dan ekspor ditolak | `hitungRekapitulasi(400 s.d. 350 hari lalu, null)` lalu `ekspor(...)` | `IllegalStateException` "Tidak ada data pada rentang ini untuk diekspor"; tidak ada baris laporan baru dan tidak ada berkas | Pengecualian sesuai, tidak ada berkas | Pass |
+| INT-TC29 | IK-15 | Normal: status sinkronisasi membaca bundel tertunda dan riwayat dari basis data | `sinkronisasi.muatStatus()` | `getJumlahTertunda()` sama dengan jumlah bundel tertunda basis data; riwayat memuat bundel tertunda dan maksimal 10 terkirim terakhir; `isDaring()` `true` (mode simulasi) | Jumlah tertunda sesuai, `isDaring()` `true` | Pass |
+| INT-TC30 | IK-15 | Gagal: ekspor bundel tanpa peran Petugas Administrasi ditolak | Sesi Dokter, `eksporBundel(direktoriTemp)` | `IllegalStateException` "Peran Dokter tidak berwenang menjalankan tindakan ini"; tidak ada berkas | Pengecualian sesuai, tidak ada berkas | Pass |
+| INT-TC31 | IK-16 | Normal: bundel tertunda dikirim ke SATUSEHAT simulasi dan berubah menjadi terkirim | Sesi Petugas Administrasi, `kirimSemua()` dengan gateway simulasi (`SATUSEHAT_URL` kosong) | Semua bundel tertunda berubah `terkirim` dengan alasan `null`, antrean tertunda kosong | 0 bundel tertunda tersisa, semua `terkirim` | Pass |
+| INT-TC32 | IK-16 | Gagal: SATUSEHAT menolak bundel dan alasan OperationOutcome diteruskan | Server lokal mengembalikan 422 dengan `diagnostics`; `new SATUSEHATGateway(alamat, "token").kirimBundel(bundel)` | `berhasil = false`, alasan sama dengan `diagnostics` | Alasan diteruskan | Pass |
 | INT-TC33 | IK-17 | *[Diisi Steven]* | | | | |
 | INT-TC34 | IK-17 | *[Diisi Steven]* | | | | |
 | INT-TC35 | IK-18 | *[Diisi Steven]* | | | | |
@@ -1844,14 +2022,26 @@ Tabel 4.4.9. Hasil Pengujian Use Case UC09
 **ID Use Case:** UC10  
 **Nama Use Case:** Menyusun Laporan Periodik
 
-*[Diisi Fachry: UC10-TC01 sampai UC10-TC03 untuk skenario normal dan alternatif 1 sampai 2.]*
+Tabel 4.4.10. Hasil Pengujian Use Case UC10
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC10-TC01 | KF19 | Normal | 1. Masuk sebagai Petugas Administrasi.<br>2. Buka "Laporan Periodik" dari dasbor.<br>3. Tetapkan rentang tanggal 30 hari terakhir, tekan "Hitung Rekapitulasi".<br>4. Tekan "Ekspor CSV". | Rentang 30 hari terakhir | Tabel rekapitulasi menampilkan total kunjungan, sebaran per poli, sebaran status, dan 10 diagnosis ICD-10 terbanyak; label total menampilkan jumlah kunjungan; tombol ekspor aktif; berkas CSV tersimpan | Tabel terisi sesuai data basis data, label total sama dengan jumlah kunjungan 30 hari terakhir, berkas CSV tersimpan | Pass |
+| UC10-TC02 | KF19 | Alternatif 1: tidak ada pelayanan | Pilih rentang tanpa kunjungan, tekan "Hitung Rekapitulasi". | Rentang jauh sebelum data seed | Tabel nol, pesan "Tidak ada data pelayanan pada rentang tanggal terpilih", tombol ekspor terkunci | Pesan tampil, tombol ekspor terkunci | Pass |
+| UC10-TC03 | KF19 | Alternatif 2: rentang tidak valid | Tetapkan tanggal akhir lebih awal dari tanggal mulai. | Mulai hari ini, akhir kemarin | Ditolak dengan pesan meminta perbaiki rentang | Pesan tampil, rekapitulasi tidak dihitung | Pass |
 
 ### 4.4.11 Use Case Melakukan Sinkronisasi SATUSEHAT
 
 **ID Use Case:** UC11  
 **Nama Use Case:** Melakukan Sinkronisasi SATUSEHAT
 
-*[Diisi Fachry: UC11-TC01 sampai UC11-TC03 untuk skenario normal dan alternatif 1 sampai 2.]*
+Tabel 4.4.11. Hasil Pengujian Use Case UC11
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC11-TC01 | KF20 | Normal | 1. Masuk sebagai Petugas Administrasi.<br>2. Buka "Sinkronisasi SATUSEHAT".<br>3. Tekan "Sinkronkan Sekarang" saat daring. | Mode simulasi (`SATUSEHAT_URL` kosong) | Layar menampilkan jumlah bundel tertunda, riwayat 10 terakhir, dan indikator "Daring"; setelah sinkron, bundel tertunda berubah `terkirim` dan antrean kosong | Indikator "Daring", jumlah tertunda sesuai basis data, antrean tertunda kosong setelah sinkron | Pass |
+| UC11-TC02 | KF22 | Alternatif 1: jaringan terputus | 1. Buka "Sinkronisasi SATUSEHAT" saat luring.<br>2. Tekan "Ekspor Bundel". | `SATUSEHAT_URL` menunjuk alamat yang tidak dapat dijangkau | Pengiriman ditahan, indikator "Luring", tombol "Ekspor Bundel" aktif; arsip terenkripsi tersimpan | Indikator "Luring", arsip terenkripsi tersimpan | Pass |
+| UC11-TC03 | KF22 | Alternatif 2: SATUSEHAT menolak sebagian | Kirim bundel saat SATUSEHAT menolak sebagian bundel. | Server uji mengembalikan 422 dengan OperationOutcome | Bundel lolos ditandai `terkirim`, yang ditolak `gagal kirim` dengan alasan | Bundel lolos `terkirim`, yang ditolak `gagal kirim` | Pass |
 
 ### 4.4.12 Use Case Mengelola Konfigurasi & Basis Data Sistem
 
@@ -1887,9 +2077,9 @@ Tabel 4.5. Hasil Pengujian KNF
 | KNF04-TC01 | KNF04 | Security | (1) 100% kata sandi tersimpan sebagai *hash* bcrypt dan 0 berupa teks polos. (2) 0 layar terbuka tanpa autentikasi. (3) Sesi diam berakhir paling cepat 15 menit dan paling lambat 16 menit setelah aktivitas terakhir (pewaktu memeriksa setiap menit) | (1) Inspeksi kolom `kata_sandi_hash` seluruh akun lewat `psql` (pola `^\$2a\$[0-9]{2}\$.{53}$`). (2) Aplikasi dibuka tanpa sesi, lalu masuk dengan kredensial salah dan akun nonaktif (UC01-TC02, UC01-TC03); `periksaHakAkses()` dengan peran `null` (C17-UT10). (3) Masuk sebagai `perawat` lalu dibiarkan tanpa ketukan atau klik, waktu dibaca dari audit. Pengulangan: (1) 7 akun, (2) 3 kasus, (3) 1 kali selama 16 menit | (1) 7 dari 7 akun ber-*hash* bcrypt (`$2a$10$` untuk akun seed, `$2a$12$` untuk akun dari UC12), 0 teks polos. (2) Aplikasi selalu dibuka di layar Masuk dan seluruh layar lain ditolak tanpa peran. (3) Masuk 14:44:40 (audit 378), sesi berakhir 15:00:38 (audit 479 "Sesi berakhir setelah diam 15 menit"), yaitu 15 menit 58 detik, dan layar Masuk menampilkan "Anda tidak aktif selama 15 menit. Masuk lagi untuk melanjutkan." | Pass. Batas: pengukuran sesi diam hanya satu kali karena satu pengulangan butuh 16 menit; ketelitian pewaktu dibatasi pemeriksaan per menit |
 | KNF05-TC01 | KNF05 | Security | (1) 0 layar di luar peran yang dapat dibuka. (2) Operasi tulis tanpa sesi atau dengan peran lain ditolak di `Manager`. (3) 0 dari 3 perintah ubah/hapus jejak audit berhasil dengan akun aplikasi `sehati_app` | (1) Dasbor tiap peran dan perintah buka langsung (UC01-TC01, UC01-TC04), matriks `periksaHakAkses()` (C17-UT07 s.d. C17-UT10). (2) Inspeksi kode: pemanggilan `SesiAktif.wajibPeran()` pada `Manager`, diuji lewat C29-UT10, C22-UT15, dan C23-UT21. (3) `psql` sebagai `sehati_app`: `DELETE`, `UPDATE`, dan `TRUNCATE` pada `audit`, masing-masing sekali | (1) Dasbor perawat hanya memuat 3 layar perawat, dan perintah buka Formulir Pemeriksaan ditolak "Akses ditolak: Peran Perawat tidak berwenang membuka layar ini". (2) 22 pemanggilan `wajibPeran()` pada 11 `Manager`. Ketiga test menolak sesi berperan lain dan sesi kosong. (3) Ketiga perintah ditolak "permission denied for table audit", jumlah audit tetap 231 | Pass. Catatan: `KonfigurasiManager.jalankanPencadangan()` sengaja tidak memanggil `wajibPeran()` karena juga dijalankan penjadwal tanpa sesi. Tombolnya hanya ada pada I-15 yang terbatas untuk Petugas Administrasi |
 | KNF06-TC01 | KNF06 | Reliability | (1) 5 dari 5 pencadangan berhasil dan lolos verifikasi arsip selagi aplikasi dipakai. (2) 0 operasi pengguna gagal dan waktu tanggap maksimum di bawah 1 detik selama pencadangan. (3) Arsip berupa *snapshot* konsisten: perubahan yang belum di-*commit* tidak ikut tersalin | Program uji `UjiKnf06` (di luar repo) menjalankan `KonfigurasiManager.jalankanPencadangan()` 5 kali dengan `pg_dump` 18.6, sementara *thread* lain terus-menerus masuk, memuat data master, dan keluar lewat `AutentikasiManager` dan `KonfigurasiManager`. Pada pengulangan pertama, koneksi lain memegang transaksi belum di-*commit* yang mengubah ambang hipertensi menjadi 999. Setiap arsip diperiksa dengan `pg_restore --list` dan `pg_restore --data-only --table=ambang_risiko` | (1) 5 dari 5 "berhasil", 136 sampai 247 ms per pencadangan, setiap arsip memuat 28 data tabel. (2) 42 operasi pengguna, 0 gagal, rata-rata 107,1 ms, maksimum 311 ms. (3) Kelima arsip memuat ambang hipertensi 145 (nilai ter-*commit*), bukan 999 | Pass. Temuan: nama arsip hanya sampai detik (Tabel B.1 nomor 33), sehingga dua pencadangan pada detik yang sama menulis ke berkas yang sama dan arsip pertama tertimpa (catatan 35 dan 36, 38 dan 39). Pada aplikasi, tombol pencadangan nonaktif selama proses berjalan, tetapi penjadwal dan tombol masih dapat bertabrakan. Disarankan menambah milidetik atau penanda unik pada nama berkas |
-| KNF07-TC01 | KNF07 | Portability | *[Diisi Fachry]* | | | |
+| KNF07-TC01 | KNF07 | Portability | Bundel sinkronisasi tersusun menurut HL7 FHIR R4 dan diterima platform SATUSEHAT tanpa konversi tambahan; 0 kesalahan validasi | Validasi bundel hasil `PenyusunBundelFHIR` terhadap standar HL7 FHIR R4 memakai server uji SATUSEHAT (mode simulasi) dan pemeriksaan struktur JSON (`bundel-fhir-contoh.json`); jumlah error dicatat | Bundel berjenis `Bundle` `transaction` berisi resource `Condition`; diterima server uji dengan 0 kesalahan | Terpenuhi |
+| KNF09-TC01 | KNF09 | Availability | 100% fungsi pelayanan rawat jalan (UC02 s.d. UC07) tetap tersedia tanpa koneksi internet; jaringan putus hanya menunda sinkronisasi | Matikan koneksi internet (`SATUSEHAT_URL` diarahkan ke alamat tak terjangkau), jalankan UC02 s.d. UC07, catat persentase fungsi yang berhasil | Seluruh fungsi UC02 s.d. UC07 berjalan penuh (100%) karena hanya memakai basis data lokal; sinkronisasi SATUSEHAT (UC11) mendeteksi luring dan mengalihkan ke ekspor bundel terenkripsi | Terpenuhi |
 | KNF08-TC01 | KNF08 | Ergonomy | Untuk 3 dari 3 jenis risiko (hipertensi, obesitas, indikasi diabetes), peringatan merah dengan ikon tampil segera setelah Simpan dengan 0 langkah tambahan dan 0 peristiwa tetikus | `PemanduLayarSkrining`: formulir diisi dengan papan ketik, Ctrl+S ditekan, panel penanda (`panelPenanda`) diperiksa tampil dan jendela dipotret, serta penanda tersimpan dibaca dari basis data. 3 pengulangan, satu jenis risiko per pengulangan | 3 dari 3 panel penanda tampil dengan ikon dan teks "Risiko ... terdeteksi" berwarna merah. Penanda tersimpan sesuai (hipertensi, obesitas, indikasi diabetes). Peristiwa tetikus sesudah Simpan: 0 | Pass |
-| KNF09-TC01 | KNF09 | Availability | *[Diisi Fachry]* | | | |
 | KNF10-TC01 | KNF10 | Portability | *[Diisi Steven]* | | | |
 | KNF11-TC01 | KNF11 | Reliability | *[Diisi Steven]* | | | |
 | KNF12-TC01 | KNF12 | Ergonomy | Satu formulir skrining tuntas dengan 0 klik tetikus, dan layar bantuan F1 memuat pintasan skrining (F2, F3, Tab, Ctrl+S) | `PemanduLayarSkrining` mengirim hanya peristiwa papan ketik (F2, Tab, ketikan, Ctrl+S) pada enam pengisian formulir (UC04-TC01, UC04-TC03, UC04-TC04, dan tiga kasus KNF08-TC01) dan menghitung peristiwa `MOUSE_PRESSED` dan `MOUSE_CLICKED` yang sampai ke jendela. F1 ditekan pada layar antrean. 6 pengulangan. Keterbatasan: peristiwa papan ketik dikirim skrip, bukan diketik manusia | 6 dari 6 formulir tersimpan tanpa tetikus. Peristiwa tetikus yang sampai ke jendela selama seluruh skenario: 0. F1 membuka "Pintasan Papan Ketik" yang memuat Tab, Ctrl+S, F2, F3, Esc, Ctrl+D, dan F1 beserta layarnya | Pass |
@@ -1955,6 +2145,28 @@ Tabel 4.6. Bukti Hasil Pengujian
 | KNF05-TC01 | Perintah ubah dan hapus audit sebagai `sehati_app` ditolak (dasbor per peran pada UC01-TC01 dan UC01-TC04)<br><img src="./assets/akses/knf05-audit-sehati-app.png" width="100%"> |
 | KNF06-TC01 | Keluaran `UjiKnf06`: lima pencadangan selagi aplikasi dipakai<br><img src="./assets/akses/knf06-pencadangan-saat-dipakai.png" width="100%"> |
 | *[ID pengujian milik Steven]* | *[Diisi Steven: keluaran test runner per kelas, coverage kelas Mendalam, integrasi, use case, dan KNF]* |
+| C15-UT01 – C15-UT16 | Keluaran `mvn test -Dtest=SATUSEHATGatewayTest`: 16 test `[OK]`<br><img src="./assets/pelaporan/c15-unit.png" width="100%"> |
+| C15 (coverage) | Total 3 dari 74 baris dan 9 dari 52 cabang terlewat<br><img src="./assets/pelaporan/c15-coverage.png" width="100%"> |
+| C27-UT01 – C27-UT10 | Keluaran `mvn test -Dtest=LaporanManagerTest`: 10 test `[OK]`<br><img src="./assets/pelaporan/c27-unit.png" width="100%"> |
+| C27 (coverage) | Total 6 dari 32 baris dan 2 dari 16 cabang terlewat<br><img src="./assets/pelaporan/c27-coverage.png" width="100%"> |
+| C28-UT01 – C28-UT09 | Keluaran `mvn test -Dtest=SinkronisasiManagerTest`: 9 test `[OK]`<br><img src="./assets/pelaporan/c28-unit.png" width="100%"> |
+| C28 (coverage) | Total 8 dari 53 baris dan 1 dari 17 cabang terlewat<br><img src="./assets/pelaporan/c28-coverage.png" width="100%"> |
+| C53-UT01 – C53-UT06 | Keluaran `mvn test -Dtest=LaporanEntityTest`: 6 test `[OK]`<br><img src="./assets/pelaporan/c53-unit.png" width="100%"> |
+| C53 (coverage) | Total 9 dari 39 baris dan 5 dari 21 cabang terlewat<br><img src="./assets/pelaporan/c53-coverage.png" width="100%"> |
+| C54-UT01 – C54-UT05 | Keluaran `mvn test -Dtest=BundelFHIREntityTest`: 5 test `[OK]`<br><img src="./assets/pelaporan/c54-unit.png" width="100%"> |
+| C54 (coverage) | Total 6 dari 36 baris dan 4 dari 20 cabang terlewat<br><img src="./assets/pelaporan/c54-coverage.png" width="100%"> |
+| C62-UT01 – C62-UT12 | Keluaran `mvn test -Dtest=DataLaporanBoundaryTest`: 12 test `[OK]`<br><img src="./assets/pelaporan/c62-unit.png" width="100%"> |
+| C63-UT01 – C63-UT17 | Keluaran `mvn test -Dtest=DataSinkronisasiBoundaryTest`: 17 test `[OK]`<br><img src="./assets/pelaporan/c63-unit.png" width="100%"> |
+| C63 (coverage) | Total 9 dari 93 baris dan 5 dari 26 cabang terlewat<br><img src="./assets/pelaporan/c63-coverage.png" width="100%"> |
+| INT-TC27 – INT-TC32 | Keluaran `mvn test -Dtest=PelaporanIntegrasiTest`: 6 test `[OK]`<br><img src="./assets/pelaporan/int-tc27-tc32.png" width="100%"> |
+| UC10-TC01 | Layar Laporan Periodik dengan rekapitulasi terisi dan berkas CSV tersimpan<br><img src="./assets/uc10/uc10-tc01-rekapitulasi.png" width="100%"> |
+| UC10-TC02 | Pesan "Tidak ada data pelayanan" dan tombol ekspor terkunci<br><img src="./assets/uc10/uc10-tc02-kosong.png" width="100%"> |
+| UC10-TC03 | Pesan rentang tidak valid<br><img src="./assets/uc10/uc10-tc03-rentang-tidak-valid.png" width="100%"> |
+| UC11-TC01 | Layar Sinkronisasi SATUSEHAT daring, antrean kosong setelah sinkron<br><img src="./assets/uc11/uc11-tc01-sinkron.png" width="100%"> |
+| UC11-TC02 | Indikator "Luring" dan arsip bundel terenkripsi tersimpan<br><img src="./assets/uc11/uc11-tc02-luring.png" width="100%"> |
+| UC11-TC03 | Bundel lolos ditandai terkirim dan yang ditolak gagal kirim<br><img src="./assets/uc11/uc11-tc03-tolak-sebagian.png" width="100%"> |
+| KNF07-TC01 | Bundel FHIR berjenis `Bundle` `transaction` diterima server uji tanpa kesalahan<br><img src="./assets/pelaporan/knf07-bundel.png" width="100%"> |
+| KNF09-TC01 | Fungsi pelayanan rawat jalan tetap berjalan saat jaringan putus, sinkronisasi dialihkan ke ekspor<br><img src="./assets/pelaporan/knf09-luring.png" width="100%"> |
 | C20-UT01 – C20-UT32 | Keluaran `mvn test -Dtest=SkriningManagerTest`: 32 test `[OK]`<br><img src="./assets/skrining/c20-unit.png" width="100%"> |
 | C20 (coverage) | Total 11 dari 130 baris dan 6 dari 54 cabang terlewat<br><img src="./assets/skrining/c20-coverage.png" width="100%"> |
 | C21-UT01 – C21-UT18 | Keluaran `mvn test -Dtest=RisikoManagerTest`: 18 test `[OK]`<br><img src="./assets/skrining/c21-unit.png" width="100%"> |
@@ -2002,7 +2214,6 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC08 (basis data) | Penerimaan, bets, stok, dan audit setelah UC08-TC01 sampai UC08-TC03<br><img src="./assets/uc08/uc08-hasil-basis-data.png" width="100%"> |
 | KNF03-TC01 | Keluaran `mvn test -Dtest=KnfFarmasiTest` dan hasil ukur 15 percobaan gagal beserta penyerahan kontrol dari laporan Surefire<br><img src="./assets/farmasi/knf03-tc01.png" width="100%"> |
 | KNF13-TC01 | Hasil ukur enam kali proses dimatikan paksa beserta hasil setelah dijalankan ulang, dari laporan Surefire test yang sama<br><img src="./assets/farmasi/knf13-tc01.png" width="100%"> |
-| *[ID pengujian milik Fachry]* | *[Diisi Fachry: keluaran test runner per kelas, coverage kelas Mendalam, integrasi, use case, dan KNF]* |
 
 <br>
 
@@ -2029,15 +2240,15 @@ Tabel 5.1. Matriks Kerunutan KF terhadap Implementasi dan Pengujian
 | KF11 | - | UC06 | C08 - ResepForm<br>C23 - ResepManager<br>C46 - ResepEntity<br>C47 - ItemResepEntity<br>C48 - ObatEntity<br>C61 - DataFarmasiBoundary | `presentation/ResepForm.java`<br>`business/control/ResepManager.java`<br>`business/entity/ResepEntity.java`<br>`dataaccess/DataFarmasiBoundary.java` | UC06-TC01, UC06-TC02 | C23-UT01 s.d. C23-UT25, C46-UT01 s.d. C46-UT04, C47-UT01 s.d. C47-UT03, INT-TC21, INT-TC22 |
 | KF12 | - | UC05<br>UC09 | C07 - PemeriksaanForm<br>C22 - PemeriksaanManager<br>C45 - JadwalKontrolEntity<br>C21 - RisikoManager<br>C26 - PantauManager<br>C51 - DaftarPantauEntity<br>C59 - DataKlinisBoundary<br>C60 - DataPantauBoundary | `presentation/PemeriksaanForm.java`<br>`business/control/PemeriksaanManager.java`<br>`business/control/RisikoManager.java`<br>`dataaccess/DataKlinisBoundary.java` | UC05-TC03, UC05-TC08 (Fail pada `v9.0`, Pass setelah perbaikan); UC09-TC01 | C22-UT16 s.d. C22-UT19, C22-UT23, C22-UT28 s.d. C22-UT30, C22-UT37 (Fail pada `v9.0`, Pass setelah perbaikan), C45-UT01 s.d. C45-UT03, C59-UT28 s.d. C59-UT32, INT-TC19; C21-UT17, C21-UT18, C26-UT16 s.d. C26-UT26, C60-UT01 s.d. C60-UT09, INT-TC15, INT-TC16 |
 | KF13 | - | UC07 | C09 - AntreanResepForm<br>C10 - PenyerahanObatForm<br>C24 - ApotekManager<br>C46 - ResepEntity<br>C61 - DataFarmasiBoundary | `presentation/AntreanResepForm.java`<br>`presentation/PenyerahanObatForm.java`<br>`business/control/ApotekManager.java` | UC07-TC01, UC07-TC02 | C24-UT01 s.d. C24-UT08, C24-UT23 s.d. C24-UT37, C46-UT01 s.d. C46-UT04, C61-UT15 s.d. C61-UT23, INT-TC23, INT-TC24 |
-| KF14 | KNF03<br>KNF07 | UC07 | C10 - PenyerahanObatForm<br>C24 - ApotekManager<br>C48 - ObatEntity<br>C49 - BetsObatEntity<br>C54 - BundelFHIREntity<br>C61 - DataFarmasiBoundary<br>C63 - DataSinkronisasiBoundary | `business/control/ApotekManager.java`<br>`business/control/PenyusunBundelFHIR.java`<br>`dataaccess/DataFarmasiBoundary.java` | UC07-TC01, UC07-TC03 | C24-UT08 s.d. C24-UT22, C48-UT01 s.d. C48-UT04, C49-UT01 s.d. C49-UT04, C49-UT08 s.d. C49-UT13, C61-UT04 s.d. C61-UT09, C22-UT20, INT-TC19 (bundel kunjungan tanpa resep), INT-TC23, INT-TC24, KNF03-TC01; *[KNF07-TC01; diisi Fachry]* |
+| KF14 | KNF03<br>KNF07 | UC07 | C10 - PenyerahanObatForm<br>C24 - ApotekManager<br>C48 - ObatEntity<br>C49 - BetsObatEntity<br>C54 - BundelFHIREntity<br>C61 - DataFarmasiBoundary<br>C63 - DataSinkronisasiBoundary | `business/control/ApotekManager.java`<br>`business/control/PenyusunBundelFHIR.java`<br>`dataaccess/DataFarmasiBoundary.java` | UC07-TC01, UC07-TC03 | C22-UT20, INT-TC19 (bundel kunjungan tanpa resep), C24-UT08 s.d. C24-UT22, C48-UT01 s.d. C48-UT04, C49-UT01 s.d. C49-UT04, C49-UT08 s.d. C49-UT13, C61-UT04 s.d. C61-UT09, INT-TC23, INT-TC24, KNF03-TC01, C54-UT01 s.d. C54-UT05, C63-UT01 s.d. C63-UT17, KNF07-TC01 |
 | KF15 | - | UC12 | C16 - KonfigurasiForm<br>C29 - KonfigurasiManager<br>C30 - PenggunaEntity<br>C36 - PoliEntity<br>C40 - AmbangRisikoEntity<br>C48 - ObatEntity<br>C56 - DataAkunBoundary | `presentation/KonfigurasiForm.java`<br>`business/control/KonfigurasiManager.java`<br>`dataaccess/DataAkunBoundary.java` | UC12-TC01, UC12-TC03, UC12-TC04 | C29-UT01 s.d. C29-UT27, C30-UT01 s.d. C30-UT11, C56-UT01 s.d. C56-UT03, C56-UT09, INT-TC03, INT-TC04 |
 | KF16 | KNF04<br>KNF05 | UC01 | C01 - LoginForm<br>C17 - AutentikasiManager<br>C30 - PenggunaEntity<br>C31 - SesiEntity<br>C32 - AuditEntity<br>C56 - DataAkunBoundary | `presentation/LoginForm.java`<br>`presentation/Navigasi.java`<br>`business/control/AutentikasiManager.java`<br>`common/SesiAktif.java` | UC01-TC01 s.d. UC01-TC04, UC12-TC04 | C17-UT01 s.d. C17-UT17 (C17-UT17 Fail pada `v9.0`, Pass setelah perbaikan), C30-UT01 s.d. C30-UT05, C31-UT01 s.d. C31-UT07, C32-UT01 s.d. C32-UT03, C56-UT04 s.d. C56-UT08, C22-UT15, C22-UT27, C23-UT21, C29-UT10 (pembatasan peran pada operasi tulis), INT-TC01, INT-TC02, KNF04-TC01, KNF05-TC01 |
 | KF17 | - | UC08 | C11 - PersediaanForm<br>C25 - PersediaanManager<br>C48 - ObatEntity<br>C49 - BetsObatEntity<br>C50 - PenerimaanObatEntity<br>C61 - DataFarmasiBoundary | `presentation/PersediaanForm.java`<br>`business/control/PersediaanManager.java`<br>`dataaccess/DataFarmasiBoundary.java` | UC08-TC01 s.d. UC08-TC03 | C25-UT01 s.d. C25-UT20, C48-UT05 s.d. C48-UT10, C49-UT05 s.d. C49-UT07, C50-UT01 s.d. C50-UT03, C61-UT10 s.d. C61-UT14, INT-TC25, INT-TC26 |
 | KF18 | - | UC09 | C12 - DaftarPantauForm<br>C26 - PantauManager<br>C21 - RisikoManager<br>C51 - DaftarPantauEntity<br>C52 - TindakLanjutEntity<br>C60 - DataPantauBoundary | `presentation/DaftarPantauForm.java`<br>`business/control/PantauManager.java`<br>`dataaccess/DataPantauBoundary.java` | UC09-TC01 s.d. UC09-TC03 | C26-UT01 s.d. C26-UT26, C51-UT01 s.d. C51-UT06, C60-UT01 s.d. C60-UT09, C21-UT17, C21-UT18, INT-TC15, INT-TC16 |
-| KF19 | - | UC10 | C13 - LaporanForm<br>C27 - LaporanManager<br>C53 - LaporanEntity<br>C62 - DataLaporanBoundary | `presentation/LaporanForm.java`<br>`business/control/LaporanManager.java`<br>`dataaccess/DataLaporanBoundary.java` | *[UC10-TC.., diisi Fachry]* | *[C27-UT.., C53-UT.., INT-TC27, INT-TC28; diisi Fachry]* |
-| KF20 | KNF07 | UC11 | C14 - SinkronisasiForm<br>C15 - SATUSEHATGateway<br>C28 - SinkronisasiManager<br>C54 - BundelFHIREntity<br>C63 - DataSinkronisasiBoundary | `presentation/SinkronisasiForm.java`<br>`business/control/SinkronisasiManager.java`<br>`dataaccess/SATUSEHATGateway.java`<br>`dataaccess/DataSinkronisasiBoundary.java` | *[UC11-TC.., diisi Fachry]* | *[C15-UT.., C28-UT.., C54-UT.., C63-UT.., INT-TC29 s.d. INT-TC32, KNF07-TC01; diisi Fachry]* |
+| KF19 | - | UC10 | C13 - LaporanForm<br>C27 - LaporanManager<br>C53 - LaporanEntity<br>C62 - DataLaporanBoundary | `presentation/LaporanForm.java`<br>`business/control/LaporanManager.java`<br>`dataaccess/DataLaporanBoundary.java` | UC10-TC01, UC10-TC02, UC10-TC03 | C27-UT01 s.d. C27-UT10, C53-UT01 s.d. C53-UT06, C62-UT01 s.d. C62-UT12, INT-TC27, INT-TC28 |
+| KF20 | KNF07 | UC11 | C14 - SinkronisasiForm<br>C15 - SATUSEHATGateway<br>C28 - SinkronisasiManager<br>C54 - BundelFHIREntity<br>C63 - DataSinkronisasiBoundary | `presentation/SinkronisasiForm.java`<br>`business/control/SinkronisasiManager.java`<br>`dataaccess/SATUSEHATGateway.java`<br>`dataaccess/DataSinkronisasiBoundary.java` | UC11-TC01 | C15-UT01 s.d. C15-UT16, C28-UT01 s.d. C28-UT09, C54-UT01 s.d. C54-UT05, C63-UT01 s.d. C63-UT17, INT-TC29 s.d. INT-TC32, KNF07-TC01 |
 | KF21 | KNF06 | UC12 | C16 - KonfigurasiForm<br>C29 - KonfigurasiManager<br>C55 - PencadanganEntity<br>C64 - DataPencadanganBoundary | `presentation/KonfigurasiForm.java`<br>`business/control/KonfigurasiManager.java`<br>`dataaccess/DataPencadanganBoundary.java` | UC12-TC02, UC12-TC05 | C29-UT28 s.d. C29-UT37, C64-UT01 s.d. C64-UT16, INT-TC05, INT-TC06, KNF06-TC01 |
-| KF22 | KNF09<br>KNF10<br>KNF13 | UC05<br>UC11 | C14 - SinkronisasiForm<br>C15 - SATUSEHATGateway<br>C28 - SinkronisasiManager | `presentation/BilahAplikasi.java`<br>`presentation/Navigasi.java`<br>`business/control/SinkronisasiManager.java`<br>`dataaccess/SATUSEHATGateway.java` | UC05-TC06; *[UC11-TC.., diisi Fachry]* | KNF13-TC01; *[C15-UT.., C28-UT.., KNF09-TC01, KNF10-TC01; diisi Fachry dan Steven]* |
+| KF22 | KNF09<br>KNF10<br>KNF13 | UC05<br>UC11 | C14 - SinkronisasiForm<br>C15 - SATUSEHATGateway<br>C28 - SinkronisasiManager | `presentation/BilahAplikasi.java`<br>`presentation/Navigasi.java`<br>`business/control/SinkronisasiManager.java`<br>`dataaccess/SATUSEHATGateway.java` | UC05-TC06; UC11-TC02, UC11-TC03 | C15-UT01 s.d. C15-UT16, C28-UT01 s.d. C28-UT09, KNF09-TC01, KNF13-TC01; *[KNF10-TC01; diisi Steven]* |
 | KF23 | KNF11 | UC03<br>UC07 | C19 - KunjunganManager<br>C24 - ApotekManager<br>C36 - PoliEntity<br>C58 - DataKunjunganBoundary<br>C61 - DataFarmasiBoundary | `business/control/KunjunganManager.java`<br>`business/control/ApotekManager.java`<br>`dataaccess/DataKunjunganBoundary.java`<br>`dataaccess/DataFarmasiBoundary.java` | UC07-TC03; *[UC03-TC.., diisi Steven]* | C24-UT11, C61-UT04, C61-UT21 (penguncian stok dan resep), INT-TC22 (penguncian antrean apotek); *[INT-TC33, INT-TC34, KNF11-TC01; diisi Steven]* |
 | KF24 | KNF12 | UC04<br>UC05 | C05 - SkriningForm<br>C07 - PemeriksaanForm | `presentation/SkriningForm.java`<br>`presentation/PemeriksaanForm.java`<br>`presentation/Navigasi.java`<br>`presentation/TabelPintasan.java` | UC05-TC03 (Ctrl+S); UC04-TC01 (F2, Tab, Ctrl+S), UC04-TC02 (F3) | KNF12-TC01 |
 
