@@ -1,5 +1,6 @@
 package sehati.business.entity;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class RekamMedisEntityTest {
 
     @Test
+    @DisplayName("C34-UT01 tambahEntri menampung catatan berurutan tanpa menyentuh riwayat")
     void tambahEntriMenampungCatatanBerurutanTanpaMenyentuhRiwayat() {
         RekamMedisEntity rm = new RekamMedisEntity();
         rm.tambahEntri("pertama");
@@ -21,6 +23,7 @@ class RekamMedisEntityTest {
     }
 
     @Test
+    @DisplayName("C34-UT02 tambahEntri menolak catatan kosong")
     void catatanKosongDitolak() {
         RekamMedisEntity rm = new RekamMedisEntity();
 
@@ -30,6 +33,7 @@ class RekamMedisEntityTest {
     }
 
     @Test
+    @DisplayName("C34-UT03 kosongkanEntriBaru hanya membuang penampung")
     void kosongkanEntriBaruHanyaMembuangPenampung() {
         RekamMedisEntity rm = new RekamMedisEntity();
         rm.tambahEntri("catatan");

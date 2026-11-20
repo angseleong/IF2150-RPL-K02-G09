@@ -2,11 +2,13 @@ package sehati.business.control;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import sehati.business.entity.PasienEntity;
 import sehati.business.entity.SesiEntity;
+import sehati.common.KoneksiBasisData;
 import sehati.common.SesiAktif;
 
 import java.sql.Connection;
@@ -15,6 +17,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +26,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,37 +35,44 @@ class PasienManagerTest {
     private final PasienManager manager = new PasienManager();
 
     @Test
+    @DisplayName("C18-UT01 validasiNIK menerima tepat 16 digit")
     void validasiNIK_menerimaTepat16Digit() {
         assertTrue(manager.validasiNIK("9999010101010001"));
     }
 
     @Test
+    @DisplayName("C18-UT02 validasiNIK menolak kurang dari 16 digit")
     void validasiNIK_menolakKurangDari16Digit() {
         assertFalse(manager.validasiNIK("999901010101001"));
     }
 
     @Test
+    @DisplayName("C18-UT03 validasiNIK menolak lebih dari 16 digit")
     void validasiNIK_menolakLebihDari16Digit() {
         assertFalse(manager.validasiNIK("99990101010100017"));
     }
 
     @Test
+    @DisplayName("C18-UT04 validasiNIK menolak karakter bukan digit")
     void validasiNIK_menolakBukanDigit() {
         assertFalse(manager.validasiNIK("999901010101000A"));
     }
 
     @Test
+    @DisplayName("C18-UT05 validasiNIK menolak null")
     void validasiNIK_menolakNull() {
         assertFalse(manager.validasiNIK(null));
     }
 
     @Test
+    @DisplayName("C18-UT06 cariPasien mengembalikan daftar kosong untuk kata kunci kosong")
     void cariPasien_kataKunciKosongMengembalikanDaftarKosong() {
         assertEquals(List.of(), manager.cariPasien("   "));
         assertEquals(List.of(), manager.cariPasien(null));
     }
 
     @Test
+    @DisplayName("C18-UT12 daftarkanPasien menolak NIK tidak valid")
     void daftarkanPasien_menolakNIKTidakValid() {
         PasienEntity data = dataPasien(0, "999901010101001");
 
@@ -71,10 +82,29 @@ class PasienManagerTest {
     }
 
     @Test
+    @DisplayName("C18-UT13 daftarkanPasien menolak data pasien null")
+    void daftarkanPasien_menolakDataNull() {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> manager.daftarkanPasien(null));
+
+        assertEquals("Data pasien kosong", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("C18-UT18 perbaruiPasien menolak data pasien null")
     void perbaruiPasien_menolakDataNull() {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> manager.perbaruiPasien(null));
 
         assertEquals("Data pasien kosong", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("C18-UT19 perbaruiPasien menolak NIK tidak valid")
+    void perbaruiPasien_menolakNIKTidakValid() {
+        PasienEntity data = dataPasien(1, "123");
+
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> manager.perbaruiPasien(data));
+
+        assertEquals("NIK tidak valid", e.getMessage());
     }
 
     private static PasienEntity dataPasien(int idPasien, String nik) {
@@ -140,6 +170,30 @@ class PasienManagerTest {
         }
 
         @Test
+        @DisplayName("C18-UT07 cariPasien menemukan pasien seed dari nama parsial")
+        void cariPasien_menemukanPasienDariNamaParsial() {
+            List<PasienEntity> hasil = manager.cariPasien("  budi ");
+
+            assertTrue(hasil.stream().anyMatch(p -> p.getNama().equals("Budi Santoso")));
+            assertTrue(hasil.stream().allMatch(p -> p.getNama().toLowerCase().contains("budi")
+                    || p.getNik().contains("budi") || p.getNomorRekamMedis().toLowerCase().contains("budi")));
+        }
+
+        @Test
+        @DisplayName("C18-UT08 cariPasien memperlakukan wildcard sebagai teks biasa")
+        void cariPasien_memperlakukanWildcardSebagaiTeksBiasa() {
+            assertEquals(List.of(), manager.cariPasien("%"));
+            assertEquals(List.of(), manager.cariPasien("_"));
+        }
+
+        @Test
+        @DisplayName("C18-UT09 cariPasien mengembalikan daftar kosong bila tidak ada yang cocok")
+        void cariPasien_tidakAdaYangCocok() {
+            assertEquals(List.of(), manager.cariPasien("zzzz-tidak-ada"));
+        }
+
+        @Test
+        @DisplayName("C18-UT10 daftarkanPasien menerbitkan tepat satu nomor RM dan mencatat audit")
         void daftarkanPasien_menerbitkanTepatSatuNomorRMDanMencatatAudit() throws SQLException {
             String nik = nikFiktif();
             nikUji.add(nik);
@@ -156,6 +210,19 @@ class PasienManagerTest {
         }
 
         @Test
+        @DisplayName("C18-UT11 daftarkanPasien menerima data opsional kosong dan menyimpannya NULL")
+        void daftarkanPasien_menerimaDataOpsionalKosong() throws SQLException {
+            String nik = nikFiktif();
+            nikUji.add(nik);
+
+            PasienEntity tersimpan = manager.daftarkanPasien(dataPasien(0, nik));
+
+            assertNull(tersimpan.getNomorTelepon());
+            assertNull(kolom("SELECT nomor_telepon FROM pasien WHERE id_pasien = ?", tersimpan.getIdPasien()));
+        }
+
+        @Test
+        @DisplayName("C18-UT14 daftarkanPasien menolak NIK duplikat")
         void daftarkanPasien_menolakNIKDuplikat() throws SQLException {
             String nik = nikFiktif();
             nikUji.add(nik);
@@ -169,6 +236,20 @@ class PasienManagerTest {
         }
 
         @Test
+        @DisplayName("C18-UT15 daftarkanPasien menolak tanpa sesi masuk")
+        void daftarkanPasien_menolakTanpaSesi() {
+            String nik = nikFiktif();
+            nikUji.add(nik);
+            SesiAktif.lepas();
+
+            IllegalStateException e = assertThrows(IllegalStateException.class,
+                    () -> manager.daftarkanPasien(dataPasien(0, nik)));
+
+            assertEquals("Sesi sudah berakhir, silakan masuk kembali", e.getMessage());
+        }
+
+        @Test
+        @DisplayName("C18-UT16 perbaruiPasien mengubah data tanpa mengubah nomor RM dan mencatat audit")
         void perbaruiPasien_mengubahDataTanpaMengubahNomorRMDanMencatatAudit() throws SQLException {
             String nik = nikFiktif();
             nikUji.add(nik);
@@ -200,6 +281,34 @@ class PasienManagerTest {
         }
 
         @Test
+        @DisplayName("C18-UT17 perbaruiPasien menerima NIK yang tidak berubah")
+        void perbaruiPasien_menerimaNIKYangTidakBerubah() throws SQLException {
+            String nik = nikFiktif();
+            nikUji.add(nik);
+            PasienEntity tersimpan = manager.daftarkanPasien(dataPasien(0, nik));
+
+            PasienEntity usulan = new PasienEntity(tersimpan.getIdPasien(), nik, null, "Nama Tetap NIK",
+                    LocalDate.of(1990, 1, 1), "Perempuan", "Jl. Uji No. 1", null);
+
+            manager.perbaruiPasien(usulan);
+
+            assertEquals("Nama Tetap NIK",
+                    kolom("SELECT nama FROM pasien WHERE id_pasien = ?", tersimpan.getIdPasien()));
+        }
+
+        @Test
+        @DisplayName("C18-UT20 perbaruiPasien menolak pasien yang tidak ditemukan")
+        void perbaruiPasien_menolakPasienTidakDitemukan() {
+            PasienEntity usulan = dataPasien(999999, nikFiktif());
+
+            IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+                    () -> manager.perbaruiPasien(usulan));
+
+            assertEquals("Pasien tidak ditemukan", e.getMessage());
+        }
+
+        @Test
+        @DisplayName("C18-UT21 perbaruiPasien menolak NIK milik pasien lain")
         void perbaruiPasien_menolakNIKMilikPasienLain() throws SQLException {
             String nikA = nikFiktif();
             String nikB = nikFiktif();
@@ -216,6 +325,72 @@ class PasienManagerTest {
 
             assertEquals("NIK sudah terdaftar", e.getMessage());
             assertEquals(nikA, kolom("SELECT nik FROM pasien WHERE id_pasien = ?", a.getIdPasien()));
+        }
+
+        @Test
+        @DisplayName("C18-UT22 pasienTerbaru memuat daftar pasien terurut dari yang terbaru")
+        void pasienTerbaru_memuatDaftarTerurut() {
+            List<PasienEntity> hasil = manager.pasienTerbaru();
+
+            assertTrue(hasil.size() >= 8, "seed berisi sedikitnya 8 pasien");
+            assertTrue(hasil.size() <= 50);
+            assertTrue(hasil.stream().anyMatch(p -> p.getNama().equals("Budi Santoso")));
+            for (int i = 1; i < hasil.size(); i++) {
+                assertTrue(hasil.get(i - 1).getIdPasien() >= hasil.get(i).getIdPasien());
+            }
+        }
+
+        @Test
+        @DisplayName("C18-UT23 pasienTerbaru dibatasi 50 baris")
+        void pasienTerbaru_dibatasiLimaPuluhBaris() throws SQLException {
+            int maksimal = 0;
+            try (PreparedStatement ps = koneksi.prepareStatement(
+                    "INSERT INTO pasien (nik, nomor_rekam_medis, nama, tanggal_lahir, jenis_kelamin, alamat) "
+                            + "VALUES (?, ?, ?, DATE '1990-01-01', 'Perempuan', 'Jl. Uji') RETURNING id_pasien")) {
+                for (int i = 0; i < 55; i++) {
+                    ps.setString(1, "8888" + String.format("%012d", i));
+                    ps.setString(2, "RM-88" + String.format("%04d", i));
+                    ps.setString(3, "Pasien Batas " + i);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        rs.next();
+                        maksimal = Math.max(maksimal, rs.getInt(1));
+                    }
+                }
+            }
+            try {
+                List<PasienEntity> hasil = manager.pasienTerbaru();
+
+                assertEquals(50, hasil.size());
+                assertEquals(maksimal, hasil.get(0).getIdPasien());
+            } finally {
+                try (PreparedStatement ps = koneksi.prepareStatement("DELETE FROM pasien WHERE nik LIKE '8888%'")) {
+                    ps.executeUpdate();
+                }
+            }
+        }
+
+        @Test
+        @DisplayName("C18-UT24 pasienTerbaru melaporkan galat basis data dengan pesan ramah")
+        void pasienTerbaru_melaporkanGalatBasisData() throws SQLException {
+            String penggunaApp = penggunaAplikasi();
+            try (Statement st = koneksi.createStatement()) {
+                st.execute("REVOKE SELECT ON pasien FROM " + penggunaApp);
+                try {
+                    IllegalStateException e = assertThrows(IllegalStateException.class, () -> manager.pasienTerbaru());
+                    assertEquals("Basis data tidak dapat dihubungi", e.getMessage());
+                } finally {
+                    st.execute("GRANT SELECT ON pasien TO " + penggunaApp);
+                }
+            }
+        }
+
+        private String penggunaAplikasi() throws SQLException {
+            try (Connection k = KoneksiBasisData.buka();
+                 PreparedStatement ps = k.prepareStatement("SELECT current_user");
+                 ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                return rs.getString(1);
+            }
         }
 
         private long posisiEfektifSeqNomorRM() throws SQLException {
