@@ -66,6 +66,11 @@ public final class TangkapanLayar {
                 case "sinkron-normal" -> sinkronNormal();
                 case "sinkron-luring" -> sinkronLuring();
                 case "sinkron-tolak" -> sinkronTolak();
+                case "pasien-cari" -> pasienCari();
+                case "pasien-daftar" -> pasienIsiLaluSimpan("9999010101990777", "Dewi Lestari", 1200);
+                case "pasien-nik-ganda" -> pasienIsiLaluSimpan("9999010101750002", "Siti Duplikat", 1200);
+                case "pasien-nik-salah" -> pasienIsiLaluSimpan("999901010199077", "Dewi Lestari", 600);
+                case "kunjungan" -> kunjungan(getParameters().getRaw().get(2));
                 default -> Platform.exit();
             }
         }
@@ -121,6 +126,73 @@ public final class TangkapanLayar {
         private void sinkronTolak() {
             Navigasi.buka("SinkronisasiForm");
             tundaSnap(1800);
+        }
+
+        // Skenario loket UC02/UC03 memakai sesi Petugas Administrasi sungguhan agar Manager menulis ke basis data uji.
+        private void masukAdmin() {
+            new sehati.business.control.AutentikasiManager().autentikasi("admin", "sehati123");
+            Navigasi.mulaiSesi("admin", sehati.common.SesiAktif.peran());
+        }
+
+        private void pasienCari() {
+            masukAdmin();
+            sehati.presentation.PasienForm form = Navigasi.buka("PasienForm");
+            ((javafx.scene.control.TextField) ambil(form, "kolomPencarian")).setText("Ami");
+            form.kirimPencarian("Ami");
+            tundaSnap(1500);
+        }
+
+        private void pasienIsiLaluSimpan(String nik, String nama, double tunda) {
+            masukAdmin();
+            sehati.presentation.PasienForm form = Navigasi.buka("PasienForm");
+            form.bukaFormulir(null);
+            ((javafx.scene.control.TextField) ambil(form, "kolomNik")).setText(nik);
+            ((javafx.scene.control.TextField) ambil(form, "kolomNama")).setText(nama);
+            ((DatePicker) ambil(form, "kolomTanggalLahir")).setValue(LocalDate.of(1999, 4, 17));
+            @SuppressWarnings("unchecked")
+            javafx.scene.control.ComboBox<String> jk = (javafx.scene.control.ComboBox<String>) ambil(form, "kolomJenisKelamin");
+            jk.setValue("Perempuan");
+            ((javafx.scene.control.TextArea) ambil(form, "kolomAlamat")).setText("Jl. Cempaka No. 7");
+            ((javafx.scene.control.TextField) ambil(form, "kolomTelepon")).setText("081234567890");
+            panggil(form, "kirimDataPasien");
+            tundaSnap(tunda);
+        }
+
+        private void kunjungan(String nomorRM) {
+            masukAdmin();
+            sehati.presentation.KunjunganForm form = Navigasi.buka("KunjunganForm");
+            sehati.business.entity.PasienEntity pasien = new sehati.business.control.PasienManager().cariPasien(nomorRM).get(0);
+            form.buka(pasien);
+            PauseTransition pilih = new PauseTransition(Duration.millis(1200));
+            pilih.setOnFinished(e -> {
+                @SuppressWarnings("unchecked")
+                javafx.scene.control.ComboBox<sehati.business.entity.PoliEntity> poli =
+                        (javafx.scene.control.ComboBox<sehati.business.entity.PoliEntity>) ambil(form, "pilihanPoli");
+                poli.getSelectionModel().selectFirst();
+                form.kirimPermintaanKunjungan();
+                tundaSnap(1500);
+            });
+            pilih.play();
+        }
+
+        private static Object ambil(Object form, String nama) {
+            try {
+                Field f = form.getClass().getDeclaredField(nama);
+                f.setAccessible(true);
+                return f.get(form);
+            } catch (ReflectiveOperationException e) {
+                throw new IllegalStateException(e);
+            }
+        }
+
+        private static void panggil(Object form, String nama) {
+            try {
+                Method m = form.getClass().getDeclaredMethod(nama);
+                m.setAccessible(true);
+                m.invoke(form);
+            } catch (ReflectiveOperationException e) {
+                throw new IllegalStateException(e);
+            }
         }
 
         private void tundaSnap(double milidetik) {

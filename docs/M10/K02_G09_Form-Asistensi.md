@@ -27,13 +27,13 @@
 
 | Catatan |
 | --- |
-| 1. Asistensi membahas isi dokumen HIUPL (Tugas 10): struktur BAB 1 sampai BAB 5, tabel pengujian unit, integrasi, use case, KNF, serta bukti pengujian yang wajib dilampirkan pada Tabel 4.6. |
-| 2. Tingkat kedalaman pengujian setiap kelas (Mendalam, Sedang, atau Tidak perlu) ditentukan dari peran kelas pada use case dan jumlah cabang algoritmanya; kelas yang memegang algoritma penting diuji Mendalam. |
-| 3. Kelas dengan tingkat Mendalam wajib mencapai coverage minimal 70% untuk baris dan cabang, diukur dengan JaCoCo; pengujian integrasi dilakukan tanpa mock dengan basis data dan sistem eksternal (mode simulasi). |
-| 4. Setiap use case dan KNF yang menjadi tanggung jawab anggota diuji dengan skenario normal dan alternatif, hasilnya dicatat lengkap dengan tangkapan layar sebagai bukti. |
+| 1. Asistensi membahas isi HIUPL (Tugas 10): sampul dengan logo, identitas, dan tabel daftar perubahan, lalu BAB 1 sampai BAB 5. BAB 1 dan BAB 2 diambil dari milestone sebelumnya lalu disesuaikan: istilah baru (TC, UT, INT, *boundary*, *coverage*) dijelaskan, aturan penomoran ditambah pola ID pengujian, referensi minimal SKPL, APL, DPPL, dan Implementasi (T9) beserta dokumentasi *framework*, *library*, dan alat uji, dan setiap gambar diberi narasi. |
+| 2. BAB 3 mendokumentasikan hasil implementasi: lingkungan (perangkat keras, OS, bahasa dan versi, *library*, DBMS, alat pengembangan, *version control*, alat uji), modul beserta nama file, antarmuka dengan ID I-XX yang sesuai DPPL, dan file lain. |
+| 3. Setiap kelas DPPL diklasifikasikan Mendalam, Sedang, atau Tidak perlu menurut ciri kelasnya (logika bisnis, perhitungan, validasi, algoritma, integrasi eksternal, keamanan), bukan menurut seberapa penting kelas itu. Kelas Mendalam diuji pada setiap operasi publik dengan minimal 3 *test case* (normal, *boundary*, dan negatif) dan *coverage* minimal 70%. Kelas Sedang minimal 2 *test case* (normal dan negatif) dan boleh lewat uji integrasi. Kelas Tidak perlu cukup diberi alasan. |
+| 4. Pengujian unit dan integrasi dilakukan otomatis, sedangkan use case dan sebagian KNF diuji manual dengan tangkapan layar. Uji integrasi memakai komponen nyata (bukan *mock*) untuk Controller ke Model, aplikasi ke basis data, dan aplikasi ke sistem eksternal. Setiap skenario normal dan alternatif SKPL minimal punya satu UCXX-TCYY, dan setiap KNF diuji dengan target terukur, metode dan alat, serta hasil aktual. Bukti setiap TC dilampirkan di Subbab 4.6, dan BAB 5 memetakan setiap KF ke KNF, use case, kelas, file, dan *test case*. |
+| 5. Tanya jawab: uji integrasi sebaiknya memakai basis data uji terpisah atau basis data yang di-reset, dan data tiruan diperbolehkan. *Coverage* yang kurang ditambah dengan menambah *test case*. Kelas yang berubah dari DPPL diuji sesuai implementasi terakhir dan perubahannya dicatat. KNF yang tidak dapat diukur atau diwujudkan tetap dicantumkan beserta justifikasinya. |
+| 6. Tenggat draf Selasa, 16 November 2026 pukul 21.00 WIB, dan tenggat final Jumat, 20 November 2026 pukul 21.00 WIB. |
 
-**Notes for this section:**  
-*Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
 
 ## Dokumentasi
 
