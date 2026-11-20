@@ -65,6 +65,7 @@ Dipersiapkan oleh:
 | :--- | :--- |
 | A | Versi pertama HIUPL. BAB 1 dan BAB 2 disusun dari DPPL Tugas 8 dan SKPL Tugas 5, ditambah istilah dan pola ID pengujian. BAB 3 merangkum implementasi pada tag `v9.0` (Tugas 9) beserta perbaikan kode hasil pengujian (Tabel 3.5). BAB 4 dan BAB 5 berisi hasil pengujian dan matriks kerunutan yang baru disusun pada dokumen ini. |
 | B | Versi final setelah draf 17 November 2026. Hasil pengujian keenam modul dilengkapi pada BAB 4 dan BAB 5. Baris ganda dari penggabungan dihapus. ID pengujian, tabel C58, dan baris C35-UT02 sampai C35-UT04 serta C57-UT04 disesuaikan dengan test yang sebenarnya. Angka *coverage* modul loket, hasil KNF01, dan batasan KNF10 (Windows belum diuji) dikoreksi. Bukti modul loket (UC02, UC03, KNF01, KNF10, KNF11) ditambahkan, dan status akhir KF pada BAB 5 diperbarui. |
+| C | Tabel C35, C36, dan C37 disesuaikan dengan kode test (tanda tangan `aktifHariIni()` dan `tambahkan(idEntri)`, jenis kasus batas). Ringkasan cakupan C15, C18, C19, C54, dan C63 dikoreksi agar sesuai jenis kasus yang benar-benar ada, dan operasi Mendalam yang belum memiliki kasus batas dicatat pada Subbab 4.2. |
 
 ---
 
@@ -421,6 +422,8 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 
 Pengujian unit dilakukan pada kelas bertingkat Mendalam dan Sedang. Kelas Mendalam diuji pada seluruh operasi public dengan kasus normal, batas, dan negatif, serta mencapai *coverage* minimal 70%. Kelas Sedang diuji minimal dengan satu kasus normal dan satu kasus negatif pada operasi public utama.
 
+Hasil pemeriksaan ulang terhadap aturan minimum kelas Mendalam (normal, batas, dan negatif untuk setiap operasi public): sebagian operasi belum memiliki kasus batas tersendiri, yaitu `kirimBundel()` (C15), `perbaruiPasien()` dan `cariPasien()` (C18), `bukaKunjungan()`, `daftarPoli()`, dan `cegahKunjunganGanda()` (C19), `hitungRekapitulasi()` dan `ekspor()` (C27), `kirimSemua()`, `muatStatus()`, dan `eksporBundel()` (C28), `keluarkan()` (C37), `tandaiTerkirim()` (C54), serta `simpanBundel()`, `ambilTertunda()`, `perbaruiBundel()`, dan `ambilTerkirimTerakhir()` (C63). Operasi tersebut tetap teruji lewat kasus normal dan negatif, *coverage* setiap kelasnya di atas 70%, dan ditandai pada Tabel ringkasan cakupan masing-masing kelas sebagai kekurangan yang belum ditutup.
+
 Setiap method test diberi anotasi `@DisplayName` yang diawali ID *test case*, misalnya `C22-UT04`, sehingga keluaran *test runner* langsung menunjukkan ID yang sama dengan tabel pada subbab ini. Kelas `Manager` membuka koneksinya sendiri lewat `KoneksiBasisData`, jadi operasi yang membaca atau menyimpan data diuji terhadap basis data uji. Setiap test menghapus atau me-*rollback* data yang dibuatnya agar test lain tidak terpengaruh. Kasus yang ditolak sebelum basis data disentuh (validasi masukan dan pemeriksaan peran) diuji tanpa basis data. *Coverage* diukur JaCoCo dari seluruh test (`mvn test`).
 
 Cara menjalankan unit test, dari folder `src/` dengan basis data uji menyala (`docker compose up -d`):
@@ -471,7 +474,7 @@ Tabel 4.2.1b. Ringkasan Cakupan Kelas C15
 | Informasi | Keterangan |
 | :--- | :--- |
 | Daftar operasi public pada DPPL | `periksaKoneksi()`, `kirimBundel()` |
-| Operasi yang diuji | Kedua operasi DPPL (2 dari 2). Setiap operasi memiliki kasus normal, batas, negatif, dan alternatif |
+| Operasi yang diuji | Kedua operasi DPPL (2 dari 2). `periksaKoneksi()` memiliki kasus normal, batas, dan negatif; `kirimBundel()` memiliki kasus normal, alternatif, dan negatif tanpa kasus batas tersendiri |
 | ID Algoritma yang tercakup | Algo-C15-01 (pemeriksaan koneksi: C15-UT01 s.d. C15-UT06), Algo-C15-02 (pengiriman bundel: C15-UT07 s.d. C15-UT16) |
 | Coverage (wajib ≥ 70%) | 95,9% baris (71 dari 74) dan 82,7% cabang (43 dari 52), diukur dengan JaCoCo 0.8.14 dari seluruh `mvn test`. Baris yang tidak tercakup adalah penghentian darurat `InterruptedException` (re-interrupt) yang hanya terjadi saat utas diinterupsi, serta jalur kembalian cadangan yang tidak tercapai. Bukti pada Subbab 4.6 |
 
@@ -560,7 +563,7 @@ Tabel 4.2.3b. Ringkasan Cakupan Kelas C18
 | Informasi | Keterangan |
 | :--- | :--- |
 | Daftar operasi public pada DPPL | `validasiNIK()`, `cariPasien()`, `daftarkanPasien()`, `perbaruiPasien()`, `terbitkanNomorRM()` (private), dan `pasienTerbaru()` (operasi tambahan, Tabel B.1) |
-| Operasi yang diuji | Lima operasi `validasiNIK`/`cariPasien`/`daftarkanPasien`/`perbaruiPasien`/`pasienTerbaru` dengan kasus normal, batas, dan negatif |
+| Operasi yang diuji | Lima operasi `validasiNIK`/`cariPasien`/`daftarkanPasien`/`perbaruiPasien`/`pasienTerbaru`. `validasiNIK()` dan `daftarkanPasien()` memiliki kasus normal, batas, dan negatif; `perbaruiPasien()` normal dan negatif; `cariPasien()` baru kasus normal |
 | ID Algoritma yang tercakup | Algo-C18-01 (C18-UT12 s.d. C18-UT15), Algo-C18-02 (C18-UT16 s.d. C18-UT21) |
 | Coverage (wajib ≥ 70%) | 73,4% baris (58 dari 79) dan 100% cabang (28 dari 28), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
@@ -593,7 +596,7 @@ Tabel 4.2.4b. Ringkasan Cakupan Kelas C19
 | Informasi | Keterangan |
 | :--- | :--- |
 | Daftar operasi public pada DPPL | `daftarPoli()`, `bukaKunjungan()`; `cegahKunjunganGanda()` dan `terbitkanNomorAntrean()` private |
-| Operasi yang diuji | Dua operasi public (2 dari 2) dengan kasus normal, batas, dan negatif |
+| Operasi yang diuji | Dua operasi public (2 dari 2). `bukaKunjungan()` dan `daftarPoli()` memiliki kasus normal dan negatif; `cegahKunjunganGanda()` baru kasus normal. Batas penomoran antrean diuji pada C36-UT03 |
 | ID Algoritma yang tercakup | Algo-C19-01 (C19-UT07 s.d. C19-UT11), Algo-C19-02 (C19-UT07) |
 | Coverage (wajib ≥ 70%) | 82,4% baris (42 dari 51) dan 87,5% cabang (7 dari 8), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
@@ -1216,9 +1219,9 @@ Tabel 4.2.20. Hasil Pengujian Unit Kelas C35
 | C35-UT03 | `perbaruiStatus(status: String): void` | Negatif | Status "selesai" → "menunggu skrining" | `IllegalStateException` "Kunjungan sudah selesai dan tidak dapat diubah" | Pengecualian dan pesan sesuai | Pass |
 | C35-UT04 | `perbaruiStatus(status: String): void` | Batas | Status "siap diperiksa dokter" → "selesai" (status terakhir) | Status menjadi "selesai" | Sesuai | Pass |
 | C35-UT05 | `perbaruiStatus(status: String): void` | Negatif | Status `null` | `IllegalArgumentException` | Keduanya ditolak | Pass |
-| C35-UT06 | `aktifHariIni(tanggal: LocalDate): boolean` | Normal | Kunjungan aktif pada hari berjalan | `true` | Sesuai | Pass |
-| C35-UT07 | `aktifHariIni(tanggal: LocalDate): boolean` | Normal | Kunjungan selesai hari ini | `false` | Sesuai | Pass |
-| C35-UT08 | `aktifHariIni(tanggal: LocalDate): boolean` | Normal | Kunjungan selesai kemarin | `false` | Sesuai | Pass |
+| C35-UT06 | `aktifHariIni(): boolean` | Normal | Kunjungan tanggal hari ini berstatus "menunggu skrining" | `true` | `true` | Pass |
+| C35-UT07 | `aktifHariIni(): boolean` | Negatif | Kunjungan tanggal hari ini berstatus "selesai" | `false` | `false` | Pass |
+| C35-UT08 | `aktifHariIni(): boolean` | Batas | Kunjungan aktif bertanggal kemarin (tepat satu hari sebelum hari ini) | `false` | `false` | Pass |
 
 Tabel 4.2.20b. Ringkasan Cakupan Kelas C35
 
@@ -1242,16 +1245,16 @@ Tabel 4.2.21. Hasil Pengujian Unit Kelas C36
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | C36-UT01 | `ambilNomorBerikutnya(tanggal: LocalDate): int` | Normal | Poli baru, hari pelayanan baru | Nomor 1 | `1` | Pass |
-| C36-UT02 | `ambilNomorBerikutnya(tanggal: LocalDate): int` | Normal | Poli yang sama, kunjungan berikutnya hari ini | Nomor berurutan | Sesuai | Pass |
-| C36-UT03 | `ambilNomorBerikutnya(tanggal: LocalDate): int` | Normal | Poli yang sama, tanggal bukan hari ini | Nomor mulai dari 1 kembali | `1` | Pass |
-| C36-UT04 | `ambilNomorBerikutnya(tanggal: LocalDate): int` | Negatif | Tanggal `null` | `IllegalArgumentException` | Keduanya ditolak | Pass |
+| C36-UT02 | `ambilNomorBerikutnya(tanggal: LocalDate): int` | Normal | Urutan terakhir 3 pada hari yang sama, dipanggil dua kali | 4 lalu 5 | `4`, `5` | Pass |
+| C36-UT03 | `ambilNomorBerikutnya(tanggal: LocalDate): int` | Batas | Urutan terakhir 7 bertanggal 9-11-2026, dipanggil untuk 10-11-2026 (hari berganti) | Nomor mulai dari 1 kembali | `1` | Pass |
+| C36-UT04 | `ambilNomorBerikutnya(tanggal: LocalDate): int` | Negatif | Tanggal `null` | `IllegalArgumentException` "Hari layanan tidak boleh kosong" | Ditolak dengan pesan sesuai | Pass |
 
 Tabel 4.2.21b. Ringkasan Cakupan Kelas C36
 
 | Informasi | Keterangan |
 | :--- | :--- |
 | Daftar operasi public pada DPPL | `ambilNomorBerikutnya()` |
-| Operasi yang diuji | `ambilNomorBerikutnya()` (1 dari 1) |
+| Operasi yang diuji | `ambilNomorBerikutnya()` (1 dari 1) dengan kasus normal, batas, dan negatif |
 | ID Algoritma yang tercakup | Algo-C36-01 (C36-UT01 s.d. C36-UT04) |
 | Coverage (wajib ≥ 70%) | 76,9% baris (20 dari 26) dan 100% cabang (4 dari 4), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
@@ -1267,25 +1270,25 @@ Tabel 4.2.22. Hasil Pengujian Unit Kelas C37
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C37-UT01 | `tambah(entri: KunjunganEntity): void` | Normal | Antrean kosong, tambah entri | Entri di akhir | Sesuai | Pass |
-| C37-UT02 | `tambah(entri: KunjunganEntity): void` | Normal | Antrean sudah berisi, tambah entri | Entri baru di akhir | Sesuai | Pass |
-| C37-UT03 | `tambah(entri: KunjunganEntity): void` | Normal | Antrean kosong, tambah entri pertama | Entri tampil pertama | Sesuai | Pass |
-| C37-UT04 | `ambilTerdepan(): KunjunganEntity` | Normal | Antrean berisi | Entri pertama | Sesuai | Pass |
-| C37-UT05 | `ambilTerdepan(): KunjunganEntity` | Normal | Antrean kosong | `null` | `null` | Pass |
-| C37-UT06 | `ambilTerdepan(): KunjunganEntity` | Normal | Antrean berisi | Hanya id kunjungan yang diisi | Sesuai | Pass |
-| C37-UT07 | `pindahkanKeBelakang(entri: KunjunganEntity): void` | Normal | Ambil entri tengah, pindah ke belakang | Urutan berubah | Sesuai | Pass |
-| C37-UT08 | `pindahkanKeBelakang(entri: KunjunganEntity): void` | Normal | Ambil entri terakhir, pindah ke belakang | Urutan tidak berubah | Sesuai | Pass |
-| C37-UT09 | `pindahkanKeBelakang(entri: KunjunganEntity): void` | Negatif | Entri tidak ada pada antrean | `IllegalArgumentException` | Ditolak | Pass |
-| C37-UT10 | `keluarkan(entri: KunjunganEntity): void` | Normal | Ambil entri tengah, keluarkan | Urutan bergeser | Sesuai | Pass |
-| C37-UT11 | `keluarkan(entri: KunjunganEntity): void` | Normal | Ambil entri terakhir, keluarkan | Urutan tidak berubah | Sesuai | Pass |
-| C37-UT12 | `keluarkan(entri: KunjunganEntity): void` | Negatif | Entri tidak ada pada antrean | `IllegalArgumentException` | Ditolak | Pass |
+| C37-UT01 | `tambahkan(idEntri: int): void` | Normal | Antrean [3, 2], tambahkan 11 | [3, 2, 11] | [3, 2, 11] | Pass |
+| C37-UT02 | `tambahkan(idEntri: int): void` | Negatif | Antrean [3, 2], tambahkan 3 (sudah ada) | Entri ganda diabaikan, antrean tetap [3, 2] | [3, 2] | Pass |
+| C37-UT03 | `tambahkan(idEntri: int): void` | Batas | Antrean kosong, tambahkan 7 | [7] | [7] | Pass |
+| C37-UT04 | `ambilTerdepan(): KunjunganEntity` | Normal | Antrean [3, 2, 11] | Kunjungan dengan id 3 | id 3 | Pass |
+| C37-UT05 | `ambilTerdepan(): KunjunganEntity` | Batas | Antrean kosong | `null` | `null` | Pass |
+| C37-UT06 | `ambilTerdepan(): KunjunganEntity` | Normal | Antrean [3, 2] | Hanya id kunjungan yang diisi (id pasien 0, status `null`) | Sesuai | Pass |
+| C37-UT07 | `pindahkanKeBelakang(idEntri: int): void` | Normal | Antrean [3, 2, 11], pindahkan 3 | [2, 11, 3] | [2, 11, 3] | Pass |
+| C37-UT08 | `pindahkanKeBelakang(idEntri: int): void` | Batas | Antrean [3, 2, 11], pindahkan 11 (sudah paling belakang) | Urutan tetap [3, 2, 11] | [3, 2, 11] | Pass |
+| C37-UT09 | `pindahkanKeBelakang(idEntri: int): void` | Negatif | Antrean [3, 2], pindahkan 99 | `IllegalArgumentException` "Entri tidak ada pada antrean skrining", antrean tetap | Ditolak, antrean [3, 2] | Pass |
+| C37-UT10 | `keluarkan(idEntri: int): void` | Normal | Antrean [3, 2, 11], keluarkan 2 | [3, 11] | [3, 11] | Pass |
+| C37-UT11 | `keluarkan(idEntri: int): void` | Normal | Antrean apotek [10, 11, 12], keluarkan 11 | [10, 12], urutan lain tetap | [10, 12] | Pass |
+| C37-UT12 | `keluarkan(idEntri: int): void` | Negatif | Antrean apotek [10], keluarkan 99 | `IllegalArgumentException` "Entri tidak ada pada antrean apotek", antrean tetap | Ditolak, antrean [10] | Pass |
 
 Tabel 4.2.22b. Ringkasan Cakupan Kelas C37
 
 | Informasi | Keterangan |
 | :--- | :--- |
-| Daftar operasi public pada DPPL | `tambah()`, `ambilTerdepan()`, `pindahkanKeBelakang()`, dan `keluarkan()` |
-| Operasi yang diuji | Keempat operasi dengan kasus normal dan negatif |
+| Daftar operasi public pada DPPL | `tambah()` (diimplementasikan sebagai `tambahkan(idEntri)`), `ambilTerdepan()`, `pindahkanKeBelakang()`, dan `keluarkan()` |
+| Operasi yang diuji | Keempat operasi (4 dari 4). `tambahkan()` dan `pindahkanKeBelakang()` memiliki kasus normal, batas, dan negatif; `ambilTerdepan()` tidak menerima masukan sehingga tidak memiliki kasus negatif (antrean kosong diuji sebagai batas); `keluarkan()` belum memiliki kasus batas tersendiri |
 | ID Algoritma yang tercakup | Algo-C37-01 (C37-UT01 s.d. C37-UT12) |
 | Coverage (wajib ≥ 70%) | 74,2% baris (23 dari 31) dan 100% cabang (6 dari 6), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
@@ -1689,7 +1692,7 @@ Tabel 4.2.37b. Ringkasan Cakupan Kelas C54
 | Informasi | Keterangan |
 | :--- | :--- |
 | Daftar operasi public pada DPPL | `tandaiTerkirim()`, `tandaiGagal()` |
-| Operasi yang diuji | Kedua operasi DPPL (2 dari 2). Setiap operasi memiliki kasus normal, batas, dan negatif |
+| Operasi yang diuji | Kedua operasi DPPL (2 dari 2) dengan kasus normal dan negatif; kasus batas tersendiri belum ada |
 | ID Algoritma yang tercakup | Algo-C54-01 (aturan status kirim: C54-UT01 s.d. C54-UT05) |
 | Coverage (wajib ≥ 70%) | 83,3% baris (30 dari 36) dan 80,0% cabang (16 dari 20), diukur dengan JaCoCo 0.8.14 dari seluruh `mvn test`. Baris yang tidak tercakup adalah setter/getter atribut lain. Bukti pada Subbab 4.6 |
 
@@ -1973,7 +1976,7 @@ Tabel 4.2.45b. Ringkasan Cakupan Kelas C63
 | Informasi | Keterangan |
 | :--- | :--- |
 | Daftar operasi public pada DPPL | `simpanBundel()`, `ambilTertunda()`, `ambilTerkirimTerakhir()`, `perbaruiBundel()`, `tulisArsipTerenkripsi()` |
-| Operasi yang diuji | Kelima operasi DPPL (5 dari 5). Setiap operasi memiliki kasus normal, batas, dan negatif |
+| Operasi yang diuji | Kelima operasi DPPL (5 dari 5). `simpanBundel()`, `ambilTertunda()`, dan `perbaruiBundel()` memiliki kasus normal dan negatif; `tulisArsipTerenkripsi()` normal dan batas; `ambilTerkirimTerakhir()` baru kasus normal |
 | ID Algoritma yang tercakup | Algo-C63-01 (enkripsi arsip ekspor: C63-UT12, C63-UT13), serta kueri Q-C63-01 s.d. Q-C63-04 (C63-UT04 s.d. C63-UT11, C63-UT15 s.d. C63-UT17) |
 | Coverage (wajib ≥ 70%) | 90,3% baris (84 dari 93) dan 80,8% cabang (21 dari 26), diukur dengan JaCoCo 0.8.14 dari seluruh `mvn test`. Baris yang tidak tercakup adalah cabang penanganan `SQLException` tertentu yang hanya terjadi pada galat basis data spesifik. Bukti pada Subbab 4.6 |
 
