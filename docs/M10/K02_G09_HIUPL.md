@@ -559,7 +559,7 @@ Tabel 4.2.3b. Ringkasan Cakupan Kelas C18
 | Daftar operasi public pada DPPL | `validasiNIK()`, `cariPasien()`, `daftarkanPasien()`, `perbaruiPasien()`, `terbitkanNomorRM()` (private), dan `pasienTerbaru()` (operasi tambahan, Tabel B.1) |
 | Operasi yang diuji | Lima operasi `validasiNIK`/`cariPasien`/`daftarkanPasien`/`perbaruiPasien`/`pasienTerbaru` dengan kasus normal, batas, dan negatif |
 | ID Algoritma yang tercakup | Algo-C18-01 (C18-UT12 s.d. C18-UT15), Algo-C18-02 (C18-UT16 s.d. C18-UT21) |
-| Coverage (wajib ≥ 70%) | 84,2% baris (52 dari 62) dan 91,3% cabang (21 dari 23), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
+| Coverage (wajib ≥ 70%) | 73,4% baris (58 dari 79) dan 100% cabang (28 dari 28), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
 ### 4.2.4 Kelas KunjunganManager
 
@@ -592,7 +592,7 @@ Tabel 4.2.4b. Ringkasan Cakupan Kelas C19
 | Daftar operasi public pada DPPL | `daftarPoli()`, `bukaKunjungan()`; `cegahKunjunganGanda()` dan `terbitkanNomorAntrean()` private |
 | Operasi yang diuji | Dua operasi public (2 dari 2) dengan kasus normal, batas, dan negatif |
 | ID Algoritma yang tercakup | Algo-C19-01 (C19-UT07 s.d. C19-UT11), Algo-C19-02 (C19-UT07) |
-| Coverage (wajib ≥ 70%) | 86,4% baris (43 dari 50) dan 92,3% cabang (12 dari 13), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
+| Coverage (wajib ≥ 70%) | 82,4% baris (42 dari 51) dan 87,5% cabang (7 dari 8), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
 ### 4.2.5 Kelas SkriningManager
 
@@ -1224,7 +1224,7 @@ Tabel 4.2.20b. Ringkasan Cakupan Kelas C35
 | Daftar operasi public pada DPPL | `perbaruiStatus()`, `aktifHariIni()` |
 | Operasi yang diuji | Dua operasi (2 dari 2) dengan kasus normal, batas, dan negatif |
 | ID Algoritma yang tercakup | Algo-C35-01 (C35-UT01 s.d. C35-UT05) |
-| Coverage (wajib ≥ 70%) | 84,6% baris (22 dari 26) dan 92,3% cabang (12 dari 13), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
+| Coverage (wajib ≥ 70%) | 83,3% baris (30 dari 36) dan 100% cabang (10 dari 10), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
 ### 4.2.21 Kelas PoliEntity
 
@@ -1250,7 +1250,7 @@ Tabel 4.2.21b. Ringkasan Cakupan Kelas C36
 | Daftar operasi public pada DPPL | `ambilNomorBerikutnya()` |
 | Operasi yang diuji | `ambilNomorBerikutnya()` (1 dari 1) |
 | ID Algoritma yang tercakup | Algo-C36-01 (C36-UT01 s.d. C36-UT04) |
-| Coverage (wajib ≥ 70%) | 83,3% baris (20 dari 24) dan 100% cabang (2 dari 2), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
+| Coverage (wajib ≥ 70%) | 76,9% baris (20 dari 26) dan 100% cabang (4 dari 4), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
 ### 4.2.22 Kelas AntreanEntity
 
@@ -1284,7 +1284,7 @@ Tabel 4.2.22b. Ringkasan Cakupan Kelas C37
 | Daftar operasi public pada DPPL | `tambah()`, `ambilTerdepan()`, `pindahkanKeBelakang()`, dan `keluarkan()` |
 | Operasi yang diuji | Keempat operasi dengan kasus normal dan negatif |
 | ID Algoritma yang tercakup | Algo-C37-01 (C37-UT01 s.d. C37-UT12) |
-| Coverage (wajib ≥ 70%) | 87,0% baris (58 dari 67) dan 90,9% cabang (20 dari 22), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
+| Coverage (wajib ≥ 70%) | 74,2% baris (23 dari 31) dan 100% cabang (6 dari 6), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
 ### 4.2.23 Kelas SkriningEntity
 
@@ -1747,7 +1747,7 @@ Tabel 4.2.39. Hasil Pengujian Unit Kelas C57
 | C57-UT18 | `ambilPasien(idPasien: int): PasienEntity` | Normal | Petakan seluruh kolom | Seluruh atribut sesuai | Sesuai | Pass |
 | C57-UT19 | `simpanPasien(p: PasienEntity): void` | Normal | Pasien lama diperbarui | Nomor RM tidak berubah | Sesuai | Pass |
 
-*Coverage* (bukan syarat kelas Sedang): 100% baris (93 dari 93) dan 93,8% cabang (15 dari 16).
+*Coverage* (bukan syarat kelas Sedang): 89,3% baris (159 dari 178) dan 83,3% cabang (65 dari 78).
 
 ### 4.2.40 Kelas DataKunjunganBoundary
 
@@ -1774,7 +1774,7 @@ Tabel 4.2.40. Hasil Pengujian Unit Kelas C58
 | C58-UT11 | `simpanAntrean(k: KunjunganEntity, jenis: String): void` | Normal | Antrean ditulis ulang | Urutan 1 sampai N | Sesuai | Pass |
 | C58-UT12 | `simpanAntrean(k: KunjunganEntity, jenis: String): void` | Negatif | Antrean gagal | Transaksi dibatalkan | Sesuai | Pass |
 
-*Coverage* (bukan syarat kelas Sedang): 100% baris (88 dari 88) dan 92,9% cabang (13 dari 14).
+*Coverage* (bukan syarat kelas Sedang): 88,8% baris (135 dari 152) dan 88,0% cabang (44 dari 50).
 
 ### 4.2.41 Kelas DataKlinisBoundary
 
@@ -2274,7 +2274,7 @@ Tabel 4.5. Hasil Pengujian KNF
 
 | ID Pengujian | ID KNF | Parameter | Target Terukur | Metode dan Alat | Hasil Aktual | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| KNF01-TC01 | KNF01 | Response time | (1) Pencarian pasien parsial pada 50.000 rekam medis < 2 detik | (1) `seed_besar.sql` + program uji `UjiKnf01` | (1) 0,08 detik | Pass |
+| KNF01-TC01 | KNF01 | Response time | (1) Pencarian pasien parsial pada 50.000 rekam medis < 2 detik | (1) `KnfLoketTest` KNF01-TC01 pada basis data uji berisi `seed_besar.sql` (50.000 pasien), `PasienManager.cariPasien("Pasien Uji")` diukur 10 kali setelah satu pemanasan | (1) Rata-rata 104 ms, maksimum 110 ms | Pass |
 | KNF02-TC01 | KNF02 | Reliability | Lima nilai di luar rentang fisiologis (sistolik 400, suhu 72, nadi 300, tinggi 20 cm, gula darah 5) ditolak 100%, dan 0 baris `skrining`, `tanda_vital`, serta `penanda_risiko` bertambah | `SkriningIntegrasiTest` (KNF02-TC01): `SkriningManager.simpanSkrining()` dipanggil lima kali dengan masing-masing satu nilai salah, jumlah baris dihitung sebelum dan sesudah lewat koneksi terpisah. Layar I-05 pada UC04-TC03 sebagai pembanding. 5 pengulangan | 5 dari 5 ditolak dengan daftar kolom yang bermasalah. Jumlah baris `skrining`, `tanda_vital`, dan `penanda_risiko` sama dengan sebelumnya (selisih 0). Pada layar, kolom sistolik dan suhu bertanda merah dan 0 baris tersimpan | Pass |
 | KNF02-TC02 | KNF02 | Reliability | Bila penyimpanan gagal di tengah transaksi, 0 baris `skrining`, `tanda_vital`, `penanda_risiko`, dan `daftar_pantau` tersisa (tanpa data setengah tersimpan) | `SkriningIntegrasiTest` (KNF02-TC02): pemicu sementara pada tabel `audit` menolak baris audit di langkah terakhir, lalu `simpanSkrining()` dengan nilai berisiko dipanggil. 3 pengulangan, jumlah baris dibaca lewat koneksi terpisah | 3 dari 3 pemanggilan gagal dengan pengecualian. Jumlah baris keempat tabel sama dengan sebelumnya (selisih 0) setelah ketiganya | Pass |
 | KNF03-TC01 | KNF03 | Reliability | 0 dari 15 penyerahan obat yang digagalkan di tengah proses meninggalkan bundel FHIR parsial maupun perubahan stok, resep, kunjungan, antrean, atau audit. Penyerahan tanpa gangguan menghasilkan satu bundel lengkap | Test JUnit `KnfFarmasiTest` menjalankan `ApotekManager.serahkanObat()` pada resep seed 4 yang digagalkan di tiga titik: (1) saat memotong obat kedua, karena stok Glibenklamid dikurangi koneksi lain, (2) saat menyusun bundel FHIR, karena hak baca tabel `pasien` untuk `sehati_app` dicabut sementara, dan (3) saat menyimpan bundel, karena bundel lama kunjungan yang sama melanggar UNIQUE. Sebelum dan sesudah setiap percobaan dibandingkan sidik basis data: stok seluruh obat, sisa seluruh bets, status seluruh resep dan kunjungan, jumlah bundel, antrean apotek, jumlah penerimaan, dan jumlah audit. Pengulangan: 5 kali per titik (15 percobaan), ditambah satu penyerahan kontrol tanpa gangguan. Alat: JUnit 5, PostgreSQL 15, laporan Surefire | 15 dari 15 percobaan ditolak dalam 8 sampai 53 ms: titik 1 "Stok Glibenklamid 5 mg tidak cukup", titik 2 "Basis data tidak dapat dihubungi", titik 3 "Kunjungan sudah memiliki bundel". Pada 15 dari 15 percobaan tidak ada bundel untuk kunjungan 5 dan sidik basis data sama persis sebelum dan sesudah. Penyerahan kontrol menghasilkan satu bundel lengkap berisi `Patient`, `Encounter`, tujuh `Observation`, `Condition`, dan dua `MedicationRequest`. Hasil yang sama ditunjukkan C24-UT16 dan INT-TC24 | Pass. Catatan: pesan titik 2 berasal dari `DataPasienBoundary` (C57), yang menerjemahkan semua galat SQL yang tidak dikenalinya, termasuk hak akses ditolak (SQLState 42501), menjadi "Basis data tidak dapat dihubungi". Atomisitas tidak terpengaruh, tetapi pesannya dapat menyesatkan petugas. Temuan ini disampaikan ke pemilik C57 |
@@ -2284,8 +2284,8 @@ Tabel 4.5. Hasil Pengujian KNF
 | KNF07-TC01 | KNF07 | Portability | Bundel sinkronisasi tersusun menurut HL7 FHIR R4 dan diterima platform SATUSEHAT tanpa konversi tambahan; 0 kesalahan validasi | Validasi bundel hasil `PenyusunBundelFHIR` terhadap standar HL7 FHIR R4 memakai server uji SATUSEHAT (mode simulasi) dan pemeriksaan struktur JSON (`bundel-fhir-contoh.json`); jumlah error dicatat | Bundel berjenis `Bundle` `transaction` berisi resource `Condition`; diterima server uji dengan 0 kesalahan | Terpenuhi |
 | KNF09-TC01 | KNF09 | Availability | 100% fungsi pelayanan rawat jalan (UC02 s.d. UC07) tetap tersedia tanpa koneksi internet; jaringan putus hanya menunda sinkronisasi | Matikan koneksi internet (`SATUSEHAT_URL` diarahkan ke alamat tak terjangkau), jalankan UC02 s.d. UC07, catat persentase fungsi yang berhasil | Seluruh fungsi UC02 s.d. UC07 berjalan penuh (100%) karena hanya memakai basis data lokal; sinkronisasi SATUSEHAT (UC11) mendeteksi luring dan mengalihkan ke ekspor bundel terenkripsi | Terpenuhi |
 | KNF08-TC01 | KNF08 | Ergonomy | Untuk 3 dari 3 jenis risiko (hipertensi, obesitas, indikasi diabetes), peringatan merah dengan ikon tampil segera setelah Simpan dengan 0 langkah tambahan dan 0 peristiwa tetikus | `PemanduLayarSkrining`: formulir diisi dengan papan ketik, Ctrl+S ditekan, panel penanda (`panelPenanda`) diperiksa tampil dan jendela dipotret, serta penanda tersimpan dibaca dari basis data. 3 pengulangan, satu jenis risiko per pengulangan | 3 dari 3 panel penanda tampil dengan ikon dan teks "Risiko ... terdeteksi" berwarna merah. Penanda tersimpan sesuai (hipertensi, obesitas, indikasi diabetes). Peristiwa tetikus sesudah Simpan: 0 | Pass |
-| KNF10-TC01 | KNF10 | Portability | (1) Pengujian pada Ubuntu 26.04 LTS dan Windows 10/11 64-bit | (1) Tabel 3.1 lingkungan implementasi | (1) 0 kegagalan pada kedua OS | Pass |
-| KNF11-TC01 | KNF11 | Reliability | (1) Dua loket membuka kunjungan bersamaan pada poli yang sama | (1) INT-TC33, INT-TC22 | (1) Nomor antrean 1 dan 2 tanpa kehilangan data | Pass |
+| KNF10-TC01 | KNF10 | Portability | (1) Aplikasi berjalan pada Windows 10/11 64-bit dan Linux 64-bit dengan RAM minimal 4 GB dan disk bebas minimal 2 GB | (1) `KnfLoketTest` KNF10-TC01 memeriksa arsitektur 64-bit, RAM, dan disk bebas, lalu seluruh `mvn test` dijalankan | (1) Ubuntu 26.04 LTS amd64, JVM 21.0.13, RAM 14,8 GB, disk bebas 32,5 GB: lulus, 701 test tanpa gagal. Windows 10/11 belum diuji karena tidak ada perangkat Windows saat pengujian | Pass untuk Linux; Windows belum diuji |
+| KNF11-TC01 | KNF11 | Reliability | (1) Beberapa loket membuka kunjungan bersamaan pada poli yang sama tanpa nomor ganda atau data hilang | (1) `KnfLoketTest` KNF11-TC01: lima thread membuka kunjungan serentak pada satu poli, ditambah INT-TC33 | (1) Nomor antrean 1 sampai 5 tanpa duplikat, `urutan_terakhir` 5, lima baris kunjungan tersimpan | Pass |
 | KNF12-TC01 | KNF12 | Ergonomy | Satu formulir skrining tuntas dengan 0 klik tetikus, dan layar bantuan F1 memuat pintasan skrining (F2, F3, Tab, Ctrl+S) | `PemanduLayarSkrining` mengirim hanya peristiwa papan ketik (F2, Tab, ketikan, Ctrl+S) pada enam pengisian formulir (UC04-TC01, UC04-TC03, UC04-TC04, dan tiga kasus KNF08-TC01) dan menghitung peristiwa `MOUSE_PRESSED` dan `MOUSE_CLICKED` yang sampai ke jendela. F1 ditekan pada layar antrean. 6 pengulangan. Keterbatasan: peristiwa papan ketik dikirim skrip, bukan diketik manusia | 6 dari 6 formulir tersimpan tanpa tetikus. Peristiwa tetikus yang sampai ke jendela selama seluruh skenario: 0. F1 membuka "Pintasan Papan Ketik" yang memuat Tab, Ctrl+S, F2, F3, Esc, Ctrl+D, dan F1 beserta layarnya | Pass |
 | KNF13-TC01 | KNF13 | Reliability | Setelah proses aplikasi dihentikan paksa (`kill -9`) di tengah penyimpanan: (1) 0 perubahan setengah jadi tersimpan, (2) 100% data yang sudah tersimpan sebelum proses mati tetap utuh, dan (3) aplikasi yang dijalankan ulang berhasil mengulang penyimpanan yang sama dengan saldo stok tetap sama dengan jumlah bets | Test JUnit `KnfFarmasiTest` menjalankan aplikasi sebagai JVM terpisah (`ProsesFarmasiKnf13`) dengan akun `sehati_app` dari `.env`, lalu mematikannya dengan `Process.destroyForcibly()` (SIGKILL, sama dengan `kill -9`) saat transaksinya tertahan di tengah penyimpanan. Skenario A: proses mencatat penerimaan Kaptopril sampai selesai, lalu menyerahkan obat resep 4 dan tertahan saat menyisipkan bundel FHIR, karena koneksi test memegang bundel kunjungan yang sama. Skenario B: proses mencatat penerimaan dan tertahan pada sisipan audit, penulisan terakhir sebelum COMMIT, oleh pemicu uji sementara yang menunggu *advisory lock*. Tabel yang sudah ditulis transaksi dibaca dari `pg_locks`, dan sidik basis data dibandingkan sebelum dan sesudah proses mati. Setelah itu proses dijalankan ulang untuk operasi yang sama. Pengulangan: 3 kali per skenario (6 kali mati paksa dan 6 kali jalan ulang) | 6 dari 6 proses keluar dengan kode 137 (SIGKILL). Saat dimatikan, transaksi skenario A sudah memegang kunci tulis pada `obat`, `bets_obat`, `resep`, `antrean_entri`, `kunjungan`, dan `bundel_fhir`, sedangkan skenario B pada `obat`, `bets_obat`, `penerimaan_obat`, dan `audit`. Pada 6 dari 6 percobaan sidik basis data sama dengan sebelum proses mati: resep 4 tetap "menunggu", tidak ada bundel, dan tidak ada faktur setengah jadi. Penerimaan Kaptopril yang selesai sebelum proses mati pada skenario A tetap tersimpan, dengan stok bertambah 10. Setelah dijalankan ulang, 6 dari 6 operasi berhasil: resep 4 "selesai dilayani" dengan tepat satu bundel dan saldo seluruh obat sama dengan jumlah bets (A), serta faktur tersimpan sekali dengan stok bertambah 10 (B) | Pass. Batas: proses dimatikan pada titik tunggu yang dibuat test, bukan pada saat acak, dan yang dimatikan adalah proses aplikasi. Mati listrik pada server basis data tidak diuji karena ditangani *write-ahead log* PostgreSQL |
 
@@ -2348,7 +2348,24 @@ Tabel 4.6. Bukti Hasil Pengujian
 | KNF04-TC01 | *Hash* seluruh akun, masuk sebagai perawat, layar setelah 15 menit diam, dan audit masuk serta sesi berakhir<br><img src="./assets/akses/knf04-hash-bcrypt.png" width="100%"><br><img src="./assets/akses/knf04-1-masuk.png" width="100%"><br><img src="./assets/akses/knf04-2-sesi-berakhir.png" width="100%"><br><img src="./assets/akses/knf04-3-audit-sesi-diam.png" width="100%"> |
 | KNF05-TC01 | Perintah ubah dan hapus audit sebagai `sehati_app` ditolak (dasbor per peran pada UC01-TC01 dan UC01-TC04)<br><img src="./assets/akses/knf05-audit-sehati-app.png" width="100%"> |
 | KNF06-TC01 | Keluaran `UjiKnf06`: lima pencadangan selagi aplikasi dipakai<br><img src="./assets/akses/knf06-pencadangan-saat-dipakai.png" width="100%"> |
-| C18-UT01 – C18-UT24, C19-UT01 – C19-UT11, C57-UT01 – C57-UT19, C58-UT01 – C58-UT21 | Keluaran `mvn test -Dtest=PasienManagerTest,KunjunganManagerTest,DataPasienBoundaryTest,DataKunjunganBoundaryTest`: seluruh test `[OK]`; coverage kelas Mendalam terpenuhi minimal 70%, integrasi IK-04 hingga IK-05 dan IK-17 hingga IK-18 lulus, use case UC02 dan UC03 lulus, KNF01, KNF10, dan KNF11 lulus |
+| C18-UT01 – C18-UT24 | Keluaran `mvn test -Dtest=PasienManagerTest`: 24 test `[OK]`<br><img src="./assets/loket/c18-unit.png" width="100%"> |
+| C18 (coverage) | Total 21 dari 79 baris dan 0 dari 28 cabang terlewat<br><img src="./assets/loket/c18-coverage.png" width="100%"> |
+| C19-UT01 – C19-UT11 | Keluaran `mvn test -Dtest=KunjunganManagerTest`: 11 test `[OK]`<br><img src="./assets/loket/c19-unit.png" width="100%"> |
+| C19 (coverage) | Total 9 dari 51 baris dan 1 dari 8 cabang terlewat<br><img src="./assets/loket/c19-coverage.png" width="100%"> |
+| C33-UT01 – C37-UT12 | Keluaran `mvn test` untuk lima kelas entity loket: 29 test `[OK]` (C33 2, C34 3, C35 8, C36 4, C37 12)<br><img src="./assets/loket/c33-c37-unit.png" width="100%"> |
+| C35 (coverage) | Total 6 dari 36 baris dan 0 dari 10 cabang terlewat<br><img src="./assets/loket/c35-coverage.png" width="100%"> |
+| C36 (coverage) | Total 6 dari 26 baris dan 0 dari 4 cabang terlewat<br><img src="./assets/loket/c36-coverage.png" width="100%"> |
+| C37 (coverage) | Total 8 dari 31 baris dan 0 dari 6 cabang terlewat<br><img src="./assets/loket/c37-coverage.png" width="100%"> |
+| C57-UT01 – C57-UT19, C58-UT01 – C58-UT21 | Keluaran `mvn test -Dtest=DataPasienBoundaryTest,DataKunjunganBoundaryTest`: 40 test `[OK]`<br><img src="./assets/loket/c57-c58-unit.png" width="100%"> |
+| INT-TC07 – INT-TC10, INT-TC33 – INT-TC36 | Keluaran `mvn test -Dtest=LoketIntegrasiTest`: 8 test `[OK]`<br><img src="./assets/loket/int-tc07-tc10-tc33-tc36.png" width="100%"> |
+| KNF01-TC01, KNF10-TC01, KNF11-TC01 | Keluaran `mvn test -Dtest=KnfLoketTest` pada basis data berisi 50.000 pasien: 3 test `[OK]`. Hasil ukur dari laporan Surefire: `[KNF01] 10 ulangan, rata-rata 104 ms, maksimum 110 ms`, `[KNF10] Linux amd64, JVM 21.0.13.0.3, RAM 14.8 GB, disk bebas 32.5 GB`, `[KNF11] 5 loket, nomor [1, 2, 3, 4, 5], urutan_terakhir 5`<br><img src="./assets/loket/knf01-knf10-knf11.png" width="100%"> |
+| UC02-TC01 | Berurutan: pencarian nama parsial "Ami", lalu pendaftaran Dewi Lestari tersimpan dengan nomor rekam medis RM-000009<br><img src="./assets/uc02/uc02-tc01-1-cari.png" width="100%"><br><img src="./assets/uc02/uc02-tc01-2-terdaftar.png" width="100%"> |
+| UC02-TC02 | Kolom NIK ditandai merah dengan pesan "NIK sudah terdaftar", nomor rekam medis tidak terbit<br><img src="./assets/uc02/uc02-tc02-nik-ganda.png" width="100%"> |
+| UC02-TC03 | NIK 15 digit ditolak dengan pesan validasi<br><img src="./assets/uc02/uc02-tc03-nik-salah.png" width="100%"> |
+| UC03-TC01 | Tiket antrean Poli Gigi nomor 2 untuk pasien yang baru didaftarkan<br><img src="./assets/uc03/uc03-tc01-tiket.png" width="100%"> |
+| UC03-TC02 | Pasien yang sama dibuka lagi: "Kunjungan Sudah Berjalan" tanpa nomor baru<br><img src="./assets/uc03/uc03-tc02-aktif.png" width="100%"> |
+| UC03-TC03 | Dua dan lima loket bersamaan diuji otomatis lewat INT-TC33 dan KNF11-TC01 (bukti keluaran test runner pada baris integrasi dan KNF modul loket di atas) |
+| UC03-TC04 | Pasien tanpa rekam medis ditolak dengan pesan "Pasien belum memiliki rekam medis"<br><img src="./assets/uc03/uc03-tc04-tanpa-rm.png" width="100%"> |
 | C15-UT01 – C15-UT16 | Keluaran `mvn test -Dtest=SATUSEHATGatewayTest`: 16 test `[OK]`<br><img src="./assets/pelaporan/c15-unit.png" width="100%"> |
 | C15 (coverage) | Total 3 dari 74 baris dan 9 dari 52 cabang terlewat<br><img src="./assets/pelaporan/c15-coverage.png" width="100%"> |
 | C27-UT01 – C27-UT10 | Keluaran `mvn test -Dtest=LaporanManagerTest`: 10 test `[OK]`<br><img src="./assets/pelaporan/c27-unit.png" width="100%"> |

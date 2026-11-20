@@ -305,6 +305,7 @@
 | *20-11-2026* | *Fachry Azriel Fajdwani* | *Menjalankan `mvn test` dengan `DB_UJI_URL`, mengukur coverage JaCoCo (seluruh 7 kelas ≥ 70%), dan mengambil bukti keluaran test runner serta laporan coverage* | *1,5* | *Done* | *-* |
 | *20-11-2026* | *Fachry Azriel Fajdwani* | *Mengisi HIUPL bagian pelaporan dan integrasi: Subbab 4.2 (C15, C27, C28, C53, C54, C62, C63), Tabel 4.1.1, Tabel 4.3.2, Subbab 4.4.10 dan 4.4.11, Tabel 4.5 (KNF07 dan KNF09), Tabel 4.6, serta BAB 5 (KF14, KF19, KF20, KF22)* | *4* | *Done* | *-* |
 | *20-11-2026* | *Fachry Azriel Fajdwani* | *Menguji UC10 dan UC11 beserta KNF07 dan KNF09, mengambil tangkapan layar, serta mengisi Logbook, AI-Usage, dan Form Asistensi* | *2* | *Done* | *-* |
+| *20-11-2026* | *Muhammad Adnan Kurniawan* | *Meninjau dan menggabungkan PR #69 (pelaporan) dan #71 (loket): menyelesaikan konflik dengan main, menghapus salinan lama `AlurUtamaTest` dan `KonkurensiTest` yang membuat 3 test error, serta melengkapi bukti modul loket (gambar test runner, coverage, dan tangkapan layar UC02 dan UC03) dan mengoreksi angka coverage, KNF01, dan KNF10* | *2,5* | *Done* | *Resolusi konflik sebelumnya di branch loket menggandakan baris HIUPL; dirapikan sebelum digabung* |
 
 **Catatan/Evaluasi Milestone 10:**
 * *[Diisi setelah seluruh bagian masuk ke main]*
