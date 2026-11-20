@@ -4,8 +4,8 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | Jumat |
-| **Tanggal** | 20/11/2026 |
+| **Hari** | Senin |
+| **Tanggal** | 16/11/2026 |
 | **Kelas** | K02 |
 | **Nomor Kelompok** | G09 |
 | **Nama Kelompok** | Cumlaude |
