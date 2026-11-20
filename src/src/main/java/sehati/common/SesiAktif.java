@@ -59,7 +59,8 @@ public final class SesiAktif {
         if (ambil() == null) {
             throw new IllegalStateException("Sesi sudah berakhir, silakan masuk kembali");
         }
-        if (!List.of(peranSah).contains(peran)) {
+        // peran null (sesi dipasang tanpa peran) tidak boleh melempar NullPointerException dari List.of(...).contains.
+        if (peran == null || !List.of(peranSah).contains(peran)) {
             throw new IllegalStateException("Peran " + peran + " tidak berwenang menjalankan tindakan ini");
         }
     }
