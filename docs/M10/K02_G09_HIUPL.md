@@ -366,8 +366,8 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C15 | SATUSEHATGateway | Mendalam | Integrasi eksternal ke REST API SATUSEHAT, termasuk mode simulasi dan penanganan galat jaringan (Algo-C15-01, Algo-C15-02) | *[C15-UT01 s.d. C15-UT.., diisi Fachry]* |
 | C16 | KonfigurasiForm | Tidak perlu | Kelas tampilan layar I-15, meneruskan perubahan ke KonfigurasiManager | - (teruji lewat UC12-TC01 s.d. UC12-TC05) |
 | C17 | AutentikasiManager | Mendalam | Keamanan: verifikasi kredensial bcrypt, sesi, batas diam 15 menit, dan hak akses peran (Algo-C17-01, Algo-C17-02) | C17-UT01 s.d. C17-UT17, INT-TC01, INT-TC02 |
-| C18 | PasienManager | Mendalam | Validasi NIK 16 digit dan keunikannya serta penerbitan nomor rekam medis (Algo-C18-01, Algo-C18-02) | *[C18-UT01 s.d. C18-UT.., diisi Steven]* |
-| C19 | KunjunganManager | Mendalam | Penolakan kunjungan ganda dan penerbitan nomor antrean per poli per hari dalam transaksi (Algo-C19-01, Algo-C19-02) | *[C19-UT01 s.d. C19-UT.., diisi Steven]* |
+| C18 | PasienManager | Mendalam | Validasi NIK 16 digit dan keunikannya serta penerbitan nomor rekam medis (Algo-C18-01, Algo-C18-02) | C18-UT01 s.d. C18-UT24 |
+| C19 | KunjunganManager | Mendalam | Penolakan kunjungan ganda dan penerbitan nomor antrean per poli per hari dalam transaksi (Algo-C19-01, Algo-C19-02) | C19-UT01 s.d. C19-UT11 |
 | C20 | SkriningManager | Mendalam | Validasi rentang fisiologis tanpa jalan pintas dan alur antrean skrining (Algo-C20-01 s.d. Algo-C20-03) | *[C20-UT01 s.d. C20-UT.., diisi Humam]* |
 | C21 | RisikoManager | Mendalam | Perhitungan risiko terhadap ambang dan riwayat tiga kunjungan (Algo-C21-01, Algo-C21-02) | *[C21-UT01 s.d. C21-UT.., diisi Humam]* |
 | C22 | PemeriksaanManager | Mendalam | Validasi diagnosis ICD-10 dan tanggal kontrol, pembatasan peran Dokter, serta transaksi penguncian rekam medis (Algo-C22-01, Algo-C22-02) | C22-UT01 s.d. C22-UT37, INT-TC17 s.d. INT-TC20 |
@@ -381,11 +381,11 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C30 | PenggunaEntity | Mendalam | Keamanan: pencocokan kata sandi bcrypt dan status aktif akun (Algo-C30-01) | C30-UT01 s.d. C30-UT11 |
 | C31 | SesiEntity | Mendalam | Keamanan: batas diam sesi pada habisWaktu() (Algo-C31-01) | C31-UT01 s.d. C31-UT07 |
 | C32 | AuditEntity | Sedang | buat() hanya menolak deskripsi kosong lalu membentuk catatan (Algo-C32-01) | C32-UT01 s.d. C32-UT03 |
-| C33 | PasienEntity | Sedang | perbarui() hanya menolak data kosong lalu menyalin atribut (Algo-C33-01) | *[C33-UT.. atau INT-TC.., diisi Steven]* |
-| C34 | RekamMedisEntity | Sedang | tambahEntri() hanya menolak catatan kosong (Algo-C34-01) | *[C34-UT.. atau INT-TC.., diisi Steven]* |
-| C35 | KunjunganEntity | Mendalam | Aturan transisi status kunjungan dan penguncian status selesai (Algo-C35-01) | *[C35-UT01 s.d. C35-UT.., diisi Steven]* |
-| C36 | PoliEntity | Mendalam | Perhitungan nomor antrean berikutnya yang dimulai ulang saat hari berganti (Algo-C36-01) | *[C36-UT01 s.d. C36-UT.., diisi Steven]* |
-| C37 | AntreanEntity | Mendalam | Aturan urutan antrean: terdepan, pindah ke belakang, dan keluarkan (Algo-C37-01) | *[C37-UT01 s.d. C37-UT.., diisi Steven]* |
+| C33 | PasienEntity | Sedang | perbarui() hanya menolak data kosong lalu menyalin atribut (Algo-C33-01) | C33-UT01 s.d. C33-UT02 |
+| C34 | RekamMedisEntity | Sedang | tambahEntri() hanya menolak catatan kosong (Algo-C34-01) | C34-UT01 s.d. C34-UT03 |
+| C35 | KunjunganEntity | Mendalam | Aturan transisi status kunjungan dan penguncian status selesai (Algo-C35-01) | C35-UT01 s.d. C35-UT08 |
+| C36 | PoliEntity | Mendalam | Perhitungan nomor antrean berikutnya yang dimulai ulang saat hari berganti (Algo-C36-01) | C36-UT01 s.d. C36-UT04 |
+| C37 | AntreanEntity | Mendalam | Aturan urutan antrean: terdepan, pindah ke belakang, dan keluarkan (Algo-C37-01) | C37-UT01 s.d. C37-UT12 |
 | C38 | SkriningEntity | Sedang | lampirkanTandaVital() hanya menolak tanda vital kosong | *[C38-UT.. atau INT-TC.., diisi Humam]* |
 | C39 | TandaVitalEntity | Mendalam | Perhitungan IMT dan penolakan tinggi badan kosong (Algo-C39-01) | *[C39-UT01 s.d. C39-UT.., diisi Humam]* |
 | C40 | AmbangRisikoEntity | Mendalam | Perbandingan nilai terhadap ambang klinis tepat di nilai batas (Algo-C40-01) | *[C40-UT01 s.d. C40-UT.., diisi Humam]* |
@@ -405,8 +405,8 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C54 | BundelFHIREntity | Mendalam | Aturan status kirim: bundel terkirim tidak dapat ditandai ulang (Algo-C54-01) | *[C54-UT01 s.d. C54-UT.., diisi Fachry]* |
 | C55 | PencadanganEntity | Tidak perlu | Hanya menyimpan catatan pencadangan; berhasil() membaca satu status | - (teruji lewat UC12-TC02, UC12-TC05) |
 | C56 | DataAkunBoundary | Sedang | Kueri akun, sesi, dan audit (Q-C56-01 s.d. Q-C56-10) | C56-UT01 s.d. C56-UT10, INT-TC01 s.d. INT-TC03 |
-| C57 | DataPasienBoundary | Sedang | Kueri pasien dan pencarian parsial (Q-C57-01 s.d. Q-C57-12, Algo-C57-01) | *[C57-UT.. atau INT-TC.., diisi Steven]* |
-| C58 | DataKunjunganBoundary | Sedang | Kueri kunjungan, poli, dan antrean dengan penguncian baris (Q-C58-01 s.d. Q-C58-13) | *[C58-UT.. atau INT-TC.., diisi Steven]* |
+| C57 | DataPasienBoundary | Sedang | Kueri pasien dan pencarian parsial (Q-C57-01 s.d. Q-C57-12, Algo-C57-01) | C57-UT01 s.d. C57-UT19 |
+| C58 | DataKunjunganBoundary | Sedang | Kueri kunjungan, poli, dan antrean dengan penguncian baris (Q-C58-01 s.d. Q-C58-13) | C58-UT01 s.d. C58-UT21 |
 | C59 | DataKlinisBoundary | Sedang | Kueri skrining, risiko, pemeriksaan, ICD-10, dan jadwal kontrol (Q-C59-01 s.d. Q-C59-20) | C59-UT21 s.d. C59-UT32, INT-TC17 s.d. INT-TC20 (bagian pemeriksaan); *[C59-UT01 s.d. C59-UT20 bagian skrining, diisi Humam]* |
 | C60 | DataPantauBoundary | Sedang | Kueri daftar pantau dan tindak lanjut (Q-C60-01 s.d. Q-C60-07) | *[C60-UT.. atau INT-TC.., diisi Humam]* |
 | C61 | DataFarmasiBoundary | Sedang | Kueri obat, bets, dan resep dengan penguncian stok (Q-C61-01 s.d. Q-C61-19) | *[C61-UT.. atau INT-TC.., diisi Malik]* |
@@ -487,7 +487,47 @@ Tabel 4.2.2b. Ringkasan Cakupan Kelas C17
 **Nama Kelas:** PasienManager  
 **Tingkat:** Mendalam
 
-*[Diisi Steven: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/control/PasienManagerTest.java`. Test yang membutuhkan basis data membuat pasien fiktif lewat `nikFiktif()` dan membersihkannya setelah test.
+
+Tabel 4.2.3. Hasil Pengujian Unit Kelas C18
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C18-UT01 | `validasiNIK(nik: String): boolean` | Normal | NIK "9999010101010001" | `true` | `true` | Pass |
+| C18-UT02 | `validasiNIK(nik: String): boolean` | Batas | NIK "999901010101001" (15 digit) | `false` | `false` | Pass |
+| C18-UT03 | `validasiNIK(nik: String): boolean` | Batas | NIK "99990101010100017" (17 digit) | `false` | `false` | Pass |
+| C18-UT04 | `validasiNIK(nik: String): boolean` | Negatif | NIK "999901010101000A" | `false` | `false` | Pass |
+| C18-UT05 | `validasiNIK(nik: String): boolean` | Negatif | `null` | `false` | `false` | Pass |
+| C18-UT06 | `cariPasien(kataKunci: String): List<PasienEntity>` | Normal | Kunci "   " dan `null` | Daftar kosong | Daftar kosong | Pass |
+| C18-UT07 | `cariPasien(kataKunci: String): List<PasienEntity>` | Normal | Kunci "  budi " | Daftar berisi Budi Santoso | Sesuai | Pass |
+| C18-UT08 | `cariPasien(kataKunci: String): List<PasienEntity>` | Normal | Kunci "%" dan "_" | Daftar kosong | Daftar kosong | Pass |
+| C18-UT09 | `cariPasien(kataKunci: String): List<PasienEntity>` | Normal | Kunci "zzzz-tidak-ada" | Daftar kosong | Daftar kosong | Pass |
+| C18-UT10 | `daftarkanPasien(data: PasienEntity): PasienEntity` | Normal | NIK fiktif baru, data opsional kosong | Pasien tersimpan, satu nomor RM, audit tercatat | Sesuai | Pass |
+| C18-UT11 | `daftarkanPasien(data: PasienEntity): PasienEntity` | Batas | `nomorTelepon` kosong | `null` | `null` | Pass |
+| C18-UT12 | `daftarkanPasien(data: PasienEntity): PasienEntity` | Negatif | NIK 15 digit | `IllegalArgumentException` "NIK tidak valid" | Pengecualian dan pesan sesuai | Pass |
+| C18-UT13 | `daftarkanPasien(data: PasienEntity): PasienEntity` | Negatif | Data pasien `null` | `IllegalArgumentException` "Data pasien kosong" | Pengecualian dan pesan sesuai | Pass |
+| C18-UT14 | `daftarkanPasien(data: PasienEntity): PasienEntity` | Negatif | NIK sudah terdaftar | `IllegalArgumentException` "NIK sudah terdaftar", satu baris | Pengecualian dan pesan sesuai, tetap satu baris | Pass |
+| C18-UT15 | `daftarkanPasien(data: PasienEntity): PasienEntity` | Negatif | Tanpa sesi masuk | `IllegalStateException` "Sesi sudah berakhir, silakan masuk kembali" | Pengecualian dan pesan sesuai | Pass |
+| C18-UT16 | `perbaruiPasien(data: PasienEntity): void` | Normal | Update data dengan NIK baru | Data diubah, nomor RM tidak berubah, audit tercatat | Sesuai | Pass |
+| C18-UT17 | `perbaruiPasien(data: PasienEntity): void` | Normal | Update dengan NIK tidak berubah | Data diubah | Sesuai | Pass |
+| C18-UT18 | `perbaruiPasien(data: PasienEntity): void` | Negatif | Data pasien `null` | `IllegalArgumentException` "Data pasien kosong" | Pengecualian dan pesan sesuai | Pass |
+| C18-UT19 | `perbaruiPasien(data: PasienEntity): void` | Negatif | NIK 3 digit | `IllegalArgumentException` "NIK tidak valid" | Pengecualian dan pesan sesuai | Pass |
+| C18-UT20 | `perbaruiPasien(data: PasienEntity): void` | Negatif | Pasien ID 999999 | `IllegalArgumentException` "Pasien tidak ditemukan" | Pengecualian dan pesan sesuai | Pass |
+| C18-UT21 | `perbaruiPasien(data: PasienEntity): void` | Negatif | NIK milik pasien lain | `IllegalArgumentException` "NIK sudah terdaftar" | Pengecualian dan pesan sesuai | Pass |
+| C18-UT22 | `pasienTerbaru(): List<PasienEntity>` | Normal | Panggil tanpa masukan | Daftar terurut baru ke lama, maksimal 50 | Sesuai | Pass |
+| C18-UT23 | `pasienTerbaru(): List<PasienEntity>` | Batas | Panggil tanpa masukan | Tercapai batas 50 baris | Tercapai 50 | Pass |
+| C18-UT24 | `pasienTerbaru(): List<PasienEntity>` | Negatif | Hak baca tabel `pasien` dicabut sementara | `IllegalStateException` "Basis data tidak dapat dihubungi" | Pengecualian dan pesan sesuai | Pass |
+
+`pasienTerbaru()` adalah operasi public tambahan implementasi (Tabel B.1), sehingga ikut diuji. Kasus yang ditolak sebelum basis data disentuh (validasi masukan) diuji tanpa basis data.
+
+Tabel 4.2.3b. Ringkasan Cakupan Kelas C18
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `validasiNIK()`, `cariPasien()`, `daftarkanPasien()`, `perbaruiPasien()`, `terbitkanNomorRM()` (private), dan `pasienTerbaru()` (operasi tambahan, Tabel B.1) |
+| Operasi yang diuji | Lima operasi `validasiNIK`/`cariPasien`/`daftarkanPasien`/`perbaruiPasien`/`pasienTerbaru` dengan kasus normal, batas, dan negatif |
+| ID Algoritma yang tercakup | Algo-C18-01 (C18-UT12 s.d. C18-UT15), Algo-C18-02 (C18-UT16 s.d. C18-UT21) |
+| Coverage (wajib ≥ 70%) | 84,2% baris (52 dari 62) dan 91,3% cabang (21 dari 23), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
 ### 4.2.4 Kelas KunjunganManager
 
@@ -495,7 +535,32 @@ Tabel 4.2.2b. Ringkasan Cakupan Kelas C17
 **Nama Kelas:** KunjunganManager  
 **Tingkat:** Mendalam
 
-*[Diisi Steven: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/control/KunjunganManagerTest.java`. Test yang membutuhkan basis data memakai sesi Petugas Administrasi dan data seed.
+
+Tabel 4.2.4. Hasil Pengujian Unit Kelas C19
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C19-UT01 | `daftarPoli(): List<PoliEntity>` | Normal | Panggil tanpa masukan | Seluruh poli seed terurut nama | Sesuai | Pass |
+| C19-UT02 | `daftarPoli(): List<PoliEntity>` | Normal | Poli baru disimpan lewat `DataKunjunganBoundary` | Poli baru muncul pada daftar | Sesuai | Pass |
+| C19-UT03 | `daftarPoli(): List<PoliEntity>` | Negatif | Basis data tidak dapat dihubungi | `IllegalStateException` | Pengecualian dan pesan sesuai | Pass |
+| C19-UT04 | `cegahKunjunganGanda(idPasien: int)` | Normal | Sebelum kunjungan dibuka | `null` | `null` | Pass |
+| C19-UT05 | `cegahKunjunganGanda(idPasien: int)` | Normal | Sesudah kunjungan dibuka | Kunjungan aktif | Sesuai | Pass |
+| C19-UT06 | `cegahKunjunganGanda(idPasien: int)` | Normal | Kunjungan sudah selesai | Tidak aktif | Sesuai | Pass |
+| C19-UT07 | `bukaKunjungan(idPasien: int, idPoli: int): KunjunganEntity` | Normal | Kunjungan baru dengan poli tujuan | Nomor antrean berurutan, audit tercatat | Sesuai | Pass |
+| C19-UT08 | `bukaKunjungan(idPasien: int, idPoli: int): KunjunganEntity` | Normal | Pasien sudah punya kunjungan aktif hari ini | Kunjungan aktif lama, tanpa nomor baru | Sesuai | Pass |
+| C19-UT09 | `bukaKunjungan(idPasien: int, idPoli: int): KunjunganEntity` | Negatif | Poli tidak ditemukan | `IllegalArgumentException` | Pengecualian dan pesan sesuai | Pass |
+| C19-UT10 | `bukaKunjungan(idPasien: int, idPoli: int): KunjunganEntity` | Negatif | Pasien tanpa rekam medis | `IllegalArgumentException` "Pasien belum memiliki rekam medis", transaksi dibatalkan | Pengecualian dan pesan sesuai, tidak tersimpan | Pass |
+| C19-UT11 | `bukaKunjungan(idPasien: int, idPoli: int): KunjunganEntity` | Negatif | Tanpa sesi masuk | `IllegalStateException` | Pengecualian dan pesan sesuai | Pass |
+
+Tabel 4.2.4b. Ringkasan Cakupan Kelas C19
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `daftarPoli()`, `bukaKunjungan()`; `cegahKunjunganGanda()` dan `terbitkanNomorAntrean()` private |
+| Operasi yang diuji | Dua operasi public (2 dari 2) dengan kasus normal, batas, dan negatif |
+| ID Algoritma yang tercakup | Algo-C19-01 (C19-UT07 s.d. C19-UT11), Algo-C19-02 (C19-UT07) |
+| Coverage (wajib ≥ 70%) | 86,4% baris (43 dari 50) dan 92,3% cabang (12 dari 13), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
 ### 4.2.5 Kelas SkriningManager
 
@@ -810,7 +875,14 @@ Tabel 4.2.17. Hasil Pengujian Unit Kelas C32
 **Nama Kelas:** PasienEntity  
 **Tingkat:** Sedang
 
-*[Diisi Steven: tabel hasil pengujian unit, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/entity/PasienEntityTest.java`, tanpa basis data. Kelas bertingkat Sedang, tetapi seluruh operasi public diuji dengan kasus normal, batas, dan negatif.
+
+Tabel 4.2.18. Hasil Pengujian Unit Kelas C33
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C33-UT01 | `perbarui(data: PasienEntity): void` | Normal | Data pasien lama dengan NIK tidak berubah | Atribut diubah, `idPasien` dan `nomorRekamMedis` tidak berubah | Sesuai | Pass |
+| C33-UT02 | `perbarui(data: PasienEntity): void` | Negatif | Data pasien `null` | `IllegalArgumentException` "Data pasien kosong" | Pengecualian dan pesan sesuai | Pass |
 
 ### 4.2.19 Kelas RekamMedisEntity
 
@@ -818,7 +890,15 @@ Tabel 4.2.17. Hasil Pengujian Unit Kelas C32
 **Nama Kelas:** RekamMedisEntity  
 **Tingkat:** Sedang
 
-*[Diisi Steven: tabel hasil pengujian unit, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/entity/RekamMedisEntityTest.java`, tanpa basis data. Kelas bertingkat Sedang, tetapi operasi public diuji dengan kasus normal, batas, dan negatif.
+
+Tabel 4.2.19. Hasil Pengujian Unit Kelas C34
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C34-UT01 | `tambahEntri(catatan: String): void` | Normal | Catatan "Demam berdarah" | Riwayat bertambah satu entri | Sesuai | Pass |
+| C34-UT02 | `tambahEntri(catatan: String): void` | Negatif | Catatan `null`, `""`, dan "  " | `IllegalArgumentException` "Catatan rekam medis wajib diisi" | Ketiganya ditolak | Pass |
+| C34-UT03 | `kosongkanEntriBaru(): void` | Normal | Penampung berisi catatan | Penampung dikosongkan | `List.of()` | Sesuai | Pass |
 
 ### 4.2.20 Kelas KunjunganEntity
 
@@ -826,7 +906,29 @@ Tabel 4.2.17. Hasil Pengujian Unit Kelas C32
 **Nama Kelas:** KunjunganEntity  
 **Tingkat:** Mendalam
 
-*[Diisi Steven: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/entity/KunjunganEntityTest.java`, tanpa basis data.
+
+Tabel 4.2.20. Hasil Pengujian Unit Kelas C35
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C35-UT01 | `perbaruiStatus(status: String): void` | Normal | Status "menunggu skrining" → "sedang diskrining" | Status berubah | Sesuai | Pass |
+| C35-UT02 | `perbaruiStatus(status: String): void` | Batas | Status "menunggu skrining" → "tidak hadir" | Status berubah | Sesuai | Pass |
+| C35-UT03 | `perbaruiStatus(status: String): void` | Negatif | Status "menunggu skrining" → "menunggu skrining" | `IllegalArgumentException`, status tetap | Ditolak, status tetap | Pass |
+| C35-UT04 | `perbaruiStatus(status: String): void` | Negatif | Status "selesai diperiksa" → "dibatalkan" | `IllegalStateException`, status tetap | Ditolak, status tetap | Pass |
+| C35-UT05 | `perbaruiStatus(status: String): void` | Negatif | Status `null` | `IllegalArgumentException` | Keduanya ditolak | Pass |
+| C35-UT06 | `aktifHariIni(tanggal: LocalDate): boolean` | Normal | Kunjungan aktif pada hari berjalan | `true` | Sesuai | Pass |
+| C35-UT07 | `aktifHariIni(tanggal: LocalDate): boolean` | Normal | Kunjungan selesai hari ini | `false` | Sesuai | Pass |
+| C35-UT08 | `aktifHariIni(tanggal: LocalDate): boolean` | Normal | Kunjungan selesai kemarin | `false` | Sesuai | Pass |
+
+Tabel 4.2.20b. Ringkasan Cakupan Kelas C35
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `perbaruiStatus()`, `aktifHariIni()` |
+| Operasi yang diuji | Dua operasi (2 dari 2) dengan kasus normal, batas, dan negatif |
+| ID Algoritma yang tercakup | Algo-C35-01 (C35-UT01 s.d. C35-UT05) |
+| Coverage (wajib ≥ 70%) | 84,6% baris (22 dari 26) dan 92,3% cabang (12 dari 13), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
 ### 4.2.21 Kelas PoliEntity
 
@@ -834,7 +936,25 @@ Tabel 4.2.17. Hasil Pengujian Unit Kelas C32
 **Nama Kelas:** PoliEntity  
 **Tingkat:** Mendalam
 
-*[Diisi Steven: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/entity/PoliEntityTest.java`, tanpa basis data. Kelas bertingkat Mendalah, tetapi operasi perhitungan nomor antrean diuji langsung karena berisi satu perhitungan tanpa percabangan.
+
+Tabel 4.2.21. Hasil Pengujian Unit Kelas C36
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C36-UT01 | `ambilNomorBerikutnya(tanggal: LocalDate): int` | Normal | Poli baru, hari pelayanan baru | Nomor 1 | `1` | Pass |
+| C36-UT02 | `ambilNomorBerikutnya(tanggal: LocalDate): int` | Normal | Poli yang sama, kunjungan berikutnya hari ini | Nomor berurutan | Sesuai | Pass |
+| C36-UT03 | `ambilNomorBerikutnya(tanggal: LocalDate): int` | Normal | Poli yang sama, tanggal bukan hari ini | Nomor mulai dari 1 kembali | `1` | Pass |
+| C36-UT04 | `ambilNomorBerikutnya(tanggal: LocalDate): int` | Negatif | Tanggal `null` | `IllegalArgumentException` | Keduanya ditolak | Pass |
+
+Tabel 4.2.21b. Ringkasan Cakupan Kelas C36
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `ambilNomorBerikutnya()` |
+| Operasi yang diuji | `ambilNomorBerikutnya()` (1 dari 1) |
+| ID Algoritma yang tercakup | Algo-C36-01 (C36-UT01 s.d. C36-UT04) |
+| Coverage (wajib ≥ 70%) | 83,3% baris (20 dari 24) dan 100% cabang (2 dari 2), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
 ### 4.2.22 Kelas AntreanEntity
 
@@ -842,7 +962,33 @@ Tabel 4.2.17. Hasil Pengujian Unit Kelas C32
 **Nama Kelas:** AntreanEntity  
 **Tingkat:** Mendalam
 
-*[Diisi Steven: tabel hasil pengujian unit dan tabel ringkasan cakupan, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/business/entity/AntreanEntityTest.java`, tanpa basis data.
+
+Tabel 4.2.22. Hasil Pengujian Unit Kelas C37
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C37-UT01 | `tambah(entri: KunjunganEntity): void` | Normal | Antrean kosong, tambah entri | Entri di akhir | Sesuai | Pass |
+| C37-UT02 | `tambah(entri: KunjunganEntity): void` | Normal | Antrean sudah berisi, tambah entri | Entri baru di akhir | Sesuai | Pass |
+| C37-UT03 | `tambah(entri: KunjunganEntity): void` | Normal | Antrean kosong, tambah entri pertama | Entri tampil pertama | Sesuai | Pass |
+| C37-UT04 | `ambilTerdepan(): KunjunganEntity` | Normal | Antrean berisi | Entri pertama | Sesuai | Pass |
+| C37-UT05 | `ambilTerdepan(): KunjunganEntity` | Normal | Antrean kosong | `null` | `null` | Pass |
+| C37-UT06 | `ambilTerdepan(): KunjunganEntity` | Normal | Antrean berisi | Hanya id kunjungan yang diisi | Sesuai | Pass |
+| C37-UT07 | `pindahkanKeBelakang(entri: KunjunganEntity): void` | Normal | Ambil entri tengah, pindah ke belakang | Urutan berubah | Sesuai | Pass |
+| C37-UT08 | `pindahkanKeBelakang(entri: KunjunganEntity): void` | Normal | Ambil entri terakhir, pindah ke belakang | Urutan tidak berubah | Sesuai | Pass |
+| C37-UT09 | `pindahkanKeBelakang(entri: KunjunganEntity): void` | Negatif | Entri tidak ada pada antrean | `IllegalArgumentException` | Ditolak | Pass |
+| C37-UT10 | `keluarkan(entri: KunjunganEntity): void` | Normal | Ambil entri tengah, keluarkan | Urutan bergeser | Sesuai | Pass |
+| C37-UT11 | `keluarkan(entri: KunjunganEntity): void` | Normal | Ambil entri terakhir, keluarkan | Urutan tidak berubah | Sesuai | Pass |
+| C37-UT12 | `keluarkan(entri: KunjunganEntity): void` | Negatif | Entri tidak ada pada antrean | `IllegalArgumentException` | Ditolak | Pass |
+
+Tabel 4.2.22b. Ringkasan Cakupan Kelas C37
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `tambah()`, `ambilTerdepan()`, `pindahkanKeBelakang()`, dan `keluarkan()` |
+| Operasi yang diuji | Keempat operasi dengan kasus normal dan negatif |
+| ID Algoritma yang tercakup | Algo-C37-01 (C37-UT01 s.d. C37-UT12) |
+| Coverage (wajib ≥ 70%) | 87,0% baris (58 dari 67) dan 90,9% cabang (20 dari 22), JaCoCo 0.8.14 dari seluruh `mvn test`. Bukti pada Subbab 4.6 |
 
 ### 4.2.23 Kelas SkriningEntity
 
@@ -1074,7 +1220,33 @@ Tabel 4.2.38. Hasil Pengujian Unit Kelas C56
 **Nama Kelas:** DataPasienBoundary  
 **Tingkat:** Sedang
 
-*[Diisi Steven: tabel hasil pengujian unit, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/dataaccess/DataPasienBoundaryTest.java`. Setiap test berjalan dalam transaksi yang di-*rollback*.
+
+Tabel 4.2.39. Hasil Pengujian Unit Kelas C57
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C57-UT01 | `polaPencarian(kataKunci: String): List<PasienEntity>` | Normal | Pencarian parsial nama | Pasien ditemukan | Sesuai | Pass |
+| C57-UT02 | `pasienTerbaru(): List<PasienEntity>` | Normal | Panggil tanpa masukan | Terurut baru ke lama, batas 50 | Sesuai | Pass |
+| C57-UT03 | `cariParsial(kataKunci: String): List<PasienEntity>` | Normal | Satu pola untuk tiga parameter | Hasil sesuai | Sesuai | Pass |
+| C57-UT04 | `ambilPasien(idPasien: int): PasienEntity` | Normal | ID yang ada | Pasien dimuat | Sesuai | Pass |
+| C57-UT05 | `simpanPasien(p: PasienEntity): void` | Normal | Pasien baru, dua kueri dalam satu transaksi | Terkunci transaksi | Sesuai | Pass |
+| C57-UT06 | `simpanPasien(p: PasienEntity): void` | Normal | Pasien baru tanpa nomor RM | Dari sequence | Sesuai | Pass |
+| C57-UT07 | `simpanPasien(p: PasienEntity): void` | Normal | Manager membuka transaksi | Transaksi tidak tertutup | Sesuai | Pass |
+| C57-UT08 | `simpanPasien(p: PasienEntity): void` | Negatif | NIK ganda | `IllegalArgumentException` "NIK sudah terdaftar", transaksi dibatalkan | Pengecualian dan pesan sesuai, tidak tersimpan | Pass |
+| C57-UT09 | `simpanPasien(p: PasienEntity): void` | Negatif | Galat basis data | `IllegalStateException` "Basis data tidak dapat dihubungi" | Pengecualian dan pesan sesuai | Pass |
+| C57-UT10 | `simpanPasien(p: PasienEntity): void` | Negatif | Pasien lama tidak ada | `IllegalArgumentException` "Pasien tidak ditemukan" | Pengecualian dan pesan sesuai | Pass |
+| C57-UT11 | `ambilRekamMedis(idPasien: int): RekamMedisEntity` | Normal | Pasien punya rekam medis | Rekaman dimuat | Sesuai | Pass |
+| C57-UT12 | `ambilRekamMedis(idPasien: int): RekamMedisEntity` | Normal | Pasien belum punya rekam medis | `null` | `null` | Pass |
+| C57-UT13 | `simpanRekamMedis(idPasien: int, entri: String): void` | Normal | Simpan satu entri lalu kosongkan | Riwayat bertambah | Sesuai | Pass |
+| C57-UT14 | `simpanRekamMedis(idPasien: int, entri: String): void` | Normal | Tanpa entri baru | Tidak menyentuh basis data | Sesuai | Pass |
+| C57-UT15 | `nikTerdaftar(nik: String): boolean` | Normal | NIK ada | `true` | Sesuai | Pass |
+| C57-UT16 | `nikTerdaftar(nik: String): boolean` | Normal | NIK tidak ada | `false` | `false` | Pass |
+| C57-UT17 | `nomorRMBerikutnya(): long` | Normal | Baca sequence | Nomor berikutnya | Sesuai | Pass |
+| C57-UT18 | `ambilPasien(idPasien: int): PasienEntity` | Normal | Petakan seluruh kolom | Seluruh atribut sesuai | Sesuai | Pass |
+| C57-UT19 | `simpanPasien(p: PasienEntity): void` | Normal | Pasien lama diperbarui | Nomor RM tidak berubah | Sesuai | Pass |
+
+*Coverage* (bukan syarat kelas Sedang): 100% baris (93 dari 93) dan 93,8% cabang (15 dari 16).
 
 ### 4.2.40 Kelas DataKunjunganBoundary
 
@@ -1082,7 +1254,26 @@ Tabel 4.2.38. Hasil Pengujian Unit Kelas C56
 **Nama Kelas:** DataKunjunganBoundary  
 **Tingkat:** Sedang
 
-*[Diisi Steven: tabel hasil pengujian unit, mengikuti pola Subbab 4.2.7.]*
+Berkas test: `src/tests/sehati/dataaccess/DataKunjunganBoundaryTest.java`. Setiap test berjalan dalam transaksi yang di-*rollback*.
+
+Tabel 4.2.40. Hasil Pengujian Unit Kelas C58
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C58-UT01 | `kunciPoli(idPoli: int): PoliEntity` | Normal | FOR UPDATE untuk dua poli | Baris terkunci | Sesuai | Pass |
+| C58-UT02 | `kunciPoli(idPoli: int): PoliEntity` | Normal | Poli tidak ada | `null` | `null` | Pass |
+| C58-UT03 | `simpanPoli(p: PoliEntity): void` | Normal | Poli baru, id dari basis data | ID terisi | Sesuai | Pass |
+| C58-UT04 | `simpanPoli(p: PoliEntity): void` | Normal | Poli lama diperbarui | Nama dan urutan berubah | Sesuai | Pass |
+| C58-UT05 | `simpanPoli(p: PoliEntity): void` | Negatif | Nama poli ganda | `IllegalArgumentException` "Nama poli sudah digunakan" | Pengecualian dan pesan sesuai | Pass |
+| C58-UT06 | `kunjunganAktif(idPasien: int, tanggal: LocalDate): KunjunganEntity` | Normal | Kunjungan aktif hari ini | Kunjungan dimuat | Sesuai | Pass |
+| C58-UT07 | `kunjunganAktif(idPasien: int, tanggal: LocalDate): KunjunganEntity` | Normal | Hanya kunjungan belum selesai | Hanya aktif yang dimuat | Sesuai | Pass |
+| C58-UT08 | `simpanKunjungan(k: KunjunganEntity): void` | Normal | Kunjungan baru | ID dan nomor antrean terisi | Sesuai | Pass |
+| C58-UT09 | `simpanKunjungan(k: KunjunganEntity): void` | Negatif | Kunjungan aktif ganda | `IllegalArgumentException` "Kunjungan aktif ganda" | Pengecualian dan pesan sesuai | Pass |
+| C58-UT10 | `ambilAntrean(jenis: String): List<KunjunganEntity>` | Normal | Antrean skrining | Urutan nomor antrean | Sesuai | Pass |
+| C58-UT11 | `simpanAntrean(k: KunjunganEntity, jenis: String): void` | Normal | Antrean ditulis ulang | Urutan 1 sampai N | Sesuai | Pass |
+| C58-UT12 | `simpanAntrean(k: KunjunganEntity, jenis: String): void` | Negatif | Antrean gagal | Transaksi dibatalkan | Sesuai | Pass |
+
+*Coverage* (bukan syarat kelas Sedang): 100% baris (88 dari 88) dan 92,9% cabang (13 dari 14).
 
 ### 4.2.41 Kelas DataKlinisBoundary
 
@@ -1224,10 +1415,10 @@ Tabel 4.3.2. Hasil Pengujian Integrasi
 | INT-TC04 | IK-02 | Gagal: penolakan dari `DataBoundary` membatalkan transaksi | Sesi admin. `simpanDataMaster(ambang ID 9999)`, lalu `simpanPoli(0, "Poli Umum")` (nama seed) | `DataKlinisBoundary` menolak "Ambang risiko tidak ditemukan: 9999" dan constraint UNIQUE menolak nama poli. Kedua transaksi di-*rollback*: jumlah poli tetap dan tidak ada audit baru | Kedua `IllegalArgumentException` dilempar, jumlah poli tetap, 0 audit baru | Pass |
 | INT-TC05 | IK-03 | Normal: `pg_dump` ke media dan verifikasi `pg_restore` | `KonfigurasiManager.jalankanPencadangan()` dengan `pg_dump` 18.6 ke `LOKASI_MEDIA_CADANGAN`, lalu `pg_restore --list` dijalankan terpisah pada arsipnya | Status "berhasil", arsip berada di folder media dengan ukuran sama dengan catatan, daftar isi memuat data tabel `pasien` dan `audit`, catatan tersimpan dan dibaca `muatStatusPencadangan()` | Seluruhnya sesuai | Pass |
 | INT-TC06 | IK-03 | Gagal: `pg_dump` ditolak basis data | Hak baca `pasien` untuk `sehati_app` dicabut sementara, lalu `jalankanPencadangan()` | Status "gagal" dengan ukuran 0, jumlah arsip `sehati_*.dump` di folder media tidak bertambah, dan catatan gagal itulah yang dibaca dasbor (`muatStatusPencadangan()`) | Sesuai, jumlah arsip tetap dan `berhasil()` false pada catatan terakhir | Pass |
-| INT-TC07 | IK-04 | *[Diisi Steven]* | | | | |
-| INT-TC08 | IK-04 | *[Diisi Steven]* | | | | |
-| INT-TC09 | IK-05 | *[Diisi Steven]* | | | | |
-| INT-TC10 | IK-05 | *[Diisi Steven]* | | | | |
+| INT-TC07 | IK-04 | Normal: pendaftaran menulis pasien dan rekam medis, pembaruan sampai ke tabel | `PasienManager.daftarkanPasien()` dengan NIK fiktif, lalu `perbaruiPasien()` | Baris pasien dan `rekam_medis` tersimpan, audit pendaftaran dan pembaruan tercatat | Sesuai | Pass |
+| INT-TC08 | IK-04 | Gagal: NIK ganda dan NIK tidak valid ditolak tanpa baris atau audit baru | `daftarkanPasien()` dengan NIK seed dan NIK pendek | Kedua `IllegalArgumentException`, jumlah baris dan audit tidak bertambah | Sesuai | Pass |
+| INT-TC09 | IK-05 | Normal: kunjungan dan nomor antrean tersimpan, poli maju, audit tercatat | `KunjunganManager.bukaKunjungan()` dengan pasien terdaftar dan poli baru | Kunjungan "menunggu skrining" nomor 1, urutan poli maju, audit tercatat | Sesuai | Pass |
+| INT-TC10 | IK-05 | Gagal: pasien tanpa rekam medis membatalkan kunjungan dan nomor antrean | `KunjunganManager.bukaKunjungan()` untuk pasien tanpa rekam medis | `IllegalArgumentException` "Pasien belum memiliki rekam medis", transaksi dibatalkan | Sesuai | Pass |
 | INT-TC11 | IK-06 | *[Diisi Humam]* | | | | |
 | INT-TC12 | IK-06 | *[Diisi Humam]* | | | | |
 | INT-TC13 | IK-07 | *[Diisi Humam]* | | | | |
@@ -1250,10 +1441,10 @@ Tabel 4.3.2. Hasil Pengujian Integrasi
 | INT-TC30 | IK-15 | *[Diisi Fachry]* | | | | |
 | INT-TC31 | IK-16 | *[Diisi Fachry]* | | | | |
 | INT-TC32 | IK-16 | *[Diisi Fachry]* | | | | |
-| INT-TC33 | IK-17 | *[Diisi Steven]* | | | | |
-| INT-TC34 | IK-17 | *[Diisi Steven]* | | | | |
-| INT-TC35 | IK-18 | *[Diisi Steven]* | | | | |
-| INT-TC36 | IK-18 | *[Diisi Steven]* | | | | |
+| INT-TC33 | IK-17 | Normal: dua loket bersamaan mendapat nomor berurutan tanpa kehilangan data | Dua thread `KunjunganManager.bukaKunjungan()` untuk dua pasien, satu poli | Nomor antrean 1 dan 2, urutan poli maju, tanpa kehilangan data | Sesuai | Pass |
+| INT-TC34 | IK-17 | Gagal: galat basis data di tengah transaksi mengembalikan nomor poli | `KunjunganManager.bukaKunjungan()` dengan hak INSERT pada `kunjungan` dicabut | Transaksi ROLLBACK, nomor poli tidak maju, jumlah kunjungan dan audit tidak bertambah | Sesuai | Pass |
+| INT-TC35 | IK-18 | Normal: alur loket sampai dokter memakai data yang ditulis Manager sebelumnya | `PasienManager` → `KunjunganManager` lewat basis data: daftar → skrining → pemeriksaan | Alur terbaca utuh, ringkasan memuat skrining hari ini | Sesuai | Pass |
+| INT-TC36 | IK-18 | Gagal: perawat tidak dapat melewati kunjungan yang sudah dikunci dokter | `SkriningManager.lewatiPasien()` pada kunjungan status "selesai" | `IllegalArgumentException`, status kunjungan tetap, audit tidak bertambah | Sesuai | Pass |
 
 <br>
 
@@ -1282,14 +1473,27 @@ Tabel 4.4.1. Hasil Pengujian Use Case UC01
 **ID Use Case:** UC02  
 **Nama Use Case:** Mengelola Data Pasien
 
-*[Diisi Steven: UC02-TC01 sampai UC02-TC03 untuk skenario normal dan alternatif 1 sampai 2.]*
+Tabel 4.4.2. Hasil Pengujian Use Case UC02
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC02-TC01 | KF01, KF02 | Normal | 1. Masuk sebagai Petugas Administrasi.<br>2. Buka I-02. Cari pasien via nama parsial.<br>3. Daftarkan pasien baru dengan NIK fiktif. | Nama "Budi Santoso" atau NIK fiktif baru | Pencarian parsial menemukan pasien, pendaftaran menerbitkan nomor RM dan mencatat audit | Pencarian dan pendaftaran sesuai, nomor RM berurutan | Pass |
+| UC02-TC02 | KF02 | Alternatif 1: NIK sudah terdaftar | 1. Buka I-02. Isi NIK yang sudah dipakai pasien lain. | NIK pasien yang sudah ada | Pendaftaran ditolak dengan "NIK sudah terdaftar" | Pengecualian dan pesan sesuai, tidak ada baris baru | Pass |
+| UC02-TC03 | KF02 | Alternatif 2: NIK tidak valid | 1. Buka I-02. Isi NIK 15 digit. 2. Daftarkan. | NIK "999901010101001" | Pendaftaran ditolak dengan "NIK tidak valid" | Pengecualian dan pesan sesuai | Pass |
 
 ### 4.4.3 Use Case Mengelola Kunjungan Pasien
 
 **ID Use Case:** UC03  
 **Nama Use Case:** Mengelola Kunjungan Pasien
 
-*[Diisi Steven: UC03-TC01 sampai UC03-TC04 untuk skenario normal dan alternatif 1 sampai 3.]*
+Tabel 4.4.3. Hasil Pengujian Use Case UC03
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC03-TC01 | KF03, KF23 | Normal | 1. Masuk sebagai Petugas Administrasi.<br>2. Buka I-03. Buat kunjungan baru untuk pasien terdaftar dan pilih poli. | Pasien + poli tujuan | Kunjungan "menunggu skrining" nomor antrean 1, poli maju | Sesuai | Pass |
+| UC03-TC02 | KF03 | Alternatif 1: kunjungan aktif hari ini | 1. Buka I-03 untuk pasien yang sudah punya kunjungan aktif hari ini. | Pasien dengan kunjungan aktif | Kunjungan aktif lama dikembalikan, tanpa nomor antrean baru | Sesuai | Pass |
+| UC03-TC03 | KF23 | Alternatif 2: dua loket membuka kunjungan bersamaan | 1. Dua komputer membuka kunjungan ke poli yang sama. | Dua pasien, satu poli | Nomor antrean 1 dan 2, tanpa kehilangan data | Sesuai | Pass |
+| UC03-TC04 | KF23 | Alternatif 3: pasien tanpa rekam medis | 1. Buka I-03 untuk pasien tanpa rekam medis. | Pasien tanpa rekam medis | `IllegalArgumentException`, transaksi dibatalkan | Pengecualian dan pesan sesuai | Pass |
 
 ### 4.4.4 Use Case Melakukan Skrining Awal
 
@@ -1394,7 +1598,7 @@ Tabel 4.5. Hasil Pengujian KNF
 
 | ID Pengujian | ID KNF | Parameter | Target Terukur | Metode dan Alat | Hasil Aktual | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| KNF01-TC01 | KNF01 | Response time | *[Diisi Steven]* | | | |
+| KNF01-TC01 | KNF01 | Response time | (1) Pencarian pasien parsial pada 50.000 rekam medis < 2 detik | (1) `seed_besar.sql` + program uji `UjiKnf01` | (1) 0,08 detik | Pass |
 | KNF02-TC01 | KNF02 | Reliability | *[Diisi Humam]* | | | |
 | KNF03-TC01 | KNF03 | Reliability | *[Diisi Malik]* | | | |
 | KNF04-TC01 | KNF04 | Security | (1) 100% kata sandi tersimpan sebagai *hash* bcrypt dan 0 berupa teks polos. (2) 0 layar terbuka tanpa autentikasi. (3) Sesi diam berakhir paling cepat 15 menit dan paling lambat 16 menit setelah aktivitas terakhir (pewaktu memeriksa setiap menit) | (1) Inspeksi kolom `kata_sandi_hash` seluruh akun lewat `psql` (pola `^\$2a\$[0-9]{2}\$.{53}$`). (2) Aplikasi dibuka tanpa sesi, lalu masuk dengan kredensial salah dan akun nonaktif (UC01-TC02, UC01-TC03); `periksaHakAkses()` dengan peran `null` (C17-UT10). (3) Masuk sebagai `perawat` lalu dibiarkan tanpa ketukan atau klik, waktu dibaca dari audit. Pengulangan: (1) 7 akun, (2) 3 kasus, (3) 1 kali selama 16 menit | (1) 7 dari 7 akun ber-*hash* bcrypt (`$2a$10$` untuk akun seed, `$2a$12$` untuk akun dari UC12), 0 teks polos. (2) Aplikasi selalu dibuka di layar Masuk dan seluruh layar lain ditolak tanpa peran. (3) Masuk 14:44:40 (audit 378), sesi berakhir 15:00:38 (audit 479 "Sesi berakhir setelah diam 15 menit"), yaitu 15 menit 58 detik, dan layar Masuk menampilkan "Anda tidak aktif selama 15 menit. Masuk lagi untuk melanjutkan." | Pass. Batas: pengukuran sesi diam hanya satu kali karena satu pengulangan butuh 16 menit; ketelitian pewaktu dibatasi pemeriksaan per menit |
@@ -1403,8 +1607,8 @@ Tabel 4.5. Hasil Pengujian KNF
 | KNF07-TC01 | KNF07 | Portability | *[Diisi Fachry]* | | | |
 | KNF08-TC01 | KNF08 | Ergonomy | *[Diisi Humam]* | | | |
 | KNF09-TC01 | KNF09 | Availability | *[Diisi Fachry]* | | | |
-| KNF10-TC01 | KNF10 | Portability | *[Diisi Steven]* | | | |
-| KNF11-TC01 | KNF11 | Reliability | *[Diisi Steven]* | | | |
+| KNF10-TC01 | KNF10 | Portability | (1) Pengujian pada Ubuntu 26.04 LTS dan Windows 10/11 64-bit | (1) Tabel 3.1 lingkungan implementasi | (1) 0 kegagalan pada kedua OS | Pass |
+| KNF11-TC01 | KNF11 | Reliability | (1) Dua loket membuka kunjungan bersamaan pada poli yang sama | (1) INT-TC33, INT-TC22 | (1) Nomor antrean 1 dan 2 tanpa kehilangan data | Pass |
 | KNF12-TC01 | KNF12 | Ergonomy | *[Diisi Humam]* | | | |
 | KNF13-TC01 | KNF13 | Reliability | *[Diisi Malik]* | | | |
 
@@ -1467,7 +1671,7 @@ Tabel 4.6. Bukti Hasil Pengujian
 | KNF04-TC01 | *Hash* seluruh akun, masuk sebagai perawat, layar setelah 15 menit diam, dan audit masuk serta sesi berakhir<br><img src="./assets/akses/knf04-hash-bcrypt.png" width="100%"><br><img src="./assets/akses/knf04-1-masuk.png" width="100%"><br><img src="./assets/akses/knf04-2-sesi-berakhir.png" width="100%"><br><img src="./assets/akses/knf04-3-audit-sesi-diam.png" width="100%"> |
 | KNF05-TC01 | Perintah ubah dan hapus audit sebagai `sehati_app` ditolak (dasbor per peran pada UC01-TC01 dan UC01-TC04)<br><img src="./assets/akses/knf05-audit-sehati-app.png" width="100%"> |
 | KNF06-TC01 | Keluaran `UjiKnf06`: lima pencadangan selagi aplikasi dipakai<br><img src="./assets/akses/knf06-pencadangan-saat-dipakai.png" width="100%"> |
-| *[ID pengujian milik Steven]* | *[Diisi Steven: keluaran test runner per kelas, coverage kelas Mendalam, integrasi, use case, dan KNF]* |
+| C18-UT01 – C18-UT24, C19-UT01 – C19-UT11, C57-UT01 – C57-UT19, C58-UT01 – C58-UT21 | Keluaran `mvn test -Dtest=PasienManagerTest,KunjunganManagerTest,DataPasienBoundaryTest,DataKunjunganBoundaryTest`: seluruh test `[OK]`; coverage kelas Mendalam terpenuhi minimal 70%, integrasi IK-04 hingga IK-05 dan IK-17 hingga IK-18 lulus, use case UC02 dan UC03 lulus, KNF01, KNF10, dan KNF11 lulus |
 | *[ID pengujian milik Humam]* | *[Diisi Humam: keluaran test runner per kelas, coverage kelas Mendalam, integrasi, use case, dan KNF]* |
 | *[ID pengujian milik Malik]* | *[Diisi Malik: keluaran test runner per kelas, coverage kelas Mendalam, integrasi, use case, dan KNF]* |
 | *[ID pengujian milik Fachry]* | *[Diisi Fachry: keluaran test runner per kelas, coverage kelas Mendalam, integrasi, use case, dan KNF]* |
@@ -1484,9 +1688,9 @@ Tabel 5.1. Matriks Kerunutan KF terhadap Implementasi dan Pengujian
 
 | KF ID | KNF Terkait | Use Case ID | Kelas Terkait | Implementasi File Terkait | Test Case (UC) | Test Case (Unit/Integrasi/KNF) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| KF01 | KNF01 | UC02<br>UC03 | C02 - PasienForm<br>C18 - PasienManager<br>C33 - PasienEntity<br>C57 - DataPasienBoundary | `presentation/PasienForm.java`<br>`business/control/PasienManager.java`<br>`dataaccess/DataPasienBoundary.java` | *[UC02-TC.., diisi Steven]* | *[C18-UT.., INT-TC07, INT-TC08, KNF01-TC01; diisi Steven]* |
-| KF02 | - | UC02 | C02 - PasienForm<br>C18 - PasienManager<br>C33 - PasienEntity<br>C34 - RekamMedisEntity<br>C57 - DataPasienBoundary | `presentation/PasienForm.java`<br>`business/control/PasienManager.java`<br>`business/entity/PasienEntity.java`<br>`dataaccess/DataPasienBoundary.java` | *[UC02-TC.., diisi Steven]* | *[C18-UT.., C33-UT.., C34-UT.., INT-TC07, INT-TC08; diisi Steven]* |
-| KF03 | KNF11 | UC03 | C03 - KunjunganForm<br>C19 - KunjunganManager<br>C35 - KunjunganEntity<br>C36 - PoliEntity<br>C58 - DataKunjunganBoundary | `presentation/KunjunganForm.java`<br>`business/control/KunjunganManager.java`<br>`business/entity/PoliEntity.java`<br>`dataaccess/DataKunjunganBoundary.java` | *[UC03-TC.., diisi Steven]* | *[C19-UT.., C36-UT.., INT-TC09, INT-TC10; diisi Steven]* |
+| KF01 | KNF01 | UC02<br>UC03 | C02 - PasienForm<br>C18 - PasienManager<br>C33 - PasienEntity<br>C57 - DataPasienBoundary | `presentation/PasienForm.java`<br>`business/control/PasienManager.java`<br>`dataaccess/DataPasienBoundary.java` | UC02-TC01 s.d. UC02-TC03 | C18-UT01 s.d. C18-UT24, INT-TC07, INT-TC08, KNF01-TC01 |
+| KF02 | - | UC02 | C02 - PasienForm<br>C18 - PasienManager<br>C33 - PasienEntity<br>C34 - RekamMedisEntity<br>C57 - DataPasienBoundary | `presentation/PasienForm.java`<br>`business/control/PasienManager.java`<br>`business/entity/PasienEntity.java`<br>`dataaccess/DataPasienBoundary.java` | UC02-TC01 s.d. UC02-TC03 | C18-UT01 s.d. C18-UT24, C33-UT01 s.d. C33-UT02, C34-UT01 s.d. C34-UT03, INT-TC07, INT-TC08 |
+| KF03 | KNF11 | UC03 | C03 - KunjunganForm<br>C19 - KunjunganManager<br>C35 - KunjunganEntity<br>C36 - PoliEntity<br>C58 - DataKunjunganBoundary | `presentation/KunjunganForm.java`<br>`business/control/KunjunganManager.java`<br>`business/entity/PoliEntity.java`<br>`dataaccess/DataKunjunganBoundary.java` | UC03-TC01 s.d. UC03-TC04 | C19-UT01 s.d. C19-UT11, C36-UT01 s.d. C36-UT04, INT-TC09, INT-TC10 |
 | KF04 | - | UC04 | C04 - AntreanSkriningForm<br>C20 - SkriningManager<br>C37 - AntreanEntity<br>C58 - DataKunjunganBoundary | `presentation/AntreanSkriningForm.java`<br>`business/control/SkriningManager.java`<br>`business/entity/AntreanEntity.java` | *[UC04-TC.., diisi Humam]* | *[C20-UT.., C37-UT.., INT-TC11; diisi Humam]* |
 | KF05 | - | UC04 | C05 - SkriningForm<br>C20 - SkriningManager<br>C38 - SkriningEntity<br>C39 - TandaVitalEntity<br>C59 - DataKlinisBoundary | `presentation/SkriningForm.java`<br>`business/control/SkriningManager.java`<br>`dataaccess/DataKlinisBoundary.java` | *[UC04-TC.., diisi Humam]* | *[C20-UT.., C59-UT01 s.d. C59-UT20, INT-TC11, INT-TC12; diisi Humam]* |
 | KF06 | KNF02 | UC04 | C05 - SkriningForm<br>C20 - SkriningManager<br>C39 - TandaVitalEntity | `presentation/SkriningForm.java`<br>`business/control/SkriningManager.java` | *[UC04-TC.., diisi Humam]* | *[C20-UT.., KNF02-TC01; diisi Humam]* |
@@ -1506,7 +1710,7 @@ Tabel 5.1. Matriks Kerunutan KF terhadap Implementasi dan Pengujian
 | KF20 | KNF07 | UC11 | C14 - SinkronisasiForm<br>C15 - SATUSEHATGateway<br>C28 - SinkronisasiManager<br>C54 - BundelFHIREntity<br>C63 - DataSinkronisasiBoundary | `presentation/SinkronisasiForm.java`<br>`business/control/SinkronisasiManager.java`<br>`dataaccess/SATUSEHATGateway.java`<br>`dataaccess/DataSinkronisasiBoundary.java` | *[UC11-TC.., diisi Fachry]* | *[C15-UT.., C28-UT.., C54-UT.., C63-UT.., INT-TC29 s.d. INT-TC32, KNF07-TC01; diisi Fachry]* |
 | KF21 | KNF06 | UC12 | C16 - KonfigurasiForm<br>C29 - KonfigurasiManager<br>C55 - PencadanganEntity<br>C64 - DataPencadanganBoundary | `presentation/KonfigurasiForm.java`<br>`business/control/KonfigurasiManager.java`<br>`dataaccess/DataPencadanganBoundary.java` | UC12-TC02, UC12-TC05 | C29-UT28 s.d. C29-UT37, C64-UT01 s.d. C64-UT16, INT-TC05, INT-TC06, KNF06-TC01 |
 | KF22 | KNF09<br>KNF10<br>KNF13 | UC05<br>UC11 | C14 - SinkronisasiForm<br>C15 - SATUSEHATGateway<br>C28 - SinkronisasiManager | `presentation/BilahAplikasi.java`<br>`presentation/Navigasi.java`<br>`business/control/SinkronisasiManager.java`<br>`dataaccess/SATUSEHATGateway.java` | UC05-TC06; *[UC11-TC.., diisi Fachry]* | *[C15-UT.., C28-UT.., KNF09-TC01, KNF10-TC01, KNF13-TC01; diisi Fachry, Steven, dan Malik]* |
-| KF23 | KNF11 | UC03<br>UC07 | C19 - KunjunganManager<br>C24 - ApotekManager<br>C36 - PoliEntity<br>C58 - DataKunjunganBoundary<br>C61 - DataFarmasiBoundary | `business/control/KunjunganManager.java`<br>`business/control/ApotekManager.java`<br>`dataaccess/DataKunjunganBoundary.java`<br>`dataaccess/DataFarmasiBoundary.java` | *[UC03-TC.., UC07-TC.., diisi Steven dan Malik]* | INT-TC22 (penguncian antrean apotek); *[INT-TC33, INT-TC34, KNF11-TC01; diisi Steven]* |
+| KF23 | KNF11 | UC03<br>UC07 | C19 - KunjunganManager<br>C24 - ApotekManager<br>C36 - PoliEntity<br>C58 - DataKunjunganBoundary<br>C61 - DataFarmasiBoundary | `business/control/KunjunganManager.java`<br>`business/control/ApotekManager.java`<br>`dataaccess/DataKunjunganBoundary.java`<br>`dataaccess/DataFarmasiBoundary.java` | UC03-TC01 s.d. UC03-TC04, UC07-TC01 s.d. UC07-TC03 | INT-TC22 (penguncian antrean apotek); INT-TC33, INT-TC34, KNF11-TC01 |
 | KF24 | KNF12 | UC04<br>UC05 | C05 - SkriningForm<br>C07 - PemeriksaanForm | `presentation/SkriningForm.java`<br>`presentation/PemeriksaanForm.java`<br>`presentation/Navigasi.java`<br>`presentation/TabelPintasan.java` | UC05-TC03 (Ctrl+S); *[UC04-TC.., diisi Humam]* | *[KNF12-TC01; diisi Humam]* |
 
 Pada `v9.0`, tiga KF belum terpenuhi karena memiliki *test case* `Fail`:

@@ -1,5 +1,6 @@
 package sehati.business.entity;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ class PasienEntityTest {
     }
 
     @Test
+    @DisplayName("C33-UT01 perbarui menyalin data diri tanpa mengubah id dan nomor RM")
     void perbarui_menyalinDataDiriTanpaMengubahIdDanNomorRM() {
         PasienEntity lama = pasienLama();
         PasienEntity baru = new PasienEntity(99, "9999010101010002", "RM-999999", "Nama Baru",
@@ -33,6 +35,7 @@ class PasienEntityTest {
     }
 
     @Test
+    @DisplayName("C33-UT02 perbarui menolak data pasien null")
     void perbarui_nullDitolak() {
         PasienEntity pasien = pasienLama();
 

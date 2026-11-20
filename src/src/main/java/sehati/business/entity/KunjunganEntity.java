@@ -41,7 +41,8 @@ public class KunjunganEntity {
      * kedua (Algo-C35-01).
      */
     public void perbaruiStatus(String status) {
-        if (!STATUS_SAH.contains(status)) {
+        // Status null ditolak lebih dahulu karena Set.of().contains(null) melempar NullPointerException (C35-UT05).
+        if (status == null || !STATUS_SAH.contains(status)) {
             throw new IllegalArgumentException("Status kunjungan tidak dikenal: " + status);
         }
         if (STATUS_SELESAI.equals(this.status)) {

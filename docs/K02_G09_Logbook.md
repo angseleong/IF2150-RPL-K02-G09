@@ -296,6 +296,7 @@
 | *18-11-2026* | *Muhammad Adnan Kurniawan* | *Memperbaiki dua temuan pengujian: kueri Q-C59-20 agar jadwal kontrol tidak ganda dan panel skrining hari ini pada I-06, lalu menguji ulang C22-UT37, UC05-TC01, dan UC05-TC08* | *2* | *Done* | *-* |
 | *19-11-2026* | *Axeleon Justin Algianto* | *Menguji modul akses dan administrasi: 101 test unit ber-ID untuk C17, C29, C30, C31, C32, C56, dan C64 (coverage C31 dan C64 dinaikkan di atas 70%), integrasi INT-TC01 sampai INT-TC06 dengan pg_dump asli, UC01 dan UC12 beserta tangkapan layar, serta KNF04 sampai KNF06* | *5* | *Done* | *Satu temuan Fail di modul sendiri: periksaHakAkses() melempar NullPointerException untuk layar null (C17-UT17). Dua catatan pencadangan: jadwal berjalan hingga satu menit lebih awal dan dua arsip pada detik yang sama saling menimpa* |
 | *19-11-2026* | *Axeleon Justin Algianto* | *Memperbaiki temuan C17-UT17 (layar null ditolak sebelum contains()), menguji ulang C17-UT17, dan mencatatnya pada Tabel 3.5 nomor 3* | *0.5* | *Done* | *-* |
+| *19-11-2026* | *Steven Vanako* | *Mengisi placeholder HIUPL untuk modul pasien dan kunjungan: tabel hasil pengujian unit C18, C19, C33 s.d. C37, C57, C58, tabel use case UC02 dan UC03, serta kerunutan KF01 s.d. KF03 dan KF23* | *4* | *Done* | *-* |
 
 **Catatan/Evaluasi Milestone 10:**
 * *[Diisi setelah seluruh bagian masuk ke main]*
